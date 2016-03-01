@@ -1,0 +1,25 @@
+{
+  "name": "ng2-tree",
+  "version": "1.0.0",
+  "description": "angular2 component for representing ui tree structures",
+  "main": "ng2-tree.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rychko.georgiy@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "angular2": "2.0.0-beta.7",
+    "es6-shim": "0.34.4",
+    "reflect-metadata": "0.1.3",
+    "rxjs": "5.0.0-beta.2",
+    "systemjs": "^0.19.23",
+    "ts-loader": "^0.8.1",
+    "typescript": "1.8.2",
+    "webpack": "1.12.14",
+    "zone.js": "0.5.15"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^2.9.0"
+  }
+}
