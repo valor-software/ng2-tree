@@ -15,11 +15,12 @@ config.resolve = {
 }
 
 config.entry = {
-  angular2: [
+  vendor: [
     'zone.js/dist/zone-microtask',
     'reflect-metadata',
     'angular2/common',
-    'angular2/core'
+    'angular2/core',
+    'lodash'
   ],
   'app': ['./ng2-tree.ts', './demo/app.ts'],
 };

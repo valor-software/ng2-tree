@@ -2,13 +2,112 @@
 <html>
 
 <head>
-  <title>Angular 2 QuickStart</title>
-  <script src="../build/angular2.js"></script>
-  <script src="../build/app.js"></script>
+    <title>Angular 2 QuickStart</title>
 </head>
 
 <body>
-  <app>Loading...</app>
+    <app>Loading...</app>
+
+
+    <script src="../build/common.js"></script>
+    <script src="../build/vendor.js"></script>
+    <script src="../build/app.js"></script>
+    <!--
+   [-] A
+    |
+    +-----B
+    |
+    +-----C
+    |
+    +-----[-] D
+    |      |
+    |      +-----X
+    |      |
+    |      +-----Y
+    |
+   [+]
+    -->
+    <script>
+        ;
+    (function () {
+      var tree = {
+        value: 'A',
+        children: [
+          {
+            value: 'B',
+          },
+          {
+            value: 'C',
+          },
+          {
+            value: 'D',
+            children: [
+              {
+                value: 'X',
+                children: [
+                  {
+                    value: 'X',
+              },
+                  {
+                    value: 'Y',
+              }
+            ]
+              },
+              {
+                value: 'Y',
+                children: [
+                  {
+                    value: 'X',
+              },
+                  {
+                    value: 'Y',
+                    children: [
+                  {
+                    value: 'X',
+              },
+                  {
+                    value: 'Y',
+              }
+            ]
+              }
+            ]
+              }
+            ]
+          }
+        ]
+      };
+
+      function walkTree(tree, level) {
+        var value = tree.value;
+        if (!tree.children) {
+          return draw(value, level, true);
+        }
+
+        var result = draw(value, level, false);
+        tree.children.forEach(function (child) {
+          result += walkTree(child, level + 1)
+        });
+
+        return result;
+      }
+
+      function draw(value, level, isLeaf) {
+        if (!level) {
+          return isLeaf ? String(value) + '\n' : '[-] ' + value + '\n';
+        }
+
+        var result =  _.repeat(' |' + _.repeat(' ', 5), level) + '\n';
+
+        if (!isLeaf) {
+          value = '[-] ' + value;
+        }
+
+        return level > 1 ? result + _.repeat(' |' + _.repeat(' ', 5), level - 1) + " +-----" + value + '\n' : " |\n +-----" + value + '\n';
+      }
+
+      console.log(walkTree(tree, 0));
+    }());
+    </script>
 </body>
 
 </html>
