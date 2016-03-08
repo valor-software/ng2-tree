@@ -1,0 +1,25 @@
+#tree {
+    font-family: monospace;
+}
+
+#tree ul {
+    margin-left: 0px;
+    padding-left: 25px;
+}
+
+
+#tree li {
+    padding: 3px 0;
+}
+
+#tree .folding {
+    cursor: pointer;
+    padding: 0 5px 0 5px;
+    font-weight: bold;
+    color: #0b97c4;
+}
+
+#tree .node-value {
+    font-weight: bold;
+    color: #8A6343;
+}

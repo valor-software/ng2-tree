@@ -3,111 +3,117 @@
 
 <head>
     <title>Angular 2 QuickStart</title>
+
+    <link href="./styles.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-    <app>Loading...</app>
+<app>Loading...</app>
 
+<div id="tree"></div>
 
-    <script src="../build/common.js"></script>
-    <script src="../build/vendor.js"></script>
-    <script src="../build/app.js"></script>
-    <!--
-   [-] A
-    |
-    +-----B
-    |
-    +-----C
-    |
-    +-----[-] D
-    |      |
-    |      +-----X
-    |      |
-    |      +-----Y
-    |
-   [+]
-    -->
-    <script>
-        ;
+<script src="../build/common.js"></script>
+<script src="../build/vendor.js"></script>
+<script src="../build/app.js"></script>
+<script>
+    ;
     (function () {
-      var tree = {
-        value: 'A',
-        children: [
-          {
-            value: 'B',
-          },
-          {
-            value: 'C',
-          },
-          {
-            value: 'D',
+        'use strict';
+        var tree = {
+            value: 'A',
             children: [
-              {
-                value: 'X',
-                children: [
-                  {
-                    value: 'X',
-              },
-                  {
-                    value: 'Y',
-              }
-            ]
-              },
-              {
-                value: 'Y',
-                children: [
-                  {
-                    value: 'X',
-              },
-                  {
-                    value: 'Y',
+                {
+                    value: 'B',
+                },
+                {
+                    value: 'C',
+                },
+                {
+                    value: 'D',
                     children: [
-                  {
-                    value: 'X',
-              },
-                  {
-                    value: 'Y',
-              }
+                        {
+                            value: 'X',
+                            children: [
+                                {
+                                    value: 'X',
+                                },
+                                {
+                                    value: 'Y',
+                                }
+                            ]
+                        },
+                        {
+                            value: 'Y',
+                            children: [
+                                {
+                                    value: 'X',
+                                },
+                                {
+                                    value: 'Y',
+                                    children: [
+                                        {
+                                            value: 'X',
+                                        },
+                                        {
+                                            value: 'Y',
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    value: 'W'
+                }
             ]
-              }
-            ]
-              }
-            ]
-          }
-        ]
-      };
+        };
 
-      function walkTree(tree, level) {
-        var value = tree.value;
-        if (!tree.children) {
-          return draw(value, level, true);
+        function walkTree2(tree, level) {
+            var value = tree.value;
+            if (!tree.children) {
+                var li = document.createElement('li');
+                li.innerHTML = value;
+                return li;
+            }
+
+            var nodeLi = document.createElement('li');
+            var nodeValue = document.createElement('span');
+            nodeValue.className = 'node-value';
+            nodeValue.innerText = value;
+
+            var nodeFold = document.createElement('span');
+            nodeFold.innerText = '[-]';
+            nodeFold.className = 'folding';
+            nodeFold.addEventListener('click', function() {
+                if (nodeFold.innerText === '[-]') {
+                    nodeFold.innerText = '[+]';
+                    nodeFold.parentNode.querySelector('span + ul').style.display = 'none';
+                } else {
+                    nodeFold.innerText = '[-]';
+                    nodeFold.parentNode.querySelector('span + ul').style.display = 'block';
+                }
+            });
+
+            var nodeChildren = document.createElement('ul');
+
+            nodeLi.appendChild(nodeValue);
+            nodeLi.appendChild(nodeFold);
+            nodeLi.appendChild(nodeChildren);
+
+            tree.children.forEach(function (child) {
+                nodeChildren.appendChild(walkTree2(child, level + 1));
+            });
+
+            return nodeLi;
         }
 
-        var result = draw(value, level, false);
-        tree.children.forEach(function (child) {
-          result += walkTree(child, level + 1)
-        });
-
-        return result;
-      }
-
-      function draw(value, level, isLeaf) {
-        if (!level) {
-          return isLeaf ? String(value) + '\n' : '[-] ' + value + '\n';
-        }
-
-        var result =  _.repeat(' |' + _.repeat(' ', 5), level) + '\n';
-
-        if (!isLeaf) {
-          value = '[-] ' + value;
-        }
-
-        return level > 1 ? result + _.repeat(' |' + _.repeat(' ', 5), level - 1) + " +-----" + value + '\n' : " |\n +-----" + value + '\n';
-      }
-
-      console.log(walkTree(tree, 0));
+        console.log(walkTree2(tree, 0));
+        var result = document.createElement('ul');
+        result.appendChild(walkTree2(tree, 0));
+        document.getElementById('tree').appendChild(result);
     }());
-    </script>
+</script>
 </body>
 
 </html>

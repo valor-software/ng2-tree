@@ -21,6 +21,7 @@
     "zone.js": "0.5.15"
   },
   "devDependencies": {
+    "clean-webpack-plugin": "0.1.8",
     "html-webpack-plugin": "^2.9.0"
   }
 }
