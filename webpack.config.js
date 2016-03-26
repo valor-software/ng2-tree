@@ -17,7 +17,7 @@ config.resolve = {
 
 config.entry = {
     vendor: [
-        'zone.js/dist/zone-microtask',
+        'zone.js',
         'reflect-metadata',
         'angular2/common',
         'angular2/core',

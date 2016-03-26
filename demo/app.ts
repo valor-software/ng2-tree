@@ -5,15 +5,60 @@ import {Component} from 'angular2/core';
 import {Ng2Tree} from '../ng2-tree';
 
 @Component({
-  selector: 'app',
-  template: `
-  <h1>{{msg}}</h1>
-  <ng2-tree></ng2-tree>
-  `,
-  directives: [Ng2Tree]
+    selector: 'app',
+    template: `<ng2-tree [tree]="tree"></ng2-tree>`,
+    directives: [Ng2Tree]
 })
 class App {
-    public msg:string = 'Hello, World!';
+    private tree:any = {
+        value: 'A',
+        children: [
+            {
+                value: 'B',
+            },
+            {
+                value: 'C',
+            },
+            {
+                value: 'D',
+                children: [
+                    {
+                        value: 'X',
+                        children: [
+                            {
+                                value: 'X',
+                            },
+                            {
+                                value: 'Y',
+                            }
+                        ]
+                    },
+                    {
+                        value: 'Y',
+                        children: [
+                            {
+                                value: 'X',
+                            },
+                            {
+                                value: 'Y',
+                                children: [
+                                    {
+                                        value: 'X',
+                                    },
+                                    {
+                                        value: 'Y',
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                value: 'W'
+            }
+        ]
+    };
 }
 
 bootstrap(App);
