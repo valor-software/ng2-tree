@@ -4,13 +4,15 @@ import {bootstrap} from 'angular2/platform/browser';
 import {Component} from 'angular2/core';
 import {Ng2Tree} from '../ng2-tree';
 
+require('./styles.styl');
+
 @Component({
     selector: 'app',
     template: `<ng2-tree [tree]="tree"></ng2-tree>`,
     directives: [Ng2Tree]
 })
 class App {
-    private tree:any = {
+    private tree: any = {
         value: 'A',
         children: [
             {

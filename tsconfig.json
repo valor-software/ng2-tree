@@ -3,6 +3,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
+    "moduleResolution": "node",
     "sourceMap": true,
     "declaration": true,
     "removeComments": true,
@@ -15,5 +16,8 @@
   },
   "exclude": [
     "node_modules"
+  ],
+  "files": [
+    "typings/main.d.ts"
   ]
 }

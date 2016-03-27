@@ -2,17 +2,17 @@
 
 const path = require('path');
 const webpack = require('webpack');
-//const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-let config = {};
+const config = {};
 
 config.devtool = 'sourcemap';
 config.context = __dirname;
 
 config.resolve = {
     root: __dirname,
-    extensions: ['', '.ts', '.js', '.json']
+    extensions: ['', '.ts', '.js', '.json', '.styl']
 };
 
 config.entry = {
@@ -28,6 +28,7 @@ config.entry = {
 
 config.output = {
     path: path.join(__dirname, './build'),
+    publicPath: '/',
     filename: '[name].js'
 };
 
@@ -35,16 +36,21 @@ config.module = {
     loaders: [
         {
             test: /\.ts$/,
-            loader: 'ts-loader'
+            loader: 'ts'
         },
         {
-            test: /\.css$/,
-            loader: 'raw'
+            test: /\.styl$/,
+            loader: 'style!css!stylus?resolve url'
         }
     ]
 };
 
 config.plugins = [
+    new HtmlWebpackPlugin({
+        title: 'ng2-tree',
+        template: 'demo/index.ejs',
+        inject: 'body'
+    }),
     new CleanWebpackPlugin(['build'], {
         root: __dirname,
         verbose: true
@@ -53,5 +59,10 @@ config.plugins = [
         name: 'common'
     })
 ];
+
+config.devServer = {
+    host: 'localhost',
+    port: 8080
+};
 
 module.exports = config;
