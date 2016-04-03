@@ -3,6 +3,7 @@
 import {bootstrap} from 'angular2/platform/browser';
 import {Component} from 'angular2/core';
 import {Ng2Tree} from '../ng2-tree';
+import {Ng2TreeService} from '../components/ng2-tree.service';
 
 require('./styles.styl');
 
@@ -63,4 +64,4 @@ class App {
     };
 }
 
-bootstrap(App);
+bootstrap(App, [Ng2TreeService]);
