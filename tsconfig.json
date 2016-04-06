@@ -14,9 +14,6 @@
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true
   },
-  "exclude": [
-    "node_modules"
-  ],
   "files": [
     "typings/main.d.ts"
   ]

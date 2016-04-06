@@ -6,9 +6,9 @@ import {EditableNodeDirective} from './editable-node.directive.ts';
 @Component({
   selector: 'ng2-tree',
   template: `
-      <ul class="tree" (keyup)="cancelActions($event)">
+      <ul *ngIf="tree" class="tree" (keyup)="cancelActions($event)">
         <li>
-          <div (mouseup)="showMenu($event)">
+          <div (contextmenu)="showMenu($event)">
             <span class="folding" (click)="switchFolding($event, tree)" [ngClass]="foldingType(tree)"></span>
             <span class="node-value" *ngIf="!edit">{{tree.value}}</span>
             <input type="text" class="node-value" editable [nodeValue]="tree.value" (valueChanged)="applyNewValue($event, tree)" *ngIf="edit"/>
@@ -17,7 +17,7 @@ import {EditableNodeDirective} from './editable-node.directive.ts';
             <ul class="node-menu-content">
               <li (click)="rename($event, tree)">Rename node</li>
               <li>Add node</li>
-              <li>Remove node</li>
+              <li (click)="remove($event, tree)">Remove node</li>
             </ul>          
           </div>
           <ng2-tree *ngFor="#child of tree.children" [tree]="child"></ng2-tree>
@@ -95,7 +95,14 @@ export class Ng2Tree implements OnInit {
     }
   }
 
-  private showMenu($event: any): void {
+  private remove($event: any, node: any) {
+    if ($event.which === 1) {
+      this.treeService.emitRemoveEvent({node});
+      this.isMenuVisible = false;
+    }
+  }
+
+  private showMenu($event: MouseEvent): void {
     if ($event.which === 3) {
       this.isMenuVisible = !this.isMenuVisible;
       this.treeService.emitMenuEvent({sender: this, action: 'close'})
@@ -117,6 +124,19 @@ export class Ng2Tree implements OnInit {
       .subscribe(menuEvent => {
         if (menuEvent.sender !== this && menuEvent.action === 'close') {
           this.isMenuVisible = false;
+        }
+      })
+    
+    this.treeService.removeNodeEventStream()
+      .subscribe(removeEvent => {
+        if (!this.tree || !this.tree.children) return;
+        for (let i = 0; i < this.tree.children.length; i++) {
+          const child = this.tree.children[i];
+          if (child === removeEvent.node) {
+            delete this.tree.children[i];
+            
+            break;
+          }
         }
       })
   }

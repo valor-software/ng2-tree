@@ -5,6 +5,7 @@ import {Observable} from 'rxjs/Observable';
 export class Ng2TreeService {
     private menuEvents$:EventEmitter<any> = new EventEmitter();
     private cancelEvents$:EventEmitter<any> = new EventEmitter();
+    private removeEvents$:EventEmitter<any> = new EventEmitter();
     
     menuEventStream(): Observable<any> {
       return this.menuEvents$;
@@ -12,6 +13,15 @@ export class Ng2TreeService {
   
     emitMenuEvent(event: any): void {
       this.menuEvents$.emit(event);
+    }
+    
+    
+    removeNodeEventStream(): Observable<any> {
+      return this.removeEvents$;
+    }
+    
+    emitRemoveEvent(event: any): void {
+      this.removeEvents$.emit(event);
     }
 
     cancelEventStream(): Observable<any> {
