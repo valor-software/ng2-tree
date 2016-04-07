@@ -26,18 +26,17 @@ export class EditableNodeDirective implements OnInit {
 
   @HostListener('keyup', ['$event', '$event.target.value'])
   private editCompleted($event: any, newValue: any) {
-    //13 - enter
-    //27 - esc
-    if ($event.keyCode === 13) {
-      // http://stackoverflow.com/questions/35515254/what-is-a-dehydrated-detector-and-how-am-i-using-one-here
-      setTimeout(() => this.valueChanged.emit({value: newValue}), 1);
+    if ($event.keyCode === 13) {//enter
+      return this.valueChanged.emit({type: 'keyup', value: newValue});
+    }
+
+    if ($event.keyCode === 27) {//esc
+      return this.valueChanged.emit({type: 'keyup', value: this.nodeValue});
     }
   }
 
   @HostListener('blur', ['$event', '$event.target.value'])
   private editCompletedByMouse($event: any, newValue: any) {
-    //13 - enter
-    //27 - esc
-    this.valueChanged.emit({value: newValue});
+    this.valueChanged.emit({type: 'blur', value: this.nodeValue});
   }
 }

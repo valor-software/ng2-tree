@@ -6,7 +6,21 @@ export class Ng2TreeService {
     private menuEvents$:EventEmitter<any> = new EventEmitter();
     private cancelEvents$:EventEmitter<any> = new EventEmitter();
     private removeEvents$:EventEmitter<any> = new EventEmitter();
+    public root: any;
+  
+    constructor() {
+      window.addEventListener('keyup', (event: any) => {
+      if (event.keyCode === 27) {
+        this.emitMenuEvent({sender: null, action: 'close'});
+      }
+    });
     
+    
+    window.addEventListener('click', (event: any) => {
+        this.emitMenuEvent({sender: null, action: 'close'});
+    });
+    }
+  
     menuEventStream(): Observable<any> {
       return this.menuEvents$;
     }

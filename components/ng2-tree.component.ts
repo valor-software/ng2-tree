@@ -6,7 +6,7 @@ import {EditableNodeDirective} from './editable-node.directive.ts';
 @Component({
   selector: 'ng2-tree',
   template: `
-      <ul *ngIf="tree" class="tree" (keyup)="cancelActions($event)">
+      <ul *ngIf="tree" class="tree">
         <li>
           <div (contextmenu)="showMenu($event)">
             <span class="folding" (click)="switchFolding($event, tree)" [ngClass]="foldingType(tree)"></span>
@@ -38,13 +38,13 @@ export class Ng2Tree implements OnInit {
   private treeService: Ng2TreeService;
   private isMenuVisible: boolean = false;
   private edit: boolean = false;
+  private previousEvent: any;
 
   constructor(treeService: Ng2TreeService) {
     this.treeService = treeService;
   }
 
   private switchFolding($event: any, tree: any): void {
-    console.log('fold');
     this.handleFoldingType($event.target.parentNode.parentNode, tree);
   }
 
@@ -91,14 +91,12 @@ export class Ng2Tree implements OnInit {
   private rename($event: any, node: any) {
     if ($event.which === 1) {
       this.edit = true;
-      this.isMenuVisible = false;
     }
   }
 
   private remove($event: any, node: any) {
     if ($event.which === 1) {
       this.treeService.emitRemoveEvent({node});
-      this.isMenuVisible = false;
     }
   }
 
@@ -110,11 +108,17 @@ export class Ng2Tree implements OnInit {
     $event.preventDefault();
   }
 
-  private cancelActions($event: any): void {
-    
-  }
-
   private applyNewValue($event: any, node: any): void {
+    if (!this.previousEvent) {
+      this.previousEvent = $event.type;
+    }
+    
+    if (this.previousEvent === 'keyup' && $event.type === 'blur') {
+      this.previousEvent = $event.type;
+      return;
+    }
+    
+    this.previousEvent = $event.type;
     node.value = $event.value;
     this.edit = false;
   }
@@ -126,7 +130,7 @@ export class Ng2Tree implements OnInit {
           this.isMenuVisible = false;
         }
       })
-    
+      
     this.treeService.removeNodeEventStream()
       .subscribe(removeEvent => {
         if (!this.tree || !this.tree.children) return;
