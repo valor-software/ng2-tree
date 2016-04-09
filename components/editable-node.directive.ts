@@ -7,13 +7,13 @@ import {Ng2TreeService} from './ng2-tree.service';
 export class EditableNodeDirective implements OnInit {
   @Input()
   nodeValue: string;
-  
+
   @Output()
   valueChanged: EventEmitter<any> = new EventEmitter(false);
 
   private element: any;
   private treeService: Ng2TreeService;
-  
+
   constructor(elementRef: ElementRef, treeService: Ng2TreeService) {
     this.element = elementRef;
     this.treeService = treeService;

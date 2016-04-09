@@ -16,7 +16,7 @@ import {EditableNodeDirective} from './editable-node.directive.ts';
           <div class="node-menu" *ngIf="isMenuVisible">
             <ul class="node-menu-content">
               <li (click)="rename($event, tree)">Rename node</li>
-              <li>Add node</li>
+              <li (click)="addNode($event, tree)">Add node</li>
               <li (click)="remove($event, tree)">Remove node</li>
             </ul>          
           </div>
@@ -88,6 +88,16 @@ export class Ng2Tree implements OnInit {
     }
   }
 
+
+  private addNode($event: any, node: any) {
+    if ($event.which === 1) {
+      if (!node.children || !node.children.push) {
+        node.children = [];
+      }
+      node.children.push({value: '', status: 'new'});
+    }
+  }
+
   private rename($event: any, node: any) {
     if ($event.which === 1) {
       this.edit = true;
@@ -112,25 +122,35 @@ export class Ng2Tree implements OnInit {
     if (!this.previousEvent) {
       this.previousEvent = $event.type;
     }
-    
+
     if (this.previousEvent === 'keyup' && $event.type === 'blur') {
       this.previousEvent = $event.type;
       return;
     }
-    
+
+    if (!$event.value) {
+      return this.treeService.emitRemoveEvent({node});
+    }
+
     this.previousEvent = $event.type;
     node.value = $event.value;
     this.edit = false;
   }
 
   ngOnInit(): void {
+    if (!this.tree) return;
+
+    if (this.tree.status === 'new') {
+      this.edit = true;
+    }
+
     this.treeService.menuEventStream()
       .subscribe(menuEvent => {
         if (menuEvent.sender !== this && menuEvent.action === 'close') {
           this.isMenuVisible = false;
         }
-      })
-      
+      });
+
     this.treeService.removeNodeEventStream()
       .subscribe(removeEvent => {
         if (!this.tree || !this.tree.children) return;
@@ -138,10 +158,10 @@ export class Ng2Tree implements OnInit {
           const child = this.tree.children[i];
           if (child === removeEvent.node) {
             delete this.tree.children[i];
-            
+
             break;
           }
         }
-      })
+      });
   }
 }
