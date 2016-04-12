@@ -4,7 +4,6 @@ import {Observable} from 'rxjs/Observable';
 @Injectable()
 export class Ng2TreeService {
   private menuEvents$: EventEmitter<any> = new EventEmitter();
-  private removeEvents$: EventEmitter<any> = new EventEmitter();
 
   constructor() {
     window.addEventListener('keyup', (event: any) => {
@@ -13,7 +12,7 @@ export class Ng2TreeService {
       }
     });
 
-    window.addEventListener('click', (event: any) => {
+    window.addEventListener('click', () => {
       this.emitMenuEvent({sender: null, action: 'close'});
     });
   }
@@ -24,13 +23,5 @@ export class Ng2TreeService {
 
   emitMenuEvent(event: any): void {
     this.menuEvents$.emit(event);
-  }
-
-  removeNodeEventStream(): Observable<any> {
-    return this.removeEvents$;
-  }
-
-  emitRemoveEvent(event: any): void {
-    this.removeEvents$.emit(event);
   }
 }

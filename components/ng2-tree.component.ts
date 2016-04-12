@@ -1,7 +1,9 @@
-import {Input, Component, OnInit} from 'angular2/core';
+import {Input, Component, OnInit, EventEmitter, Output} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {Ng2TreeService} from './ng2-tree.service';
-import {EditableNodeDirective} from './editable-node.directive.ts';
+import {EditableNodeDirective} from './editable-node.directive';
+import {NodeMenuComponent} from "./node-menu.component";
+import {TreeStatus} from "./types";
 
 @Component({
   selector: 'ng2-tree',
@@ -13,18 +15,17 @@ import {EditableNodeDirective} from './editable-node.directive.ts';
             <span class="node-value" *ngIf="!edit">{{tree.value}}</span>
             <input type="text" class="node-value" editable [nodeValue]="tree.value" (valueChanged)="applyNewValue($event, tree)" *ngIf="edit"/>
           </div>
-          <div class="node-menu" *ngIf="isMenuVisible">
-            <ul class="node-menu-content">
-              <li (click)="rename($event, tree)">Rename node</li>
-              <li (click)="addNode($event, tree)">Add node</li>
-              <li (click)="remove($event, tree)">Remove node</li>
-            </ul>          
-          </div>
-          <ng2-tree *ngFor="#child of tree.children" [tree]="child"></ng2-tree>
+
+          <node-menu *ngIf="isMenuVisible" 
+            (removeSelected)="onRemoveSelected()" 
+            (renameSelected)="onRenameSelected()"
+            (newSelected)="onNewSelected()"></node-menu>
+
+          <ng2-tree *ngFor="#child of tree.children" [tree]="child" (nodeRemoved)="onChildRemoved($event)"></ng2-tree>
         </li>
       </ul>
     `,
-  directives: [EditableNodeDirective, Ng2Tree, CORE_DIRECTIVES]
+  directives: [EditableNodeDirective, Ng2Tree, NodeMenuComponent, CORE_DIRECTIVES]
 })
 export class Ng2Tree implements OnInit {
   private static COMPONENT_TAG_NAME: string = 'NG2-TREE';
@@ -34,6 +35,9 @@ export class Ng2Tree implements OnInit {
 
   @Input()
   private tree: any;
+
+  @Output()
+  private nodeRemoved: EventEmitter<any> = new EventEmitter();
 
   private treeService: Ng2TreeService;
   private isMenuVisible: boolean = false;
@@ -88,25 +92,28 @@ export class Ng2Tree implements OnInit {
     }
   }
 
-
-  private addNode($event: any, node: any) {
-    if ($event.which === 1) {
-      if (!node.children || !node.children.push) {
-        node.children = [];
-      }
-      node.children.push({value: '', status: 'new'});
-    }
-  }
-
-  private rename($event: any, node: any) {
-    if ($event.which === 1) {
+  private onRenameSelected() {
       this.edit = true;
-    }
   }
 
-  private remove($event: any, node: any) {
-    if ($event.which === 1) {
-      this.treeService.emitRemoveEvent({node});
+  private onRemoveSelected() {
+    this.nodeRemoved.emit({node: this.tree});
+  }
+
+  private onNewSelected() {
+    if (!this.tree.children || !this.tree.children.push) {
+      this.tree.children = [];
+    }
+    this.tree.children.push({value: '', status: TreeStatus.New});
+  }
+
+  private onChildRemoved(event: any) {
+    for (let i = 0; i < this.tree.children.length; i++) {
+      const child = this.tree.children[i];
+      if (child === event.node) {
+        this.tree.children.splice(i, 1);
+        break;
+      }
     }
   }
 
@@ -129,7 +136,7 @@ export class Ng2Tree implements OnInit {
     }
 
     if (!$event.value) {
-      return this.treeService.emitRemoveEvent({node});
+      return this.nodeRemoved.emit({node: this.tree});
     }
 
     this.previousEvent = $event.type;
@@ -140,7 +147,7 @@ export class Ng2Tree implements OnInit {
   ngOnInit(): void {
     if (!this.tree) return;
 
-    if (this.tree.status === 'new') {
+    if (this.tree.status === TreeStatus.New) {
       this.edit = true;
     }
 
@@ -148,19 +155,6 @@ export class Ng2Tree implements OnInit {
       .subscribe(menuEvent => {
         if (menuEvent.sender !== this && menuEvent.action === 'close') {
           this.isMenuVisible = false;
-        }
-      });
-
-    this.treeService.removeNodeEventStream()
-      .subscribe(removeEvent => {
-        if (!this.tree || !this.tree.children) return;
-        for (let i = 0; i < this.tree.children.length; i++) {
-          const child = this.tree.children[i];
-          if (child === removeEvent.node) {
-            delete this.tree.children[i];
-
-            break;
-          }
         }
       });
   }
