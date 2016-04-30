@@ -1,19 +1,18 @@
-///<reference path="../node_modules/angular2/typings/browser.d.ts"/>
-
-import {bootstrap} from 'angular2/platform/browser';
-import {Component} from 'angular2/core';
+import {bootstrap} from '@angular/platform-browser-dynamic';
+import {Component, OnInit} from '@angular/core';
 import {Ng2Tree} from '../ng2-tree';
 import {Ng2TreeService} from '../components/ng2-tree.service';
 
-require('./styles.styl');
-
 @Component({
     selector: 'app',
-    template: `<ng2-tree [tree]="tree"></ng2-tree>`,
+    template: `
+        <ng2-tree [tree]="tree"></ng2-tree>
+        <ng2-tree [tree]="tree2"></ng2-tree>
+    `,
     directives: [Ng2Tree]
 })
 class App {
-    private tree: any = {
+  private tree: any = {
         value: 'A',
         children: [
             {
@@ -62,6 +61,57 @@ class App {
             }
         ]
     };
+    
+      private tree2: any = {
+        value: 'Hello, World!',
+        children: [
+            {
+                value: 'Javascript',
+            },
+            {
+                value: 'Java',
+            },
+            {
+                value: 'Web',
+                children: [
+                    {
+                        value: 'HTML',
+                        children: [
+                            {
+                                value: 'html5',
+                            },
+                            {
+                                value: 'bootstrap',
+                            }
+                        ]
+                    },
+                    {
+                        value: 'css',
+                        children: [
+                            {
+                                value: 'X',
+                            },
+                            {
+                                value: 'Y',
+                                children: [
+                                    {
+                                        value: 'X',
+                                    },
+                                    {
+                                        value: 'Y',
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                value: 'W'
+            }
+        ]
+    };
+
 }
 
 bootstrap(App, [Ng2TreeService]);

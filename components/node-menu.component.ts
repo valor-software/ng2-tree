@@ -1,19 +1,12 @@
-import {Component, EventEmitter, Output} from "angular2/core";
-import {CORE_DIRECTIVES} from "angular2/common";
+import {Component, EventEmitter, Output} from "@angular/core";
+import {CORE_DIRECTIVES} from "@angular/common";
 import {MouseButtons} from "./types";
 
 @Component({
   selector: 'node-menu',
-  directives: [CORE_DIRECTIVES],
-  template: `
-    <div class="node-menu">
-      <ul class="node-menu-content">
-        <li (click)="onNew($event)">New</li>
-        <li (click)="onRename($event)">Rename</li>
-        <li (click)="onRemove($event)">Remove</li>
-      </ul>          
-    </div>
-  `
+  styles: [require('./node-menu.component.styl')],
+  template: require('./node-menu.component.html'),
+  directives: [CORE_DIRECTIVES]
 })
 export class NodeMenuComponent {
 
@@ -26,12 +19,12 @@ export class NodeMenuComponent {
   @Output()
   private renameSelected: EventEmitter<any> = new EventEmitter();
 
-  private onNew($event: any) {
+  private onNew($event: any, isFolder: boolean = false) {
     if (!this.menuItemSelected($event)) {
       return;
     }
 
-    this.newSelected.emit(null);
+    this.newSelected.emit({isFolder});
   }
 
   private onRename($event: any) {

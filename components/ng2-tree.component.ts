@@ -1,34 +1,18 @@
-import {Input, Component, OnInit, EventEmitter, Output} from 'angular2/core';
-import {CORE_DIRECTIVES} from 'angular2/common';
+import {Input, Component, OnInit, EventEmitter, Output, ElementRef} from '@angular/core';
+import {CORE_DIRECTIVES} from '@angular/common';
 import {Ng2TreeService} from './ng2-tree.service';
 import {EditableNodeDirective} from './editable-node.directive';
-import {NodeMenuComponent} from "./node-menu.component";
-import {TreeStatus} from "./types";
+import {NodeMenuComponent} from './node-menu.component';
+import {TreeStatus} from './types';
+import Draggable from './draggable.directive';
 
 @Component({
   selector: 'ng2-tree',
-  template: `
-      <ul *ngIf="tree" class="tree">
-        <li>
-          <div (contextmenu)="showMenu($event)">
-            <span class="folding" (click)="switchFolding($event, tree)" [ngClass]="foldingType(tree)"></span>
-            <span class="node-value" *ngIf="!edit">{{tree.value}}</span>
-            <input type="text" class="node-value" editable [nodeValue]="tree.value" (valueChanged)="applyNewValue($event, tree)" *ngIf="edit"/>
-          </div>
-
-          <node-menu *ngIf="isMenuVisible" 
-            (removeSelected)="onRemoveSelected()" 
-            (renameSelected)="onRenameSelected()"
-            (newSelected)="onNewSelected()"></node-menu>
-
-          <ng2-tree *ngFor="#child of tree.children" [tree]="child" (nodeRemoved)="onChildRemoved($event)"></ng2-tree>
-        </li>
-      </ul>
-    `,
-  directives: [EditableNodeDirective, Ng2Tree, NodeMenuComponent, CORE_DIRECTIVES]
+  styles: [require('./ng2-tree.component.styl')],
+  template: require('./ng2-tree.component.html'),
+  directives: [EditableNodeDirective, Ng2Tree, NodeMenuComponent, Draggable, CORE_DIRECTIVES],
 })
 export class Ng2Tree implements OnInit {
-  private static COMPONENT_TAG_NAME: string = 'NG2-TREE';
   private static FOLDING_NODE_EXPANDED: string = 'node-expanded';
   private static FOLDING_NODE_COLLAPSED: string = 'node-collapsed';
   private static FOLDING_NODE_LEAF: string = 'node-leaf';
@@ -36,16 +20,25 @@ export class Ng2Tree implements OnInit {
   @Input()
   private tree: any;
 
+  @Input()
+  private parent: any;
+  
+  @Input()
+  private positionRelativelyToParent: number = 0;
+
   @Output()
   private nodeRemoved: EventEmitter<any> = new EventEmitter();
 
-  private treeService: Ng2TreeService;
+  private isFolder: boolean;
   private isMenuVisible: boolean = false;
   private edit: boolean = false;
   private previousEvent: any;
 
-  constructor(treeService: Ng2TreeService) {
-    this.treeService = treeService;
+  public constructor(private treeService: Ng2TreeService, private element: ElementRef) {
+  }
+
+  private isNodeExpanded(): boolean {
+    return this.tree.foldingType === Ng2Tree.FOLDING_NODE_EXPANDED;
   }
 
   private switchFolding($event: any, tree: any): void {
@@ -79,39 +72,37 @@ export class Ng2Tree implements OnInit {
       return;
     }
 
-    let display = 'block';
-    if (node.foldingType === Ng2Tree.FOLDING_NODE_EXPANDED) {
-      display = 'none';
-    }
-
     node.foldingType = this.nextFoldingType(node);
-    for (let element of parent.childNodes) {
-      if (element.nodeName === Ng2Tree.COMPONENT_TAG_NAME) {
-        element.style.display = display;
-      }
-    }
   }
 
   private onRenameSelected() {
       this.edit = true;
+      this.isMenuVisible = false;
   }
 
   private onRemoveSelected() {
     this.nodeRemoved.emit({node: this.tree});
   }
 
-  private onNewSelected() {
+  private onNewSelected(event: any) {
     if (!this.tree.children || !this.tree.children.push) {
       this.tree.children = [];
     }
-    this.tree.children.push({value: '', status: TreeStatus.New});
+    const newNode: any = {value: '', status: TreeStatus.New};
+
+    if (event.isFolder) {
+      newNode.children = [];
+    }
+
+    this.isFolder ? this.tree.children.push(newNode) : this.parent.children.push(newNode);
+    this.isMenuVisible = false;
   }
 
-  private onChildRemoved(event: any) {
-    for (let i = 0; i < this.tree.children.length; i++) {
-      const child = this.tree.children[i];
+  private onChildRemoved(event: any, parent: any = this.tree) {
+    for (let i = 0; i < parent.children.length; i++) {
+      const child = parent.children[i];
       if (child === event.node) {
-        this.tree.children.splice(i, 1);
+        parent.children.splice(i, 1);
         break;
       }
     }
@@ -120,7 +111,7 @@ export class Ng2Tree implements OnInit {
   private showMenu($event: MouseEvent): void {
     if ($event.which === 3) {
       this.isMenuVisible = !this.isMenuVisible;
-      this.treeService.emitMenuEvent({sender: this, action: 'close'})
+      this.treeService.emitMenuEvent({sender: this.element.nativeElement, action: 'close'})
     }
     $event.preventDefault();
   }
@@ -141,21 +132,65 @@ export class Ng2Tree implements OnInit {
 
     this.previousEvent = $event.type;
     node.value = $event.value;
+    node.status = TreeStatus.Modified;
     this.edit = false;
   }
 
   ngOnInit(): void {
+    this.tree.position = this.positionRelativelyToParent;
     if (!this.tree) return;
 
     if (this.tree.status === TreeStatus.New) {
       this.edit = true;
     }
 
+    this.isFolder = this.tree.children && this.tree.children.push;
+
     this.treeService.menuEventStream()
       .subscribe(menuEvent => {
-        if (menuEvent.sender !== this && menuEvent.action === 'close') {
+        if (!this.element.nativeElement.contains(menuEvent.sender) && menuEvent.action === 'close') {
           this.isMenuVisible = false;
         }
       });
+
+    this.treeService.dragNDropEventStream()
+      // .filter((event: any) => event.target === this.element.nativeElement)
+      .subscribe((event: any) => {
+        if (event.source === this.element && event.action === 'remove') {
+
+           this.onChildRemoved({node: event.value}, this.parent);
+          return;
+        }
+
+
+        if(event.target === this.element && event.action !== 'remove') {
+          if (this.tree.children && this.tree.children.indexOf(event.value) >= 0) {
+            console.log('moved element to existing parent');
+            return;
+          }
+
+          if (this.isFolder) {
+
+            this.tree.children.push(event.value);
+            event.action = 'remove';
+            this.treeService.emitDragNDropEvent(event);
+            console.log('folder')
+          } else if (this.parent.children.indexOf(event.value) >= 0) {
+
+            const ev = this.parent.children.indexOf(event.value);
+            const tv = this.parent.children.indexOf(this.tree);
+
+            this.parent.children[ev] = this.tree;
+            this.parent.children[tv] = event.value;
+            console.log('sibling')
+          } else {
+
+            this.parent.children.splice(this.positionRelativelyToParent, 0, event.value);
+            event.action = 'remove';
+            this.treeService.emitDragNDropEvent(event);
+            console.log('foreign')
+          }
+        }
+    });
   }
 }

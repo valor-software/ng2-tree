@@ -12,15 +12,18 @@ config.context = __dirname;
 
 config.resolve = {
     root: __dirname,
-    extensions: ['', '.ts', '.js', '.json', '.styl']
+    extensions: ['', '.ts', '.js', '.json', '.styl', '.css', 'html']
 };
 
 config.entry = {
     vendor: [
         'zone.js',
         'reflect-metadata',
-        'angular2/common',
-        'angular2/core',
+        '@angular/common',
+        '@angular/core',
+        '@angular/compiler',
+        '@angular/platform-browser',
+        '@angular/platform-browser-dynamic',
         'lodash'
     ],
     'app': ['./ng2-tree.ts', './demo/app.ts'],
@@ -35,12 +38,36 @@ config.output = {
 config.module = {
     loaders: [
         {
+            test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "url?limit=10000&mimetype=application/font-woff"
+        }, {
+            test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "url?limit=10000&mimetype=application/font-woff"
+        }, {
+            test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "url?limit=10000&mimetype=application/octet-stream"
+        }, {
+            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "file"
+        }, {
+            test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "url?limit=10000&mimetype=image/svg+xml"
+        },
+        {
             test: /\.ts$/,
             loader: 'ts'
         },
         {
-            test: /\.styl$/,
+            test: /\.css$/,
             loader: 'style!css!stylus?resolve url'
+        },
+        {
+            test: /\.styl$/,
+            loader: 'to-string!css!stylus?resolve url'
+        },
+        {
+            test: /\.html$/,
+            loader: 'raw'
         }
     ]
 };

@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, OnInit, Output, EventEmitter, HostListener} from 'angular2/core';
+import {Directive, ElementRef, Input, OnInit, Output, EventEmitter, HostListener} from '@angular/core';
 import {Ng2TreeService} from './ng2-tree.service';
 
 @Directive({

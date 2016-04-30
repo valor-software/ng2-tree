@@ -5,7 +5,8 @@ export interface Tree {
 }
 
 export enum TreeStatus {
-  New
+  New,
+  Modified
 }
 
 export enum MouseButtons {

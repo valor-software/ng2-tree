@@ -4,30 +4,39 @@
   "description": "angular2 component for representing ui tree structures",
   "main": "ng2-tree.js",
   "scripts": {
-    "preinstall": "rm -rf ./typings",
+    "preinstall": "rm -rf ./typings && typings install",
     "dev": "webpack-dev-server --inline --hot",
     "build": "webpack"
   },
   "author": "rychko.georgiy@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "angular2": "2.0.0-beta.13",
+    "@angular/common": "2.0.0-rc.1",
+    "@angular/compiler": "2.0.0-rc.1",
+    "@angular/core": "2.0.0-rc.1",
+    "@angular/platform-browser": "2.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "2.0.0-rc.1",
     "es6-shim": "0.35.0",
+    "file-loader": "0.8.5",
+    "font-awesome": "4.6.1",
     "lodash": "4.6.1",
     "reflect-metadata": "0.1.2",
-    "rxjs": "5.0.0-beta.2",
+    "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.23",
     "ts-loader": "0.8.1",
     "typescript": "1.8.2",
+    "url-loader": "0.5.7",
     "webpack": "1.12.14",
-    "zone.js": "0.6.6"
+    "zone.js": "0.6.12"
   },
   "devDependencies": {
     "clean-webpack-plugin": "0.1.8",
     "css-loader": "0.23.1",
     "html-webpack-plugin": "2.9.0",
+    "raw-loader": "0.5.1",
     "style-loader": "0.13.1",
     "stylus-loader": "1.5.1",
+    "to-string-loader": "1.1.4",
     "typings": "0.7.9",
     "webpack-dev-server": "1.14.1"
   }
