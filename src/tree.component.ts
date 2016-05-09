@@ -3,7 +3,7 @@ import {CORE_DIRECTIVES} from '@angular/common';
 import {TreeService} from './tree.service';
 import {NodeEditableDirective} from './node-editable.directive';
 import {NodeMenuComponent} from './node-menu.component';
-import {TreeStatus} from './types';
+import {TreeStatus, NodeMenuItemSelectedEvent, NodeMenuItemAction} from './types';
 import Draggable from './node-draggable.directive';
 
 @Component({
@@ -22,7 +22,7 @@ export class TreeComponent implements OnInit {
 
   @Input()
   private parent: any;
-  
+
   @Input()
   private positionRelativelyToParent: number = 0;
 
@@ -76,8 +76,8 @@ export class TreeComponent implements OnInit {
   }
 
   private onRenameSelected() {
-      this.edit = true;
-      this.isMenuVisible = false;
+    this.edit = true;
+    this.isMenuVisible = false;
   }
 
   private onRemoveSelected() {
@@ -96,6 +96,26 @@ export class TreeComponent implements OnInit {
 
     this.isFolder ? this.model.children.push(newNode) : this.parent.children.push(newNode);
     this.isMenuVisible = false;
+  }
+
+  private onMenuItemSelected($event: NodeMenuItemSelectedEvent) {
+    console.log($event);
+    switch ($event.nodeMenuItemAction) {
+      case NodeMenuItemAction.NewTag:
+        this.onNewSelected({});
+        break;
+      case NodeMenuItemAction.NewFolder:
+        this.onNewSelected({isFolder: true});
+        break;
+      case NodeMenuItemAction.Rename:
+        this.onRenameSelected();
+        break;
+      case NodeMenuItemAction.Remove:
+        this.onRemoveSelected();
+        break;
+      default:
+        throw new Error(`Chosen menu item doesn't exist`);
+    }
   }
 
   private onChildRemoved(event: any, parent: any = this.model) {
@@ -158,12 +178,12 @@ export class TreeComponent implements OnInit {
       .subscribe((event: any) => {
         if (event.source === this.element && event.action === 'remove') {
 
-           this.onChildRemoved({node: event.value}, this.parent);
+          this.onChildRemoved({node: event.value}, this.parent);
           return;
         }
 
 
-        if(event.target === this.element && event.action !== 'remove') {
+        if (event.target === this.element && event.action !== 'remove') {
           if (this.model.children && this.model.children.indexOf(event.value) >= 0) {
             console.log('moved element to existing parent');
             return;
@@ -191,6 +211,6 @@ export class TreeComponent implements OnInit {
             console.log('foreign')
           }
         }
-    });
+      });
   }
 }

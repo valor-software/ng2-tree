@@ -12,3 +12,14 @@ export enum TreeStatus {
 export enum MouseButtons {
   Left = 1,
 }
+
+export enum NodeMenuItemAction {
+  NewFolder,
+  NewTag,
+  Rename,
+  Remove
+}
+
+export interface NodeMenuItemSelectedEvent {
+  nodeMenuItemAction: NodeMenuItemAction
+}

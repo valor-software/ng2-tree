@@ -1,6 +1,12 @@
 @import '../common/styles/colors'
 @import '../common/styles/fonts'
 
+// mixins
+node-menu-item-icon(content)
+  content: content
+  font-family primary-icons-font-family
+
+// styles
 .node-menu
   position relative
   width 150px
@@ -9,25 +15,40 @@
     width 100%
     padding 5px
     position absolute
-    background-color node-menu-background
+    border 1px solid color-grey
     border-radius 5%
-    color primary-font-color
+    box-shadow 0 0 5px color-grey
+    background-color color-light-grey
+    color color-black
     font-family primary-font-family
 
-    li
+    li.node-menu-item
       list-style none
       padding 3px
 
+    .node-menu-item
       &:hover
         border-radius 5%
         opacity unset
         cursor pointer
-        background-color node-menu-active-item
+        background-color color-indigo
         transition background-color 0.2s ease-out
 
-      .fa
+      .node-menu-item-icon
+        display inline-block
         width 16px
-        height 16px
+
+        &.new-tag:before
+          node-menu-item-icon(tag-icon)
+
+        &.new-folder:before
+          node-menu-item-icon(folder-icon)
+
+        &.rename:before
+          node-menu-item-icon(rename-icon)
+
+        &.remove:before
+          node-menu-item-icon(remove-icon)
 
       .node-menu-item-value
         margin-left 5px

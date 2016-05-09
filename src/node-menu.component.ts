@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Output} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {MouseButtons} from "./types";
+import {Component, EventEmitter, Output} from '@angular/core';
+import {CORE_DIRECTIVES} from '@angular/common';
+import {MouseButtons, NodeMenuItemAction, NodeMenuItemSelectedEvent} from './types';
 
 @Component({
   selector: 'node-menu',
@@ -9,41 +9,47 @@ import {MouseButtons} from "./types";
   directives: [CORE_DIRECTIVES]
 })
 export class NodeMenuComponent {
-
   @Output()
-  private newSelected: EventEmitter<any> = new EventEmitter();
+  private menuItemSelected: EventEmitter<NodeMenuItemSelectedEvent> = new EventEmitter();
 
-  @Output()
-  private removeSelected: EventEmitter<any> = new EventEmitter();
+  private availableMenuItems: NodeMenuItem[] = [
+    {
+      name: 'New tag',
+      action: NodeMenuItemAction.NewTag,
+      cssClass: 'new-tag'
+    },
+    {
+      name: 'New folder',
+      action: NodeMenuItemAction.NewFolder,
+      cssClass: 'new-folder',
+    },
+    {
+      name: 'Rename',
+      action: NodeMenuItemAction.Rename,
+      cssClass: 'rename'
+    },
+    {
+      name: 'Remove',
+      action: NodeMenuItemAction.Remove,
+      cssClass: 'remove'
+    },
+  ];
 
-  @Output()
-  private renameSelected: EventEmitter<any> = new EventEmitter();
-
-  private onNew($event: any, isFolder: boolean = false) {
-    if (!this.menuItemSelected($event)) {
+  private onMenuItemSelected($event: any, selectedMenuItem: NodeMenuItem) {
+    if (!this.isSelectionValid($event)) {
       return;
     }
 
-    this.newSelected.emit({isFolder});
+    this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
   }
 
-  private onRename($event: any) {
-    if (!this.menuItemSelected($event)) {
-      return;
-    }
-
-    this.renameSelected.emit(null);
+  private isSelectionValid($event: any) {
+    return $event.which === MouseButtons.Left;
   }
+}
 
-  private onRemove($event: any) {
-    if (!this.menuItemSelected($event)) {
-      return;
-    }
-
-    this.removeSelected.emit(null);
-  }
-
-  private menuItemSelected(event: any) {
-    return event.which === MouseButtons.Left;
-  }
+interface NodeMenuItem {
+  name: string;
+  action: NodeMenuItemAction;
+  cssClass: string;
 }
