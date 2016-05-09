@@ -1,24 +1,24 @@
 import {Input, Component, OnInit, EventEmitter, Output, ElementRef} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
-import {Ng2TreeService} from './ng2-tree.service';
-import {EditableNodeDirective} from './editable-node.directive';
+import {TreeService} from './tree.service';
+import {NodeEditableDirective} from './node-editable.directive';
 import {NodeMenuComponent} from './node-menu.component';
 import {TreeStatus} from './types';
-import Draggable from './draggable.directive';
+import Draggable from './node-draggable.directive';
 
 @Component({
-  selector: 'ng2-tree',
-  styles: [require('./ng2-tree.component.styl')],
-  template: require('./ng2-tree.component.html'),
-  directives: [EditableNodeDirective, Ng2Tree, NodeMenuComponent, Draggable, CORE_DIRECTIVES],
+  selector: 'tree',
+  styles: [require('./tree.component.styl')],
+  template: require('./tree.component.html'),
+  directives: [NodeEditableDirective, TreeComponent, NodeMenuComponent, Draggable, CORE_DIRECTIVES],
 })
-export class Ng2Tree implements OnInit {
+export class TreeComponent implements OnInit {
   private static FOLDING_NODE_EXPANDED: string = 'node-expanded';
   private static FOLDING_NODE_COLLAPSED: string = 'node-collapsed';
   private static FOLDING_NODE_LEAF: string = 'node-leaf';
 
   @Input()
-  private tree: any;
+  private model: any;
 
   @Input()
   private parent: any;
@@ -34,11 +34,11 @@ export class Ng2Tree implements OnInit {
   private edit: boolean = false;
   private previousEvent: any;
 
-  public constructor(private treeService: Ng2TreeService, private element: ElementRef) {
+  public constructor(private treeService: TreeService, private element: ElementRef) {
   }
 
   private isNodeExpanded(): boolean {
-    return this.tree.foldingType === Ng2Tree.FOLDING_NODE_EXPANDED;
+    return this.model.foldingType === TreeComponent.FOLDING_NODE_EXPANDED;
   }
 
   private switchFolding($event: any, tree: any): void {
@@ -51,24 +51,24 @@ export class Ng2Tree implements OnInit {
     }
 
     if (node.children) {
-      node.foldingType = Ng2Tree.FOLDING_NODE_EXPANDED;
+      node.foldingType = TreeComponent.FOLDING_NODE_EXPANDED;
     } else {
-      node.foldingType = Ng2Tree.FOLDING_NODE_LEAF;
+      node.foldingType = TreeComponent.FOLDING_NODE_LEAF;
     }
 
     return node.foldingType;
   }
 
   private nextFoldingType(node: any): string {
-    if (node.foldingType === Ng2Tree.FOLDING_NODE_EXPANDED) {
-      return Ng2Tree.FOLDING_NODE_COLLAPSED;
+    if (node.foldingType === TreeComponent.FOLDING_NODE_EXPANDED) {
+      return TreeComponent.FOLDING_NODE_COLLAPSED;
     }
 
-    return Ng2Tree.FOLDING_NODE_EXPANDED;
+    return TreeComponent.FOLDING_NODE_EXPANDED;
   }
 
   private handleFoldingType(parent: any, node: any) {
-    if (node.foldingType === Ng2Tree.FOLDING_NODE_LEAF) {
+    if (node.foldingType === TreeComponent.FOLDING_NODE_LEAF) {
       return;
     }
 
@@ -81,12 +81,12 @@ export class Ng2Tree implements OnInit {
   }
 
   private onRemoveSelected() {
-    this.nodeRemoved.emit({node: this.tree});
+    this.nodeRemoved.emit({node: this.model});
   }
 
   private onNewSelected(event: any) {
-    if (!this.tree.children || !this.tree.children.push) {
-      this.tree.children = [];
+    if (!this.model.children || !this.model.children.push) {
+      this.model.children = [];
     }
     const newNode: any = {value: '', status: TreeStatus.New};
 
@@ -94,11 +94,11 @@ export class Ng2Tree implements OnInit {
       newNode.children = [];
     }
 
-    this.isFolder ? this.tree.children.push(newNode) : this.parent.children.push(newNode);
+    this.isFolder ? this.model.children.push(newNode) : this.parent.children.push(newNode);
     this.isMenuVisible = false;
   }
 
-  private onChildRemoved(event: any, parent: any = this.tree) {
+  private onChildRemoved(event: any, parent: any = this.model) {
     for (let i = 0; i < parent.children.length; i++) {
       const child = parent.children[i];
       if (child === event.node) {
@@ -127,7 +127,7 @@ export class Ng2Tree implements OnInit {
     }
 
     if (!$event.value) {
-      return this.nodeRemoved.emit({node: this.tree});
+      return this.nodeRemoved.emit({node: this.model});
     }
 
     this.previousEvent = $event.type;
@@ -137,14 +137,14 @@ export class Ng2Tree implements OnInit {
   }
 
   ngOnInit(): void {
-    this.tree.position = this.positionRelativelyToParent;
-    if (!this.tree) return;
+    this.model.position = this.positionRelativelyToParent;
+    if (!this.model) return;
 
-    if (this.tree.status === TreeStatus.New) {
+    if (this.model.status === TreeStatus.New) {
       this.edit = true;
     }
 
-    this.isFolder = this.tree.children && this.tree.children.push;
+    this.isFolder = this.model.children && this.model.children.push;
 
     this.treeService.menuEventStream()
       .subscribe(menuEvent => {
@@ -164,23 +164,23 @@ export class Ng2Tree implements OnInit {
 
 
         if(event.target === this.element && event.action !== 'remove') {
-          if (this.tree.children && this.tree.children.indexOf(event.value) >= 0) {
+          if (this.model.children && this.model.children.indexOf(event.value) >= 0) {
             console.log('moved element to existing parent');
             return;
           }
 
           if (this.isFolder) {
 
-            this.tree.children.push(event.value);
+            this.model.children.push(event.value);
             event.action = 'remove';
             this.treeService.emitDragNDropEvent(event);
             console.log('folder')
           } else if (this.parent.children.indexOf(event.value) >= 0) {
 
             const ev = this.parent.children.indexOf(event.value);
-            const tv = this.parent.children.indexOf(this.tree);
+            const tv = this.parent.children.indexOf(this.model);
 
-            this.parent.children[ev] = this.tree;
+            this.parent.children[ev] = this.model;
             this.parent.children[tv] = event.value;
             console.log('sibling')
           } else {

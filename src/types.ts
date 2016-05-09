@@ -1,6 +1,6 @@
-export interface Tree {
+export interface TreeModel {
   value: string;
-  children?: Array<Tree>;
+  children?: Array<TreeModel>;
   status?: TreeStatus
 }
 

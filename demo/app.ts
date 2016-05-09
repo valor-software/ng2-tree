@@ -1,15 +1,14 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
-import {Component, OnInit} from '@angular/core';
-import {Ng2Tree} from '../ng2-tree';
-import {Ng2TreeService} from '../components/ng2-tree.service';
+import {Component} from '@angular/core';
+import {TreeComponent, TreeService} from '../ng2-tree';
 
 @Component({
     selector: 'app',
     template: `
-        <ng2-tree [tree]="tree"></ng2-tree>
-        <ng2-tree [tree]="tree2"></ng2-tree>
+        <tree [model]="tree"></tree>
+        <tree [model]="tree2"></tree>
     `,
-    directives: [Ng2Tree]
+    directives: [TreeComponent]
 })
 class App {
   private tree: any = {
@@ -89,16 +88,16 @@ class App {
                         value: 'css',
                         children: [
                             {
-                                value: 'X',
+                                value: 'tricks',
                             },
                             {
-                                value: 'Y',
+                                value: 'codestyle',
                                 children: [
                                     {
-                                        value: 'X',
+                                        value: 'spaces',
                                     },
                                     {
-                                        value: 'Y',
+                                        value: 'naming conventions',
                                     }
                                 ]
                             }
@@ -114,4 +113,4 @@ class App {
 
 }
 
-bootstrap(App, [Ng2TreeService]);
+bootstrap(App, [TreeService]);

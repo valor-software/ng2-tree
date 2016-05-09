@@ -1,1 +1,2 @@
-export * from './components/ng2-tree.component';
+export * from './src/tree.component';
+export * from './src/tree.service';

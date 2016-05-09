@@ -1,20 +1,20 @@
 import {Directive, ElementRef, Input} from "@angular/core";
-import {Ng2TreeService} from "./ng2-tree.service";
-import {Tree} from "./types";
+import {TreeService} from "./tree.service";
+import {TreeModel} from "./types";
 
 @Directive({
-  selector: '[drag]'
+  selector: '[nodeDraggable]'
 })
-export default class Draggable {
+export default class NodeDraggableDirective {
   @Input()
-  private drag: ElementRef;
+  private nodeDraggable: ElementRef;
 
   @Input()
-  private tree: Tree;
+  private tree: TreeModel;
 
   private nativeElement: HTMLElement;
 
-  constructor(private element: ElementRef, private treeService: Ng2TreeService) {
+  constructor(private element: ElementRef, private treeService: TreeService) {
     this.nativeElement = element.nativeElement;
     this.nativeElement.draggable = true;
 
@@ -30,7 +30,7 @@ export default class Draggable {
     e.stopPropagation();
     e.dataTransfer.setData('text', 'firefox enables dragNdrop only when dataTransfer has data');
 
-    this.treeService.sourceElement = {element: this.drag, tree: this.tree};
+    this.treeService.sourceElement = {element: this.nodeDraggable, tree: this.tree};
     e.dataTransfer.effectAllowed = 'move';
   }
 
@@ -76,11 +76,11 @@ export default class Draggable {
       return false;
     }
 
-    if (this.treeService.sourceElement.element === this.drag) {
+    if (this.treeService.sourceElement.element === this.nodeDraggable) {
       return false;
     }
 
-    if (this.treeService.sourceElement.element.nativeElement.contains(this.drag.nativeElement)) {
+    if (this.treeService.sourceElement.element.nativeElement.contains(this.nodeDraggable.nativeElement)) {
       return false;
     }
 
@@ -88,7 +88,7 @@ export default class Draggable {
       this.treeService.emitDragNDropEvent({
         value: this.treeService.sourceElement.tree,
         source: this.treeService.sourceElement.element,
-        target: this.drag
+        target: this.nodeDraggable
       });
     }
   }

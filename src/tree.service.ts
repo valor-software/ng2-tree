@@ -1,12 +1,12 @@
 import {Injectable, EventEmitter} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {Tree} from "./types";
 
 @Injectable()
-export class Ng2TreeService {
+export class TreeService {
   private menuEvents$: EventEmitter<any> = new EventEmitter();
-  sourceElement: any;
   private dragNDropEvents$: EventEmitter<any> = new EventEmitter();
+  
+  sourceElement: any;
 
   constructor() {
     document.addEventListener('keyup', (event: any) => {

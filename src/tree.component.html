@@ -1,0 +1,18 @@
+<ul *ngIf="model" class="tree">
+  <li>
+    <div (contextmenu)="showMenu($event)" [nodeDraggable]="element" [tree]="model">
+      <div class="folding" (click)="switchFolding($event, model)" [ngClass]="foldingType(model)"></div>
+      <div href="#" class="node-value" *ngIf="!edit">{{model.value}}</div>
+      <input type="text" class="node-value" [nodeEditable]="model.value" (valueChanged)="applyNewValue($event, model)" *ngIf="edit"/>
+    </div>
+
+    <node-menu *ngIf="isMenuVisible" 
+      (removeSelected)="onRemoveSelected()" 
+      (renameSelected)="onRenameSelected()" 
+      (newSelected)="onNewSelected($event)"></node-menu>
+
+    <template [ngIf]="isNodeExpanded()">
+            <tree *ngFor="let child of model.children; let position = index" [parent]="model" [positionRelativelyToParent]="position" [model]="child" (nodeRemoved)="onChildRemoved($event)"></tree>
+    </template>
+  </li>
+</ul>

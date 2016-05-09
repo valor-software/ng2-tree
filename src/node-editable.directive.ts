@@ -1,27 +1,27 @@
 import {Directive, ElementRef, Input, OnInit, Output, EventEmitter, HostListener} from '@angular/core';
-import {Ng2TreeService} from './ng2-tree.service';
+import {TreeService} from './tree.service';
 
 @Directive({
-  selector: '[editable]'
+  selector: '[nodeEditable]'
 })
-export class EditableNodeDirective implements OnInit {
+export class NodeEditableDirective implements OnInit {
   @Input()
-  nodeValue: string;
+  private nodeEditable: string;
 
   @Output()
-  valueChanged: EventEmitter<any> = new EventEmitter(false);
+  private valueChanged: EventEmitter<any> = new EventEmitter(false);
 
   private element: any;
-  private treeService: Ng2TreeService;
+  private treeService: TreeService;
 
-  constructor(elementRef: ElementRef, treeService: Ng2TreeService) {
+  constructor(elementRef: ElementRef, treeService: TreeService) {
     this.element = elementRef;
     this.treeService = treeService;
   }
 
   ngOnInit(): void {
     this.element.nativeElement.focus();
-    this.element.nativeElement.value = this.nodeValue;
+    this.element.nativeElement.value = this.nodeEditable;
   }
 
   @HostListener('keyup', ['$event', '$event.target.value'])
@@ -31,12 +31,12 @@ export class EditableNodeDirective implements OnInit {
     }
 
     if ($event.keyCode === 27) {//esc
-      return this.valueChanged.emit({type: 'keyup', value: this.nodeValue});
+      return this.valueChanged.emit({type: 'keyup', value: this.nodeEditable});
     }
   }
 
   @HostListener('blur', ['$event', '$event.target.value'])
   private editCompletedByMouse($event: any, newValue: any) {
-    this.valueChanged.emit({type: 'blur', value: this.nodeValue});
+    this.valueChanged.emit({type: 'blur', value: this.nodeEditable});
   }
 }
