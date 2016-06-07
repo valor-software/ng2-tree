@@ -1,6 +1,6 @@
-import {Directive, ElementRef, Input} from "@angular/core";
+import {Directive, ElementRef, Input, Inject, Renderer} from "@angular/core";
 import {TreeService} from "./tree.service";
-import {TreeModel} from "./types";
+import {TreeModel, CapturedNode, NodeDraggableEvent} from "./types";
 
 @Directive({
   selector: '[nodeDraggable]'
@@ -12,89 +12,94 @@ export default class NodeDraggableDirective {
   @Input()
   private tree: TreeModel;
 
-  private nativeElement: HTMLElement;
+  private nodeNativeElement: HTMLElement;
 
-  constructor(private element: ElementRef, private treeService: TreeService) {
-    this.nativeElement = element.nativeElement;
-    this.nativeElement.draggable = true;
+  constructor(
+    @Inject(ElementRef) private element: ElementRef,
+    @Inject(TreeService) private treeService: TreeService,
+    @Inject(Renderer) private renderer: Renderer) {
 
-    this.nativeElement.addEventListener('dragstart', this.handleDragStart.bind(this));
-    this.nativeElement.addEventListener('dragenter', this.handleDragEnter.bind(this));
-    this.nativeElement.addEventListener('dragover', this.handleDragOver.bind(this));
-    this.nativeElement.addEventListener('dragleave', this.handleDragLeave.bind(this));
-    this.nativeElement.addEventListener('drop', this.handleDrop.bind(this));
-    this.nativeElement.addEventListener('dragend', this.handleDragEnd.bind(this));
+    this.nodeNativeElement = element.nativeElement;
+
+    renderer.setElementAttribute(this.nodeNativeElement, 'draggable', 'true');
+
+    renderer.listen(this.nodeNativeElement, 'dragstart', this.handleDragStart.bind(this));
+    renderer.listen(this.nodeNativeElement, 'dragenter', this.handleDragEnter.bind(this));
+    renderer.listen(this.nodeNativeElement, 'dragover', this.handleDragOver.bind(this));
+    renderer.listen(this.nodeNativeElement, 'dragleave', this.handleDragLeave.bind(this));
+    renderer.listen(this.nodeNativeElement, 'drop', this.handleDrop.bind(this));
+    renderer.listen(this.nodeNativeElement, 'dragend', this.handleDragEnd.bind(this));
   }
 
-  private handleDragStart(e: any) {
+  private handleDragStart(e: DragEvent): any {
     e.stopPropagation();
-    e.dataTransfer.setData('text', 'firefox enables dragNdrop only when dataTransfer has data');
 
-    this.treeService.sourceElement = {element: this.nodeDraggable, tree: this.tree};
+    this.treeService.captureNode(new CapturedNode(this.nodeDraggable, this.tree));
+
+    e.dataTransfer.setData('text', 'some browsers enable drag-n-drop only when dataTransfer has data');
     e.dataTransfer.effectAllowed = 'move';
   }
 
-  private handleDragOver(e: any) {
-    if (e.preventDefault) {
-      e.preventDefault(); // Necessary. Allows us to drop.
-    }
+  private handleDragOver(e: DragEvent): any {
+    e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-    return false;
   }
 
-  private handleDragEnter(e: any) {
+  private handleDragEnter(e: DragEvent): any {
     e.preventDefault();
-
-    e = e.originalEvent || e;
-    var elementUnderCursor = document.elementFromPoint(e.pageX, e.pageY);
-    if (this.nativeElement.contains(elementUnderCursor)) {
-      this.nativeElement.classList.add('over-drop-target');
+    if (this.containsElementAt(e.pageX, e.pageY)) {
+      this.addClass('over-drop-target');
     }
   }
 
-  private handleDragLeave(e: any) {
-    // if (!e.target.draggable) return;
-
-    e = e.originalEvent || e;
-    var elementUnderCursor = document.elementFromPoint(e.pageX, e.pageY);
-    if (!this.nativeElement.contains(elementUnderCursor)) {
-      this.nativeElement.classList.remove('over-drop-target');
+  private handleDragLeave(e: DragEvent): any {
+    if (!this.containsElementAt(e.pageX, e.pageY)) {
+      this.removeClass('over-drop-target');
     }
   }
 
-  private handleDrop(e: any) {
-    this.nativeElement.classList.remove('over-drop-target');
-
+  private handleDrop(e: DragEvent): any {
     e.preventDefault();
-    if (e.stopPropagation) {
-      e.stopPropagation(); // Stops some browsers from redirecting.
-    }
+    e.stopPropagation();
 
-    e = e.originalEvent || e;
-    var elementUnderCursor = document.elementFromPoint(e.pageX, e.pageY);
-    if (!this.nativeElement.contains(elementUnderCursor)) {
+    this.removeClass('over-drop-target');
+
+    const capturedNode = this.treeService.getCapturedNode();
+    if (!this.containsElementAt(e.pageX, e.pageY)
+      || !capturedNode.canBeDroppedAt(this.nodeDraggable)) {
       return false;
     }
 
-    if (this.treeService.sourceElement.element === this.nodeDraggable) {
-      return false;
-    }
-
-    if (this.treeService.sourceElement.element.nativeElement.contains(this.nodeDraggable.nativeElement)) {
-      return false;
-    }
-
-    if (this.treeService.sourceElement) {
-      this.treeService.emitDragNDropEvent({
-        value: this.treeService.sourceElement.tree,
-        source: this.treeService.sourceElement.element,
-        target: this.nodeDraggable
-      });
+    if (this.treeService.getCapturedNode()) {
+      return this.notifyThatNodeWasDropped()
     }
   }
 
-  private handleDragEnd(e: any) {
-    this.treeService.sourceElement = null;
-    this.nativeElement.classList.remove('over-drop-target');
+  private handleDragEnd(e: DragEvent): any {
+    this.removeClass('over-drop-target');
+    this.treeService.releaseCapturedNode();
+  }
+
+  private containsElementAt(x: number, y: number): boolean {
+    return this.nodeNativeElement.contains(document.elementFromPoint(x, y));
+  }
+
+  private addClass(className: string): void {
+    const classList: DOMTokenList = this.nodeNativeElement.classList;
+    classList.add(className);
+  }
+
+  private removeClass(className: string): void {
+    const classList: DOMTokenList = this.nodeNativeElement.classList;
+    classList.remove(className);
+  }
+
+  private notifyThatNodeWasDropped(): void {
+    const event: NodeDraggableEvent = {
+      captured: this.treeService.getCapturedNode(),
+      target: this.nodeDraggable
+    };
+
+    this.treeService.draggableNodeEvents$.next(event);
   }
 }

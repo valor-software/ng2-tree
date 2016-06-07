@@ -9,7 +9,7 @@ export class NodeEditableDirective implements OnInit {
   private nodeValue: string;
 
   @Output()
-  private valueChanged: EventEmitter<NodeEditableEvent> = new EventEmitter(false);
+  private valueChanged: EventEmitter<NodeEditableEvent> = new EventEmitter<NodeEditableEvent>(false);
 
   constructor(
     @Inject(Renderer) private renderer: Renderer,

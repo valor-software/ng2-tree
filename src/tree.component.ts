@@ -3,7 +3,13 @@ import {CORE_DIRECTIVES} from '@angular/common';
 import {TreeService} from './tree.service';
 import {NodeEditableDirective} from './node-editable.directive';
 import {NodeMenuComponent} from './node-menu.component';
-import {TreeStatus, NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeEditableEvent} from './types';
+import {
+  TreeStatus,
+  NodeMenuItemSelectedEvent,
+  NodeMenuItemAction,
+  NodeEditableEvent,
+  NodeDraggableEvent
+} from './types';
 import Draggable from './node-draggable.directive';
 
 @Component({
@@ -173,41 +179,40 @@ export class TreeComponent implements OnInit {
         }
       });
 
-    this.treeService.dragNDropEventStream()
-      // .filter((event: any) => event.target === this.element.nativeElement)
-      .subscribe((event: any) => {
-        if (event.source === this.element && event.action === 'remove') {
+    this.treeService.draggableNodeEvents$
+      .subscribe((event: NodeDraggableEvent) => {
+        if (event.captured.element === this.element && event.action === 'remove') {
 
-          this.onChildRemoved({node: event.value}, this.parent);
+          this.onChildRemoved({node: event.captured.tree}, this.parent);
           return;
         }
 
 
         if (event.target === this.element && event.action !== 'remove') {
-          if (this.model.children && this.model.children.indexOf(event.value) >= 0) {
+          if (this.model.children && this.model.children.indexOf(event.captured.tree) >= 0) {
             console.log('moved element to existing parent');
             return;
           }
 
           if (this.isFolder) {
 
-            this.model.children.push(event.value);
+            this.model.children.push(event.captured.tree);
             event.action = 'remove';
-            this.treeService.emitDragNDropEvent(event);
+            this.treeService.draggableNodeEvents$.next(event);
             console.log('folder')
-          } else if (this.parent.children.indexOf(event.value) >= 0) {
+          } else if (this.parent.children.indexOf(event.captured.tree) >= 0) {
 
-            const ev = this.parent.children.indexOf(event.value);
+            const ev = this.parent.children.indexOf(event.captured.tree);
             const tv = this.parent.children.indexOf(this.model);
 
             this.parent.children[ev] = this.model;
-            this.parent.children[tv] = event.value;
+            this.parent.children[tv] = event.captured.tree;
             console.log('sibling')
           } else {
 
-            this.parent.children.splice(this.positionRelativelyToParent, 0, event.value);
+            this.parent.children.splice(this.positionRelativelyToParent, 0, event.captured.tree);
             event.action = 'remove';
-            this.treeService.emitDragNDropEvent(event);
+            this.treeService.draggableNodeEvents$.next(event);
             console.log('foreign')
           }
         }

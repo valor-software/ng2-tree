@@ -1,14 +1,19 @@
-import {Injectable, EventEmitter} from '@angular/core';
+import {Injectable, EventEmitter, ElementRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {CapturedNode, NodeDraggableEvent} from './types';
+import {Subject} from 'rxjs/Rx';
 
 @Injectable()
 export class TreeService {
   private menuEvents$: EventEmitter<any> = new EventEmitter();
-  private dragNDropEvents$: EventEmitter<any> = new EventEmitter();
-  
-  sourceElement: any;
 
-  constructor() {
+  //TODO: Move into DraggableNodeService
+  public draggableNodeEvents$: Subject<NodeDraggableEvent> = new Subject<NodeDraggableEvent>();
+
+  //TODO: Move into DraggableNodeService
+  private capturedNode: CapturedNode;
+
+  public constructor() {
     document.addEventListener('keyup', (event: any) => {
       if (event.keyCode === 27) {
         this.emitMenuEvent({sender: event.target, action: 'close'});
@@ -20,19 +25,26 @@ export class TreeService {
     });
   }
 
-  dragNDropEventStream(): Observable<any> {
-    return this.dragNDropEvents$;
+  //TODO: Move into DraggableNodeService
+  public captureNode(node: CapturedNode): void {
+    this.capturedNode = node;
   }
 
-  emitDragNDropEvent(event: any): void {
-    this.dragNDropEvents$.emit(event);
+  //TODO: Move into DraggableNodeService
+  public getCapturedNode(): CapturedNode {
+    return this.capturedNode;
   }
 
-  menuEventStream(): Observable<any> {
+  //TODO: Move into DraggableNodeService
+  public releaseCapturedNode(): void {
+    this.capturedNode = null;
+  }
+
+  public menuEventStream(): Observable<any> {
     return this.menuEvents$;
   }
 
-  emitMenuEvent(event: any): void {
+  public emitMenuEvent(event: any): void {
     this.menuEvents$.emit(event);
   }
 }

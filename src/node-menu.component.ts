@@ -10,7 +10,7 @@ import {MouseButtons, NodeMenuItemAction, NodeMenuItemSelectedEvent} from './typ
 })
 export class NodeMenuComponent {
   @Output()
-  private menuItemSelected: EventEmitter<NodeMenuItemSelectedEvent> = new EventEmitter();
+  private menuItemSelected: EventEmitter<NodeMenuItemSelectedEvent> = new EventEmitter<NodeMenuItemSelectedEvent>();
 
   private availableMenuItems: NodeMenuItem[] = [
     {
