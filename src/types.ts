@@ -23,3 +23,8 @@ export enum NodeMenuItemAction {
 export interface NodeMenuItemSelectedEvent {
   nodeMenuItemAction: NodeMenuItemAction
 }
+
+export interface NodeEditableEvent {
+  value: any,
+  type: string
+}

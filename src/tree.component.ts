@@ -3,7 +3,7 @@ import {CORE_DIRECTIVES} from '@angular/common';
 import {TreeService} from './tree.service';
 import {NodeEditableDirective} from './node-editable.directive';
 import {NodeMenuComponent} from './node-menu.component';
-import {TreeStatus, NodeMenuItemSelectedEvent, NodeMenuItemAction} from './types';
+import {TreeStatus, NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeEditableEvent} from './types';
 import Draggable from './node-draggable.directive';
 
 @Component({
@@ -136,7 +136,7 @@ export class TreeComponent implements OnInit {
     $event.preventDefault();
   }
 
-  private applyNewValue($event: any, node: any): void {
+  private applyNewValue($event: NodeEditableEvent, node: any): void {
     if (!this.previousEvent) {
       this.previousEvent = $event.type;
     }

@@ -1,42 +1,39 @@
-import {Directive, ElementRef, Input, OnInit, Output, EventEmitter, HostListener} from '@angular/core';
-import {TreeService} from './tree.service';
+import {Directive, ElementRef, Input, OnInit, Output, EventEmitter, HostListener, Inject, Renderer} from '@angular/core';
+import {NodeEditableEvent} from './types';
 
 @Directive({
   selector: '[nodeEditable]'
 })
 export class NodeEditableDirective implements OnInit {
-  @Input()
-  private nodeEditable: string;
+  @Input('nodeEditable')
+  private nodeValue: string;
 
   @Output()
-  private valueChanged: EventEmitter<any> = new EventEmitter(false);
+  private valueChanged: EventEmitter<NodeEditableEvent> = new EventEmitter(false);
 
-  private element: any;
-  private treeService: TreeService;
-
-  constructor(elementRef: ElementRef, treeService: TreeService) {
-    this.element = elementRef;
-    this.treeService = treeService;
+  constructor(
+    @Inject(Renderer) private renderer: Renderer,
+    @Inject(ElementRef) private elementRef: ElementRef) {
   }
 
   ngOnInit(): void {
-    this.element.nativeElement.focus();
-    this.element.nativeElement.value = this.nodeEditable;
+    const nativeElement = this.elementRef.nativeElement;
+    this.renderer.invokeElementMethod(nativeElement, 'focus', []);
+    this.renderer.setElementProperty(nativeElement, 'value', this.nodeValue);
   }
 
-  @HostListener('keyup', ['$event', '$event.target.value'])
-  private editCompleted($event: any, newValue: any) {
-    if ($event.keyCode === 13) {//enter
-      return this.valueChanged.emit({type: 'keyup', value: newValue});
-    }
-
-    if ($event.keyCode === 27) {//esc
-      return this.valueChanged.emit({type: 'keyup', value: this.nodeEditable});
-    }
+  @HostListener('keyup.enter', ['$event.target.value'])
+  private applyNewValue(newNodeValue: string) {
+    return this.valueChanged.emit({type: 'keyup', value: newNodeValue});
   }
 
-  @HostListener('blur', ['$event', '$event.target.value'])
-  private editCompletedByMouse($event: any, newValue: any) {
-    this.valueChanged.emit({type: 'blur', value: this.nodeEditable});
+  @HostListener('keyup.esc')
+  private cancelEditing() {
+    return this.valueChanged.emit({type: 'keyup', value: this.nodeValue});
+  }
+
+  @HostListener('blur')
+  private cancelEditingByLoosingFocus() {
+    this.valueChanged.emit({type: 'blur', value: this.nodeValue});
   }
 }
