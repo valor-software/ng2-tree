@@ -1,4 +1,4 @@
-import {Input, Component, OnInit, EventEmitter, Output, ElementRef} from '@angular/core';
+import {Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
 import {TreeService} from './tree.service';
 import {NodeEditableDirective} from './node-editable.directive';
@@ -11,6 +11,7 @@ import {
   NodeDraggableEvent
 } from './types';
 import Draggable from './node-draggable.directive';
+import {NodeDraggableService} from './node-draggable.service';
 
 @Component({
   selector: 'tree',
@@ -40,7 +41,9 @@ export class TreeComponent implements OnInit {
   private edit: boolean = false;
   private previousEvent: any;
 
-  public constructor(private treeService: TreeService, private element: ElementRef) {
+  public constructor(@Inject(TreeService) private treeService: TreeService,
+                     @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
+                     @Inject(ElementRef) private element: ElementRef) {
   }
 
   private isNodeExpanded(): boolean {
@@ -179,7 +182,7 @@ export class TreeComponent implements OnInit {
         }
       });
 
-    this.treeService.draggableNodeEvents$
+    this.nodeDraggableService.draggableNodeEvents$
       .subscribe((event: NodeDraggableEvent) => {
         if (event.captured.element === this.element && event.action === 'remove') {
 
@@ -198,7 +201,7 @@ export class TreeComponent implements OnInit {
 
             this.model.children.push(event.captured.tree);
             event.action = 'remove';
-            this.treeService.draggableNodeEvents$.next(event);
+            this.nodeDraggableService.draggableNodeEvents$.next(event);
             console.log('folder')
           } else if (this.parent.children.indexOf(event.captured.tree) >= 0) {
 
@@ -212,7 +215,7 @@ export class TreeComponent implements OnInit {
 
             this.parent.children.splice(this.positionRelativelyToParent, 0, event.captured.tree);
             event.action = 'remove';
-            this.treeService.draggableNodeEvents$.next(event);
+            this.nodeDraggableService.draggableNodeEvents$.next(event);
             console.log('foreign')
           }
         }

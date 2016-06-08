@@ -1,6 +1,6 @@
-import {Directive, ElementRef, Input, Inject, Renderer} from "@angular/core";
-import {TreeService} from "./tree.service";
-import {TreeModel, CapturedNode, NodeDraggableEvent} from "./types";
+import {Directive, ElementRef, Input, Inject, Renderer} from '@angular/core';
+import {TreeModel, CapturedNode, NodeDraggableEvent} from './types';
+import {NodeDraggableService} from './node-draggable.service';
 
 @Directive({
   selector: '[nodeDraggable]'
@@ -16,7 +16,7 @@ export default class NodeDraggableDirective {
 
   constructor(
     @Inject(ElementRef) private element: ElementRef,
-    @Inject(TreeService) private treeService: TreeService,
+    @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
     @Inject(Renderer) private renderer: Renderer) {
 
     this.nodeNativeElement = element.nativeElement;
@@ -34,7 +34,7 @@ export default class NodeDraggableDirective {
   private handleDragStart(e: DragEvent): any {
     e.stopPropagation();
 
-    this.treeService.captureNode(new CapturedNode(this.nodeDraggable, this.tree));
+    this.nodeDraggableService.captureNode(new CapturedNode(this.nodeDraggable, this.tree));
 
     e.dataTransfer.setData('text', 'some browsers enable drag-n-drop only when dataTransfer has data');
     e.dataTransfer.effectAllowed = 'move';
@@ -64,20 +64,20 @@ export default class NodeDraggableDirective {
 
     this.removeClass('over-drop-target');
 
-    const capturedNode = this.treeService.getCapturedNode();
+    const capturedNode = this.nodeDraggableService.getCapturedNode();
     if (!this.containsElementAt(e.pageX, e.pageY)
       || !capturedNode.canBeDroppedAt(this.nodeDraggable)) {
       return false;
     }
 
-    if (this.treeService.getCapturedNode()) {
+    if (this.nodeDraggableService.getCapturedNode()) {
       return this.notifyThatNodeWasDropped()
     }
   }
 
   private handleDragEnd(e: DragEvent): any {
     this.removeClass('over-drop-target');
-    this.treeService.releaseCapturedNode();
+    this.nodeDraggableService.releaseCapturedNode();
   }
 
   private containsElementAt(x: number, y: number): boolean {
@@ -96,10 +96,10 @@ export default class NodeDraggableDirective {
 
   private notifyThatNodeWasDropped(): void {
     const event: NodeDraggableEvent = {
-      captured: this.treeService.getCapturedNode(),
+      captured: this.nodeDraggableService.getCapturedNode(),
       target: this.nodeDraggable
     };
 
-    this.treeService.draggableNodeEvents$.next(event);
+    this.nodeDraggableService.draggableNodeEvents$.next(event);
   }
 }
