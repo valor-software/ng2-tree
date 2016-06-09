@@ -1,11 +1,11 @@
-import {Directive, ElementRef, Input, Inject, Renderer} from '@angular/core';
+import {Directive, ElementRef, Input, Inject, Renderer, OnDestroy} from '@angular/core';
 import {TreeModel, CapturedNode, NodeDraggableEvent} from './types';
 import {NodeDraggableService} from './node-draggable.service';
 
 @Directive({
   selector: '[nodeDraggable]'
 })
-export default class NodeDraggableDirective {
+export default class NodeDraggableDirective implements OnDestroy {
   @Input()
   private nodeDraggable: ElementRef;
 
@@ -13,6 +13,7 @@ export default class NodeDraggableDirective {
   private tree: TreeModel;
 
   private nodeNativeElement: HTMLElement;
+  private dragListeners: Function[] = [];
 
   constructor(
     @Inject(ElementRef) private element: ElementRef,
@@ -23,12 +24,12 @@ export default class NodeDraggableDirective {
 
     renderer.setElementAttribute(this.nodeNativeElement, 'draggable', 'true');
 
-    renderer.listen(this.nodeNativeElement, 'dragstart', this.handleDragStart.bind(this));
-    renderer.listen(this.nodeNativeElement, 'dragenter', this.handleDragEnter.bind(this));
-    renderer.listen(this.nodeNativeElement, 'dragover', this.handleDragOver.bind(this));
-    renderer.listen(this.nodeNativeElement, 'dragleave', this.handleDragLeave.bind(this));
-    renderer.listen(this.nodeNativeElement, 'drop', this.handleDrop.bind(this));
-    renderer.listen(this.nodeNativeElement, 'dragend', this.handleDragEnd.bind(this));
+    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragstart', this.handleDragStart.bind(this)));
+    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragenter', this.handleDragEnter.bind(this)));
+    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragover', this.handleDragOver.bind(this)));
+    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragleave', this.handleDragLeave.bind(this)));
+    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'drop', this.handleDrop.bind(this)));
+    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragend', this.handleDragEnd.bind(this)));
   }
 
   private handleDragStart(e: DragEvent): any {
@@ -101,5 +102,9 @@ export default class NodeDraggableDirective {
     };
 
     this.nodeDraggableService.draggableNodeEvents$.next(event);
+  }
+
+  ngOnDestroy(): void {
+    this.dragListeners.forEach(listener => listener());
   }
 }

@@ -8,10 +8,11 @@ import {
   NodeMenuItemSelectedEvent,
   NodeMenuItemAction,
   NodeEditableEvent,
-  NodeDraggableEvent
+  NodeDraggableEvent, NodeMenuAction, NodeMenuEvent
 } from './types';
 import Draggable from './node-draggable.directive';
 import {NodeDraggableService} from './node-draggable.service';
+import {NodeMenuService} from './node-menu.service';
 
 @Component({
   selector: 'tree',
@@ -42,6 +43,7 @@ export class TreeComponent implements OnInit {
   private previousEvent: any;
 
   public constructor(@Inject(TreeService) private treeService: TreeService,
+                     @Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
                      @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
                      @Inject(ElementRef) private element: ElementRef) {
   }
@@ -140,7 +142,7 @@ export class TreeComponent implements OnInit {
   private showMenu($event: MouseEvent): void {
     if ($event.which === 3) {
       this.isMenuVisible = !this.isMenuVisible;
-      this.treeService.emitMenuEvent({sender: this.element.nativeElement, action: 'close'})
+      this.nodeMenuService.nodeMenuEvents$.next({sender: this.element.nativeElement, action: NodeMenuAction.Close})
     }
     $event.preventDefault();
   }
@@ -175,9 +177,9 @@ export class TreeComponent implements OnInit {
 
     this.isFolder = this.model.children && this.model.children.push;
 
-    this.treeService.menuEventStream()
-      .subscribe(menuEvent => {
-        if (!this.element.nativeElement.contains(menuEvent.sender) && menuEvent.action === 'close') {
+    this.nodeMenuService.nodeMenuEvents$
+      .subscribe((menuEvent: NodeMenuEvent) => {
+        if (!this.element.nativeElement.contains(menuEvent.sender) && menuEvent.action === NodeMenuAction.Close) {
           this.isMenuVisible = false;
         }
       });

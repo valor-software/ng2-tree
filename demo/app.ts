@@ -2,6 +2,7 @@ import {bootstrap} from '@angular/platform-browser-dynamic';
 import {Component} from '@angular/core';
 import {TreeComponent, TreeService} from '../ng2-tree';
 import {NodeDraggableService} from '../src/node-draggable.service';
+import {NodeMenuService} from '../src/node-menu.service';
 
 @Component({
   selector: 'app',
@@ -114,4 +115,4 @@ class App {
 
 }
 
-bootstrap(App, [TreeService, NodeDraggableService]);
+bootstrap(App, [TreeService, NodeDraggableService, NodeMenuService]);

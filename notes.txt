@@ -1,0 +1,3 @@
+Make a gif of a working tree for the readme
+Draw an icon or a nice picture
+Name the project!
