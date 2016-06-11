@@ -1,5 +1,6 @@
 import {Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
+import * as _ from 'lodash';
 import {
   TreeStatus,
   NodeMenuItemSelectedEvent,
@@ -18,8 +19,6 @@ import Draggable from './node-draggable.directive';
 import {NodeDraggableService} from './node-draggable.service';
 import {NodeMenuService} from './node-menu.service';
 
-type FoldingTypeCssClass = 'node-expanded' | 'node-collapsed' | 'node-leaf';
-
 @Component({
   selector: 'tree',
   styles: [require('./tree.component.styl')],
@@ -27,11 +26,11 @@ type FoldingTypeCssClass = 'node-expanded' | 'node-collapsed' | 'node-leaf';
   directives: [NodeEditableDirective, TreeComponent, NodeMenuComponent, Draggable, CORE_DIRECTIVES],
 })
 export class TreeComponent implements OnInit {
-  @Input()
-  private model: TreeModel;
+  @Input('model')
+  private tree: TreeModel;
 
   @Input()
-  private parent: TreeModel;
+  private parentTree: TreeModel;
 
   @Input()
   private indexInParent: number = 0;
@@ -43,17 +42,97 @@ export class TreeComponent implements OnInit {
   private isMenuVisible: boolean = false;
   private previousEvent: NodeEditableEvent;
 
-  public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
-                     @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
-                     @Inject(ElementRef) private element: ElementRef) {
+  public constructor(
+    @Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
+    @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
+    @Inject(ElementRef) private element: ElementRef) {
   }
 
+  public ngOnInit(): void {
+    this.isLeaf = !Array.isArray(this.tree.children);
+
+    this.tree.indexInParent = this.indexInParent;
+    //TODO: Feature envy detected!
+    this.tree.status = this.tree.status === TreeStatus.New ? TreeStatus.EditInProgress : this.tree.status;
+
+    this.setUpMenuEventHandler();
+    this.setUpDraggableEventHandler();
+  }
+
+  // DRAG-N-DROP -------------------------------------------------------------------------------------------------------
+
+  private setUpMenuEventHandler() {
+    this.nodeMenuService.nodeMenuEvents$
+      .filter((event: NodeMenuEvent) => !this.element.nativeElement.contains(event.sender))
+      .filter((event: NodeMenuEvent) => event.action === NodeMenuAction.Close)
+      .subscribe(_ => this.isMenuVisible = false);
+  }
+
+  private setUpDraggableEventHandler() {
+    this.nodeDraggableService.draggableNodeEvents$
+      .filter(event => event.action === 'remove')
+      .filter(event => event.captured.element === this.element)
+      .subscribe(event => this.onChildRemoved({node: event.captured.tree}, this.parentTree));
+
+    this.nodeDraggableService.draggableNodeEvents$
+      .filter(event => event.action !== 'remove')
+      .filter(event => event.target === this.element)
+      .filter(event => !this.hasChild(event.captured.tree))
+      .subscribe(event => {
+        if (this.isSiblingOf(event.captured.tree)) {
+          return this.swapWithSibling(event.captured.tree);
+        }
+
+        if (this.isFolder()) {
+          return this.moveNodeToThisTreeAndRemoveFromPreviousOne(event);
+        } else {
+          return this.moveNodeToParentTreeAndRemoveFromPreviousOne(event);
+        }
+      });
+  }
+
+  private moveNodeToThisTreeAndRemoveFromPreviousOne(event: NodeDraggableEvent): void {
+    this.tree.children.push(event.captured.tree);
+    this.nodeDraggableService.draggableNodeEvents$.next(_.merge(event, {action: 'remove'}));
+  }
+
+  private moveNodeToParentTreeAndRemoveFromPreviousOne(event: NodeDraggableEvent): void {
+    this.parentTree.children.splice(this.indexInParent, 0, event.captured.tree);
+    this.nodeDraggableService.draggableNodeEvents$.next(_.merge(event, {action: 'remove'}));
+  }
+
+  private isEditInProgress() {
+    return this.tree.status === TreeStatus.EditInProgress;
+  }
+
+  private isFolder() {
+    return !this.isLeaf;
+  }
+
+  private hasChild(child: TreeModel): boolean {
+    return _.includes(this.tree.children, child);
+  }
+
+  private isSiblingOf(child: TreeModel) {
+    return _.includes(this.parentTree.children, child);
+  }
+
+  private swapWithSibling(sibling: TreeModel): void {
+    const siblingIndex = this.parentTree.children.indexOf(sibling);
+    const thisTreeIndex = this.parentTree.children.indexOf(this.tree);
+
+    this.parentTree.children[siblingIndex] = this.tree;
+    this.parentTree.children[thisTreeIndex] = sibling;
+  }
+
+  // FOLDING -----------------------------------------------------------------------------------------------------------
+
   private isNodeExpanded(): boolean {
-    return this.model.foldingType === FoldingType.Expanded;
+    return this.tree.foldingType === FoldingType.Expanded;
   }
 
   private switchFolding($event: any, tree: TreeModel): void {
-    this.handleFoldingType($event.target.parentNode.parentNode, tree);
+    this.handleFoldingType($event.target.parentTree.parentNode, tree);
   }
 
   private foldingType(node: TreeModel): FoldingTypeCssClass {
@@ -84,31 +163,20 @@ export class TreeComponent implements OnInit {
     node.foldingType = this.nextFoldingType(node);
   }
 
-  private onRenameSelected() {
-    this.model.status = TreeStatus.EditInProgress;
-    this.isMenuVisible = false;
-  }
-
-  private onRemoveSelected() {
-    this.nodeRemoved.emit({node: this.model});
-  }
-
-  private onNewSelected(event: NodeMenuItemSelectedEvent) {
-    if (!this.model.children || !this.model.children.push) {
-      this.model.children = [];
+  private toCssClass(foldingType: FoldingType): FoldingTypeCssClass {
+    switch (foldingType) {
+      case FoldingType.Expanded:
+        return 'node-expanded';
+      case FoldingType.Collapsed:
+        return 'node-collapsed';
+      default:
+        return 'node-leaf';
     }
-    const newNode: TreeModel = {value: '', status: TreeStatus.New};
-
-    if (event.nodeMenuItemAction === NodeMenuItemAction.NewFolder) {
-      newNode.children = [];
-    }
-
-    this.isLeaf ? this.parent.children.push(newNode) : this.model.children.push(newNode);
-    this.isMenuVisible = false;
   }
+
+  // MENU --------------------------------------------------------------------------------------------------------------
 
   private onMenuItemSelected($event: NodeMenuItemSelectedEvent) {
-    console.log($event);
     switch ($event.nodeMenuItemAction) {
       case NodeMenuItemAction.NewTag:
         this.onNewSelected($event);
@@ -127,7 +195,30 @@ export class TreeComponent implements OnInit {
     }
   }
 
-  private onChildRemoved(event: TreeEvent, parent: TreeModel = this.model) {
+  private onRenameSelected() {
+    this.tree.status = TreeStatus.EditInProgress;
+    this.isMenuVisible = false;
+  }
+
+  private onRemoveSelected() {
+    this.nodeRemoved.emit({node: this.tree});
+  }
+
+  private onNewSelected(event: NodeMenuItemSelectedEvent) {
+    if (!this.tree.children || !this.tree.children.push) {
+      this.tree.children = [];
+    }
+    const newNode: TreeModel = {value: '', status: TreeStatus.New};
+
+    if (event.nodeMenuItemAction === NodeMenuItemAction.NewFolder) {
+      newNode.children = [];
+    }
+
+    this.isLeaf ? this.parentTree.children.push(newNode) : this.tree.children.push(newNode);
+    this.isMenuVisible = false;
+  }
+
+  private onChildRemoved(event: TreeEvent, parent: TreeModel = this.tree) {
     for (let i = 0; i < parent.children.length; i++) {
       const child = parent.children[i];
       if (child === event.node) {
@@ -156,84 +247,13 @@ export class TreeComponent implements OnInit {
     }
 
     if (!$event.value) {
-      return this.nodeRemoved.emit({node: this.model});
+      return this.nodeRemoved.emit({node: this.tree});
     }
 
     this.previousEvent = $event;
     node.value = $event.value;
     node.status = TreeStatus.Modified;
   }
-
-  ngOnInit(): void {
-    this.setUpMenuEventHandler();
-
-    this.model.indexInParent = this.indexInParent;
-
-    if (this.model.status === TreeStatus.New) {
-      this.model.status = TreeStatus.EditInProgress;
-    }
-
-    this.isLeaf = !Array.isArray(this.model.children);
-
-    this.nodeDraggableService.draggableNodeEvents$
-      .subscribe((event: NodeDraggableEvent) => {
-        if (event.captured.element === this.element && event.action === 'remove') {
-
-          this.onChildRemoved({node: event.captured.tree}, this.parent);
-          return;
-        }
-
-
-        if (event.target === this.element && event.action !== 'remove') {
-          if (this.model.children && this.model.children.indexOf(event.captured.tree) >= 0) {
-            console.log('Someone tries to move children to it\'s current parent - which is nonsense');
-            return;
-          }
-
-          if (!this.isLeaf) {
-
-            this.model.children.push(event.captured.tree);
-            event.action = 'remove';
-            this.nodeDraggableService.draggableNodeEvents$.next(event);
-            console.log('folder')
-          } else if (this.parent.children.indexOf(event.captured.tree) >= 0) {
-
-            const ev = this.parent.children.indexOf(event.captured.tree);
-            const tv = this.parent.children.indexOf(this.model);
-
-            this.parent.children[ev] = this.model;
-            this.parent.children[tv] = event.captured.tree;
-            console.log('sibling')
-          } else {
-
-            this.parent.children.splice(this.indexInParent, 0, event.captured.tree);
-            event.action = 'remove';
-            this.nodeDraggableService.draggableNodeEvents$.next(event);
-            console.log('foreign')
-          }
-        }
-      });
-  }
-
-  private setUpMenuEventHandler() {
-    this.nodeMenuService.nodeMenuEvents$
-      .filter((event: NodeMenuEvent) => !this.element.nativeElement.contains(event.sender))
-      .filter((event: NodeMenuEvent) => event.action === NodeMenuAction.Close)
-      .subscribe(_ => this.isMenuVisible = false);
-  }
-
-  private isEditInProgress() {
-    return this.model.status === TreeStatus.EditInProgress;
-  }
-
-  private toCssClass(foldingType: FoldingType): FoldingTypeCssClass {
-    switch (foldingType) {
-      case FoldingType.Expanded:
-        return 'node-expanded';
-      case FoldingType.Collapsed:
-        return 'node-collapsed';
-      default:
-        return 'node-leaf';
-    }
-  }
 }
+
+type FoldingTypeCssClass = 'node-expanded' | 'node-collapsed' | 'node-leaf';
