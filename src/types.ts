@@ -53,7 +53,7 @@ export interface NodeMenuItemSelectedEvent {
 }
 
 export interface NodeEditableEvent {
-  value: any,
+  value: string,
 
   // FIXME: Make it of proper enum
   type: string

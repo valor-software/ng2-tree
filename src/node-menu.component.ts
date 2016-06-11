@@ -43,18 +43,18 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
     @Inject(NodeMenuService) private nodeMenuService: NodeMenuService) {
   }
 
-  private onMenuItemSelected($event: any, selectedMenuItem: NodeMenuItem) {
+  private onMenuItemSelected($event: MouseEvent, selectedMenuItem: NodeMenuItem) {
     if (!this.isSelectionValid($event)) {
       return;
     }
     this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
   }
 
-  private isSelectionValid($event: any) {
+  private isSelectionValid($event: MouseEvent) {
     return $event.which === MouseButtons.Left;
   }
 
-  private closeMenu(event: any) {
+  private closeMenu(event: MouseEvent | KeyboardEvent) {
     const mouseClicked = event instanceof MouseEvent;
     const escapePressed = event instanceof KeyboardEvent && event.key === 'Escape';
 

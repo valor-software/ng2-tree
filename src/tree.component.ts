@@ -9,9 +9,9 @@ import {
   NodeMenuAction,
   NodeMenuEvent,
   TreeModel,
-  FoldingType, TreeEvent
+  FoldingType,
+  TreeEvent
 } from './types';
-import {TreeService} from './tree.service';
 import {NodeEditableDirective} from './node-editable.directive';
 import {NodeMenuComponent} from './node-menu.component';
 import Draggable from './node-draggable.directive';
@@ -43,8 +43,7 @@ export class TreeComponent implements OnInit {
   private isMenuVisible: boolean = false;
   private previousEvent: NodeEditableEvent;
 
-  public constructor(@Inject(TreeService) private treeService: TreeService,
-                     @Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
+  public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
                      @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
                      @Inject(ElementRef) private element: ElementRef) {
   }
@@ -94,13 +93,13 @@ export class TreeComponent implements OnInit {
     this.nodeRemoved.emit({node: this.model});
   }
 
-  private onNewSelected(event: any) {
+  private onNewSelected(event: NodeMenuItemSelectedEvent) {
     if (!this.model.children || !this.model.children.push) {
       this.model.children = [];
     }
     const newNode: TreeModel = {value: '', status: TreeStatus.New};
 
-    if (event.isLeaf === false) {
+    if (event.nodeMenuItemAction === NodeMenuItemAction.NewFolder) {
       newNode.children = [];
     }
 
@@ -112,10 +111,10 @@ export class TreeComponent implements OnInit {
     console.log($event);
     switch ($event.nodeMenuItemAction) {
       case NodeMenuItemAction.NewTag:
-        this.onNewSelected({});
+        this.onNewSelected($event);
         break;
       case NodeMenuItemAction.NewFolder:
-        this.onNewSelected({isLeaf: false});
+        this.onNewSelected($event);
         break;
       case NodeMenuItemAction.Rename:
         this.onRenameSelected();
