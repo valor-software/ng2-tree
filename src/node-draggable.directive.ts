@@ -6,6 +6,8 @@ import {NodeDraggableService} from './node-draggable.service';
   selector: '[nodeDraggable]'
 })
 export default class NodeDraggableDirective implements OnDestroy {
+  private static DATA_TRANSFER_STUB_DATA: string = 'some browsers enable drag-n-drop only when dataTransfer has data';
+  
   @Input()
   private nodeDraggable: ElementRef;
 
@@ -13,7 +15,7 @@ export default class NodeDraggableDirective implements OnDestroy {
   private tree: TreeModel;
 
   private nodeNativeElement: HTMLElement;
-  private dragListeners: Function[] = [];
+  private disposersForDragListeners: Function[] = [];
 
   constructor(
     @Inject(ElementRef) private element: ElementRef,
@@ -24,12 +26,12 @@ export default class NodeDraggableDirective implements OnDestroy {
 
     renderer.setElementAttribute(this.nodeNativeElement, 'draggable', 'true');
 
-    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragstart', this.handleDragStart.bind(this)));
-    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragenter', this.handleDragEnter.bind(this)));
-    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragover', this.handleDragOver.bind(this)));
-    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragleave', this.handleDragLeave.bind(this)));
-    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'drop', this.handleDrop.bind(this)));
-    this.dragListeners.push(renderer.listen(this.nodeNativeElement, 'dragend', this.handleDragEnd.bind(this)));
+    this.disposersForDragListeners.push(renderer.listen(this.nodeNativeElement, 'dragstart', this.handleDragStart.bind(this)));
+    this.disposersForDragListeners.push(renderer.listen(this.nodeNativeElement, 'dragenter', this.handleDragEnter.bind(this)));
+    this.disposersForDragListeners.push(renderer.listen(this.nodeNativeElement, 'dragover', this.handleDragOver.bind(this)));
+    this.disposersForDragListeners.push(renderer.listen(this.nodeNativeElement, 'dragleave', this.handleDragLeave.bind(this)));
+    this.disposersForDragListeners.push(renderer.listen(this.nodeNativeElement, 'drop', this.handleDrop.bind(this)));
+    this.disposersForDragListeners.push(renderer.listen(this.nodeNativeElement, 'dragend', this.handleDragEnd.bind(this)));
   }
 
   private handleDragStart(e: DragEvent): any {
@@ -37,7 +39,7 @@ export default class NodeDraggableDirective implements OnDestroy {
 
     this.nodeDraggableService.captureNode(new CapturedNode(this.nodeDraggable, this.tree));
 
-    e.dataTransfer.setData('text', 'some browsers enable drag-n-drop only when dataTransfer has data');
+    e.dataTransfer.setData('text', NodeDraggableDirective.DATA_TRANSFER_STUB_DATA);
     e.dataTransfer.effectAllowed = 'move';
   }
 
@@ -105,6 +107,6 @@ export default class NodeDraggableDirective implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.dragListeners.forEach(listener => listener());
+    this.disposersForDragListeners.forEach(dispose => dispose());
   }
 }

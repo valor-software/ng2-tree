@@ -8,11 +8,17 @@ import {
   NodeMenuItemSelectedEvent,
   NodeMenuItemAction,
   NodeEditableEvent,
-  NodeDraggableEvent, NodeMenuAction, NodeMenuEvent
+  NodeDraggableEvent,
+  NodeMenuAction,
+  NodeMenuEvent,
+  TreeModel,
+  FoldingType
 } from './types';
 import Draggable from './node-draggable.directive';
 import {NodeDraggableService} from './node-draggable.service';
 import {NodeMenuService} from './node-menu.service';
+
+type FoldingTypeCssClass = 'node-expanded' | 'node-collapsed' | 'node-leaf';
 
 @Component({
   selector: 'tree',
@@ -21,10 +27,6 @@ import {NodeMenuService} from './node-menu.service';
   directives: [NodeEditableDirective, TreeComponent, NodeMenuComponent, Draggable, CORE_DIRECTIVES],
 })
 export class TreeComponent implements OnInit {
-  private static FOLDING_NODE_EXPANDED: string = 'node-expanded';
-  private static FOLDING_NODE_COLLAPSED: string = 'node-collapsed';
-  private static FOLDING_NODE_LEAF: string = 'node-leaf';
-
   @Input()
   private model: any;
 
@@ -49,37 +51,35 @@ export class TreeComponent implements OnInit {
   }
 
   private isNodeExpanded(): boolean {
-    return this.model.foldingType === TreeComponent.FOLDING_NODE_EXPANDED;
+    return this.model.foldingType === FoldingType.Expanded;
   }
 
-  private switchFolding($event: any, tree: any): void {
+  private switchFolding($event: any, tree: TreeModel): void {
     this.handleFoldingType($event.target.parentNode.parentNode, tree);
   }
 
-  private foldingType(node: any): any {
-    if (node.foldingType) {
-      return node.foldingType;
+  private foldingType(node: TreeModel): any {
+    if (!node.foldingType) {
+      if (node.children) {
+        node.foldingType = FoldingType.Expanded;
+      } else {
+        node.foldingType = FoldingType.Leaf;
+      }
     }
-
-    if (node.children) {
-      node.foldingType = TreeComponent.FOLDING_NODE_EXPANDED;
-    } else {
-      node.foldingType = TreeComponent.FOLDING_NODE_LEAF;
-    }
-
-    return node.foldingType;
+    
+    return this.toCssClass(node.foldingType);
   }
 
-  private nextFoldingType(node: any): string {
-    if (node.foldingType === TreeComponent.FOLDING_NODE_EXPANDED) {
-      return TreeComponent.FOLDING_NODE_COLLAPSED;
+  private nextFoldingType(node: TreeModel): FoldingType {
+    if (node.foldingType === FoldingType.Expanded) {
+      return FoldingType.Collapsed;
     }
 
-    return TreeComponent.FOLDING_NODE_EXPANDED;
+    return FoldingType.Expanded;
   }
 
-  private handleFoldingType(parent: any, node: any) {
-    if (node.foldingType === TreeComponent.FOLDING_NODE_LEAF) {
+  private handleFoldingType(parent: any, node: TreeModel) {
+    if (node.foldingType === FoldingType.Leaf) {
       return;
     }
 
@@ -222,5 +222,16 @@ export class TreeComponent implements OnInit {
           }
         }
       });
+  }
+
+  private toCssClass(foldingType: FoldingType): FoldingTypeCssClass {
+    switch (foldingType) {
+      case FoldingType.Expanded:
+        return 'node-expanded';
+      case FoldingType.Collapsed:
+        return 'node-collapsed';
+      default:
+        return 'node-leaf';
+    }
   }
 }

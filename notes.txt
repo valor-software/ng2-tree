@@ -1,3 +1,6 @@
 Make a gif of a working tree for the readme
-Draw an icon or a nice picture
+Draw an icon or a nice picture (sketchnoting)
 Name the project!
+  - ng2-cactus
+  - ng2-tree-view
+  - ng2-branchy

@@ -1,4 +1,14 @@
-import {Directive, ElementRef, Input, OnInit, Output, EventEmitter, HostListener, Inject, Renderer} from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  HostListener,
+  Inject,
+  Renderer
+} from '@angular/core';
 import {NodeEditableEvent} from './types';
 
 @Directive({

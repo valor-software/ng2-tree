@@ -1,8 +1,16 @@
 import {ElementRef} from '@angular/core';
+
+export enum FoldingType {
+  Expanded,
+  Collapsed,
+  Leaf
+}
+
 export interface TreeModel {
   value: string;
   children?: Array<TreeModel>;
-  status?: TreeStatus
+  status?: TreeStatus,
+  foldingType?: FoldingType
 }
 
 export enum TreeStatus {
