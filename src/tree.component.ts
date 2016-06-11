@@ -186,7 +186,7 @@ export class TreeComponent implements OnInit {
 
         if (event.target === this.element && event.action !== 'remove') {
           if (this.model.children && this.model.children.indexOf(event.captured.tree) >= 0) {
-            console.log('moved element to existing parent');
+            console.log('Someone tries to move children to it\'s current parent - which is nonsense');
             return;
           }
 
