@@ -6,16 +6,22 @@ export enum FoldingType {
   Leaf
 }
 
+export interface TreeEvent {
+  node: TreeModel
+}
+
 export interface TreeModel {
   value: string;
   children?: Array<TreeModel>;
   status?: TreeStatus,
-  foldingType?: FoldingType
+  foldingType?: FoldingType,
+  indexInParent?: number
 }
 
 export enum TreeStatus {
   New,
-  Modified
+  Modified,
+  EditInProgress
 }
 
 export enum MouseButtons {

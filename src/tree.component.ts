@@ -1,8 +1,5 @@
 import {Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
-import {TreeService} from './tree.service';
-import {NodeEditableDirective} from './node-editable.directive';
-import {NodeMenuComponent} from './node-menu.component';
 import {
   TreeStatus,
   NodeMenuItemSelectedEvent,
@@ -12,8 +9,11 @@ import {
   NodeMenuAction,
   NodeMenuEvent,
   TreeModel,
-  FoldingType
+  FoldingType, TreeEvent
 } from './types';
+import {TreeService} from './tree.service';
+import {NodeEditableDirective} from './node-editable.directive';
+import {NodeMenuComponent} from './node-menu.component';
 import Draggable from './node-draggable.directive';
 import {NodeDraggableService} from './node-draggable.service';
 import {NodeMenuService} from './node-menu.service';
@@ -28,21 +28,20 @@ type FoldingTypeCssClass = 'node-expanded' | 'node-collapsed' | 'node-leaf';
 })
 export class TreeComponent implements OnInit {
   @Input()
-  private model: any;
+  private model: TreeModel;
 
   @Input()
-  private parent: any;
+  private parent: TreeModel;
 
   @Input()
-  private positionRelativelyToParent: number = 0;
+  private indexInParent: number = 0;
 
   @Output()
-  private nodeRemoved: EventEmitter<any> = new EventEmitter();
+  private nodeRemoved: EventEmitter<TreeEvent> = new EventEmitter<TreeEvent>();
 
-  private isFolder: boolean;
+  private isLeaf: boolean;
   private isMenuVisible: boolean = false;
-  private edit: boolean = false;
-  private previousEvent: any;
+  private previousEvent: NodeEditableEvent;
 
   public constructor(@Inject(TreeService) private treeService: TreeService,
                      @Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
@@ -58,7 +57,7 @@ export class TreeComponent implements OnInit {
     this.handleFoldingType($event.target.parentNode.parentNode, tree);
   }
 
-  private foldingType(node: TreeModel): any {
+  private foldingType(node: TreeModel): FoldingTypeCssClass {
     if (!node.foldingType) {
       if (node.children) {
         node.foldingType = FoldingType.Expanded;
@@ -66,7 +65,7 @@ export class TreeComponent implements OnInit {
         node.foldingType = FoldingType.Leaf;
       }
     }
-    
+
     return this.toCssClass(node.foldingType);
   }
 
@@ -78,7 +77,7 @@ export class TreeComponent implements OnInit {
     return FoldingType.Expanded;
   }
 
-  private handleFoldingType(parent: any, node: TreeModel) {
+  private handleFoldingType(parent: TreeModel, node: TreeModel) {
     if (node.foldingType === FoldingType.Leaf) {
       return;
     }
@@ -87,7 +86,7 @@ export class TreeComponent implements OnInit {
   }
 
   private onRenameSelected() {
-    this.edit = true;
+    this.model.status = TreeStatus.EditInProgress;
     this.isMenuVisible = false;
   }
 
@@ -99,13 +98,13 @@ export class TreeComponent implements OnInit {
     if (!this.model.children || !this.model.children.push) {
       this.model.children = [];
     }
-    const newNode: any = {value: '', status: TreeStatus.New};
+    const newNode: TreeModel = {value: '', status: TreeStatus.New};
 
-    if (event.isFolder) {
+    if (event.isLeaf === false) {
       newNode.children = [];
     }
 
-    this.isFolder ? this.model.children.push(newNode) : this.parent.children.push(newNode);
+    this.isLeaf ? this.parent.children.push(newNode) : this.model.children.push(newNode);
     this.isMenuVisible = false;
   }
 
@@ -116,7 +115,7 @@ export class TreeComponent implements OnInit {
         this.onNewSelected({});
         break;
       case NodeMenuItemAction.NewFolder:
-        this.onNewSelected({isFolder: true});
+        this.onNewSelected({isLeaf: false});
         break;
       case NodeMenuItemAction.Rename:
         this.onRenameSelected();
@@ -129,7 +128,7 @@ export class TreeComponent implements OnInit {
     }
   }
 
-  private onChildRemoved(event: any, parent: any = this.model) {
+  private onChildRemoved(event: TreeEvent, parent: TreeModel = this.model) {
     for (let i = 0; i < parent.children.length; i++) {
       const child = parent.children[i];
       if (child === event.node) {
@@ -147,13 +146,13 @@ export class TreeComponent implements OnInit {
     $event.preventDefault();
   }
 
-  private applyNewValue($event: NodeEditableEvent, node: any): void {
+  private applyNewValue($event: NodeEditableEvent, node: TreeModel): void {
     if (!this.previousEvent) {
-      this.previousEvent = $event.type;
+      this.previousEvent = $event;
     }
 
-    if (this.previousEvent === 'keyup' && $event.type === 'blur') {
-      this.previousEvent = $event.type;
+    if (this.previousEvent.type === 'keyup' && $event.type === 'blur') {
+      this.previousEvent = $event;
       return;
     }
 
@@ -161,28 +160,21 @@ export class TreeComponent implements OnInit {
       return this.nodeRemoved.emit({node: this.model});
     }
 
-    this.previousEvent = $event.type;
+    this.previousEvent = $event;
     node.value = $event.value;
     node.status = TreeStatus.Modified;
-    this.edit = false;
   }
 
   ngOnInit(): void {
-    this.model.position = this.positionRelativelyToParent;
-    if (!this.model) return;
+    this.setUpMenuEventHandler();
+
+    this.model.indexInParent = this.indexInParent;
 
     if (this.model.status === TreeStatus.New) {
-      this.edit = true;
+      this.model.status = TreeStatus.EditInProgress;
     }
 
-    this.isFolder = this.model.children && this.model.children.push;
-
-    this.nodeMenuService.nodeMenuEvents$
-      .subscribe((menuEvent: NodeMenuEvent) => {
-        if (!this.element.nativeElement.contains(menuEvent.sender) && menuEvent.action === NodeMenuAction.Close) {
-          this.isMenuVisible = false;
-        }
-      });
+    this.isLeaf = !Array.isArray(this.model.children);
 
     this.nodeDraggableService.draggableNodeEvents$
       .subscribe((event: NodeDraggableEvent) => {
@@ -199,7 +191,7 @@ export class TreeComponent implements OnInit {
             return;
           }
 
-          if (this.isFolder) {
+          if (!this.isLeaf) {
 
             this.model.children.push(event.captured.tree);
             event.action = 'remove';
@@ -215,13 +207,24 @@ export class TreeComponent implements OnInit {
             console.log('sibling')
           } else {
 
-            this.parent.children.splice(this.positionRelativelyToParent, 0, event.captured.tree);
+            this.parent.children.splice(this.indexInParent, 0, event.captured.tree);
             event.action = 'remove';
             this.nodeDraggableService.draggableNodeEvents$.next(event);
             console.log('foreign')
           }
         }
       });
+  }
+
+  private setUpMenuEventHandler() {
+    this.nodeMenuService.nodeMenuEvents$
+      .filter((event: NodeMenuEvent) => !this.element.nativeElement.contains(event.sender))
+      .filter((event: NodeMenuEvent) => event.action === NodeMenuAction.Close)
+      .subscribe(_ => this.isMenuVisible = false);
+  }
+
+  private isEditInProgress() {
+    return this.model.status === TreeStatus.EditInProgress;
   }
 
   private toCssClass(foldingType: FoldingType): FoldingTypeCssClass {
