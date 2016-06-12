@@ -1,16 +1,14 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {Component} from '@angular/core';
-import {TreeComponent, TreeService} from '../ng2-tree';
-import {NodeDraggableService} from '../src/node-draggable.service';
-import {NodeMenuService} from '../src/node-menu.service';
+import {BranchyComponent} from 'ng2-branchy.ts';
 
 @Component({
   selector: 'app',
   template: `
-        <tree [model]="tree"></tree>
-        <tree [model]="tree2"></tree>
+        <branchy [model]="tree"></branchy>
+        <branchy [model]="tree2"></branchy>
     `,
-  directives: [TreeComponent]
+  directives: [BranchyComponent]
 })
 class App {
   private tree: any = {
@@ -115,4 +113,4 @@ class App {
 
 }
 
-bootstrap(App, [TreeService, NodeDraggableService, NodeMenuService]);
+bootstrap(App);

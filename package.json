@@ -1,8 +1,8 @@
 {
-  "name": "ng2-tree",
+  "name": "ng2-branchy",
   "version": "1.0.0",
-  "description": "angular2 component for representing ui tree structures",
-  "main": "ng2-tree.js",
+  "description": "angular2 component for visualizing a tree",
+  "main": "ng2-branchy.js",
   "scripts": {
     "preinstall": "rm -rf ./typings && typings install",
     "dev": "webpack-dev-server --inline --hot",

@@ -5,9 +5,9 @@ import {NodeDraggableService} from './node-draggable.service';
 @Directive({
   selector: '[nodeDraggable]'
 })
-export default class NodeDraggableDirective implements OnDestroy {
+export class NodeDraggableDirective implements OnDestroy {
   private static DATA_TRANSFER_STUB_DATA: string = 'some browsers enable drag-n-drop only when dataTransfer has data';
-  
+
   @Input()
   private nodeDraggable: ElementRef;
 
@@ -67,15 +67,18 @@ export default class NodeDraggableDirective implements OnDestroy {
 
     this.removeClass('over-drop-target');
 
-    const capturedNode = this.nodeDraggableService.getCapturedNode();
-    if (!this.containsElementAt(e.pageX, e.pageY)
-      || !capturedNode.canBeDroppedAt(this.nodeDraggable)) {
+    if (!this.isDropPossible(e)) {
       return false;
     }
 
     if (this.nodeDraggableService.getCapturedNode()) {
       return this.notifyThatNodeWasDropped()
     }
+  }
+
+  private isDropPossible(e: DragEvent) {
+    const capturedNode = this.nodeDraggableService.getCapturedNode();
+    return capturedNode && capturedNode.canBeDroppedAt(this.nodeDraggable) && this.containsElementAt(e.pageX, e.pageY);
   }
 
   private handleDragEnd(e: DragEvent): any {

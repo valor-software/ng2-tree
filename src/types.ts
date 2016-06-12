@@ -39,12 +39,8 @@ export enum NodeMenuAction {
   Close
 }
 
-
-//TODO: Should we gather all generic actions like CLOSE, REMOVE under one type of events?
-
 export interface NodeMenuEvent {
-  //FIXME: Put proper type in here. What is type of event.target?
-  sender: any;
+  sender: HTMLElement;
   action: NodeMenuAction;
 }
 
@@ -52,19 +48,20 @@ export interface NodeMenuItemSelectedEvent {
   nodeMenuItemAction: NodeMenuItemAction
 }
 
+export type NodeEditableEventType = 'blur' | 'keyup';
 export interface NodeEditableEvent {
   value: string,
+  type: NodeEditableEventType
+}
 
-  // FIXME: Make it of proper enum
-  type: string
+export enum NodeDraggableEventAction {
+  Remove
 }
 
 export interface NodeDraggableEvent {
   captured: CapturedNode;
   target: ElementRef;
-
-  // FIXME: Make it of proper enum
-  action?: string;
+  action?: NodeDraggableEventAction;
 }
 
 export class CapturedNode {

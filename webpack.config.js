@@ -26,7 +26,7 @@ config.entry = {
         '@angular/platform-browser-dynamic',
         'lodash'
     ],
-    'app': ['./ng2-tree.ts', './demo/app.ts'],
+    'app': ['./ng2-branchy.ts', './demo/app.ts'],
 };
 
 config.output = {

@@ -11,21 +11,27 @@ import {
   NodeMenuEvent,
   TreeModel,
   FoldingType,
-  TreeEvent
+  TreeEvent, NodeDraggableEventAction
 } from './types';
 import {NodeEditableDirective} from './node-editable.directive';
 import {NodeMenuComponent} from './node-menu.component';
-import Draggable from './node-draggable.directive';
 import {NodeDraggableService} from './node-draggable.service';
 import {NodeMenuService} from './node-menu.service';
+import {NodeDraggableDirective} from './node-draggable.directive';
 
 @Component({
   selector: 'tree',
-  styles: [require('./tree.component.styl')],
-  template: require('./tree.component.html'),
-  directives: [NodeEditableDirective, TreeComponent, NodeMenuComponent, Draggable, CORE_DIRECTIVES],
+  styles: [require('./branchy.component.styl')],
+  template: require('./branchy.component.html'),
+  directives: [
+    NodeEditableDirective,
+    TreeComponent,
+    NodeMenuComponent,
+    NodeDraggableDirective,
+    CORE_DIRECTIVES
+  ],
 })
-export class TreeComponent implements OnInit {
+class TreeComponent implements OnInit {
   @Input('model')
   private tree: TreeModel;
 
@@ -70,12 +76,12 @@ export class TreeComponent implements OnInit {
 
   private setUpDraggableEventHandler() {
     this.nodeDraggableService.draggableNodeEvents$
-      .filter(event => event.action === 'remove')
+      .filter(event => event.action === NodeDraggableEventAction.Remove)
       .filter(event => event.captured.element === this.element)
       .subscribe(event => this.onChildRemoved({node: event.captured.tree}, this.parentTree));
 
     this.nodeDraggableService.draggableNodeEvents$
-      .filter(event => event.action !== 'remove')
+      .filter(event => event.action !== NodeDraggableEventAction.Remove)
       .filter(event => event.target === this.element)
       .filter(event => !this.hasChild(event.captured.tree))
       .subscribe(event => {
@@ -93,12 +99,12 @@ export class TreeComponent implements OnInit {
 
   private moveNodeToThisTreeAndRemoveFromPreviousOne(event: NodeDraggableEvent): void {
     this.tree.children.push(event.captured.tree);
-    this.nodeDraggableService.draggableNodeEvents$.next(_.merge(event, {action: 'remove'}));
+    this.nodeDraggableService.draggableNodeEvents$.next(_.merge(event, {action: NodeDraggableEventAction.Remove}));
   }
 
   private moveNodeToParentTreeAndRemoveFromPreviousOne(event: NodeDraggableEvent): void {
     this.parentTree.children.splice(this.indexInParent, 0, event.captured.tree);
-    this.nodeDraggableService.draggableNodeEvents$.next(_.merge(event, {action: 'remove'}));
+    this.nodeDraggableService.draggableNodeEvents$.next(_.merge(event, {action: NodeDraggableEventAction.Remove}));
   }
 
   private isEditInProgress() {
@@ -114,7 +120,7 @@ export class TreeComponent implements OnInit {
   }
 
   private isSiblingOf(child: TreeModel) {
-    return _.includes(this.parentTree.children, child);
+    return this.parentTree && _.includes(this.parentTree.children, child);
   }
 
   private swapWithSibling(sibling: TreeModel): void {
@@ -132,7 +138,7 @@ export class TreeComponent implements OnInit {
   }
 
   private switchFolding($event: any, tree: TreeModel): void {
-    this.handleFoldingType($event.target.parentTree.parentNode, tree);
+    this.handleFoldingType($event.target.parentNode.parentNode, tree);
   }
 
   private foldingType(node: TreeModel): FoldingTypeCssClass {
@@ -257,3 +263,14 @@ export class TreeComponent implements OnInit {
 }
 
 type FoldingTypeCssClass = 'node-expanded' | 'node-collapsed' | 'node-leaf';
+
+@Component({
+  selector: 'branchy',
+  providers: [NodeMenuService, NodeDraggableService],
+  template: `<tree [model]="tree"></tree>`,
+  directives: [TreeComponent]
+})
+export class BranchyComponent {
+  @Input('model')
+  private tree: TreeModel
+}
