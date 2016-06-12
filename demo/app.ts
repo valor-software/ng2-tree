@@ -1,6 +1,6 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {Component} from '@angular/core';
-import {BranchyComponent} from 'ng2-branchy.ts';
+import {BranchyComponent} from '../ng2-branchy';
 
 @Component({
   selector: 'app',

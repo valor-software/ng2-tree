@@ -35,7 +35,8 @@
     "html-webpack-plugin": "2.9.0",
     "raw-loader": "0.5.1",
     "style-loader": "0.13.1",
-    "stylus-loader": "1.5.1",
+    "stylus": "0.54.5",
+    "stylus-loader": "2.1.0",
     "to-string-loader": "1.1.4",
     "typings": "0.7.9",
     "webpack-dev-server": "1.14.1"
