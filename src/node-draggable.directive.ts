@@ -50,13 +50,13 @@ export class NodeDraggableDirective implements OnDestroy {
 
   private handleDragEnter(e: DragEvent): any {
     e.preventDefault();
-    if (this.containsElementAt(e.pageX, e.pageY)) {
+    if (this.containsElementAt(e)) {
       this.addClass('over-drop-target');
     }
   }
 
   private handleDragLeave(e: DragEvent): any {
-    if (!this.containsElementAt(e.pageX, e.pageY)) {
+    if (!this.containsElementAt(e)) {
       this.removeClass('over-drop-target');
     }
   }
@@ -78,7 +78,9 @@ export class NodeDraggableDirective implements OnDestroy {
 
   private isDropPossible(e: DragEvent) {
     const capturedNode = this.nodeDraggableService.getCapturedNode();
-    return capturedNode && capturedNode.canBeDroppedAt(this.nodeDraggable) && this.containsElementAt(e.pageX, e.pageY);
+    return capturedNode
+      && capturedNode.canBeDroppedAt(this.nodeDraggable)
+      && this.containsElementAt(e);
   }
 
   private handleDragEnd(e: DragEvent): any {
@@ -86,7 +88,8 @@ export class NodeDraggableDirective implements OnDestroy {
     this.nodeDraggableService.releaseCapturedNode();
   }
 
-  private containsElementAt(x: number, y: number): boolean {
+  private containsElementAt(e: DragEvent): boolean {
+    const {x = e.clientX, y = e.clientY} = e;
     return this.nodeNativeElement.contains(document.elementFromPoint(x, y));
   }
 

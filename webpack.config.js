@@ -74,7 +74,7 @@ config.module = {
 
 config.plugins = [
     new HtmlWebpackPlugin({
-        title: 'ng2-tree',
+        title: 'ng2-branchy',
         template: 'demo/index.ejs',
         inject: 'body'
     }),
