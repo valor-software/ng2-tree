@@ -38,12 +38,17 @@ li
     display inline-block
     color color-black
 
-    &:hover
-      background-color color-indigo
-      padding 0 5px
-      border-radius 7%
-      transition padding 0.2s ease-out
-      cursor pointer
+    &:after
+      display block
+      padding-top -3px
+      width 0
+      height 2px
+      background-color color-black
+      content ''
+      transition width 0.3s
+
+    &:hover:after
+      width 100%
 
   .folding
     width 25px
