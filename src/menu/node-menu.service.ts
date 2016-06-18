@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Rx';
-import {NodeMenuEvent} from './types';
+import {NodeMenuEvent} from './menu.types';
 
 @Injectable()
 export class NodeMenuService {

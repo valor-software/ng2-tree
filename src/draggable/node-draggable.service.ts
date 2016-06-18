@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {NodeDraggableEvent, CapturedNode} from './types';
 import {Subject} from 'rxjs/Rx';
+import {CapturedNode} from './captured-node';
+import {NodeDraggableEvent} from './draggable.types';
 
 @Injectable()
 export class NodeDraggableService {

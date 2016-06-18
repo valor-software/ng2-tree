@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
-import {MouseButtons, NodeMenuItemAction, NodeMenuItemSelectedEvent, NodeMenuAction, NodeMenuEvent} from './types';
 import {NodeMenuService} from './node-menu.service';
+import {NodeMenuItemSelectedEvent, NodeMenuItemAction, MouseButtons, NodeMenuEvent, NodeMenuAction} from './menu.types';
 
 @Component({
   selector: 'node-menu',

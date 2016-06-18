@@ -1,23 +1,15 @@
 import {Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
 import * as _ from 'lodash';
-import {
-  TreeStatus,
-  NodeMenuItemSelectedEvent,
-  NodeMenuItemAction,
-  NodeEditableEvent,
-  NodeDraggableEvent,
-  NodeMenuAction,
-  NodeMenuEvent,
-  TreeModel,
-  FoldingType,
-  TreeEvent, NodeDraggableEventAction
-} from './types';
-import {NodeEditableDirective} from './node-editable.directive';
-import {NodeMenuComponent} from './node-menu.component';
-import {NodeDraggableService} from './node-draggable.service';
-import {NodeMenuService} from './node-menu.service';
-import {NodeDraggableDirective} from './node-draggable.directive';
+import {TreeStatus, TreeModel, FoldingType, TreeEvent, FoldingTypeCssClass} from './branchy.types';
+import {NodeEditableDirective} from './editable/node-editable.directive';
+import {NodeMenuComponent} from './menu/node-menu.component';
+import {NodeDraggableService} from './draggable/node-draggable.service';
+import {NodeMenuService} from './menu/node-menu.service';
+import {NodeDraggableDirective} from './draggable/node-draggable.directive';
+import {NodeDraggableEventAction, NodeDraggableEvent} from './draggable/draggable.types';
+import {NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction} from './menu/menu.types';
+import {NodeEditableEvent} from './editable/editable.type';
 
 @Component({
   selector: 'tree',
@@ -261,8 +253,6 @@ class TreeComponent implements OnInit {
     node.status = TreeStatus.Modified;
   }
 }
-
-type FoldingTypeCssClass = 'node-expanded' | 'node-collapsed' | 'node-leaf';
 
 @Component({
   selector: 'branchy',
