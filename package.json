@@ -6,7 +6,8 @@
   "scripts": {
     "preinstall": "typings install",
     "dev": "webpack-dev-server --inline --hot",
-    "build": "webpack"
+    "build": "webpack",
+    "tslint": "node_modules/.bin/tslint **/*.ts -e typings"
   },
   "author": "rychko.georgiy@gmail.com",
   "license": "MIT",
@@ -17,20 +18,22 @@
     "@angular/platform-browser": "2.0.0-rc.2",
     "@angular/platform-browser-dynamic": "2.0.0-rc.2",
     "es6-shim": "0.35.0",
-    "file-loader": "0.8.5",
     "font-awesome": "4.6.1",
     "lodash": "4.6.1",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.23",
-    "ts-loader": "0.8.1",
     "typescript": "1.8.2",
-    "url-loader": "0.5.7",
-    "webpack": "1.12.14",
-    "zone.js": "0.6.12"
+    "zone.js": "0.6.12",
+    "webpack": "1.12.14"
   },
   "devDependencies": {
     "clean-webpack-plugin": "0.1.8",
+    "ts-loader": "0.8.1",
+    "file-loader": "0.8.5",
+    "url-loader": "0.5.7",
+    "tslint": "3.11.0",
+    "codelyzer": "0.0.23",
     "css-loader": "0.23.1",
     "html-webpack-plugin": "2.9.0",
     "raw-loader": "0.5.1",
