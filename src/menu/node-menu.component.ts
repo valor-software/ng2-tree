@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
 import {NodeMenuService} from './node-menu.service';
-import {NodeMenuItemSelectedEvent, NodeMenuItemAction, MouseButtons, NodeMenuEvent, NodeMenuAction} from './menu.types';
+import {NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuEvent, NodeMenuAction} from './menu.types';
+import {isLeftButtonClicked, isEscapePressed} from '../common/utils/event.utils';
 
 @Component({
   selector: 'node-menu',
@@ -43,24 +44,20 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
     @Inject(NodeMenuService) private nodeMenuService: NodeMenuService) {
   }
 
-  private onMenuItemSelected($event: MouseEvent, selectedMenuItem: NodeMenuItem) {
-    if (!this.isSelectionValid($event)) {
-      return;
+  private onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {
+    if (isLeftButtonClicked(e)) {
+      this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
     }
-    this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
   }
 
-  private isSelectionValid($event: MouseEvent) {
-    return $event.which === MouseButtons.Left;
-  }
-
-  private closeMenu(event: MouseEvent | KeyboardEvent) {
-    const mouseClicked = event instanceof MouseEvent;
-    const escapePressed = event instanceof KeyboardEvent && event.key === 'Escape';
+  private closeMenu(e: MouseEvent | KeyboardEvent): void {
+    const mouseClicked = e instanceof MouseEvent;
+    const escapePressed = e instanceof KeyboardEvent && isEscapePressed(e);
 
     if (escapePressed || mouseClicked) {
+      console.log(e.target)
       const nodeMenuEvent: NodeMenuEvent = {
-        sender: (event.target as HTMLElement),
+        sender: (e.target as HTMLElement),
         action: NodeMenuAction.Close
       };
 

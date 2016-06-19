@@ -9,7 +9,7 @@ import {
   Inject,
   Renderer
 } from '@angular/core';
-import {NodeEditableEvent} from './editable.type';
+import {NodeEditableEvent, NodeEditableEventAction} from './editable.type';
 
 @Directive({
   selector: '[nodeEditable]'
@@ -39,11 +39,19 @@ export class NodeEditableDirective implements OnInit {
 
   @HostListener('keyup.esc')
   private cancelEditing() {
-    return this.valueChanged.emit({type: 'keyup', value: this.nodeValue});
+    return this.valueChanged.emit({
+      type: 'keyup', 
+      value: this.nodeValue, 
+      action: NodeEditableEventAction.Cancel
+    });
   }
 
   @HostListener('blur')
   private cancelEditingByLoosingFocus() {
-    this.valueChanged.emit({type: 'blur', value: this.nodeValue});
+    this.valueChanged.emit({
+      type: 'blur', 
+      value: this.nodeValue, 
+      action: NodeEditableEventAction.Cancel
+    });
   }
 }

@@ -1,21 +1,22 @@
-export enum FoldingType {
-  Expanded,
-  Collapsed,
-  Leaf
-}
+export class FoldingType {
+  public static Expanded: FoldingType = new FoldingType('node-expanded');
+  public static Collapsed: FoldingType = new FoldingType('node-collapsed');
+  public static Leaf: FoldingType = new FoldingType('node-leaf');
 
-export type FoldingTypeCssClass = 'node-expanded' | 'node-collapsed' | 'node-leaf';
+  constructor(private _cssClass: string) {
+  }
 
-export interface TreeEvent {
-  node: TreeModel
+  public get cssClass(): string {
+    return this._cssClass;
+  }
 }
 
 export interface TreeModel {
-  value: string;
+  value: string | RenamableNode;
   children?: Array<TreeModel>;
-  status?: TreeStatus,
-  foldingType?: FoldingType,
-  indexInParent?: number
+  _status?: TreeStatus;
+  _foldingType?: FoldingType;
+  _indexInParent?: number;
 }
 
 export enum TreeStatus {
@@ -23,3 +24,35 @@ export enum TreeStatus {
   Modified,
   EditInProgress
 }
+
+export interface RenamableNode {
+  setName: (name: string) => void
+  toString: () => string;
+}
+
+export interface NodeEvent {
+  node: TreeModel;
+}
+
+export interface NodeSelectedEvent extends NodeEvent {
+}
+
+export interface NodeDestructiveEvent extends NodeEvent {
+  parent: TreeModel;
+}
+
+export interface NodeMovedEvent extends NodeDestructiveEvent {
+}
+
+export interface NodeRemovedEvent extends NodeDestructiveEvent {
+}
+
+export interface NodeCreatedEvent extends NodeDestructiveEvent {
+}
+
+export interface NodeRenamedEvent extends NodeDestructiveEvent {
+  newValue: string | RenamableNode;
+  oldValue: string | RenamableNode;
+}
+
+

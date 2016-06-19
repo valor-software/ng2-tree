@@ -1,7 +1,3 @@
-export enum MouseButtons {
-  Left = 1,
-}
-
 export enum NodeMenuItemAction {
   NewFolder,
   NewTag,

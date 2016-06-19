@@ -1,17 +1,22 @@
-<ul *ngIf="tree" class="tree">
+<ul class="tree" *ngIf="tree">
   <li>
     <div (contextmenu)="showMenu($event)" [nodeDraggable]="element" [tree]="tree">
-      <div class="folding" (click)="switchFolding($event, tree)" [ngClass]="foldingType(tree)"></div>
-      <div href="#" class="node-value" *ngIf="!isEditInProgress()">{{tree.value}}</div>
-      <input type="text" class="node-value" [nodeEditable]="tree.value" (valueChanged)="applyNewValue($event, tree)"
-             *ngIf="isEditInProgress()"/>
+      <div class="folding" (click)="switchFoldingType($event, tree)" [ngClass]="getFoldingTypeCssClass(tree)"></div>
+      <div href="#" class="node-value" *ngIf="!isEditInProgress()" [class.node-selected]="isSelected" (click)="onNodeSelected($event)">{{tree.value}}</div>
+
+      <input type="text" class="node-value" *ngIf="isEditInProgress()"
+             [nodeEditable]="tree.value"
+             (valueChanged)="applyNewValue($event, tree)"/>
     </div>
 
     <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
 
     <template [ngIf]="isNodeExpanded()">
-      <tree *ngFor="let child of tree.children; let position = index" [parentTree]="tree"
-            [indexInParent]="position" [model]="child" (nodeRemoved)="onChildRemoved($event)"></tree>
+      <tree *ngFor="let child of tree.children; let position = index"
+            [parentTree]="tree"
+            [indexInParent]="position"
+            [model]="child"
+            (nodeRemoved)="onChildRemoved($event)"></tree>
     </template>
   </li>
 </ul>
