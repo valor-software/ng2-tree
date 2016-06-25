@@ -12,7 +12,7 @@ config.context = __dirname;
 
 config.resolve = {
   root: __dirname,
-  extensions: ['', '.ts', '.js', '.json', '.styl', '.css', 'html']
+  extensions: ['', '.ts', '.js', '.json', '.css', 'html']
 };
 
 config.entry = {
@@ -26,7 +26,7 @@ config.entry = {
     '@angular/platform-browser-dynamic',
     'lodash'
   ],
-  'app': ['./ng2-branchy.ts', './demo/app.ts']
+  'app': ['./index.ts', './demo/app.component.ts']
 };
 
 config.output = {
@@ -59,11 +59,7 @@ config.module = {
     },
     {
       test: /\.css$/,
-      loader: 'style!css!stylus?resolve url'
-    },
-    {
-      test: /\.styl$/,
-      loader: 'to-string!css!stylus?resolve url'
+      loader: 'to-string!css'
     },
     {
       test: /\.html$/,
@@ -72,11 +68,18 @@ config.module = {
   ]
 };
 
+config.ts = {
+  compilerOptions: {
+    declaration: false
+  }
+};
+
 config.plugins = [
   new HtmlWebpackPlugin({
     title: 'ng2-branchy',
     template: 'demo/index.ejs',
-    inject: 'body'
+    inject: false,
+    hash: true
   }),
   new CleanWebpackPlugin(['build'], {
     root: __dirname,

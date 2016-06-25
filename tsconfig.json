@@ -1,5 +1,5 @@
 {
-  "version": "1.8.2",
+  "version": "1.8.10",
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
@@ -14,7 +14,14 @@
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true
   },
+  "exclude": [
+    "node_modules",
+    "typings",
+    "build"
+  ],
   "files": [
-    "typings/main.d.ts"
+    "demo/app.component.ts",
+    "index.ts",
+    "typings/index.d.ts"
   ]
 }

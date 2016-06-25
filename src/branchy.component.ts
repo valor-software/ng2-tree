@@ -16,12 +16,12 @@ import {applyNewValueToRenamable, isRenamable, isValueEmpty} from './common/util
 
 @Component({
   selector: 'tree',
-  styles: [require('./branchy.component.styl')],
+  styles: [require('./branchy.component.css')],
   template: require('./branchy.component.html'),
   directives: [NodeEditableDirective, TreeComponent, NodeMenuComponent, NodeDraggableDirective, CORE_DIRECTIVES],
 })
 class TreeComponent implements OnInit {
-  @Input('model')
+  @Input()
   private tree: TreeModel;
 
   @Input()
@@ -72,15 +72,15 @@ class TreeComponent implements OnInit {
 
   private setUpDraggableEventHandler() {
     this.nodeDraggableService.draggableNodeEvents$
-      .filter(e => e.action === NodeDraggableEventAction.Remove)
-      .filter(e => e.captured.element === this.element)
-      .subscribe(e => this.onChildRemoved({node: e.captured.tree}, this.parentTree));
+      .filter((e:NodeDraggableEvent) => e.action === NodeDraggableEventAction.Remove)
+      .filter((e:NodeDraggableEvent) => e.captured.element === this.element)
+      .subscribe((e:NodeDraggableEvent) => this.onChildRemoved({node: e.captured.tree}, this.parentTree));
 
     this.nodeDraggableService.draggableNodeEvents$
-      .filter(e => e.action !== NodeDraggableEventAction.Remove)
-      .filter(e => e.target === this.element)
-      .filter(e => !this.hasChild(e.captured.tree))
-      .subscribe(e => {
+      .filter((e:NodeDraggableEvent) => e.action !== NodeDraggableEventAction.Remove)
+      .filter((e:NodeDraggableEvent) => e.target === this.element)
+      .filter((e:NodeDraggableEvent) => !this.hasChild(e.captured.tree))
+      .subscribe((e:NodeDraggableEvent) => {
         if (this.isSiblingOf(e.captured.tree)) {
           return this.swapWithSibling(e.captured.tree);
         }
@@ -300,11 +300,11 @@ class TreeComponent implements OnInit {
 @Component({
   selector: 'branchy',
   providers: [NodeMenuService, NodeDraggableService, BranchyService],
-  template: `<tree [model]="tree"></tree>`,
+  template: `<tree [tree]="tree"></tree>`,
   directives: [TreeComponent]
 })
 export class BranchyComponent implements OnInit {
-  @Input('model')
+  @Input()
   private tree: TreeModel;
 
   @Output()

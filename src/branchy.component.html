@@ -15,7 +15,7 @@
       <tree *ngFor="let child of tree.children; let position = index"
             [parentTree]="tree"
             [indexInParent]="position"
-            [model]="child"
+            [tree]="child"
             (nodeRemoved)="onChildRemoved($event)"></tree>
     </template>
   </li>

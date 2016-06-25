@@ -5,3 +5,14 @@ build/
 npm-debug.log
 typings/
 
+**/*.js.map
+
+demo/**/*.js
+demo/**/*.d.ts
+
+src/**/*.js
+src/**/*.d.ts
+src/**/*.css
+
+*.js
+*.d.ts

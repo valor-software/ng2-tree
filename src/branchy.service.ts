@@ -1,5 +1,5 @@
 import {NodeRemovedEvent, NodeRenamedEvent, NodeCreatedEvent, NodeSelectedEvent, NodeMovedEvent} from './branchy.types';
-import {Subject, Observable} from 'rxjs/Rx';
+import {Subject} from 'rxjs/Rx';
 import {Injectable} from '@angular/core';
 
 @Injectable()

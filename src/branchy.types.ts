@@ -26,8 +26,8 @@ export enum TreeStatus {
 }
 
 export interface RenamableNode {
-  setName: (name: string) => void;
-  toString: () => string;
+  setName(name: string): void;
+  toString(): string;
 }
 
 export interface NodeEvent {

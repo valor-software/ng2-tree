@@ -6,7 +6,7 @@ import {isLeftButtonClicked, isEscapePressed} from '../common/utils/event.utils'
 
 @Component({
   selector: 'node-menu',
-  styles: [require('./node-menu.component.styl')],
+  styles: [require('./node-menu.component.css')],
   template: require('./node-menu.component.html'),
   directives: [CORE_DIRECTIVES]
 })
@@ -55,7 +55,6 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
     const escapePressed = e instanceof KeyboardEvent && isEscapePressed(e);
 
     if (escapePressed || mouseClicked) {
-      console.log(e.target)
       const nodeMenuEvent: NodeMenuEvent = {
         sender: (e.target as HTMLElement),
         action: NodeMenuAction.Close
