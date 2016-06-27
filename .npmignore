@@ -2,6 +2,7 @@
 build/
 demo/
 typings/
+.publish/
 
 webpack.config.js
 

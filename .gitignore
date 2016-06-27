@@ -4,6 +4,7 @@ build/
 .vscode/
 npm-debug.log
 typings/
+.publish/
 
 **/*.js.map
 
