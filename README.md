@@ -213,7 +213,7 @@ Here is an example of such a node in the `TreeModel` object:
 
 Here is the diagram that shows branchy events' hierarchy
 
-![brachy events' hierarchy](media/branchy-events-hierarchy.svg)
+![branchy events' hierarchy](media/branchy-events-hierarchy.png)
 
 `NodeEvent` is the root of branchy events' hierarchy. It defines property `node` that contains a receiver of the event's action (`node` confirms to `TreeModel`).
 
