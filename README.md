@@ -342,6 +342,6 @@ I really want to deminish all the [Bad parts](#-1-bad-parts) and extend branchy 
 
 ## :bulb: Want to help?
 
-I am very appreciate for your ideas, proposals and found bugs which you can leave in [github issues](). Thanks in advance!
+I am very appreciate for your ideas, proposals and found bugs which you can leave in [github issues](https://github.com/rychkog/ng2-branchy/issues). Thanks in advance!
 
 **P.S.** If you find it hard going through documentation, please, let me know which parts of it was difficult to grasp and I will improve them.
