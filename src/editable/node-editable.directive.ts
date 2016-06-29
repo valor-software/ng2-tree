@@ -34,23 +34,19 @@ export class NodeEditableDirective implements OnInit {
 
   @HostListener('keyup.enter', ['$event.target.value'])
   private applyNewValue(newNodeValue: string) {
-    return this.valueChanged.emit({type: 'keyup', value: newNodeValue});
+    this.valueChanged.emit({type: 'keyup', value: newNodeValue});
+  }
+
+  @HostListener('blur', ['$event.target.value'])
+  private applyNewValueByLoosingFocus(newNodeValue: string): void {
+    this.valueChanged.emit({type: 'blur', value: newNodeValue});
   }
 
   @HostListener('keyup.esc')
-  private cancelEditing() {
-    return this.valueChanged.emit({
-      type: 'keyup', 
-      value: this.nodeValue, 
-      action: NodeEditableEventAction.Cancel
-    });
-  }
-
-  @HostListener('blur')
-  private cancelEditingByLoosingFocus() {
+  private cancelEditing(): void {
     this.valueChanged.emit({
-      type: 'blur', 
-      value: this.nodeValue, 
+      type: 'keyup',
+      value: this.nodeValue,
       action: NodeEditableEventAction.Cancel
     });
   }
