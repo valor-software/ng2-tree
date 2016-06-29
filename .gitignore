@@ -10,6 +10,7 @@ typings/
 
 demo/**/*.js
 demo/**/*.d.ts
+demo/**/*.css
 
 src/**/*.js
 src/**/*.d.ts
