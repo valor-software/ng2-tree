@@ -1,6 +1,6 @@
 {
   "name": "ng2-branchy",
-  "version": "0.0.2-4",
+  "version": "0.0.2-5",
   "description": "angular2 component for visualizing data that can be naturally represented as a tree",
   "main": "index.js",
   "license": "MIT",
