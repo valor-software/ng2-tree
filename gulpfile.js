@@ -1,16 +1,21 @@
 'use strict';
 
 const gulp = require('gulp');
-const stylus = require('gulp-stylus');
-const gitignore = require('gulp-gitignore');
+const stylus = require('stylus');
 const ghPages = require('gulp-gh-pages');
+const gitignore = require('gulp-gitignore');
+const gulpStylus = require('gulp-stylus');
 
 const SAME_DIRECTORY = '.';
 
 gulp.task('stylus', () => {
   return gulp.src('**/*.styl')
     .pipe(gitignore())
-    .pipe(stylus())
+    .pipe(gulpStylus({
+      define: {
+        url: stylus.resolver()
+      }
+    }))
     .pipe(gulp.dest(SAME_DIRECTORY));
 });
 

@@ -10,7 +10,7 @@ import {
   NodeDestructiveEvent
 } from './src/branchy.types';
 
-export * from './src/branchy.component';
+import {BranchyComponent} from './src/branchy.component'
 
 export {
   TreeModel,
@@ -21,5 +21,6 @@ export {
   NodeRenamedEvent,
   NodeMovedEvent,
   NodeSelectedEvent,
-  NodeDestructiveEvent
+  NodeDestructiveEvent,
+  BranchyComponent
 };
