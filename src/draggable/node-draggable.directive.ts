@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Input, Inject, Renderer, OnDestroy} from '@angular/core';
-import {TreeModel} from '../branchy.types';
+import {TreeModel} from '../tree.types';
 import {NodeDraggableService} from './node-draggable.service';
 import {CapturedNode} from './captured-node';
 import {NodeDraggableEvent} from './draggable.types';

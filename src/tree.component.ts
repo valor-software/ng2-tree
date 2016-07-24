@@ -1,6 +1,6 @@
 import {Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject} from '@angular/core';
 import {CORE_DIRECTIVES} from '@angular/common';
-import {TreeStatus, TreeModel, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent} from './branchy.types';
+import {TreeStatus, TreeModel, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent} from './tree.types';
 import {NodeEditableDirective} from './editable/node-editable.directive';
 import {NodeMenuComponent} from './menu/node-menu.component';
 import {NodeDraggableService} from './draggable/node-draggable.service';
@@ -9,18 +9,18 @@ import {NodeDraggableDirective} from './draggable/node-draggable.directive';
 import {NodeDraggableEventAction, NodeDraggableEvent} from './draggable/draggable.types';
 import {NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction} from './menu/menu.types';
 import {NodeEditableEvent, NodeEditableEventAction} from './editable/editable.type';
-import {BranchyService} from './branchy.service';
+import {TreeService} from './tree.service';
 import {isLeftButtonClicked, isRightButtonClicked} from './common/utils/event.utils';
 import * as _ from 'lodash';
 import {applyNewValueToRenamable, isRenamable, isValueEmpty} from './common/utils/type.utils';
 
 @Component({
-  selector: 'tree',
-  styles: [require('./branchy.component.css')],
-  template: require('./branchy.component.html'),
-  directives: [NodeEditableDirective, TreeComponent, NodeMenuComponent, NodeDraggableDirective, CORE_DIRECTIVES],
+  selector: 'tree-internal',
+  styleUrls: ['./tree.component.css'],
+  templateUrl: './tree.component.html',
+  directives: [NodeEditableDirective, TreeInternalComponent, NodeMenuComponent, NodeDraggableDirective, CORE_DIRECTIVES],
 })
-class TreeComponent implements OnInit {
+class TreeInternalComponent implements OnInit {
   @Input()
   private tree: TreeModel;
 
@@ -40,7 +40,7 @@ class TreeComponent implements OnInit {
   public constructor(
     @Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
     @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
-    @Inject(BranchyService) private branchyService: BranchyService,
+    @Inject(TreeService) private treeService: TreeService,
     @Inject(ElementRef) private element: ElementRef) {
   }
 
@@ -56,7 +56,7 @@ class TreeComponent implements OnInit {
   }
 
   private setUpNodeSelectedEventHandler() {
-    this.branchyService.nodeSelected$
+    this.treeService.nodeSelected$
       .filter((e: NodeSelectedEvent) => this.tree !== e.node)
       .subscribe(_ => this.isSelected = false);
   }
@@ -97,7 +97,7 @@ class TreeComponent implements OnInit {
     this.tree.children.push(e.captured.tree);
     this.nodeDraggableService.draggableNodeEvents$.next(_.merge(e, {action: NodeDraggableEventAction.Remove}));
 
-    this.branchyService.nodeMoved$.next({
+    this.treeService.nodeMoved$.next({
       node: e.captured.tree,
       parent: this.tree
     });
@@ -107,7 +107,7 @@ class TreeComponent implements OnInit {
     this.parentTree.children.splice(this.indexInParent, 0, e.captured.tree);
     this.nodeDraggableService.draggableNodeEvents$.next(_.merge(e, {action: NodeDraggableEventAction.Remove}));
 
-    this.branchyService.nodeMoved$.next({
+    this.treeService.nodeMoved$.next({
       node: e.captured.tree,
       parent: this.parentTree
     });
@@ -140,7 +140,7 @@ class TreeComponent implements OnInit {
     this.tree._indexInParent = siblingIndex;
     sibling._indexInParent = thisTreeIndex;
 
-    this.branchyService.nodeMoved$.next({
+    this.treeService.nodeMoved$.next({
       node: this.tree,
       parent: this.parentTree
     });
@@ -211,7 +211,7 @@ class TreeComponent implements OnInit {
   }
 
   private onRemoveSelected() {
-    this.branchyService.nodeRemoved$.next({
+    this.treeService.nodeRemoved$.next({
       node: this.tree,
       parent: this.parentTree
     });
@@ -274,11 +274,11 @@ class TreeComponent implements OnInit {
     }
 
     if (node._status === TreeStatus.New) {
-      this.branchyService.nodeCreated$.next({node, parent: this.parentTree});
+      this.treeService.nodeCreated$.next({node, parent: this.parentTree});
     }
 
     if (node._status === TreeStatus.EditInProgress) {
-      this.branchyService.nodeRenamed$.next({
+      this.treeService.nodeRenamed$.next({
         node,
         parent: this.parentTree,
         oldValue: nodeOldValue,
@@ -292,18 +292,18 @@ class TreeComponent implements OnInit {
   private onNodeSelected(e: MouseEvent) {
     if (isLeftButtonClicked(e)) {
       this.isSelected = true;
-      this.branchyService.nodeSelected$.next({node: this.tree});
+      this.treeService.nodeSelected$.next({node: this.tree});
     }
   }
 }
 
 @Component({
-  selector: 'branchy',
-  providers: [NodeMenuService, NodeDraggableService, BranchyService],
-  template: `<tree [tree]="tree"></tree>`,
-  directives: [TreeComponent]
+  selector: 'tree',
+  providers: [NodeMenuService, NodeDraggableService, TreeService],
+  template: `<tree-internal [tree]="tree"></tree-internal>`,
+  directives: [TreeInternalComponent]
 })
-export class BranchyComponent implements OnInit {
+export class TreeComponent implements OnInit {
   @Input()
   private tree: TreeModel;
 
@@ -322,27 +322,27 @@ export class BranchyComponent implements OnInit {
   @Output()
   private nodeMoved: EventEmitter<any> = new EventEmitter();
 
-  constructor(@Inject(BranchyService) private branchyService: BranchyService) {
+  constructor(@Inject(TreeService) private treeService: TreeService) {
   }
 
   public ngOnInit(): void {
-    this.branchyService.nodeRemoved$.subscribe((e: NodeEvent) => {
+    this.treeService.nodeRemoved$.subscribe((e: NodeEvent) => {
       this.nodeRemoved.emit(e);
     });
 
-    this.branchyService.nodeRenamed$.subscribe((e: NodeEvent) => {
+    this.treeService.nodeRenamed$.subscribe((e: NodeEvent) => {
       this.nodeRenamed.emit(e);
     });
 
-    this.branchyService.nodeCreated$.subscribe((e: NodeEvent) => {
+    this.treeService.nodeCreated$.subscribe((e: NodeEvent) => {
       this.nodeCreated.emit(e);
     });
 
-    this.branchyService.nodeSelected$.subscribe((e: NodeEvent) => {
+    this.treeService.nodeSelected$.subscribe((e: NodeEvent) => {
       this.nodeSelected.emit(e);
     });
 
-    this.branchyService.nodeMoved$.subscribe((e: NodeEvent) => {
+    this.treeService.nodeMoved$.subscribe((e: NodeEvent) => {
       this.nodeMoved.emit(e);
     });
   }
