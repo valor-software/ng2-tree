@@ -1,39 +1,39 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {Component} from '@angular/core';
-import {BranchyComponent, NodeEvent, TreeModel, RenamableNode} from '../index';
+import {TreeComponent, NodeEvent, TreeModel, RenamableNode} from '../index';
 
 declare const alertify: any;
 
 @Component({
   selector: 'app',
   template: `
-    <div class="branchy-demo-app">
-      <div class="branchy-container">
-        <p>Branchy fonts</p>
-        <branchy
+    <div class="tree-demo-app">
+      <div class="tree-container">
+        <p>Fonts tree</p>
+        <tree
           [tree]="fonts" 
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
           (nodeMoved)="onNodeMoved($event)"
           (nodeCreated)="onNodeCreated($event)">
-        </branchy>
+        </tree>
       </div>
-      <div class="branchy-container">
-        <p>Branchy programming languages</p>
-        <branchy 
+      <div class="tree-container">
+        <p>Programming languages tree</p>
+        <tree 
           [tree]="pls" 
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
           (nodeMoved)="onNodeMoved($event)"
           (nodeCreated)="onNodeCreated($event)">
-        </branchy>
+        </tree>
       </div>
     </div>
     `,
-  styles: [require('./app.css')],
-  directives: [BranchyComponent]
+  styleUrls: ['./app.css'],
+  directives: [TreeComponent]
 })
 class AppComponent {
   private fonts: TreeModel = {

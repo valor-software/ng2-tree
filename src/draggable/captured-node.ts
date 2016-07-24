@@ -1,4 +1,4 @@
-import {TreeModel} from '../branchy.types';
+import {TreeModel} from '../tree.types';
 import {ElementRef} from '@angular/core';
 
 export class CapturedNode {

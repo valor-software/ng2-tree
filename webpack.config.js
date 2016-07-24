@@ -55,7 +55,7 @@ config.module = {
     },
     {
       test: /\.ts$/,
-      loader: 'ts'
+      loaders: ['ts-loader', 'angular2-template-loader']
     },
     {
       test: /\.css$/,
@@ -76,7 +76,7 @@ config.ts = {
 
 config.plugins = [
   new HtmlWebpackPlugin({
-    title: 'ng2-branchy',
+    title: 'ng2-tree',
     template: 'demo/index.ejs',
     inject: false,
     hash: true
