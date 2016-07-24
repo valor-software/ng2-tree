@@ -12,11 +12,11 @@
     <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
 
     <template [ngIf]="isNodeExpanded()">
-      <tree *ngFor="let child of tree.children; let position = index"
+      <tree-internal *ngFor="let child of tree.children; let position = index"
             [parentTree]="tree"
             [indexInParent]="position"
             [tree]="child"
-            (nodeRemoved)="onChildRemoved($event)"></tree>
+            (nodeRemoved)="onChildRemoved($event)"></tree-internal>
     </template>
   </li>
 </ul>

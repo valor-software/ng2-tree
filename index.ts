@@ -8,9 +8,9 @@ import {
   NodeMovedEvent,
   NodeSelectedEvent,
   NodeDestructiveEvent
-} from './src/branchy.types';
+} from './src/tree.types';
 
-import {BranchyComponent} from './src/branchy.component'
+import {TreeComponent} from './src/tree.component'
 
 export {
   TreeModel,
@@ -22,5 +22,5 @@ export {
   NodeMovedEvent,
   NodeSelectedEvent,
   NodeDestructiveEvent,
-  BranchyComponent
+  TreeComponent
 };

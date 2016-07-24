@@ -1,6 +1,6 @@
 {
-  "name": "ng2-branchy",
-  "version": "0.0.2-5",
+  "name": "ng2-tree",
+  "version": "0.0.2-6",
   "description": "angular2 component for visualizing data that can be naturally represented as a tree",
   "main": "index.js",
   "license": "MIT",
@@ -8,13 +8,13 @@
     "name": "Georgii Rychko",
     "email": "rychko.georgiy@gmail.com"
   },
-  "homepage": "https://github.com/rychkog/ng2-branchy",
+  "homepage": "https://github.com/valor-software/ng2-tree",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rychkog/ng2-branchy.git"
+    "url": "git@github.com:valor-software/ng2-tree.git"
   },
   "bugs": {
-    "url": "https://github.com/rychkog/ng2-branchy/issues"
+    "url": "https://github.com/valor-software/ng2-tree/issues"
   },
   "keywords": [
     "tree",
@@ -23,17 +23,21 @@
     "ng2-tree",
     "branch",
     "tree-view",
-    "branchy"
+    "branchy",
+    "angular2-tree-view",
+    "expand",
+    "collapse",
+    "recursive"
   ],
   "scripts": {
-    "prepublish": "typings install && npm run build:branchy",
+    "prepublish": "typings install && npm run build:tree",
     "lint": "node_modules/.bin/tslint **/*.ts -e typings",
     "clean": "rimraf build '{src,demo}/**/*.{d.ts,js.map,js,css}' 'index.{js,js.map,d.ts}'",
     "dev": "npm run clean && npm run compile:styl && concurrently 'webpack-dev-server --inline --hot --colors --progress' 'npm run compile:styl:w'",
     "compile:ts": "tsc",
     "compile:styl": "gulp stylus",
     "compile:styl:w": "gulp watch:stylus",
-    "build:branchy": "npm run compile:styl && npm run compile:ts",
+    "build:tree": "npm run compile:styl && npm run compile:ts",
     "build:demo": "npm run clean && npm run compile:styl && webpack --progress --colors",
     "deploy:demo": "npm run build:demo && gulp deploy"
   },
@@ -52,6 +56,7 @@
   },
   "devDependencies": {
     "alertifyjs": "1.7.1",
+    "angular2-template-loader": "0.4.0",
     "clean-webpack-plugin": "0.1.9",
     "codelyzer": "0.0.23",
     "concurrently": "2.1.0",

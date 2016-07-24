@@ -1,5 +1,5 @@
 import * as _ from 'lodash/index'
-import {RenamableNode} from '../../branchy.types';
+import {RenamableNode} from '../../tree.types';
 
 export function applyNewValueToRenamable(value: RenamableNode, newValue: string): RenamableNode {
   const renamableValue: RenamableNode = _.merge({}, value as RenamableNode);
