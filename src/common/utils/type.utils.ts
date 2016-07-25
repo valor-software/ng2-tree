@@ -1,4 +1,4 @@
-import * as _ from 'lodash/index'
+import * as _ from 'lodash'
 import {RenamableNode} from '../../tree.types';
 
 export function applyNewValueToRenamable(value: RenamableNode, newValue: string): RenamableNode {
