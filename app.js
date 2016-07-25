@@ -3,7 +3,7 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	module.exports = __webpack_require__(453);
+	module.exports = __webpack_require__(452);
 
 
 /***/ },
@@ -283,8 +283,8 @@ webpackJsonp([0],[
 	    TreeInternalComponent = __decorate([
 	        core_1.Component({
 	            selector: 'tree-internal',
-	            styles: [__webpack_require__(451)],
-	            template: __webpack_require__(452),
+	            styles: [__webpack_require__(450)],
+	            template: __webpack_require__(451),
 	            directives: [node_editable_directive_1.NodeEditableDirective, TreeInternalComponent, node_menu_component_1.NodeMenuComponent, node_draggable_directive_1.NodeDraggableDirective, common_1.CORE_DIRECTIVES],
 	        }),
 	        __param(0, core_1.Inject(node_menu_service_1.NodeMenuService)),
@@ -13593,7 +13593,7 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var _ = __webpack_require__(450);
+	var _ = __webpack_require__(448);
 	function applyNewValueToRenamable(value, newValue) {
 	    var renamableValue = _.merge({}, value);
 	    renamableValue.setName(newValue);
@@ -13612,24 +13612,18 @@ webpackJsonp([0],[
 
 /***/ },
 /* 450 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(448);
-
-/***/ },
-/* 451 */
 /***/ function(module, exports) {
 
 	module.exports = "ul {\n  padding: 3px 0 3px 25px;\n}\nli {\n  padding: 0;\n  margin: 0;\n  list-style: none;\n}\n.over-drop-target {\n  border: 4px solid #757575;\n  transition: padding 0.2s ease-out;\n  padding: 5px;\n  border-radius: 5%;\n}\n.tree {\n  box-sizing: border-box;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n}\n.tree li {\n  list-style: none;\n  cursor: default;\n}\n.tree li div {\n  display: inline-block;\n  box-sizing: border-box;\n}\n.tree .node-value {\n  display: inline-block;\n  color: #212121;\n}\n.tree .node-value:after {\n  display: block;\n  padding-top: -3px;\n  width: 0;\n  height: 2px;\n  background-color: #212121;\n  content: '';\n  transition: width 0.3s;\n}\n.tree .node-value:hover:after {\n  width: 100%;\n}\n.tree .node-selected:after {\n  width: 100%;\n}\n.tree .folding {\n  width: 25px;\n  display: inline-block;\n  line-height: 1px;\n  padding: 0 5px;\n  font-weight: bold;\n}\n.tree .folding.node-collapsed {\n  cursor: pointer;\n}\n.tree .folding.node-collapsed:before {\n  content: '\\25B6';\n  color: #757575;\n}\n.tree .folding.node-expanded {\n  cursor: pointer;\n}\n.tree .folding.node-expanded:before {\n  content: '\\25BC';\n  color: #757575;\n}\n.tree .folding.node-leaf {\n  color: #212121;\n  text-align: center;\n  font-size: 0.89em;\n}\n.tree .folding.node-leaf:before {\n  content: '\\25CF';\n  color: #757575;\n}\n"
 
 /***/ },
-/* 452 */
+/* 451 */
 /***/ function(module, exports) {
 
 	module.exports = "<ul class=\"tree\" *ngIf=\"tree\">\n  <li>\n    <div (contextmenu)=\"showMenu($event)\" [nodeDraggable]=\"element\" [tree]=\"tree\">\n      <div class=\"folding\" (click)=\"switchFoldingType($event, tree)\" [ngClass]=\"getFoldingTypeCssClass(tree)\"></div>\n      <div href=\"#\" class=\"node-value\" *ngIf=\"!isEditInProgress()\" [class.node-selected]=\"isSelected\" (click)=\"onNodeSelected($event)\">{{tree.value}}</div>\n\n      <input type=\"text\" class=\"node-value\" *ngIf=\"isEditInProgress()\"\n             [nodeEditable]=\"tree.value\"\n             (valueChanged)=\"applyNewValue($event, tree)\"/>\n    </div>\n\n    <node-menu *ngIf=\"isMenuVisible\" (menuItemSelected)=\"onMenuItemSelected($event)\"></node-menu>\n\n    <template [ngIf]=\"isNodeExpanded()\">\n      <tree-internal *ngFor=\"let child of tree.children; let position = index\"\n            [parentTree]=\"tree\"\n            [indexInParent]=\"position\"\n            [tree]=\"child\"\n            (nodeRemoved)=\"onChildRemoved($event)\"></tree-internal>\n    </template>\n  </li>\n</ul>\n"
 
 /***/ },
-/* 453 */
+/* 452 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -13642,7 +13636,7 @@ webpackJsonp([0],[
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	var platform_browser_dynamic_1 = __webpack_require__(454);
+	var platform_browser_dynamic_1 = __webpack_require__(453);
 	var core_1 = __webpack_require__(3);
 	var index_1 = __webpack_require__(1);
 	var AppComponent = (function () {
@@ -13755,7 +13749,7 @@ webpackJsonp([0],[
 	        core_1.Component({
 	            selector: 'app',
 	            template: "\n    <div class=\"tree-demo-app\">\n      <div class=\"tree-container\">\n        <p>Fonts tree</p>\n        <tree\n          [tree]=\"fonts\" \n          (nodeRemoved)=\"onNodeRemoved($event)\"\n          (nodeRenamed)=\"onNodeRenamed($event)\"\n          (nodeSelected)=\"onNodeSelected($event)\"\n          (nodeMoved)=\"onNodeMoved($event)\"\n          (nodeCreated)=\"onNodeCreated($event)\">\n        </tree>\n      </div>\n      <div class=\"tree-container\">\n        <p>Programming languages tree</p>\n        <tree \n          [tree]=\"pls\" \n          (nodeRemoved)=\"onNodeRemoved($event)\"\n          (nodeRenamed)=\"onNodeRenamed($event)\"\n          (nodeSelected)=\"onNodeSelected($event)\"\n          (nodeMoved)=\"onNodeMoved($event)\"\n          (nodeCreated)=\"onNodeCreated($event)\">\n        </tree>\n      </div>\n    </div>\n    ",
-	            styles: [__webpack_require__(607)],
+	            styles: [__webpack_require__(606)],
 	            directives: [index_1.TreeComponent]
 	        }), 
 	        __metadata('design:paramtypes', [])
@@ -13766,6 +13760,7 @@ webpackJsonp([0],[
 
 
 /***/ },
+/* 453 */,
 /* 454 */,
 /* 455 */,
 /* 456 */,
@@ -13918,8 +13913,7 @@ webpackJsonp([0],[
 /* 603 */,
 /* 604 */,
 /* 605 */,
-/* 606 */,
-/* 607 */
+/* 606 */
 /***/ function(module, exports) {
 
 	module.exports = ".tree-demo-app {\n  margin: auto;\n  width: -moz-fit-content;\n  width: -webkit-fit-content;\n  width: fit-content;\n}\n.tree-demo-app .tree-container {\n  float: left;\n  vertical-align: top;\n  width: 500px;\n}\n.tree-demo-app .tree-container p {\n  color: #40a070;\n  font-size: 2em;\n}\n"
