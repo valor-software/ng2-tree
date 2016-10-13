@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit} from '@angular/core';
-import {CORE_DIRECTIVES} from '@angular/common';
 import {NodeMenuService} from './node-menu.service';
 import {NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuEvent, NodeMenuAction} from './menu.types';
 import {isLeftButtonClicked, isEscapePressed} from '../common/utils/event.utils';
@@ -8,7 +7,6 @@ import {isLeftButtonClicked, isEscapePressed} from '../common/utils/event.utils'
   selector: 'node-menu',
   styleUrls: ['./node-menu.component.css'],
   templateUrl: './node-menu.component.html',
-  directives: [CORE_DIRECTIVES]
 })
 export class NodeMenuComponent implements OnInit, OnDestroy {
   @Output()

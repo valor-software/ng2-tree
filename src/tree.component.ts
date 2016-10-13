@@ -1,8 +1,5 @@
 import {Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject} from '@angular/core';
-import {CORE_DIRECTIVES} from '@angular/common';
 import {TreeStatus, TreeModel, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent} from './tree.types';
-import {NodeEditableDirective} from './editable/node-editable.directive';
-import {NodeMenuComponent} from './menu/node-menu.component';
 import {NodeDraggableService} from './draggable/node-draggable.service';
 import {NodeMenuService} from './menu/node-menu.service';
 import {NodeDraggableDirective} from './draggable/node-draggable.directive';
@@ -18,9 +15,8 @@ import {applyNewValueToRenamable, isRenamable, isValueEmpty} from './common/util
   selector: 'tree-internal',
   styleUrls: ['./tree.component.css'],
   templateUrl: './tree.component.html',
-  directives: [NodeEditableDirective, TreeInternalComponent, NodeMenuComponent, NodeDraggableDirective, CORE_DIRECTIVES],
 })
-class TreeInternalComponent implements OnInit {
+export class TreeInternalComponent implements OnInit {
   @Input()
   private tree: TreeModel;
 
@@ -301,7 +297,6 @@ class TreeInternalComponent implements OnInit {
   selector: 'tree',
   providers: [NodeMenuService, NodeDraggableService, TreeService],
   template: `<tree-internal [tree]="tree"></tree-internal>`,
-  directives: [TreeInternalComponent]
 })
 export class TreeComponent implements OnInit {
   @Input()

@@ -1,6 +1,9 @@
-import {bootstrap} from '@angular/platform-browser-dynamic';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {Component} from '@angular/core';
 import {TreeComponent, NodeEvent, TreeModel, RenamableNode} from '../index';
+import {TreeModule} from '../src/tree.module';
+import { NgModule }      from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 declare const alertify: any;
 
@@ -33,7 +36,6 @@ declare const alertify: any;
     </div>
     `,
   styleUrls: ['./app.css'],
-  directives: [TreeComponent]
 })
 class AppComponent {
   private fonts: TreeModel = {
@@ -148,4 +150,11 @@ class AppComponent {
   }
 }
 
-bootstrap(AppComponent);
+@NgModule({
+  imports: [ BrowserModule, TreeModule ],
+  declarations: [ AppComponent ],
+  bootstrap:    [ AppComponent ]
+})
+export default class AppModule{}
+platformBrowserDynamic().bootstrapModule(AppModule);
+
