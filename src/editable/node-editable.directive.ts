@@ -9,41 +9,42 @@ import {
   Inject,
   Renderer
 } from '@angular/core';
-import {NodeEditableEvent, NodeEditableEventAction} from './editable.type';
+import { NodeEditableEvent, NodeEditableEventAction } from './editable.type';
 
 @Directive({
   selector: '[nodeEditable]'
 })
 export class NodeEditableDirective implements OnInit {
+  /* tslint:disable:no-input-rename */
   @Input('nodeEditable')
-  private nodeValue: string;
+  public nodeValue: string;
+  /* tslint:enable:no-input-rename */
 
   @Output()
-  private valueChanged: EventEmitter<NodeEditableEvent> = new EventEmitter<NodeEditableEvent>(false);
+  public valueChanged: EventEmitter<NodeEditableEvent> = new EventEmitter<NodeEditableEvent>(false);
 
-  constructor(
-    @Inject(Renderer) private renderer: Renderer,
-    @Inject(ElementRef) private elementRef: ElementRef) {
+  public constructor(@Inject(Renderer) private renderer: Renderer,
+                     @Inject(ElementRef) private elementRef: ElementRef) {
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const nativeElement = this.elementRef.nativeElement;
     this.renderer.invokeElementMethod(nativeElement, 'focus', []);
     this.renderer.setElementProperty(nativeElement, 'value', this.nodeValue);
   }
 
   @HostListener('keyup.enter', ['$event.target.value'])
-  private applyNewValue(newNodeValue: string) {
+  public applyNewValue(newNodeValue: string): void {
     this.valueChanged.emit({type: 'keyup', value: newNodeValue});
   }
 
   @HostListener('blur', ['$event.target.value'])
-  private applyNewValueByLoosingFocus(newNodeValue: string): void {
+  public applyNewValueByLoosingFocus(newNodeValue: string): void {
     this.valueChanged.emit({type: 'blur', value: newNodeValue});
   }
 
   @HostListener('keyup.esc')
-  private cancelEditing(): void {
+  public cancelEditing(): void {
     this.valueChanged.emit({
       type: 'keyup',
       value: this.nodeValue,

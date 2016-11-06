@@ -10,7 +10,8 @@ import {
   NodeDestructiveEvent
 } from './src/tree.types';
 
-import {TreeComponent} from './src/tree.component'
+import { TreeComponent } from './src/tree.component';
+import { TreeModule } from './src/tree.module';
 
 export {
   TreeModel,
@@ -22,5 +23,6 @@ export {
   NodeMovedEvent,
   NodeSelectedEvent,
   NodeDestructiveEvent,
-  TreeComponent
+  TreeComponent,
+  TreeModule
 };

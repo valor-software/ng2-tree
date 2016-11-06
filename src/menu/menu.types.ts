@@ -15,5 +15,5 @@ export interface NodeMenuEvent {
 }
 
 export interface NodeMenuItemSelectedEvent {
-  nodeMenuItemAction: NodeMenuItemAction
+  nodeMenuItemAction: NodeMenuItemAction;
 }

@@ -1,9 +1,9 @@
-import {TreeModel} from '../tree.types';
-import {ElementRef} from '@angular/core';
+import { TreeModel } from '../tree.types';
+import { ElementRef } from '@angular/core';
 
 export class CapturedNode {
-  constructor(private anElement: ElementRef,
-              private aTree: TreeModel) {
+  public constructor(private anElement: ElementRef,
+                     private aTree: TreeModel) {
   }
 
   public canBeDroppedAt(element: ElementRef): boolean {
@@ -11,18 +11,18 @@ export class CapturedNode {
   }
 
   public contains(other: ElementRef): boolean {
-    return this.element.nativeElement.contains(other.nativeElement)
+    return this.element.nativeElement.contains(other.nativeElement);
   }
 
   public sameAs(other: ElementRef): boolean {
     return this.element === other;
   }
 
-  get element(): ElementRef {
+  public get element(): ElementRef {
     return this.anElement;
   }
 
-  get tree(): TreeModel {
+  public get tree(): TreeModel {
     return this.aTree;
   }
 }

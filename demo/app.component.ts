@@ -1,6 +1,5 @@
-import {bootstrap} from '@angular/platform-browser-dynamic';
-import {Component} from '@angular/core';
-import {TreeComponent, NodeEvent, TreeModel, RenamableNode} from '../index';
+import { Component } from '@angular/core';
+import { NodeEvent, TreeModel, RenamableNode } from '../index';
 
 declare const alertify: any;
 
@@ -32,11 +31,26 @@ declare const alertify: any;
       </div>
     </div>
     `,
-  styleUrls: ['./app.css'],
-  directives: [TreeComponent]
+  styles: [`
+   .tree-demo-app {
+      margin: auto;
+      width: -moz-fit-content;
+      width: -webkit-fit-content;
+      width: fit-content;
+    }
+    .tree-demo-app .tree-container {
+      float: left;
+      vertical-align: top;
+      width: 500px;
+    }
+    .tree-demo-app .tree-container p {
+      color: #40a070;
+      font-size: 2em;
+    } 
+  `]
 })
-class AppComponent {
-  private fonts: TreeModel = {
+export class AppComponent {
+  public fonts: TreeModel = {
     value: 'Fonts',
     children: [
       {
@@ -52,7 +66,7 @@ class AppComponent {
             children: [
               {value: 'Candida'},
               {value: 'Swift'},
-              {value: 'Guardian Egyptian'},
+              {value: 'Guardian Egyptian'}
             ]
           }
         ]
@@ -65,7 +79,7 @@ class AppComponent {
           {value: 'DejaVu Sans'},
           {value: 'Futura'},
           {value: 'Geneva'},
-          {value: 'Liberation Sans'},
+          {value: 'Liberation Sans'}
         ]
       },
       {
@@ -77,13 +91,13 @@ class AppComponent {
           {value: 'Hack'},
           {value: 'Consolas'},
           {value: 'Menlo'},
-          {value: 'Source Code Pro'},
+          {value: 'Source Code Pro'}
         ]
       }
     ]
   };
 
-  private pls: TreeModel = {
+  public pls: TreeModel = {
     value: 'Programming languages by programming paradigm',
     children: [
       {
@@ -97,7 +111,7 @@ class AppComponent {
         value: 'Object-oriented programming',
         children: [
           {
-            value: <RenamableNode>{
+            value: {
               name: 'Java',
               setName(name: string): void {
                 this.name = name;
@@ -105,10 +119,10 @@ class AppComponent {
               toString(): string {
                 return this.name;
               }
-            }
+            } as RenamableNode
           },
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -116,36 +130,34 @@ class AppComponent {
         children: [
           {value: 'JavaScript'},
           {value: 'CoffeeScript'},
-          {value: 'TypeScript'},
+          {value: 'TypeScript'}
         ]
       }
     ]
   };
 
-  private onNodeRemoved(e: NodeEvent): void {
+  public onNodeRemoved(e: NodeEvent): void {
     this.logEvent(e, 'Removed');
   }
 
-  private onNodeMoved(e: NodeEvent): void {
+  public onNodeMoved(e: NodeEvent): void {
     this.logEvent(e, 'Moved');
   }
 
-  private onNodeRenamed(e: NodeEvent): void {
+  public onNodeRenamed(e: NodeEvent): void {
     this.logEvent(e, 'Renamed');
   }
 
-  private onNodeCreated(e: NodeEvent): void {
+  public onNodeCreated(e: NodeEvent): void {
     this.logEvent(e, 'Created');
   }
 
-  private onNodeSelected(e: NodeEvent): void {
+  public onNodeSelected(e: NodeEvent): void {
     this.logEvent(e, 'Selected');
   }
 
-  private logEvent(e: NodeEvent, message: string): void {
+  public logEvent(e: NodeEvent, message: string): void {
     console.log(e);
     alertify.message(`${message}: ${e.node.value}`);
   }
 }
-
-bootstrap(AppComponent);

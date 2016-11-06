@@ -3,7 +3,7 @@ export class FoldingType {
   public static Collapsed: FoldingType = new FoldingType('node-collapsed');
   public static Leaf: FoldingType = new FoldingType('node-leaf');
 
-  constructor(private _cssClass: string) {
+  public constructor(private _cssClass: string) {
   }
 
   public get cssClass(): string {
@@ -54,5 +54,3 @@ export interface NodeRenamedEvent extends NodeDestructiveEvent {
   newValue: string | RenamableNode;
   oldValue: string | RenamableNode;
 }
-
-
