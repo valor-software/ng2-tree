@@ -1,4 +1,4 @@
-webpackJsonp([1],[
+webpackJsonp([1,0],[
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -21750,17 +21750,17 @@ webpackJsonp([1],[
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
 	var core_1 = __webpack_require__(17);
-	var tree_types_1 = __webpack_require__(629);
+	var tree_types_1 = __webpack_require__(631);
 	var node_draggable_service_1 = __webpack_require__(118);
 	var node_menu_service_1 = __webpack_require__(119);
-	var draggable_types_1 = __webpack_require__(622);
+	var draggable_types_1 = __webpack_require__(624);
 	var menu_types_1 = __webpack_require__(179);
 	var editable_type_1 = __webpack_require__(178);
 	var tree_service_1 = __webpack_require__(181);
 	var event_utils_1 = __webpack_require__(177);
 	var _ = __webpack_require__(176);
-	var type_utils_1 = __webpack_require__(620);
-	var tree_styles_1 = __webpack_require__(628);
+	var type_utils_1 = __webpack_require__(622);
+	var tree_styles_1 = __webpack_require__(630);
 	var TreeInternalComponent = (function () {
 	    function TreeInternalComponent(nodeMenuService, nodeDraggableService, treeService, element) {
 	        this.nodeMenuService = nodeMenuService;
@@ -34955,7 +34955,7 @@ webpackJsonp([1],[
 	var core_1 = __webpack_require__(17);
 	var app_component_1 = __webpack_require__(617);
 	var platform_browser_1 = __webpack_require__(84);
-	var index_1 = __webpack_require__(619);
+	var index_1 = __webpack_require__(621);
 	var AppModule = (function () {
 	    function AppModule() {
 	    }
@@ -34973,18 +34973,20 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 619 */
+/* 619 */,
+/* 620 */,
+/* 621 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var tree_component_1 = __webpack_require__(180);
 	exports.TreeComponent = tree_component_1.TreeComponent;
-	var tree_module_1 = __webpack_require__(627);
+	var tree_module_1 = __webpack_require__(629);
 	exports.TreeModule = tree_module_1.TreeModule;
 	
 
 /***/ },
-/* 620 */
+/* 622 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35006,7 +35008,7 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 621 */
+/* 623 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35044,7 +35046,7 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 622 */
+/* 624 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35055,7 +35057,7 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 623 */
+/* 625 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35073,7 +35075,7 @@ webpackJsonp([1],[
 	};
 	var core_1 = __webpack_require__(17);
 	var node_draggable_service_1 = __webpack_require__(118);
-	var captured_node_1 = __webpack_require__(621);
+	var captured_node_1 = __webpack_require__(623);
 	var NodeDraggableDirective = (function () {
 	    function NodeDraggableDirective(element, nodeDraggableService, renderer) {
 	        this.element = element;
@@ -35177,7 +35179,7 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 624 */
+/* 626 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35259,7 +35261,7 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 625 */
+/* 627 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35279,7 +35281,7 @@ webpackJsonp([1],[
 	var node_menu_service_1 = __webpack_require__(119);
 	var menu_types_1 = __webpack_require__(179);
 	var event_utils_1 = __webpack_require__(177);
-	var node_menu_styles_1 = __webpack_require__(626);
+	var node_menu_styles_1 = __webpack_require__(628);
 	var NodeMenuComponent = (function () {
 	    function NodeMenuComponent(renderer, nodeMenuService) {
 	        this.renderer = renderer;
@@ -35352,7 +35354,7 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 626 */
+/* 628 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35360,7 +35362,7 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 627 */
+/* 629 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35376,10 +35378,10 @@ webpackJsonp([1],[
 	var core_1 = __webpack_require__(17);
 	var tree_component_1 = __webpack_require__(180);
 	var common_1 = __webpack_require__(83);
-	var node_draggable_directive_1 = __webpack_require__(623);
+	var node_draggable_directive_1 = __webpack_require__(625);
 	var node_draggable_service_1 = __webpack_require__(118);
-	var node_editable_directive_1 = __webpack_require__(624);
-	var node_menu_component_1 = __webpack_require__(625);
+	var node_editable_directive_1 = __webpack_require__(626);
+	var node_menu_component_1 = __webpack_require__(627);
 	var node_menu_service_1 = __webpack_require__(119);
 	var tree_service_1 = __webpack_require__(181);
 	var TreeModule = (function () {
@@ -35400,7 +35402,7 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 628 */
+/* 630 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35408,7 +35410,7 @@ webpackJsonp([1],[
 	
 
 /***/ },
-/* 629 */
+/* 631 */
 /***/ function(module, exports) {
 
 	"use strict";
