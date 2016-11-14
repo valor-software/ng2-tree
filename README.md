@@ -20,7 +20,7 @@ import {TreeComponent, TreeModel} from 'ng2-tree';
     <tree [tree]="tree"></tree>
     `,
   // 3 - add TreeComponent to the list of directives
-  directives: [BranchyComponent]
+  directives: [TreeComponent]
 })
 class MyComponent {
   ...
