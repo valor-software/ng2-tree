@@ -1,29 +1,28 @@
 'use strict';
 
 const gulp = require('gulp');
-const stylus = require('stylus');
 const ghPages = require('gulp-gh-pages');
-const gitignore = require('gulp-gitignore');
-const gulpStylus = require('gulp-stylus');
+const tslint = require('gulp-tslint');
+const gitignore = require('gitignore-to-glob')();
 
-const SAME_DIRECTORY = '.';
+gitignore.push('!node_modules/**/*');
+gitignore.push('**/*.ts');
 
-gulp.task('stylus', () => {
-  return gulp.src('**/*.styl')
-    .pipe(gitignore())
-    .pipe(gulpStylus({
-      define: {
-        url: stylus.resolver()
-      }
+gulp.task('tslint', () =>
+  gulp
+    .src(gitignore)
+    .pipe(tslint({
+      formatter: 'verbose',
+      emitError: true,
+      summarizeFailureOutput: true,
+      reportLimit: 50
     }))
-    .pipe(gulp.dest(SAME_DIRECTORY));
-});
+    .pipe(tslint.report())
+);
 
-gulp.task('watch:stylus', () => {
-  gulp.watch('**/*.styl', ['stylus']);
-});
+gulp.task('lint', ['tslint']);
 
 gulp.task('deploy', function() {
-  return gulp.src('./build/**/*')
+  return gulp.src('./demo-build/**/*')
     .pipe(ghPages());
 });

@@ -1,47 +1,65 @@
-import {Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject} from '@angular/core';
-import {CORE_DIRECTIVES} from '@angular/common';
-import {TreeStatus, TreeModel, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent} from './tree.types';
-import {NodeEditableDirective} from './editable/node-editable.directive';
-import {NodeMenuComponent} from './menu/node-menu.component';
-import {NodeDraggableService} from './draggable/node-draggable.service';
-import {NodeMenuService} from './menu/node-menu.service';
-import {NodeDraggableDirective} from './draggable/node-draggable.directive';
-import {NodeDraggableEventAction, NodeDraggableEvent} from './draggable/draggable.types';
-import {NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction} from './menu/menu.types';
-import {NodeEditableEvent, NodeEditableEventAction} from './editable/editable.type';
-import {TreeService} from './tree.service';
-import {isLeftButtonClicked, isRightButtonClicked} from './common/utils/event.utils';
+import { Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject } from '@angular/core';
+import { TreeStatus, TreeModel, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
+import { NodeDraggableService } from './draggable/node-draggable.service';
+import { NodeMenuService } from './menu/node-menu.service';
+import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
+import { NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.types';
+import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.type';
+import { TreeService } from './tree.service';
+import { isLeftButtonClicked, isRightButtonClicked } from './common/utils/event.utils';
 import * as _ from 'lodash';
-import {applyNewValueToRenamable, isRenamable, isValueEmpty} from './common/utils/type.utils';
+import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './common/utils/type.utils';
+import { styles } from './tree.styles';
 
 @Component({
   selector: 'tree-internal',
-  styleUrls: ['./tree.component.css'],
-  templateUrl: './tree.component.html',
-  directives: [NodeEditableDirective, TreeInternalComponent, NodeMenuComponent, NodeDraggableDirective, CORE_DIRECTIVES],
+  styles: styles,
+  template: `
+  <ul class="tree" *ngIf="tree">
+    <li>
+      <div (contextmenu)="showMenu($event)" [nodeDraggable]="element" [tree]="tree">
+        <div class="folding" (click)="switchFoldingType($event, tree)" [ngClass]="getFoldingTypeCssClass(tree)"></div>
+        <div href="#" class="node-value" *ngIf="!isEditInProgress()" [class.node-selected]="isSelected" (click)="onNodeSelected($event)">{{tree.value}}</div>
+
+        <input type="text" class="node-value" *ngIf="isEditInProgress()"
+               [nodeEditable]="tree.value"
+               (valueChanged)="applyNewValue($event, tree)"/>
+      </div>
+
+      <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
+
+      <template [ngIf]="isNodeExpanded()">
+        <tree-internal *ngFor="let child of tree.children; let position = index"
+              [parentTree]="tree"
+              [indexInParent]="position"
+              [tree]="child"
+              (nodeRemoved)="onChildRemoved($event)"></tree-internal>
+      </template>
+    </li>
+  </ul>
+  `
 })
-class TreeInternalComponent implements OnInit {
+export class TreeInternalComponent implements OnInit {
   @Input()
-  private tree: TreeModel;
+  public tree: TreeModel;
 
   @Input()
-  private parentTree: TreeModel;
+  public parentTree: TreeModel;
 
   @Input()
-  private indexInParent: number;
+  public indexInParent: number;
 
   @Output()
-  private nodeRemoved: EventEmitter<NodeEvent> = new EventEmitter<NodeEvent>();
+  public nodeRemoved: EventEmitter<NodeEvent> = new EventEmitter<NodeEvent>();
 
   private isLeaf: boolean;
   private isSelected: boolean = false;
   private isMenuVisible: boolean = false;
 
-  public constructor(
-    @Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
-    @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
-    @Inject(TreeService) private treeService: TreeService,
-    @Inject(ElementRef) private element: ElementRef) {
+  public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
+                     @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
+                     @Inject(TreeService) private treeService: TreeService,
+                     @Inject(ElementRef) private element: ElementRef) {
   }
 
   public ngOnInit(): void {
@@ -55,32 +73,32 @@ class TreeInternalComponent implements OnInit {
     this.setUpDraggableEventHandler();
   }
 
-  private setUpNodeSelectedEventHandler() {
+  private setUpNodeSelectedEventHandler(): void {
     this.treeService.nodeSelected$
       .filter((e: NodeSelectedEvent) => this.tree !== e.node)
-      .subscribe(_ => this.isSelected = false);
+      .subscribe(() => this.isSelected = false);
   }
 
-  private setUpMenuEventHandler() {
+  private setUpMenuEventHandler(): void {
     this.nodeMenuService.nodeMenuEvents$
       .filter((e: NodeMenuEvent) => this.element.nativeElement !== e.sender)
       .filter((e: NodeMenuEvent) => e.action === NodeMenuAction.Close)
-      .subscribe(_ => this.isMenuVisible = false);
+      .subscribe(() => this.isMenuVisible = false);
   }
 
   // DRAG-N-DROP -------------------------------------------------------------------------------------------------------
 
-  private setUpDraggableEventHandler() {
+  private setUpDraggableEventHandler(): void {
     this.nodeDraggableService.draggableNodeEvents$
-      .filter((e:NodeDraggableEvent) => e.action === NodeDraggableEventAction.Remove)
-      .filter((e:NodeDraggableEvent) => e.captured.element === this.element)
-      .subscribe((e:NodeDraggableEvent) => this.onChildRemoved({node: e.captured.tree}, this.parentTree));
+      .filter((e: NodeDraggableEvent) => e.action === NodeDraggableEventAction.Remove)
+      .filter((e: NodeDraggableEvent) => e.captured.element === this.element)
+      .subscribe((e: NodeDraggableEvent) => this.onChildRemoved({node: e.captured.tree}, this.parentTree));
 
     this.nodeDraggableService.draggableNodeEvents$
-      .filter((e:NodeDraggableEvent) => e.action !== NodeDraggableEventAction.Remove)
-      .filter((e:NodeDraggableEvent) => e.target === this.element)
-      .filter((e:NodeDraggableEvent) => !this.hasChild(e.captured.tree))
-      .subscribe((e:NodeDraggableEvent) => {
+      .filter((e: NodeDraggableEvent) => e.action !== NodeDraggableEventAction.Remove)
+      .filter((e: NodeDraggableEvent) => e.target === this.element)
+      .filter((e: NodeDraggableEvent) => !this.hasChild(e.captured.tree))
+      .subscribe((e: NodeDraggableEvent) => {
         if (this.isSiblingOf(e.captured.tree)) {
           return this.swapWithSibling(e.captured.tree);
         }
@@ -113,12 +131,12 @@ class TreeInternalComponent implements OnInit {
     });
   }
 
-  private isEditInProgress() {
+  private isEditInProgress(): boolean {
     return this.tree._status === TreeStatus.EditInProgress
       || this.tree._status === TreeStatus.New;
   }
 
-  private isFolder() {
+  private isFolder(): boolean {
     return !this.isLeaf;
   }
 
@@ -126,7 +144,7 @@ class TreeInternalComponent implements OnInit {
     return _.includes(this.tree.children, child);
   }
 
-  private isSiblingOf(child: TreeModel) {
+  private isSiblingOf(child: TreeModel): boolean {
     return this.parentTree && _.includes(this.parentTree.children, child);
   }
 
@@ -176,7 +194,7 @@ class TreeInternalComponent implements OnInit {
     return FoldingType.Expanded;
   }
 
-  private handleFoldingType(parent: TreeModel, node: TreeModel) {
+  private handleFoldingType(parent: TreeModel, node: TreeModel): void {
     if (node._foldingType === FoldingType.Leaf) {
       return;
     }
@@ -186,7 +204,7 @@ class TreeInternalComponent implements OnInit {
 
   // MENU --------------------------------------------------------------------------------------------------------------
 
-  private onMenuItemSelected(e: NodeMenuItemSelectedEvent) {
+  private onMenuItemSelected(e: NodeMenuItemSelectedEvent): void {
     switch (e.nodeMenuItemAction) {
       case NodeMenuItemAction.NewTag:
         this.onNewSelected(e);
@@ -205,12 +223,12 @@ class TreeInternalComponent implements OnInit {
     }
   }
 
-  private onRenameSelected() {
+  private onRenameSelected(): void {
     this.tree._status = TreeStatus.EditInProgress;
     this.isMenuVisible = false;
   }
 
-  private onRemoveSelected() {
+  private onRemoveSelected(): void {
     this.treeService.nodeRemoved$.next({
       node: this.tree,
       parent: this.parentTree
@@ -219,7 +237,7 @@ class TreeInternalComponent implements OnInit {
     this.nodeRemoved.emit({node: this.tree});
   }
 
-  private onNewSelected(e: NodeMenuItemSelectedEvent) {
+  private onNewSelected(e: NodeMenuItemSelectedEvent): void {
     if (!this.tree.children || !this.tree.children.push) {
       this.tree.children = [];
     }
@@ -233,8 +251,8 @@ class TreeInternalComponent implements OnInit {
     this.isMenuVisible = false;
   }
 
-  private onChildRemoved(e: NodeEvent, parent: TreeModel = this.tree) {
-    const childIndex = _.findIndex(parent.children, child => child === e.node);
+  private onChildRemoved(e: NodeEvent, parent: TreeModel = this.tree): void {
+    const childIndex = _.findIndex(parent.children, (child: any) => child === e.node);
     if (childIndex >= 0) {
       parent.children.splice(childIndex, 1);
     }
@@ -289,7 +307,7 @@ class TreeInternalComponent implements OnInit {
     node._status = TreeStatus.Modified;
   }
 
-  private onNodeSelected(e: MouseEvent) {
+  private onNodeSelected(e: MouseEvent): void {
     if (isLeftButtonClicked(e)) {
       this.isSelected = true;
       this.treeService.nodeSelected$.next({node: this.tree});
@@ -299,30 +317,29 @@ class TreeInternalComponent implements OnInit {
 
 @Component({
   selector: 'tree',
-  providers: [NodeMenuService, NodeDraggableService, TreeService],
   template: `<tree-internal [tree]="tree"></tree-internal>`,
-  directives: [TreeInternalComponent]
+  providers: [TreeService]
 })
 export class TreeComponent implements OnInit {
   @Input()
-  private tree: TreeModel;
+  public tree: TreeModel;
 
   @Output()
-  private nodeCreated: EventEmitter<any> = new EventEmitter();
+  public nodeCreated: EventEmitter<any> = new EventEmitter();
 
   @Output()
-  private nodeRemoved: EventEmitter<any> = new EventEmitter();
+  public nodeRemoved: EventEmitter<any> = new EventEmitter();
 
   @Output()
-  private nodeRenamed: EventEmitter<any> = new EventEmitter();
+  public nodeRenamed: EventEmitter<any> = new EventEmitter();
 
   @Output()
-  private nodeSelected: EventEmitter<any> = new EventEmitter();
+  public nodeSelected: EventEmitter<any> = new EventEmitter();
 
   @Output()
-  private nodeMoved: EventEmitter<any> = new EventEmitter();
+  public nodeMoved: EventEmitter<any> = new EventEmitter();
 
-  constructor(@Inject(TreeService) private treeService: TreeService) {
+  public constructor(@Inject(TreeService) private treeService: TreeService) {
   }
 
   public ngOnInit(): void {

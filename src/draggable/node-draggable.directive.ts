@@ -1,28 +1,27 @@
-import {Directive, ElementRef, Input, Inject, Renderer, OnDestroy} from '@angular/core';
-import {TreeModel} from '../tree.types';
-import {NodeDraggableService} from './node-draggable.service';
-import {CapturedNode} from './captured-node';
-import {NodeDraggableEvent} from './draggable.types';
+import { Directive, ElementRef, Input, Inject, Renderer, OnDestroy } from '@angular/core';
+import { TreeModel } from '../tree.types';
+import { NodeDraggableService } from './node-draggable.service';
+import { CapturedNode } from './captured-node';
+import { NodeDraggableEvent } from './draggable.types';
 
 @Directive({
   selector: '[nodeDraggable]'
 })
 export class NodeDraggableDirective implements OnDestroy {
-  private static DATA_TRANSFER_STUB_DATA: string = 'some browsers enable drag-n-drop only when dataTransfer has data';
+  public static DATA_TRANSFER_STUB_DATA: string = 'some browsers enable drag-n-drop only when dataTransfer has data';
 
   @Input()
-  private nodeDraggable: ElementRef;
+  public nodeDraggable: ElementRef;
 
   @Input()
-  private tree: TreeModel;
+  public tree: TreeModel;
 
   private nodeNativeElement: HTMLElement;
   private disposersForDragListeners: Function[] = [];
 
-  constructor(
-    @Inject(ElementRef) private element: ElementRef,
-    @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
-    @Inject(Renderer) private renderer: Renderer) {
+  public constructor(@Inject(ElementRef) private element: ElementRef,
+                     @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
+                     @Inject(Renderer) private renderer: Renderer) {
 
     this.nodeNativeElement = element.nativeElement;
 
@@ -34,6 +33,12 @@ export class NodeDraggableDirective implements OnDestroy {
     this.disposersForDragListeners.push(renderer.listen(this.nodeNativeElement, 'dragleave', this.handleDragLeave.bind(this)));
     this.disposersForDragListeners.push(renderer.listen(this.nodeNativeElement, 'drop', this.handleDrop.bind(this)));
     this.disposersForDragListeners.push(renderer.listen(this.nodeNativeElement, 'dragend', this.handleDragEnd.bind(this)));
+  }
+
+  public ngOnDestroy(): void {
+    /* tslint:disable:typedef */
+    this.disposersForDragListeners.forEach(dispose => dispose());
+    /* tslint:enable:typedef */
   }
 
   private handleDragStart(e: DragEvent): any {
@@ -74,11 +79,11 @@ export class NodeDraggableDirective implements OnDestroy {
     }
 
     if (this.nodeDraggableService.getCapturedNode()) {
-      return this.notifyThatNodeWasDropped()
+      return this.notifyThatNodeWasDropped();
     }
   }
 
-  private isDropPossible(e: DragEvent) {
+  private isDropPossible(e: DragEvent): boolean {
     const capturedNode = this.nodeDraggableService.getCapturedNode();
     return capturedNode
       && capturedNode.canBeDroppedAt(this.nodeDraggable)
@@ -112,9 +117,5 @@ export class NodeDraggableDirective implements OnDestroy {
     };
 
     this.nodeDraggableService.draggableNodeEvents$.next(event);
-  }
-
-  ngOnDestroy(): void {
-    this.disposersForDragListeners.forEach(dispose => dispose());
   }
 }

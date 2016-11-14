@@ -1,5 +1,5 @@
-import * as _ from 'lodash'
-import {RenamableNode} from '../../tree.types';
+import * as _ from 'lodash';
+import { RenamableNode } from '../../tree.types';
 
 export function applyNewValueToRenamable(value: RenamableNode, newValue: string): RenamableNode {
   const renamableValue: RenamableNode = _.merge({}, value as RenamableNode);
@@ -8,9 +8,9 @@ export function applyNewValueToRenamable(value: RenamableNode, newValue: string)
 }
 
 export function isValueEmpty(value: string): boolean {
-  return _.isEmpty(_.trim(value))
+  return _.isEmpty(_.trim(value));
 }
 
-export function isRenamable(value: any) {
+export function isRenamable(value: any): boolean {
   return value.setName !== undefined;
 }

@@ -1,5 +1,5 @@
-import {ElementRef} from '@angular/core';
-import {CapturedNode} from './captured-node';
+import { ElementRef } from '@angular/core';
+import { CapturedNode } from './captured-node';
 
 export enum NodeDraggableEventAction {
   Remove

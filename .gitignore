@@ -5,6 +5,7 @@ build/
 npm-debug.log
 typings/
 .publish/
+yarn.lock
 
 **/*.js.map
 
@@ -18,3 +19,16 @@ src/**/*.css
 
 *.js
 *.d.ts
+
+!./.config/umd.bundler.js
+
+bundles
+
+demo-build
+
+factories
+*.ngfactory.ts
+*.shim.ts
+
+yarn.lock
+yarn-error.log
