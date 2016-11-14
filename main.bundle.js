@@ -20873,7 +20873,7 @@
 	    return NodeDraggableService;
 	}());
 	exports.NodeDraggableService = NodeDraggableService;
-	
+
 
 /***/ },
 /* 119 */
@@ -20902,7 +20902,7 @@
 	    return NodeMenuService;
 	}());
 	exports.NodeMenuService = NodeMenuService;
-	
+
 
 /***/ },
 /* 120 */
@@ -41091,7 +41091,7 @@
 	    MouseButtons[MouseButtons["Left"] = 0] = "Left";
 	    MouseButtons[MouseButtons["Right"] = 2] = "Right";
 	})(MouseButtons || (MouseButtons = {}));
-	
+
 
 /***/ },
 /* 178 */
@@ -41102,7 +41102,7 @@
 	    NodeEditableEventAction[NodeEditableEventAction["Cancel"] = 0] = "Cancel";
 	})(exports.NodeEditableEventAction || (exports.NodeEditableEventAction = {}));
 	var NodeEditableEventAction = exports.NodeEditableEventAction;
-	
+
 
 /***/ },
 /* 179 */
@@ -41120,7 +41120,7 @@
 	    NodeMenuAction[NodeMenuAction["Close"] = 0] = "Close";
 	})(exports.NodeMenuAction || (exports.NodeMenuAction = {}));
 	var NodeMenuAction = exports.NodeMenuAction;
-	
+
 
 /***/ },
 /* 180 */
@@ -41462,7 +41462,7 @@
 	    return TreeComponent;
 	}());
 	exports.TreeComponent = TreeComponent;
-	
+
 
 /***/ },
 /* 181 */
@@ -41495,7 +41495,7 @@
 	    return TreeService;
 	}());
 	exports.TreeService = TreeService;
-	
+
 
 /***/ },
 /* 182 */
@@ -77230,7 +77230,7 @@
 	    return AppComponent;
 	}());
 	exports.AppComponent = AppComponent;
-	
+
 
 /***/ },
 /* 618 */
@@ -77264,7 +77264,7 @@
 	    return AppModule;
 	}());
 	exports.AppModule = AppModule;
-	
+
 
 /***/ },
 /* 619 */
@@ -77274,7 +77274,7 @@
 	var platform_browser_dynamic_1 = __webpack_require__(120);
 	var app_module_1 = __webpack_require__(618);
 	platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule);
-	
+
 
 /***/ },
 /* 620 */
@@ -77284,7 +77284,7 @@
 	__webpack_require__(462);
 	__webpack_require__(463);
 	__webpack_require__(616);
-	
+
 
 /***/ },
 /* 621 */
@@ -77295,7 +77295,7 @@
 	__webpack_require__(17);
 	__webpack_require__(84);
 	__webpack_require__(120);
-	
+
 
 /***/ },
 /* 622 */
@@ -77306,7 +77306,7 @@
 	exports.TreeComponent = tree_component_1.TreeComponent;
 	var tree_module_1 = __webpack_require__(630);
 	exports.TreeModule = tree_module_1.TreeModule;
-	
+
 
 /***/ },
 /* 623 */
@@ -77328,7 +77328,7 @@
 	    return value.setName !== undefined;
 	}
 	exports.isRenamable = isRenamable;
-	
+
 
 /***/ },
 /* 624 */
@@ -77366,7 +77366,7 @@
 	    return CapturedNode;
 	}());
 	exports.CapturedNode = CapturedNode;
-	
+
 
 /***/ },
 /* 625 */
@@ -77377,7 +77377,7 @@
 	    NodeDraggableEventAction[NodeDraggableEventAction["Remove"] = 0] = "Remove";
 	})(exports.NodeDraggableEventAction || (exports.NodeDraggableEventAction = {}));
 	var NodeDraggableEventAction = exports.NodeDraggableEventAction;
-	
+
 
 /***/ },
 /* 626 */
@@ -77499,7 +77499,7 @@
 	    return NodeDraggableDirective;
 	}());
 	exports.NodeDraggableDirective = NodeDraggableDirective;
-	
+
 
 /***/ },
 /* 627 */
@@ -77581,7 +77581,7 @@
 	    return NodeEditableDirective;
 	}());
 	exports.NodeEditableDirective = NodeEditableDirective;
-	
+
 
 /***/ },
 /* 628 */
@@ -77674,7 +77674,7 @@
 	    return NodeMenuComponent;
 	}());
 	exports.NodeMenuComponent = NodeMenuComponent;
-	
+
 
 /***/ },
 /* 629 */
@@ -77682,7 +77682,7 @@
 
 	"use strict";
 	exports.styles = ["\n  .node-menu {\n    position: relative;\n    width: 150px;\n  }\n  .node-menu .node-menu-content {\n    width: 100%;\n    padding: 5px;\n    position: absolute;\n    border: 1px solid #bdbdbd;\n    border-radius: 5%;\n    box-shadow: 0 0 5px #bdbdbd;\n    background-color: #eee;\n    color: #212121;\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  }\n  .node-menu .node-menu-content li.node-menu-item {\n    list-style: none;\n    padding: 3px;\n  }\n  .node-menu .node-menu-content .node-menu-item:hover {\n    border-radius: 5%;\n    opacity: unset;\n    cursor: pointer;\n    background-color: #bdbdbd;\n    transition: background-color 0.2s ease-out;\n  }\n  .node-menu .node-menu-content .node-menu-item .node-menu-item-icon {\n    display: inline-block;\n    width: 16px;\n  }\n  .node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-tag:before {\n    content: '\\25CF';\n  }\n  .node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-folder:before {\n    content: '\\25B6';\n  }\n  .node-menu .node-menu-content .node-menu-item .node-menu-item-icon.rename:before {\n    content: '\\270E';\n  }\n  .node-menu .node-menu-content .node-menu-item .node-menu-item-icon.remove:before {\n    content: '\\2716';\n  }\n  .node-menu .node-menu-content .node-menu-item .node-menu-item-value {\n    margin-left: 5px;\n  }\n"];
-	
+
 
 /***/ },
 /* 630 */
@@ -77722,7 +77722,7 @@
 	    return TreeModule;
 	}());
 	exports.TreeModule = TreeModule;
-	
+
 
 /***/ },
 /* 631 */
@@ -77730,7 +77730,7 @@
 
 	"use strict";
 	exports.styles = ["\n  ul {\n    padding: 3px 0 3px 25px;\n  }\n  li {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n  }\n  .over-drop-target {\n    border: 4px solid #757575;\n    transition: padding 0.2s ease-out;\n    padding: 5px;\n    border-radius: 5%;\n  }\n  .tree {\n    box-sizing: border-box;\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  }\n  .tree li {\n    list-style: none;\n    cursor: default;\n  }\n  .tree li div {\n    display: inline-block;\n    box-sizing: border-box;\n  }\n  .tree .node-value {\n    display: inline-block;\n    color: #212121;\n  }\n  .tree .node-value:after {\n    display: block;\n    padding-top: -3px;\n    width: 0;\n    height: 2px;\n    background-color: #212121;\n    content: '';\n    transition: width 0.3s;\n  }\n  .tree .node-value:hover:after {\n    width: 100%;\n  }\n  .tree .node-selected:after {\n    width: 100%;\n  }\n  .tree .folding {\n    width: 25px;\n    display: inline-block;\n    line-height: 1px;\n    padding: 0 5px;\n    font-weight: bold;\n  }\n  .tree .folding.node-collapsed {\n    cursor: pointer;\n  }\n  .tree .folding.node-collapsed:before {\n    content: '\\25B6';\n    color: #757575;\n  }\n  .tree .folding.node-expanded {\n    cursor: pointer;\n  }\n  .tree .folding.node-expanded:before {\n    content: '\\25BC';\n    color: #757575;\n  }\n  .tree .folding.node-leaf {\n    color: #212121;\n    text-align: center;\n    font-size: 0.89em;\n  }\n  .tree .folding.node-leaf:before {\n    content: '\\25CF';\n    color: #757575;\n  }\n"];
-	
+
 
 /***/ },
 /* 632 */
@@ -77760,7 +77760,7 @@
 	    TreeStatus[TreeStatus["EditInProgress"] = 2] = "EditInProgress";
 	})(exports.TreeStatus || (exports.TreeStatus = {}));
 	var TreeStatus = exports.TreeStatus;
-	
+
 
 /***/ }
 /******/ ]);
