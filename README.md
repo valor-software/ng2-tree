@@ -7,23 +7,20 @@ Ok, let's start with an installation - all you need to do is:
 
 `npm install --save ng2-tree`
 
-Now when you have ng2-tree installed you need to add it to your component's template and to the list of its directives:
+Now when you have ng2-tree installed you need to add `TreeModule` to your application's module `imports`
 
 ```typescript
-// 1 - import required classes and interfaces
-import {TreeComponent, TreeModel} from 'ng2-tree';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { TreeModule } from 'ng2-tree';
 
-@Component({
-  selector: 'myComp',
-  // 2 - add ng2-tree to the template
-  template: `
-    <tree [tree]="tree"></tree>
-    `,
-  // 3 - add TreeComponent to the list of directives
-  directives: [TreeComponent]
+@NgModule({
+  declarations: [MyComponent],
+  imports:      [BrowserModule, TreeModule],
+  bootstrap:    [MyComponent]
 })
-class MyComponent {
-  ...
+export class MyModule {
 }
 ```
 
@@ -31,19 +28,16 @@ As soon as the previous step is done we need to give ng2-tree a model to render 
 
 ```typescript
 // 1 - import required classes and interfaces
-import {TreeComponent, TreeModel} from 'ng2-tree';
+import {TreeModel} from 'ng2-tree';
 
 @Component({
   selector: 'myComp',
   // 2 - set [tree] attribute to tree object
-  template: `
-    <tree [tree]="tree"></tree>
-    `,
-  directives: [TreeComponent]
+  template: `<tree [tree]="tree"></tree>`
 })
 class MyComponent {
   // 3 - make sure tree object confirms to TreeModel interface
-  private tree: TreeModel = {
+  public tree: TreeModel = {
     value: 'Programming languages by programming paradigm',
     children: [
       {
@@ -71,21 +65,18 @@ Apart from that I suppose you'd want to listen to tree events (for a full list o
 
 ```typescript
 // 1 - import required classes and interfaces
-import {TreeComponent, TreeModel, NodeEvent} from 'ng2-tree';
+import {TreeModel, NodeEvent} from 'ng2-tree';
 
 @Component({
   selector: 'myComp',
   // 2 - listent for nodeSelected events and handle them
-  template: `
-    <tree [tree]="tree" (nodeSelected)="logEvent($event)"></tree>
-    `,
-  directives: [TreeComponent]
+  template: `<tree [tree]="tree" (nodeSelected)="logEvent($event)"></tree>`
 })
 class MyComponent {
-  private tree: TreeModel = { ... };
+  public tree: TreeModel = { ... };
 
   // 3 - print caught event to the console
-  private logEvent(e: NodeEvent): void {
+  public logEvent(e: NodeEvent): void {
     console.log(e);
   }
 }
@@ -114,11 +105,7 @@ Let's go through every element of this structure one by one.
 
 ### tree
 
-`tree` is the selector for `TreeComponent` which you can import like shown below:
-
-```typescript
-import {TreeComponent} from 'ng2-tree';
-```
+`tree` is the selector for `TreeComponent` which is bundled into `TreeModule`:
 
 ### [tree]
 
