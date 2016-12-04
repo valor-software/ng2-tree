@@ -32,3 +32,5 @@ factories
 
 yarn.lock
 yarn-error.log
+
+*.metadata.json
