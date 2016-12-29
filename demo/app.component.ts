@@ -10,7 +10,7 @@ declare const alertify: any;
       <div class="tree-container">
         <p>Fonts tree</p>
         <tree
-          [tree]="fonts" 
+          [tree]="fonts"
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
@@ -20,8 +20,8 @@ declare const alertify: any;
       </div>
       <div class="tree-container">
         <p>Programming languages tree</p>
-        <tree 
-          [tree]="pls" 
+        <tree
+          [tree]="pls"
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
@@ -46,7 +46,7 @@ declare const alertify: any;
     .tree-demo-app .tree-container p {
       color: #40a070;
       font-size: 2em;
-    } 
+    }
   `]
 })
 export class AppComponent {
