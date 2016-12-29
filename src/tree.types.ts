@@ -19,6 +19,10 @@ export interface TreeModel {
   _indexInParent?: number;
 }
 
+export interface TreeOptions {
+  activateRightMenu?: boolean;
+}
+
 export enum TreeStatus {
   New,
   Modified,

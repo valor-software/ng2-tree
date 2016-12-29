@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NodeEvent, TreeModel, RenamableNode } from '../index';
+import { NodeEvent, TreeModel, TreeOptions, RenamableNode } from '../index';
 
 declare const alertify: any;
 
@@ -11,6 +11,7 @@ declare const alertify: any;
         <p>Fonts tree</p>
         <tree
           [tree]="fonts"
+          [treeOptions]="fontsOptions"
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
@@ -95,6 +96,9 @@ export class AppComponent {
         ]
       }
     ]
+  };
+  public fontsOptions: TreeOptions = {
+    activateRightMenu: false
   };
 
   public pls: TreeModel = {

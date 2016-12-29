@@ -1,5 +1,5 @@
 import { Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject } from '@angular/core';
-import { TreeStatus, TreeModel, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
+import { TreeStatus, TreeModel, TreeOptions, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
@@ -29,7 +29,7 @@ import { styles } from './tree.styles';
       <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
 
       <template [ngIf]="isNodeExpanded()">
-        <tree-internal *ngFor="let child of tree.children; let position = index"
+        <tree-internal [options]="options" *ngFor="let child of tree.children; let position = index"
               [parentTree]="tree"
               [indexInParent]="position"
               [tree]="child"
@@ -48,6 +48,9 @@ export class TreeInternalComponent implements OnInit {
 
   @Input()
   public indexInParent: number;
+
+  @Input()
+  public options: TreeOptions;
 
   @Output()
   public nodeRemoved: EventEmitter<NodeEvent> = new EventEmitter<NodeEvent>();
@@ -259,14 +262,14 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private showMenu(e: MouseEvent): void {
-    if (isRightButtonClicked(e)) {
+    if (isRightButtonClicked(e) && (this.options === undefined || this.options.activateRightMenu)) {
       this.isMenuVisible = !this.isMenuVisible;
       this.nodeMenuService.nodeMenuEvents$.next({
         sender: this.element.nativeElement,
         action: NodeMenuAction.Close
       });
+      e.preventDefault();
     }
-    e.preventDefault();
   }
 
   private applyNewValue(e: NodeEditableEvent, node: TreeModel): void {
@@ -317,12 +320,15 @@ export class TreeInternalComponent implements OnInit {
 
 @Component({
   selector: 'tree',
-  template: `<tree-internal [tree]="tree"></tree-internal>`,
+  template: `<tree-internal [tree]="tree" [options]="options"></tree-internal>`,
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit {
   @Input()
   public tree: TreeModel;
+
+  @Input()
+  public treeOptions: TreeOptions;
 
   @Output()
   public nodeCreated: EventEmitter<any> = new EventEmitter();
@@ -338,6 +344,10 @@ export class TreeComponent implements OnInit {
 
   @Output()
   public nodeMoved: EventEmitter<any> = new EventEmitter();
+
+  private options: TreeOptions = {
+    activateRightMenu: true
+  };
 
   public constructor(@Inject(TreeService) private treeService: TreeService) {
   }
@@ -362,5 +372,15 @@ export class TreeComponent implements OnInit {
     this.treeService.nodeMoved$.subscribe((e: NodeEvent) => {
       this.nodeMoved.emit(e);
     });
+
+    this.setUpOptions();
+  }
+
+  private setUpOptions(): void {
+    if (this.treeOptions !== undefined) {
+      if (this.treeOptions.activateRightMenu !== undefined) {
+        this.options.activateRightMenu = this.treeOptions.activateRightMenu;
+      }
+    }
   }
 }

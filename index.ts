@@ -1,5 +1,6 @@
 import {
   TreeModel,
+  TreeOptions,
   RenamableNode,
   NodeEvent,
   NodeCreatedEvent,
@@ -15,6 +16,7 @@ import { TreeModule } from './src/tree.module';
 
 export {
   TreeModel,
+  TreeOptions,
   RenamableNode,
   NodeEvent,
   NodeCreatedEvent,
