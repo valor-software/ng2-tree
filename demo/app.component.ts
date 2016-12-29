@@ -57,7 +57,12 @@ export class AppComponent {
       {
         value: 'Serif',
         children: [
-          {value: 'Antiqua'},
+          {
+            value: 'Antiqua',
+            icon: {
+              nodeLeaf: 'fa fa-circle-o'
+            }
+          },
           {value: 'DejaVu Serif'},
           {value: 'Garamond'},
           {value: 'Georgia'},
@@ -98,6 +103,12 @@ export class AppComponent {
     ]
   };
   public fontsOptions: TreeOptions = {
+    icon: {
+      font: 'FontAwesome',
+      nodeCollapsed: 'fa fa-folder-o',
+      nodeExpanded: 'fa fa-folder-open-o',
+      nodeLeaf: 'fa fa-file-o'
+    },
     activateRightMenu: false
   };
 

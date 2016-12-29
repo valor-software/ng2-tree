@@ -1,5 +1,5 @@
 import { Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject } from '@angular/core';
-import { TreeStatus, TreeModel, TreeOptions, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
+import { TreeStatus, TreeModel, TreeOptions, IconOptions, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
@@ -186,7 +186,7 @@ export class TreeInternalComponent implements OnInit {
       }
     }
 
-    return node._foldingType.cssClass;
+    return node._foldingType.getCssClass(this.options, node.icon);
   }
 
   private getNextFoldingType(node: TreeModel): FoldingType {
@@ -346,6 +346,12 @@ export class TreeComponent implements OnInit {
   public nodeMoved: EventEmitter<any> = new EventEmitter();
 
   private options: TreeOptions = {
+    icon: {
+      font: 'None',
+      nodeCollapsed: 'arrow-down',
+      nodeExpanded: 'arrow-right',
+      nodeLeaf: 'dot'
+    },
     activateRightMenu: true
   };
 
@@ -378,6 +384,20 @@ export class TreeComponent implements OnInit {
 
   private setUpOptions(): void {
     if (this.treeOptions !== undefined) {
+      if (this.treeOptions.icon !== undefined) {
+        if (this.treeOptions.icon.font !== undefined) {
+          this.options.icon.font = this.treeOptions.icon.font;
+        }
+        if (this.treeOptions.icon.nodeCollapsed !== undefined) {
+          this.options.icon.nodeCollapsed = this.treeOptions.icon.nodeCollapsed;
+        }
+        if (this.treeOptions.icon.nodeExpanded !== undefined) {
+          this.options.icon.nodeExpanded = this.treeOptions.icon.nodeExpanded;
+        }
+        if (this.treeOptions.icon.nodeLeaf !== undefined) {
+          this.options.icon.nodeLeaf = this.treeOptions.icon.nodeLeaf;
+        }
+      }
       if (this.treeOptions.activateRightMenu !== undefined) {
         this.options.activateRightMenu = this.treeOptions.activateRightMenu;
       }

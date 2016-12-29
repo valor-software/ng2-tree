@@ -65,6 +65,7 @@
     "async": "2.1.2",
     "concurrently": "2.1.0",
     "del": "2.2.2",
+    "font-awesome": "^4.7.0",
     "gitignore-to-glob": "^0.3.0",
     "gulp": "3.9.1",
     "gulp-gh-pages": "0.5.4",

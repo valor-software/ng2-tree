@@ -3,10 +3,25 @@ export class FoldingType {
   public static Collapsed: FoldingType = new FoldingType('node-collapsed');
   public static Leaf: FoldingType = new FoldingType('node-leaf');
 
+  private _nodeType: string;
+
   public constructor(private _cssClass: string) {
+    this._nodeType = this._cssClass.replace(/-(.)/, function (original, match) { return match.toUpperCase() });
   }
 
   public get cssClass(): string {
+    return this._cssClass;
+  }
+
+  public getCssClass(options: TreeOptions, icon: IconOptions): string {
+    if (icon !== undefined && icon[this._nodeType] !== undefined) {
+      return icon[this._nodeType];
+    }
+
+    if (options !== undefined && options.icon.font !== 'None') {
+      return options.icon[this._nodeType];
+    }
+
     return this._cssClass;
   }
 }
@@ -14,13 +29,23 @@ export class FoldingType {
 export interface TreeModel {
   value: string | RenamableNode;
   children?: Array<TreeModel>;
+  icon?: IconOptions;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
   _indexInParent?: number;
 }
 
 export interface TreeOptions {
+  icon?: IconOptions;
   activateRightMenu?: boolean;
+  activateMainMenu?: boolean;
+}
+
+export interface IconOptions {
+  font?: string;
+  nodeCollapsed?: string;
+  nodeExpanded?: string;
+  nodeLeaf?: string;
 }
 
 export enum TreeStatus {
