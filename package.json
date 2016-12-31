@@ -1,6 +1,6 @@
 {
   "name": "ng2-tree",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha.0",
   "description": "angular2 component for visualizing data that can be naturally represented as a tree",
   "main": "index.js",
   "license": "MIT",
