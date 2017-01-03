@@ -6,14 +6,12 @@ import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/dragga
 import { NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.types';
 import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.type';
 import { TreeService } from './tree.service';
-import { isLeftButtonClicked, isRightButtonClicked } from './common/utils/event.utils';
+import { isLeftButtonClicked, isRightButtonClicked } from './utils/event.utils';
 import * as _ from 'lodash';
-import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './common/utils/type.utils';
-import { styles } from './tree.styles';
+import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './utils/type.utils';
 
 @Component({
   selector: 'tree-internal',
-  styles: styles,
   template: `
   <ul class="tree" *ngIf="tree">
     <li>
