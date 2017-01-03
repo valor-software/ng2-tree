@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NodeEvent, TreeModel, RenamableNode } from '../index';
+import { NodeEvent, TreeModel, TreeSettings, RenamableNode } from '../index';
 
 declare const alertify: any;
 
@@ -22,6 +22,7 @@ declare const alertify: any;
         <p>Programming languages tree</p>
         <tree 
           [tree]="pls" 
+          [settings]="settings"
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
@@ -134,6 +135,10 @@ export class AppComponent {
         ]
       }
     ]
+  };
+
+  public settings: TreeSettings = {
+    contextMenu: false
   };
 
   public onNodeRemoved(e: NodeEvent): void {

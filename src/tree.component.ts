@@ -1,5 +1,5 @@
 import { Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject } from '@angular/core';
-import { TreeStatus, TreeModel, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
+import { TreeStatus, TreeModel, TreeSettings, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
@@ -33,6 +33,7 @@ import { styles } from './tree.styles';
               [parentTree]="tree"
               [indexInParent]="position"
               [tree]="child"
+              [settings]="settings"
               (nodeRemoved)="onChildRemoved($event)"></tree-internal>
       </template>
     </li>
@@ -48,6 +49,9 @@ export class TreeInternalComponent implements OnInit {
 
   @Input()
   public indexInParent: number;
+
+  @Input()
+  public settings: TreeSettings;
 
   @Output()
   public nodeRemoved: EventEmitter<NodeEvent> = new EventEmitter<NodeEvent>();
@@ -80,6 +84,10 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private setUpMenuEventHandler(): void {
+    if(this.settings != null && !this.settings['contextMenu']) {
+      return;
+    }
+
     this.nodeMenuService.nodeMenuEvents$
       .filter((e: NodeMenuEvent) => this.element.nativeElement !== e.sender)
       .filter((e: NodeMenuEvent) => e.action === NodeMenuAction.Close)
@@ -259,7 +267,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private showMenu(e: MouseEvent): void {
-    if (isRightButtonClicked(e)) {
+    if (isRightButtonClicked(e) && this.settings['contextMenu']) {
       this.isMenuVisible = !this.isMenuVisible;
       this.nodeMenuService.nodeMenuEvents$.next({
         sender: this.element.nativeElement,
@@ -317,12 +325,17 @@ export class TreeInternalComponent implements OnInit {
 
 @Component({
   selector: 'tree',
-  template: `<tree-internal [tree]="tree"></tree-internal>`,
+  template: `<tree-internal [tree]="tree" [settings]="settings"></tree-internal>`,
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit {
   @Input()
   public tree: TreeModel;
+
+  @Input()
+  public settings: TreeSettings = {
+    contextMenu: true
+  };
 
   @Output()
   public nodeCreated: EventEmitter<any> = new EventEmitter();
