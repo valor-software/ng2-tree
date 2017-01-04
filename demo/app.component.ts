@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NodeEvent, TreeModel, RenamableNode } from '../index';
 
+require('../src/styles.css');
+
 declare const alertify: any;
 
 @Component({
