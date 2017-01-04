@@ -1,19 +1,17 @@
 import { Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject } from '@angular/core';
-import { TreeStatus, TreeModel, TreeOptions, IconOptions, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
+import { TreeStatus, TreeModel, TreeModelOptions, TreeOptions, IconOptions, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
 import { NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.types';
 import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.type';
 import { TreeService } from './tree.service';
-import { isLeftButtonClicked, isRightButtonClicked } from './common/utils/event.utils';
+import { isLeftButtonClicked, isRightButtonClicked } from './utils/event.utils';
 import * as _ from 'lodash';
-import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './common/utils/type.utils';
-import { styles } from './tree.styles';
+import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './utils/type.utils';
 
 @Component({
   selector: 'tree-internal',
-  styles: styles,
   template: `
   <ul class="tree" *ngIf="tree">
     <li>
@@ -67,9 +65,10 @@ export class TreeInternalComponent implements OnInit {
 
   public ngOnInit(): void {
     this.indexInParent = 0;
-
-    this.isLeaf = !Array.isArray(this.tree.children);
     this.tree._indexInParent = this.indexInParent;
+ 
+    this.isLeaf = !Array.isArray(this.tree.children);
+    this.tree.options = TreeModelOptions.merge(this.tree, this.parentTree);
 
     this.setUpNodeSelectedEventHandler();
     this.setUpMenuEventHandler();
@@ -262,6 +261,10 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private showMenu(e: MouseEvent): void {
+    if (this.tree.options.static) {
+      return;
+    }
+
     if (isRightButtonClicked(e) && (this.options === undefined || this.options.activateRightMenu)) {
       this.isMenuVisible = !this.isMenuVisible;
       this.nodeMenuService.nodeMenuEvents$.next({

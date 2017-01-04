@@ -6,6 +6,7 @@ npm-debug.log
 typings/
 .publish/
 yarn.lock
+.DS_Store
 
 **/*.js.map
 
@@ -15,7 +16,6 @@ demo/**/*.css
 
 src/**/*.js
 src/**/*.d.ts
-src/**/*.css
 
 *.js
 *.d.ts

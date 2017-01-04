@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NodeEvent, TreeModel, TreeOptions, RenamableNode } from '../index';
 
+require('../src/styles.css');
+
 declare const alertify: any;
 
 @Component({
@@ -55,7 +57,10 @@ export class AppComponent {
     value: 'Fonts',
     children: [
       {
-        value: 'Serif',
+        value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
+        options: {
+          static: true
+        },
         children: [
           {
             value: 'Antiqua',

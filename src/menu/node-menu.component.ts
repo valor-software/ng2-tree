@@ -1,12 +1,10 @@
 import { Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
 import { NodeMenuService } from './node-menu.service';
 import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuEvent, NodeMenuAction } from './menu.types';
-import { isLeftButtonClicked, isEscapePressed } from '../common/utils/event.utils';
-import { styles } from './node-menu.styles';
+import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
 
 @Component({
   selector: 'node-menu',
-  styles: styles,
   template: `
     <div class="node-menu">
       <ul class="node-menu-content">
