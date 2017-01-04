@@ -1,5 +1,5 @@
 import { Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject } from '@angular/core';
-import { TreeStatus, TreeModel, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
+import { TreeStatus, TreeModel, TreeModelOptions, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
@@ -62,9 +62,10 @@ export class TreeInternalComponent implements OnInit {
 
   public ngOnInit(): void {
     this.indexInParent = 0;
-
-    this.isLeaf = !Array.isArray(this.tree.children);
     this.tree._indexInParent = this.indexInParent;
+ 
+    this.isLeaf = !Array.isArray(this.tree.children);
+    this.tree.options = TreeModelOptions.merge(this.tree, this.parentTree);
 
     this.setUpNodeSelectedEventHandler();
     this.setUpMenuEventHandler();
@@ -257,6 +258,10 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private showMenu(e: MouseEvent): void {
+    if (this.tree.options.static) {
+      return;
+    }
+
     if (isRightButtonClicked(e)) {
       this.isMenuVisible = !this.isMenuVisible;
       this.nodeMenuService.nodeMenuEvents$.next({

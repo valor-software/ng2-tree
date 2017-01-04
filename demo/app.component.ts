@@ -56,7 +56,10 @@ export class AppComponent {
     value: 'Fonts',
     children: [
       {
-        value: 'Serif',
+        value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
+        options: {
+          static: true
+        },
         children: [
           {value: 'Antiqua'},
           {value: 'DejaVu Serif'},
