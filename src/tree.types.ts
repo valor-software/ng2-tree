@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
   public static Collapsed: FoldingType = new FoldingType('node-collapsed');
@@ -14,9 +16,18 @@ export class FoldingType {
 export interface TreeModel {
   value: string | RenamableNode;
   children?: Array<TreeModel>;
+  options?: TreeModelOptions; 
   _status?: TreeStatus;
   _foldingType?: FoldingType;
   _indexInParent?: number;
+}
+
+export class TreeModelOptions {
+  static: boolean = false;
+
+  static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelOptions {
+    return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {static: false});
+  }
 }
 
 export enum TreeStatus {
