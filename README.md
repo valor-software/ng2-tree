@@ -81,6 +81,115 @@ class MyComponent {
   }
 }
 ```
+
+You can configure your tree with setting an option object next to the tree:
+```html
+<tree [tree]="files" [options]="options"></tree>
+```
+Here is an example of it:
+```typescript
+options = {
+  icon: {
+    font: 'NameOfFont', // Should be different than empty ot 'None'
+    nodeCollapsed: 'classWhenCollapsed', // The name of the class which will be set when a node is collapsed
+    nodeExpanded: 'classWhenExpanded', // The name of the class which will be set when a node is expanded
+    nodeLeaf: 'classWhenLeaf', // The name of the class which will be set when a node is a leaf
+  },
+  activateRightMenu: false, // Deactivate right click menu, by default it is active
+  expanded: false // Expand the tree or collapsed it, by default it is expanded
+};
+```
+You can also configure a particular node or a subtree, just add options property to the tree structior like this:
+```typescript
+public files: TreeModel = {
+  value: '/',
+  children: [
+    {
+      value: 'home',
+      children: [
+        {
+          value: 'firstUser',
+          options: {
+            disableDraging: true,
+            icon: {
+              font: 'FontAwesome',
+              nodeCollapsed: 'fa fa-folder',
+              nodeExpanded: 'fa fa-folder-open',
+              nodeLeaf: 'fa fa-file'
+            },
+            applyToSubtree: false
+          },
+          children: [
+            {
+              value: 'Documents',
+              children: [
+                {
+                  value: 'home',
+                  children: [
+                    {
+                      value: 'bills',
+                      children: [
+                        {value: '2016-07-01-mobile.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-pdf-o'}}},
+                        {value: '2016-07-01-electricity.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-excel-o'}}},
+                        {value: '2016-07-01-water.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-sound-o'}}},
+                        {value: '2016-07-01-internet.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-word-o'}}},
+                        {value: '2016-08-01-mobile.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-archive-o'}}},
+                        {value: '2016-10-01-internet.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-pdf-o'}}}
+                      ]
+                    },
+                    {value: 'photos', children: []}
+                  ]
+                }
+              ]
+            },
+            {value: 'Downloads', children: []},
+            {value: 'Desktop', children: []},
+            {value: 'Pictures', children: []},
+            {value: 'Music', children: []},
+            {value: 'Public', children: []}
+          ]
+        },
+        {
+          value: 'secondUser',
+          options: {
+            icon: {
+              font: 'FontAwesome',
+              nodeCollapsed: 'fa fa-folder-o',
+              nodeExpanded: 'fa fa-folder-open-o',
+              nodeLeaf: 'fa fa-file-o'
+            }
+          },
+          children: [
+            {value: 'Documents', children: []},
+            {
+              value: 'Downloads',
+              children: [
+                {value: 'Actobat3'},
+                {value: 'Complib'},
+                {value: 'Eudora'},
+                {value: 'java'},
+                {value: 'drivers'},
+                {value: 'kathy'}
+              ]
+            },
+            {value: 'Desktop', children: []},
+            {value: 'Pictures', children: []},
+            {value: 'Music', children: []},
+            {value: 'Public', children: []}
+          ]
+        }
+      ]
+    }
+  ]
+};
+```
+Options are:
+* static - true / false - When true disables all static options of a node
+* disableDraging - true / false - When true a node could not be moved but can drag other nodes under it (when it isn't a leaf)
+* icon - Has the same options as tree icon configurations
+* applyToSubtree - true / false - When true all options will apply to the tree, if there is no overwrites, when false it don't apply anything to the subtree
+
+
 Voila! That's pretty much it - enjoy :blush:
 
 ## :eyes: Demo
