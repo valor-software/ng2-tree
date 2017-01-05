@@ -335,7 +335,7 @@ export class TreeComponent implements OnInit {
   public tree: TreeModel;
 
   @Input()
-  public treeOptions: TreeOptions;
+  public options: TreeOptions;
 
   @Output()
   public nodeCreated: EventEmitter<any> = new EventEmitter();
@@ -351,16 +351,6 @@ export class TreeComponent implements OnInit {
 
   @Output()
   public nodeMoved: EventEmitter<any> = new EventEmitter();
-
-  private options: TreeOptions = {
-    icon: {
-      font: 'None',
-      nodeCollapsed: 'arrow-down',
-      nodeExpanded: 'arrow-right',
-      nodeLeaf: 'dot'
-    },
-    activateRightMenu: true
-  };
 
   public constructor(@Inject(TreeService) private treeService: TreeService) {
   }
@@ -385,29 +375,5 @@ export class TreeComponent implements OnInit {
     this.treeService.nodeMoved$.subscribe((e: NodeEvent) => {
       this.nodeMoved.emit(e);
     });
-
-    this.setUpOptions();
-  }
-
-  private setUpOptions(): void {
-    if (this.treeOptions !== undefined) {
-      if (this.treeOptions.icon !== undefined) {
-        if (this.treeOptions.icon.font !== undefined) {
-          this.options.icon.font = this.treeOptions.icon.font;
-        }
-        if (this.treeOptions.icon.nodeCollapsed !== undefined) {
-          this.options.icon.nodeCollapsed = this.treeOptions.icon.nodeCollapsed;
-        }
-        if (this.treeOptions.icon.nodeExpanded !== undefined) {
-          this.options.icon.nodeExpanded = this.treeOptions.icon.nodeExpanded;
-        }
-        if (this.treeOptions.icon.nodeLeaf !== undefined) {
-          this.options.icon.nodeLeaf = this.treeOptions.icon.nodeLeaf;
-        }
-      }
-      if (this.treeOptions.activateRightMenu !== undefined) {
-        this.options.activateRightMenu = this.treeOptions.activateRightMenu;
-      }
-    }
   }
 }
