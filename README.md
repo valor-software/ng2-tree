@@ -126,7 +126,6 @@ public files: TreeModel = {
           options: {
             disableDraging: true,
             icon: {
-              font: 'FontAwesome',
               nodeCollapsed: 'fa fa-folder',
               nodeExpanded: 'fa fa-folder-open',
               nodeLeaf: 'fa fa-file'
@@ -143,12 +142,12 @@ public files: TreeModel = {
                     {
                       value: 'bills',
                       children: [
-                        {value: '2016-07-01-mobile.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-pdf-o'}}},
-                        {value: '2016-07-01-electricity.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-excel-o'}}},
-                        {value: '2016-07-01-water.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-sound-o'}}},
-                        {value: '2016-07-01-internet.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-word-o'}}},
-                        {value: '2016-08-01-mobile.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-archive-o'}}},
-                        {value: '2016-10-01-internet.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-pdf-o'}}}
+                        {value: '2016-07-01-mobile.pdf', options: {icon: {nodeLeaf: 'fa fa-file-pdf-o'}}},
+                        {value: '2016-07-01-electricity.pdf', options: {icon: {nodeLeaf: 'fa fa-file-excel-o'}}},
+                        {value: '2016-07-01-water.pdf', options: {icon: {nodeLeaf: 'fa fa-file-sound-o'}}},
+                        {value: '2016-07-01-internet.pdf', options: {icon: {nodeLeaf: 'fa fa-file-word-o'}}},
+                        {value: '2016-08-01-mobile.pdf', options: {icon: {nodeLeaf: 'fa fa-file-archive-o'}}},
+                        {value: '2016-10-01-internet.pdf', options: {icon: {nodeLeaf: 'fa fa-file-pdf-o'}}}
                       ]
                     },
                     {value: 'photos', children: []}
