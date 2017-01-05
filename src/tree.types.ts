@@ -28,7 +28,7 @@ export class FoldingType {
   }
 }
 
-export class NodeIconOptions {
+export interface NodeIconOptions {
   /* The class or classes when a node is collapsed */
   nodeCollapsed?: string;
 
