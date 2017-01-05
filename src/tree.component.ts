@@ -66,7 +66,7 @@ export class TreeInternalComponent implements OnInit {
   public ngOnInit(): void {
     this.indexInParent = 0;
     this.tree._indexInParent = this.indexInParent;
- 
+
     this.isLeaf = !Array.isArray(this.tree.children);
     this.tree.options = TreeModelOptions.merge(this.tree, this.parentTree);
 
