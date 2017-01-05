@@ -269,7 +269,7 @@ export class TreeInternalComponent implements OnInit {
       return;
     }
 
-    if (isRightButtonClicked(e) && (this.options === undefined || this.options.activateRightMenu)) {
+    if (isRightButtonClicked(e) && _.get(this.options, 'activateRightMenu') !== false) {
       this.isMenuVisible = !this.isMenuVisible;
       this.nodeMenuService.nodeMenuEvents$.next({
         sender: this.element.nativeElement,
