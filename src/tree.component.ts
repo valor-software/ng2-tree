@@ -179,13 +179,17 @@ export class TreeInternalComponent implements OnInit {
   private getFoldingTypeCssClass(node: TreeModel): string {
     if (!node._foldingType) {
       if (node.children) {
-        node._foldingType = FoldingType.Expanded;
+        if (_.get(this.options, 'expanded') === false) {
+          node._foldingType = FoldingType.Collapsed;
+        } else {
+          node._foldingType = FoldingType.Expanded;
+        }
       } else {
         node._foldingType = FoldingType.Leaf;
       }
     }
 
-    return node._foldingType.getCssClass(this.options, node.icon);
+    return node._foldingType.getCssClass(this.options, node.options.icon);
   }
 
   private getNextFoldingType(node: TreeModel): FoldingType {
