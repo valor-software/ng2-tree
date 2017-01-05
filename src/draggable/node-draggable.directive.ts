@@ -28,7 +28,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
 
   public ngOnInit(): void {
     if (!this.tree.options.static) {
-      if (!this.tree.options.disableDraging) {
+      if (this.tree.options.drag) {
         this.renderer.setElementAttribute(this.nodeNativeElement, 'draggable', 'true');
         this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragstart', this.handleDragStart.bind(this)));
         this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragend', this.handleDragEnd.bind(this)));

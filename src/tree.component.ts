@@ -189,7 +189,7 @@ export class TreeInternalComponent implements OnInit {
       }
     }
 
-    return node._foldingType.getCssClass(this.options, node.options.icon);
+    return node._foldingType.getCssClass(this.options, node.options);
   }
 
   private getNextFoldingType(node: TreeModel): FoldingType {
@@ -269,7 +269,7 @@ export class TreeInternalComponent implements OnInit {
       return;
     }
 
-    if (isRightButtonClicked(e) && _.get(this.options, 'activateRightMenu') !== false) {
+    if (isRightButtonClicked(e) && _.get(this.options, 'rightMenu') !== false) {
       this.isMenuVisible = !this.isMenuVisible;
       this.nodeMenuService.nodeMenuEvents$.next({
         sender: this.element.nativeElement,

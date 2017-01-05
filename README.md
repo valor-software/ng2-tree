@@ -82,24 +82,23 @@ class MyComponent {
 }
 ```
 
-You can configure your tree with setting an option object next to the tree:
+You can configure your tree by setting an options object in the `tree` tag:
 ```html
 <tree [tree]="files" [options]="options"></tree>
 ```
-Here is an example of it:
+For example:
 ```typescript
 options = {
   icon: {
-    font: 'NameOfFont', // Should be different than empty ot 'None'
-    nodeCollapsed: 'classWhenCollapsed', // The name of the class which will be set when a node is collapsed
-    nodeExpanded: 'classWhenExpanded', // The name of the class which will be set when a node is expanded
-    nodeLeaf: 'classWhenLeaf', // The name of the class which will be set when a node is a leaf
+    nodeCollapsed: 'classWhenCollapsed', // The class or classes, when a node is collapsed
+    nodeExpanded: 'classWhenExpanded', // The class or classes, when a node is expanded
+    nodeLeaf: 'classWhenLeaf', // The class or classes, when a node is a leaf
   },
-  activateRightMenu: false, // Deactivate right click menu, by default it is active
-  expanded: false // Expand the tree or collapsed it, by default it is expanded
+  rightMenu: false, // if true show a custom menu on right click on the mouse, default: false
+  expanded: false // The initial state of the tree - expanded (true) or collapsed (false), default: true
 };
 ```
-You can also configure a particular node or a subtree, just add options property to the tree structior like this:
+You can also configure a particular node or a subtree by adding an options property to it:
 ```typescript
 public files: TreeModel = {
   value: '/',
@@ -148,35 +147,6 @@ public files: TreeModel = {
             {value: 'Music', children: []},
             {value: 'Public', children: []}
           ]
-        },
-        {
-          value: 'secondUser',
-          options: {
-            icon: {
-              font: 'FontAwesome',
-              nodeCollapsed: 'fa fa-folder-o',
-              nodeExpanded: 'fa fa-folder-open-o',
-              nodeLeaf: 'fa fa-file-o'
-            }
-          },
-          children: [
-            {value: 'Documents', children: []},
-            {
-              value: 'Downloads',
-              children: [
-                {value: 'Actobat3'},
-                {value: 'Complib'},
-                {value: 'Eudora'},
-                {value: 'java'},
-                {value: 'drivers'},
-                {value: 'kathy'}
-              ]
-            },
-            {value: 'Desktop', children: []},
-            {value: 'Pictures', children: []},
-            {value: 'Music', children: []},
-            {value: 'Public', children: []}
-          ]
         }
       ]
     }
@@ -184,10 +154,10 @@ public files: TreeModel = {
 };
 ```
 Options are:
-* static - true / false - When true disables all static options of a node
-* disableDraging - true / false - When true a node could not be moved but can drag other nodes under it (when it isn't a leaf)
+* static - true / false - When true disables dragging of a node and dragging other nodes below it, default: false
+* drag - true / false - When true a node cannot be dragged but other nodes can be dragged below it (if it isn't a leaf), default: false
 * icon - Has the same options as tree icon configurations
-* applyToSubtree - true / false - When true all options will apply to the tree, if there is no overwrites, when false it don't apply anything to the subtree
+* applyToSubtree - true / false - When true all options apply to the this node and its subtree, when false - only to the node
 
 
 Voila! That's pretty much it - enjoy :blush:

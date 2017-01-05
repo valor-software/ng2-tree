@@ -190,7 +190,6 @@ export class AppComponent {
             value: 'lost+found',
             options: {
               icon: {
-                font: 'FontAwesome',
                 nodeExpanded: 'fa fa-circle',
                 nodeCollapsed: 'fa fa-circle',
                 nodeLeaf: 'fa fa-circle'
@@ -219,9 +218,8 @@ export class AppComponent {
           {
             value: 'firstUser',
             options: {
-              disableDraging: true,
+              drag: false,
               icon: {
-                font: 'FontAwesome',
                 nodeCollapsed: 'fa fa-folder',
                 nodeExpanded: 'fa fa-folder-open',
                 nodeLeaf: 'fa fa-file'
@@ -238,22 +236,12 @@ export class AppComponent {
                       {
                         value: 'bills',
                         children: [
-                          {value: '2016-07-01-mobile.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-pdf-o'}}},
-                          {value: '2016-07-01-electricity.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-excel-o'}}},
-                          {value: '2016-07-01-water.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-sound-o'}}},
-                          {value: '2016-07-01-internet.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-word-o'}}},
-                          {value: '2016-08-01-mobile.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-archive-o'}}},
-                          {value: '2016-08-01-electricity.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-image-o'}}},
-                          {value: '2016-08-01-water.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-audio-o'}}},
-                          {value: '2016-08-01-internet.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-movie-o'}}},
-                          {value: '2016-09-01-mobile.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-picture-o'}}},
-                          {value: '2016-09-01-electricity.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-text-o'}}},
-                          {value: '2016-09-01-water.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-code-o'}}},
-                          {value: '2016-09-01-internet.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-powerpoint-o'}}},
-                          {value: '2016-10-01-mobile.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-pdf-o'}}},
-                          {value: '2016-10-01-electricity.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-pdf-o'}}},
-                          {value: '2016-10-01-water.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-pdf-o'}}},
-                          {value: '2016-10-01-internet.pdf', options: {icon: {font: 'FontAwesome', nodeLeaf: 'fa fa-file-pdf-o'}}}
+                          {value: '2016-07-01-mobile.pdf', options: {icon: {nodeLeaf: 'fa fa-file-pdf-o'}}},
+                          {value: '2016-07-01-electricity.pdf', options: {icon: {nodeLeaf: 'fa fa-file-excel-o'}}},
+                          {value: '2016-07-01-water.pdf', options: {icon: {nodeLeaf: 'fa fa-file-sound-o'}}},
+                          {value: '2016-07-01-internet.pdf', options: {icon: {nodeLeaf: 'fa fa-file-word-o'}}},
+                          {value: '2016-08-01-mobile.pdf', options: {icon: {nodeLeaf: 'fa fa-file-archive-o'}}},
+                          {value: '2016-10-01-internet.pdf', options: {icon: {nodeLeaf: 'fa fa-file-pdf-o'}}}
                         ]
                       },
                       {value: 'photos', children: []}
@@ -272,7 +260,6 @@ export class AppComponent {
             value: 'secondUser',
             options: {
               icon: {
-                font: 'FontAwesome',
                 nodeCollapsed: 'fa fa-folder-o',
                 nodeExpanded: 'fa fa-folder-open-o',
                 nodeLeaf: 'fa fa-file-o'
@@ -315,12 +302,11 @@ export class AppComponent {
 
   public filesOptions = {
     icon: {
-      font: 'FontAwesome',
       nodeCollapsed: 'fa fa-folder-o',
       nodeExpanded: 'fa fa-folder-open-o',
       nodeLeaf: 'fa fa-file-o'
     },
-    activateRightMenu: false,
+    rightMenu: false,
     expanded: false
   };
 
