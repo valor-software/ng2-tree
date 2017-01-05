@@ -53,20 +53,21 @@ export class TreeInternalComponent implements OnInit {
   @Output()
   public nodeRemoved: EventEmitter<NodeEvent> = new EventEmitter<NodeEvent>();
 
+  public isSelected: boolean = false;
+
   private isLeaf: boolean;
-  private isSelected: boolean = false;
   private isMenuVisible: boolean = false;
 
   public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
                      @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
                      @Inject(TreeService) private treeService: TreeService,
-                     @Inject(ElementRef) private element: ElementRef) {
+                     @Inject(ElementRef) public element: ElementRef) {
   }
 
   public ngOnInit(): void {
     this.indexInParent = 0;
     this.tree._indexInParent = this.indexInParent;
- 
+
     this.isLeaf = !Array.isArray(this.tree.children);
 
     this.tree.options = TreeModelOptions.merge(this.tree, this.parentTree);
@@ -135,7 +136,7 @@ export class TreeInternalComponent implements OnInit {
     });
   }
 
-  private isEditInProgress(): boolean {
+  public isEditInProgress(): boolean {
     return this.tree._status === TreeStatus.EditInProgress
       || this.tree._status === TreeStatus.New;
   }
@@ -174,11 +175,11 @@ export class TreeInternalComponent implements OnInit {
     return this.tree._foldingType === FoldingType.Expanded;
   }
 
-  private switchFoldingType(e: any, tree: TreeModel): void {
+  public switchFoldingType(e: any, tree: TreeModel): void {
     this.handleFoldingType(e.target.parentNode.parentNode, tree);
   }
 
-  private getFoldingTypeCssClass(node: TreeModel): string {
+  public getFoldingTypeCssClass(node: TreeModel): string {
     if (!node._foldingType) {
       if (node.children) {
         node._foldingType = FoldingType.Expanded;
@@ -208,7 +209,7 @@ export class TreeInternalComponent implements OnInit {
 
   // MENU --------------------------------------------------------------------------------------------------------------
 
-  private onMenuItemSelected(e: NodeMenuItemSelectedEvent): void {
+  public onMenuItemSelected(e: NodeMenuItemSelectedEvent): void {
     switch (e.nodeMenuItemAction) {
       case NodeMenuItemAction.NewTag:
         this.onNewSelected(e);
@@ -255,14 +256,14 @@ export class TreeInternalComponent implements OnInit {
     this.isMenuVisible = false;
   }
 
-  private onChildRemoved(e: NodeEvent, parent: TreeModel = this.tree): void {
+  public onChildRemoved(e: NodeEvent, parent: TreeModel = this.tree): void {
     const childIndex = _.findIndex(parent.children, (child: any) => child === e.node);
     if (childIndex >= 0) {
       parent.children.splice(childIndex, 1);
     }
   }
 
-  private showMenu(e: MouseEvent): void {
+  public showMenu(e: MouseEvent): void {
     if (this.tree.options.static) {
       return;
     }
@@ -277,7 +278,7 @@ export class TreeInternalComponent implements OnInit {
     e.preventDefault();
   }
 
-  private applyNewValue(e: NodeEditableEvent, node: TreeModel): void {
+  public applyNewValue(e: NodeEditableEvent, node: TreeModel): void {
     if (e.action === NodeEditableEventAction.Cancel) {
       if (isValueEmpty(e.value)) {
         return this.nodeRemoved.emit({node: this.tree});
@@ -315,7 +316,7 @@ export class TreeInternalComponent implements OnInit {
     node._status = TreeStatus.Modified;
   }
 
-  private onNodeSelected(e: MouseEvent): void {
+  public onNodeSelected(e: MouseEvent): void {
     if (isLeftButtonClicked(e)) {
       this.isSelected = true;
       this.treeService.nodeSelected$.next({node: this.tree});

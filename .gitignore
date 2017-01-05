@@ -22,6 +22,11 @@ src/**/*.d.ts
 
 !.config/*.js
 
+!test.bundle.js
+!karma.conf.js
+!webpack.test.js
+!webpack.conf.js
+
 bundles
 
 demo-build

@@ -16,5 +16,5 @@ enum Keys {
 
 enum MouseButtons {
   Left = 0,
-  Right = 2,
+  Right = 2
 }

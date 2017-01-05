@@ -59,7 +59,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
     this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
   }
 
-  private onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {
+  public onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {
     if (isLeftButtonClicked(e)) {
       this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
     }

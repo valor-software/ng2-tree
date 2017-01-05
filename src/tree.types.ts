@@ -15,8 +15,8 @@ export class FoldingType {
 
 export interface TreeModel {
   value: string | RenamableNode;
-  children?: Array<TreeModel>;
-  options?: TreeModelOptions; 
+  children?: TreeModel[];
+  options?: TreeModelOptions;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
   _indexInParent?: number;
@@ -25,7 +25,7 @@ export interface TreeModel {
 export class TreeModelOptions {
   public static: boolean = false;
 
-  static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelOptions {
+  public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelOptions {
     return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {static: false});
   }
 }

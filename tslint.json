@@ -3,8 +3,12 @@
   "rulesDirectory": "./node_modules/codelyzer",
   "rules": {
     "no-null-keyword": false,
-    "no-unused-variable": false,
-    "component-selector-name": [false, ""],
-    "only-arrow-functions": false
+    "no-parameter-properties": false,
+    "only-arrow-functions": false,
+    "max-classes-per-file": false,
+    "component-selector": false,
+    "max-file-line-count": false,
+    "member-ordering": false,
+    "arrow-parens": false
   }
 }
