@@ -1,5 +1,5 @@
 import { Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject } from '@angular/core';
-import { TreeStatus, TreeModel, TreeModelOptions, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
+import { TreeStatus, TreeModel, TreeModelOptions, TreeViewOptions, FoldingType, NodeEvent, RenamableNode, NodeSelectedEvent } from './tree.types';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
@@ -13,9 +13,9 @@ import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './utils/typ
 @Component({
   selector: 'tree-internal',
   template: `
-  <ul class="tree" *ngIf="tree">
+  <ul class="tree" *ngIf="tree" [ngClass]="{rootless: !viewOptions.rootIsVisible}">
     <li>
-      <div (contextmenu)="showMenu($event)" [nodeDraggable]="element" [tree]="tree">
+      <div [ngClass]="{rootless: !viewOptions.rootIsVisible}" (contextmenu)="showMenu($event)" [nodeDraggable]="element" [tree]="tree">
         <div class="folding" (click)="switchFoldingType($event, tree)" [ngClass]="getFoldingTypeCssClass(tree)"></div>
         <div href="#" class="node-value" *ngIf="!isEditInProgress()" [class.node-selected]="isSelected" (click)="onNodeSelected($event)">{{tree.value}}</div>
 
@@ -42,6 +42,9 @@ export class TreeInternalComponent implements OnInit {
   public tree: TreeModel;
 
   @Input()
+  public viewOptions: TreeViewOptions;
+
+  @Input()
   public parentTree: TreeModel;
 
   @Input()
@@ -65,7 +68,9 @@ export class TreeInternalComponent implements OnInit {
     this.tree._indexInParent = this.indexInParent;
  
     this.isLeaf = !Array.isArray(this.tree.children);
+
     this.tree.options = TreeModelOptions.merge(this.tree, this.parentTree);
+    this.viewOptions = this.viewOptions || new TreeViewOptions();
 
     this.setUpNodeSelectedEventHandler();
     this.setUpMenuEventHandler();
@@ -320,12 +325,15 @@ export class TreeInternalComponent implements OnInit {
 
 @Component({
   selector: 'tree',
-  template: `<tree-internal [tree]="tree"></tree-internal>`,
+  template: `<tree-internal [tree]="tree" [viewOptions]="viewOptions"></tree-internal>`,
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit {
   @Input()
   public tree: TreeModel;
+
+  @Input()
+  public viewOptions: TreeViewOptions;
 
   @Output()
   public nodeCreated: EventEmitter<any> = new EventEmitter();

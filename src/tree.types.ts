@@ -23,11 +23,15 @@ export interface TreeModel {
 }
 
 export class TreeModelOptions {
-  static: boolean = false;
+  public static: boolean = false;
 
   static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelOptions {
     return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {static: false});
   }
+}
+
+export class TreeViewOptions {
+  public rootIsVisible: boolean = true;
 }
 
 export enum TreeStatus {
