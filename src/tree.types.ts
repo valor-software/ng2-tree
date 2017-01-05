@@ -15,7 +15,7 @@ export class FoldingType {
     return this._cssClass;
   }
 
-  public getCssClass(options: TreeOptions, icon: IconOptions): string {
+  public getCssClass(options: TreeOptions, icon: NodeIconOptions): string {
     if (icon !== undefined && icon[this._nodeType] !== undefined) {
       return icon[this._nodeType];
     }
@@ -31,31 +31,53 @@ export class FoldingType {
 export interface TreeModel {
   value: string | RenamableNode;
   children?: Array<TreeModel>;
-  icon?: IconOptions;
-  options?: TreeModelOptions; 
+  options?: TreeModelOptions;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
   _indexInParent?: number;
 }
 
-export interface TreeOptions {
-  icon?: IconOptions;
-  activateRightMenu?: boolean;
-  activateMainMenu?: boolean;
+export class TreeOptions {
+  /* icon - configure custom icon for the whole tree */
+  icon?: NodeIconOptions;
+  /* activateRightMenu - allow to activate or disable right menu on click of the nodes */
+  activateRightMenu?: boolean = true;
+  /* activateRightMenu - allow to activate or disable main menu */
+  activateMainMenu?: boolean = false;
+  /* expanded - when true makes all nodes to be expanded, when false collapes all */
+  expanded?: boolean = true;
 }
 
-export interface IconOptions {
-  font?: string;
+export class NodeIconOptions {
+  font: string = 'None';
   nodeCollapsed?: string;
   nodeExpanded?: string;
   nodeLeaf?: string;
 }
 
 export class TreeModelOptions {
-  static: boolean = false;
+  static?: boolean = false;
+
+  /* disableDraging - when true disable the option to drag the node to
+   * other places - nodes, but allow to drag other nodes under it
+   */
+  disableDraging?: boolean = false;
+
+  /* icon - configure custom icon for a particular node or the whole subtree */
+  icon?: NodeIconOptions;
+
+  /* applyToSubtree - when true means that all configurations to a node will
+   * apply to his children
+   */
+  applyToSubtree?: boolean = true;
 
   static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelOptions {
-    return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {static: false});
+    /* Merge sourceA and sourceB only when applyToSubtree option is applied to the sourceB node */
+    if (_.get(sourceB, 'options.applyToSubtree')) {
+      return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {static: false, disableDraging: false, applyToSubtree: true});
+    }
+
+    return _.defaults({}, _.get(sourceA, 'options'), {static: false, disableDraging: false, applyToSubtree: false});
   }
 }
 
