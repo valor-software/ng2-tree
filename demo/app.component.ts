@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NodeEvent, TreeModel, TreeOptions, RenamableNode } from '../index';
+import { NodeEvent, TreeModel, RenamableNode } from '../index';
 
 require('../src/styles.css');
 
