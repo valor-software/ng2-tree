@@ -4,6 +4,7 @@ build/
 .vscode/
 npm-debug.log
 typings/
+coverage/
 .publish/
 yarn.lock
 .DS_Store

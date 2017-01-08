@@ -15,7 +15,7 @@ import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './utils/typ
   template: `
   <ul class="tree" *ngIf="tree" [ngClass]="{rootless: !viewOptions.rootIsVisible}">
     <li>
-      <div [ngClass]="{rootless: !viewOptions.rootIsVisible}" (contextmenu)="showMenu($event)" [nodeDraggable]="element" [tree]="tree">
+      <div [ngClass]="{rootless: !viewOptions.rootIsVisible}" (contextmenu)="showMenu($event)" [nodeDraggable]="tree">
         <div class="folding" (click)="switchFoldingType($event, tree)" [ngClass]="getFoldingTypeCssClass(tree)"></div>
         <div href="#" class="node-value" *ngIf="!isEditInProgress()" [class.node-selected]="isSelected" (click)="onNodeSelected($event)">{{tree.value}}</div>
 

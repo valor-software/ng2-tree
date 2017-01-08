@@ -17,7 +17,7 @@ module.exports = config => {
             'test.bundle.js': ['webpack', 'sourcemap']
         },
         reporters: ['spec'],
-        singleRun: true,
+        singleRun: false,
         webpack: require('./webpack.test.js'),
         webpackServer: {
             noInfo: true

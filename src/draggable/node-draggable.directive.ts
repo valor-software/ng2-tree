@@ -3,6 +3,7 @@ import { TreeModel } from '../tree.types';
 import { NodeDraggableService } from './node-draggable.service';
 import { CapturedNode } from './captured-node';
 import { NodeDraggableEvent } from './draggable.types';
+import * as _ from 'lodash';
 
 @Directive({
   selector: '[nodeDraggable]'
@@ -10,16 +11,15 @@ import { NodeDraggableEvent } from './draggable.types';
 export class NodeDraggableDirective implements OnDestroy, OnInit {
   public static DATA_TRANSFER_STUB_DATA: string = 'some browsers enable drag-n-drop only when dataTransfer has data';
 
-  @Input()
-  public nodeDraggable: ElementRef;
-
-  @Input()
+  /* tslint:disable:no-input-rename */
+  @Input('nodeDraggable')
   public tree: TreeModel;
+  /* tslint:enable:no-input-rename */
 
   private nodeNativeElement: HTMLElement;
   private disposersForDragListeners: Function[] = [];
 
-  public constructor(@Inject(ElementRef) private element: ElementRef,
+  public constructor(@Inject(ElementRef) public element: ElementRef,
                      @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
                      @Inject(Renderer) private renderer: Renderer) {
 
@@ -27,7 +27,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   }
 
   public ngOnInit(): void {
-    if (!this.tree.options.static) {
+    if (!_.get(this, 'tree.options.static')) {
       this.renderer.setElementAttribute(this.nodeNativeElement, 'draggable', 'true');
       this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragenter', this.handleDragEnter.bind(this)));
       this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragover', this.handleDragOver.bind(this)));
@@ -47,7 +47,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   private handleDragStart(e: DragEvent): any {
     e.stopPropagation();
 
-    this.nodeDraggableService.captureNode(new CapturedNode(this.nodeDraggable, this.tree));
+    this.nodeDraggableService.captureNode(new CapturedNode(this.element, this.tree));
 
     e.dataTransfer.setData('text', NodeDraggableDirective.DATA_TRANSFER_STUB_DATA);
     e.dataTransfer.effectAllowed = 'move';
@@ -89,7 +89,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   private isDropPossible(e: DragEvent): boolean {
     const capturedNode = this.nodeDraggableService.getCapturedNode();
     return capturedNode
-      && capturedNode.canBeDroppedAt(this.nodeDraggable)
+      && capturedNode.canBeDroppedAt(this.element)
       && this.containsElementAt(e);
   }
 
@@ -116,7 +116,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   private notifyThatNodeWasDropped(): void {
     const event: NodeDraggableEvent = {
       captured: this.nodeDraggableService.getCapturedNode(),
-      target: this.nodeDraggable
+      target: this.element
     };
 
     this.nodeDraggableService.draggableNodeEvents$.next(event);
