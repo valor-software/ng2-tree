@@ -10,11 +10,11 @@ export function isEscapePressed(e: KeyboardEvent): boolean {
   return e.keyCode === Keys.Escape;
 }
 
-enum Keys {
+export enum Keys {
   Escape = 27
 }
 
-enum MouseButtons {
+export enum MouseButtons {
   Left = 0,
   Right = 2
 }

@@ -67,9 +67,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
 
   private closeMenu(e: MouseEvent | KeyboardEvent): void {
     const mouseClicked = e instanceof MouseEvent;
-    const escapePressed = e instanceof KeyboardEvent && isEscapePressed(e);
-
-    if (escapePressed || mouseClicked) {
+    if (mouseClicked || isEscapePressed(e as KeyboardEvent)) {
       const nodeMenuEvent: NodeMenuEvent = {
         sender: (e.target as HTMLElement),
         action: NodeMenuAction.Close
