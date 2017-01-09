@@ -9,7 +9,7 @@ import {
   Inject,
   Renderer
 } from '@angular/core';
-import { NodeEditableEvent, NodeEditableEventAction } from './editable.type';
+import { NodeEditableEvent, NodeEditableEventAction } from './editable.types';
 
 @Directive({
   selector: '[nodeEditable]'

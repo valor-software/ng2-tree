@@ -4,7 +4,7 @@ import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
 import { NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.types';
-import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.type';
+import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.types';
 import { TreeService } from './tree.service';
 import { isLeftButtonClicked, isRightButtonClicked } from './utils/event.utils';
 import * as _ from 'lodash';
