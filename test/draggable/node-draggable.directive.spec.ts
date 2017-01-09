@@ -35,11 +35,18 @@ describe('NodeDraggableDirective', () => {
     nodeDraggableService = TestBed.get(NodeDraggableService);
   });
 
-  it('should have correctly set "nodeDraggable" property', () => {
+  it('should have correctly set "tree" property', () => {
     fixture.detectChanges();
 
     expect(directiveInstance).not.toBeNull();
     expect(directiveInstance.tree.value).toEqual('42');
+  });
+
+  it('should have correctly set "nodeDraggable" property', () => {
+    fixture.detectChanges();
+
+    expect(directiveInstance).not.toBeNull();
+    expect(directiveInstance.nodeDraggable).toBe(fixture.componentInstance.draggableTarget);
   });
 
   it('should have correctly set "element" property', () => {
@@ -125,7 +132,7 @@ describe('NodeDraggableDirective', () => {
     expect(dragenterEvent.stopPropagation).toHaveBeenCalledTimes(1);
 
     const capturedNode: CapturedNode = nodeDraggableService.getCapturedNode();
-    expect(capturedNode.element).toBe(directiveInstance.element);
+    expect(capturedNode.element).toBe(directiveInstance.nodeDraggable);
     expect(capturedNode.tree).toBe(directiveInstance.tree);
 
     expect(dragenterEvent.dataTransfer.setData).toHaveBeenCalledWith('text', NodeDraggableDirective.DATA_TRANSFER_STUB_DATA);
@@ -228,7 +235,7 @@ describe('NodeDraggableDirective', () => {
 
     spyOn(nodeDraggableService.draggableNodeEvents$, 'next');
 
-    const capturedNode = new CapturedNode(directiveInstance.element, directiveInstance.tree);
+    const capturedNode = new CapturedNode(directiveInstance.nodeDraggable, directiveInstance.tree);
     spyOn(capturedNode, 'canBeDroppedAt').and.returnValue(true);
 
     spyOn(nodeDraggableService, 'getCapturedNode').and.returnValue(capturedNode);
@@ -236,7 +243,7 @@ describe('NodeDraggableDirective', () => {
 
     directiveEl.triggerEventHandler('drop', dragenterEvent);
 
-    expect(capturedNode.canBeDroppedAt).toHaveBeenCalledWith(directiveInstance.element);
+    expect(capturedNode.canBeDroppedAt).toHaveBeenCalledWith(directiveInstance.nodeDraggable);
     expect(capturedNode.canBeDroppedAt).toHaveBeenCalledTimes(1);
     expect(nodeDraggableService.getCapturedNode).toHaveBeenCalledTimes(1);
     expect(nodeDraggableService.draggableNodeEvents$.next).not.toHaveBeenCalled();
@@ -249,7 +256,7 @@ describe('NodeDraggableDirective', () => {
 
     spyOn(nodeDraggableService.draggableNodeEvents$, 'next');
 
-    const capturedNode = new CapturedNode(directiveInstance.element, directiveInstance.tree);
+    const capturedNode = new CapturedNode(directiveInstance.nodeDraggable, directiveInstance.tree);
     spyOn(capturedNode, 'canBeDroppedAt').and.returnValue(true);
 
     spyOn(nodeDraggableService, 'getCapturedNode').and.returnValue(capturedNode);
@@ -257,7 +264,7 @@ describe('NodeDraggableDirective', () => {
 
     directiveEl.triggerEventHandler('drop', dragenterEvent);
 
-    expect(capturedNode.canBeDroppedAt).toHaveBeenCalledWith(directiveInstance.element);
+    expect(capturedNode.canBeDroppedAt).toHaveBeenCalledWith(directiveInstance.nodeDraggable);
     expect(capturedNode.canBeDroppedAt).toHaveBeenCalledTimes(1);
 
     expect(nodeDraggableService.getCapturedNode).toHaveBeenCalledTimes(3);
@@ -266,12 +273,12 @@ describe('NodeDraggableDirective', () => {
 
     const dropEvent: NodeDraggableEvent = nodeDraggableService.draggableNodeEvents$.next.calls.argsFor(0)[0];
     expect(dropEvent.captured).toBe(capturedNode);
-    expect(dropEvent.target).toBe(directiveInstance.element);
+    expect(dropEvent.target).toBe(directiveInstance.nodeDraggable);
   });
 });
 
 @Component({
-  template: '<div id="draggableTarget" [nodeDraggable]="tree"></div>'
+  template: '<div id="draggableTarget" [nodeDraggable]="draggableTarget" [tree]="tree"></div>'
 })
 class TestComponent {
   public tree: TreeModel = {

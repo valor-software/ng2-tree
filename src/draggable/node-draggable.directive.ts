@@ -11,10 +11,11 @@ import * as _ from 'lodash';
 export class NodeDraggableDirective implements OnDestroy, OnInit {
   public static DATA_TRANSFER_STUB_DATA: string = 'some browsers enable drag-n-drop only when dataTransfer has data';
 
-  /* tslint:disable:no-input-rename */
-  @Input('nodeDraggable')
+  @Input()
+  public nodeDraggable: ElementRef;
+
+  @Input()
   public tree: TreeModel;
-  /* tslint:enable:no-input-rename */
 
   private nodeNativeElement: HTMLElement;
   private disposersForDragListeners: Function[] = [];
@@ -22,7 +23,6 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   public constructor(@Inject(ElementRef) public element: ElementRef,
                      @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
                      @Inject(Renderer) private renderer: Renderer) {
-
     this.nodeNativeElement = element.nativeElement;
   }
 
@@ -47,7 +47,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   private handleDragStart(e: DragEvent): any {
     e.stopPropagation();
 
-    this.nodeDraggableService.captureNode(new CapturedNode(this.element, this.tree));
+    this.nodeDraggableService.captureNode(new CapturedNode(this.nodeDraggable, this.tree));
 
     e.dataTransfer.setData('text', NodeDraggableDirective.DATA_TRANSFER_STUB_DATA);
     e.dataTransfer.effectAllowed = 'move';
@@ -89,7 +89,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   private isDropPossible(e: DragEvent): boolean {
     const capturedNode = this.nodeDraggableService.getCapturedNode();
     return capturedNode
-      && capturedNode.canBeDroppedAt(this.element)
+      && capturedNode.canBeDroppedAt(this.nodeDraggable)
       && this.containsElementAt(e);
   }
 
@@ -116,7 +116,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   private notifyThatNodeWasDropped(): void {
     const event: NodeDraggableEvent = {
       captured: this.nodeDraggableService.getCapturedNode(),
-      target: this.element
+      target: this.nodeDraggable
     };
 
     this.nodeDraggableService.draggableNodeEvents$.next(event);

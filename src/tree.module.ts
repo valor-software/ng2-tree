@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { TreeComponent, TreeInternalComponent } from './tree.component';
+import { TreeComponent } from './tree.component';
+import { TreeInternalComponent } from './tree-internal.component';
 import { CommonModule } from '@angular/common';
 import { NodeDraggableDirective } from './draggable/node-draggable.directive';
 import { NodeDraggableService } from './draggable/node-draggable.service';
