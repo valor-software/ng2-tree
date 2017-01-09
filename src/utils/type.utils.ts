@@ -12,5 +12,5 @@ export function isValueEmpty(value: string): boolean {
 }
 
 export function isRenamable(value: any): boolean {
-  return value.setName !== undefined;
+  return value.setName !== undefined && _.isFunction(value.setName);
 }

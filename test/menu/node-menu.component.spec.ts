@@ -28,16 +28,16 @@ describe('NodeMenuComponent', () => {
     nodeMenuService = TestBed.get(NodeMenuService);
   });
 
-  it('it should be created by angular', () => {
+  it('should be created by angular', () => {
     expect(fixture).not.toBeNull();
     expect(nodeMenuService).not.toBeNull();
   });
 
-  it('it should have event emitter properly created', () => {
+  it('should have event emitter properly created', () => {
     expect(fixture.componentInstance.menuItemSelected instanceof EventEmitter).toBe(true);
   });
 
-  it('it should have basic menu items', () => {
+  it('should have basic menu items', () => {
     expect(fixture.componentInstance.availableMenuItems.length).toEqual(4);
     expect(fixture.componentInstance.availableMenuItems[0]).toEqual({
       name: "New tag",
@@ -64,7 +64,7 @@ describe('NodeMenuComponent', () => {
     });
   });
 
-  it('it should render basic menu items', () => {
+  it('should render basic menu items', () => {
     fixture.detectChanges();
 
     const menuItems = fixture.debugElement.queryAll(By.css('.node-menu-item'));
@@ -84,7 +84,7 @@ describe('NodeMenuComponent', () => {
     expect(menuItems[3].query(By.css('.node-menu-item-value')).nativeElement.innerText).toEqual('Remove');
   });
 
-  it('it should not emit an action on right mouse button click', () => {
+  it('should not emit an action on right mouse button click', () => {
     fixture.detectChanges();
 
     const event = {
@@ -100,7 +100,7 @@ describe('NodeMenuComponent', () => {
     expect(componentInstance.menuItemSelected.emit).not.toHaveBeenCalled();
   });
 
-  it('it should emit an action on left mouse button click', () => {
+  it('should emit an action on left mouse button click', () => {
     fixture.detectChanges();
 
     const event = {
