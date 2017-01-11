@@ -28,11 +28,11 @@ describe('EventUtils', () => {
 
     expect(EventUtils.isRightButtonClicked(rightEvent)).toBe(true);
     expect(EventUtils.isRightButtonClicked(leftEvent)).toBe(false);
-  })
+  });
 
   it('should have correct Keys bindings', () => {
     expect(EventUtils.Keys.Escape).toEqual(27);
-  })
+  });
 
   it('should have correct MouseButtons bindings', () => {
     expect(EventUtils.MouseButtons.Left).toEqual(0);

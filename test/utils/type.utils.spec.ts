@@ -39,7 +39,7 @@ describe('TypeUtils', () => {
       setName: function (value) {
         this.name = value;
       }
-    }
+    };
 
     const changedRenamableNode = TypeUtils.applyNewValueToRenamable(renamableNode, '12');
 

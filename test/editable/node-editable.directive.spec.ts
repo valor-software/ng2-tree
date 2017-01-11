@@ -1,18 +1,8 @@
-import {
-  inject,
-  async,
-  tick,
-  getTestBed,
-  TestBed
-} from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
-import { Component, ElementRef, EventEmitter } from '@angular/core';
-
+import { Component, EventEmitter } from '@angular/core';
 import { NodeEditableDirective } from '../../src/editable/node-editable.directive';
 import { NodeEditableEvent, NodeEditableEventAction } from '../../src/editable/editable.types';
-
 import { TreeModel } from '../../src/tree.types';
 
 let fixture;
@@ -59,7 +49,7 @@ describe('NodeEditableDirective', () => {
     fixture.detectChanges();
 
     const expectedNewValue = '12';
-    const event = { target: { value: expectedNewValue } }
+    const event = { target: { value: expectedNewValue } };
 
     spyOn(directiveInstance.valueChanged, 'emit');
     directiveEl.triggerEventHandler('keyup.enter', event);
@@ -72,7 +62,7 @@ describe('NodeEditableDirective', () => {
     fixture.detectChanges();
 
     const expectedNewValue = '12';
-    const event = { target: { value: expectedNewValue } }
+    const event = { target: { value: expectedNewValue } };
 
     spyOn(directiveInstance.valueChanged, 'emit');
     directiveEl.triggerEventHandler('blur', event);
@@ -99,8 +89,5 @@ describe('NodeEditableDirective', () => {
 class TestComponent {
   public tree: TreeModel = {
     value: '42'
-  }
-
-  public constructor(public editableTarget: ElementRef) {
-  }
+  };
 }

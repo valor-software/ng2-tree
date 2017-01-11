@@ -1,16 +1,7 @@
-import {
-  inject,
-  async,
-  tick,
-  getTestBed,
-  TestBed
-} from '@angular/core/testing';
-
+import { inject, TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-
 import { NodeDraggableService } from '../../src/draggable/node-draggable.service';
 import { CapturedNode } from '../../src/draggable/captured-node';
-import { NodeDraggableEvent } from '../../src/draggable/draggable.types';
 
 describe('NodeDraggableService', function () {
   beforeEach(() => {

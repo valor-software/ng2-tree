@@ -1,21 +1,15 @@
-import {
-  TestBed,
-  getTestBed
-} from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Component, EventEmitter, ElementRef } from '@angular/core';
-
-import { TreeInternalComponent } from '../src/tree-internal.component'; 
-import { TreeComponent } from '../src/tree.component'; 
-import { TreeModel, TreeModelOptions } from '../src/tree.types'; 
-
-import { TreeService } from '../src/tree.service'; 
-import { NodeMenuService } from '../src/menu/node-menu.service'; 
-import { NodeMenuComponent } from '../src/menu/node-menu.component'; 
-import { NodeDraggableService } from '../src/draggable/node-draggable.service'; 
-import { NodeDraggableDirective } from '../src/draggable/node-draggable.directive'; 
-import { NodeEditableDirective } from '../src/editable/node-editable.directive'; 
+import { Component, ElementRef } from '@angular/core';
+import { TreeInternalComponent } from '../src/tree-internal.component';
+import { TreeComponent } from '../src/tree.component';
+import { TreeModel } from '../src/tree.types';
+import { TreeService } from '../src/tree.service';
+import { NodeMenuService } from '../src/menu/node-menu.service';
+import { NodeMenuComponent } from '../src/menu/node-menu.component';
+import { NodeDraggableService } from '../src/draggable/node-draggable.service';
+import { NodeDraggableDirective } from '../src/draggable/node-draggable.directive';
+import { NodeEditableDirective } from '../src/editable/node-editable.directive';
 
 let fixture;
 let componentInstance;
@@ -41,7 +35,7 @@ describe('Tree', () => {
     fixture = TestBed.createComponent(TestComponent);
     internalTreeEl = fixture.debugElement.query(By.directive(TreeInternalComponent));
     componentInstance = internalTreeEl.componentInstance;
-    
+
     nodeMenuService = TestBed.get(NodeMenuService);
     nodeDraggableService = TestBed.get(NodeDraggableService);
     treeService = TestBed.get(TreeService);

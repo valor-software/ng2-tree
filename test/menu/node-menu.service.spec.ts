@@ -1,11 +1,4 @@
-import {
-  inject,
-  async,
-  tick,
-  getTestBed,
-  TestBed
-} from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { NodeMenuService } from '../../src/menu/node-menu.service';
 import { Subject } from 'rxjs/Rx';
 

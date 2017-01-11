@@ -1,11 +1,4 @@
-import {
-  inject,
-  async,
-  tick,
-  getTestBed,
-  TestBed
-} from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { TreeService } from '../src/tree.service';
 import { Subject } from 'rxjs/Rx';
 

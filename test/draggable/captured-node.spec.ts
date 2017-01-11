@@ -1,8 +1,5 @@
 import { ElementRef } from '@angular/core';
-
-import { NodeDraggableService } from '../../src/draggable/node-draggable.service';
 import { CapturedNode } from '../../src/draggable/captured-node';
-import { NodeDraggableEvent } from '../../src/draggable/draggable.types';
 import { TreeModel } from '../../src/tree.types';
 
 describe('Captured Node', () => {
@@ -31,7 +28,7 @@ describe('Captured Node', () => {
     const contains = jasmine.createSpy('contains').and.returnValue(false);
     const thisNativeElement = {
       contains
-    }
+    };
 
     const element: ElementRef = {
       nativeElement: thisNativeElement
@@ -51,7 +48,7 @@ describe('Captured Node', () => {
     const contains = jasmine.createSpy('contains').and.returnValue(true);
     const thisNativeElement = {
       contains
-    }
+    };
 
     const element: ElementRef = {
       nativeElement: thisNativeElement
@@ -71,7 +68,7 @@ describe('Captured Node', () => {
     const contains = jasmine.createSpy('contains').and.returnValue(false);
     const thisNativeElement = {
       contains
-    }
+    };
 
     const element: ElementRef = {
       nativeElement: thisNativeElement
@@ -90,7 +87,7 @@ describe('Captured Node', () => {
     const contains = jasmine.createSpy('contains').and.returnValue(true);
     const thisNativeElement = {
       contains
-    }
+    };
 
     const element: ElementRef = {
       nativeElement: thisNativeElement
@@ -106,7 +103,7 @@ describe('Captured Node', () => {
     const contains = jasmine.createSpy('contains').and.returnValue(true);
     const thisNativeElement = {
       contains
-    }
+    };
 
     const element: ElementRef = {
       nativeElement: thisNativeElement
