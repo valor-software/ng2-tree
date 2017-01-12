@@ -17,6 +17,7 @@ export interface TreeModel {
   value: string | RenamableNode;
   children?: TreeModel[];
   options?: TreeModelOptions;
+  _isLeaf?: boolean;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
   _indexInParent?: number;

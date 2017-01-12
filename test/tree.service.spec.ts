@@ -1,13 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { TreeService } from '../src/tree.service';
 import { Subject } from 'rxjs/Rx';
+import { NodeDraggableService } from '../src/draggable/node-draggable.service';
 
 let treeService;
 
 describe('TreeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TreeService]
+      providers: [TreeService, NodeDraggableService]
     });
 
     treeService = TestBed.get(TreeService);
