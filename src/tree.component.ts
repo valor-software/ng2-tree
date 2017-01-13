@@ -68,7 +68,7 @@ export class TreeInternalComponent implements OnInit {
     this.tree._indexInParent = this.indexInParent;
 
     this.isLeaf = !Array.isArray(this.tree.children);
-    this.tree.options = TreeModelOptions.merge(this.tree, this.parentTree);
+    this.tree.options = TreeModelOptions.getOptions(this.tree, this.parentTree, this.options);
 
     this.setUpNodeSelectedEventHandler();
     this.setUpMenuEventHandler();
@@ -179,7 +179,7 @@ export class TreeInternalComponent implements OnInit {
   private getFoldingTypeCssClass(node: TreeModel): string {
     if (!node._foldingType) {
       if (node.children) {
-        if (_.get(this.options, 'expanded') === false) {
+        if (_.get(node, 'options.expanded') === false) {
           node._foldingType = FoldingType.Collapsed;
         } else {
           node._foldingType = FoldingType.Expanded;
@@ -189,7 +189,7 @@ export class TreeInternalComponent implements OnInit {
       }
     }
 
-    return node._foldingType.getCssClass(this.options, node.options);
+    return node._foldingType.getCssClass(node.options);
   }
 
   private getNextFoldingType(node: TreeModel): FoldingType {
@@ -269,7 +269,7 @@ export class TreeInternalComponent implements OnInit {
       return;
     }
 
-    if (isRightButtonClicked(e) && _.get(this.options, 'rightMenu') !== false) {
+    if (isRightButtonClicked(e) && _.get(this.tree, 'options.rightMenu') !== false) {
       this.isMenuVisible = !this.isMenuVisible;
       this.nodeMenuService.nodeMenuEvents$.next({
         sender: this.element.nativeElement,

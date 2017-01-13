@@ -15,13 +15,9 @@ export class FoldingType {
     return this._cssClass;
   }
 
-  public getCssClass(treeOptions: TreeOptions, nodeOptions: TreeModelOptions): string {
+  public getCssClass(nodeOptions: TreeModelOptions): string {
     if (_.get(nodeOptions, 'icon.' + this._nodeType) !== undefined) {
       return nodeOptions.icon[this._nodeType];
-    }
-
-    if (_.get(treeOptions, 'icon.' + this._nodeType) !== undefined) {
-      return treeOptions.icon[this._nodeType];
     }
 
     return this._cssClass;
@@ -80,18 +76,70 @@ export class TreeModelOptions {
   /* icon - configure custom icon for a particular node or the whole subtree */
   icon?: NodeIconOptions;
 
+  /* rightMenu - true / false - if true show a custom menu on right click on the
+   * mouse
+   */
+  rightMenu?: boolean = true;
+
+  /* mainMenu - true / false - if true show a custom menu in the top right
+   * corner of the tree container
+   */
+  mainMenu?: boolean = false;
+
+  /* expanded - true / false - if true expands all nodes on initial loading */
+  expanded?: boolean = true;
+
   /* applyToSubtree - when true means that all configurations to a node will
    * apply to his children
    */
   applyToSubtree?: boolean = true;
 
+  static convert(base: TreeOptions): TreeModelOptions {
+    if (base === undefined) {
+      return {
+        static: false,
+        drag: true,
+        applyToSubtree: true
+      };
+    } else {
+      var result: TreeModelOptions = {
+        icon: {},
+        rightMenu: base.rightMenu,
+        mainMenu: base.mainMenu,
+        expanded: base.expanded,
+        applyToSubtree: true
+      };
+      result.icon = _.defaults(result.icon, base.icon);
+      return result;
+    }
+  }
+
   static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelOptions {
     /* Merge sourceA and sourceB only when applyToSubtree option is applied to the sourceB node */
+    var defaults:TreeModelOptions = {static: false, drag: true, applyToSubtree: true};
+
     if (_.get(sourceB, 'options.applyToSubtree') === false) {
-      return _.defaults({}, _.get(sourceA, 'options'), {static: false, drag: true, applyToSubtree: false});
+      defaults.applyToSubtree = false;
+      return _.defaults({}, _.get(sourceA, 'options'), _.get(defaults, ''));
     }
 
-    return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {static: false, drag: true, applyToSubtree: true});
+    return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), _.get(defaults, ''));
+  }
+
+  static getOptions(sourceA: TreeModel, sourceB: TreeModel, treeOptions: TreeOptions): TreeModelOptions {
+    /*
+     * Merge sourceA and sourceB only when applyToSubtree option is applied to the sourceB node
+     * For default values take from TreeOptions
+     */
+    var defaults:TreeModelOptions = _.defaultsDeep({}, TreeModelOptions.convert(treeOptions), );
+    console.log(defaults.icon);
+
+    if (_.get(sourceB, 'options.applyToSubtree') === false) {
+      defaults.applyToSubtree = false;
+      return _.defaultsDeep({}, _.get(sourceA, 'options'), defaults);
+    }
+
+    return _.defaultsDeep({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), defaults);
   }
 }
 

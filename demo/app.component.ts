@@ -155,6 +155,10 @@ export class AppComponent {
 
   public files: TreeModel = {
     value: '/',
+    options: {
+      expanded: true,
+      applyToSubtree: false
+    },
     children: [
       {
         value: 'bin',
