@@ -6,7 +6,7 @@ import { NodeMenuEvent, NodeMenuAction } from './menu.types';
 export class NodeMenuService {
   public nodeMenuEvents$: Subject<NodeMenuEvent> = new Subject<NodeMenuEvent>();
 
-  public hideMenuEventStreamFor(treeElementRef: ElementRef): Observable<any> {
+  public hideMenuEventStream(treeElementRef: ElementRef): Observable<any> {
     return this.nodeMenuEvents$
       .filter((e: NodeMenuEvent) => treeElementRef.nativeElement !== e.sender)
       .filter((e: NodeMenuEvent) => e.action === NodeMenuAction.Close);

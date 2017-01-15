@@ -1,6 +1,6 @@
-import { Input, Component, OnInit, EventEmitter, Output, ElementRef, Inject } from '@angular/core';
+import { Input, Component, OnInit, EventEmitter, Output, Inject } from '@angular/core';
 import { TreeService } from './tree.service';
-import { TreeModel, TreeViewOptions, NodeEvent } from './tree.types';
+import { TreeModel, TreeViewOptions, NodeEvent, Tree } from './tree.types';
 
 @Component({
   selector: 'tree',
@@ -8,8 +8,10 @@ import { TreeModel, TreeViewOptions, NodeEvent } from './tree.types';
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit {
-  @Input()
-  public tree: TreeModel;
+  /* tslint:disable:no-input-rename */
+  @Input('tree')
+  public treeModel: TreeModel;
+  /* tslint:enable:no-input-rename */
 
   @Input()
   public viewOptions: TreeViewOptions;
@@ -29,10 +31,14 @@ export class TreeComponent implements OnInit {
   @Output()
   public nodeMoved: EventEmitter<any> = new EventEmitter();
 
+  public tree: Tree;
+
   public constructor(@Inject(TreeService) private treeService: TreeService) {
   }
 
   public ngOnInit(): void {
+    this.tree = Tree.buildTree(this.treeModel);
+
     this.treeService.nodeRemoved$.subscribe((e: NodeEvent) => {
       this.nodeRemoved.emit(e);
     });

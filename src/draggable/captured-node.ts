@@ -1,9 +1,9 @@
-import { TreeModel } from '../tree.types';
+import { Tree } from '../tree.types';
 import { ElementRef } from '@angular/core';
 
 export class CapturedNode {
   public constructor(private anElement: ElementRef,
-                     private aTree: TreeModel) {
+                     private aTree: Tree) {
   }
 
   public canBeDroppedAt(element: ElementRef): boolean {
@@ -22,7 +22,7 @@ export class CapturedNode {
     return this.anElement;
   }
 
-  public get tree(): TreeModel {
+  public get tree(): Tree {
     return this.aTree;
   }
 }

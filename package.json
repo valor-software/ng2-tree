@@ -54,7 +54,7 @@
     "@angular/platform-server": "2.4.1",
     "@types/core-js": "0.9.35",
     "@types/jasmine": "2.5.40",
-    "@types/lodash": "4.14.45",
+    "@types/lodash": "4.14.50",
     "@types/node": "6.0.57",
     "@types/webpack": "1.12.35",
     "alertifyjs": "1.7.1",

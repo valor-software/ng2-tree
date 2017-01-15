@@ -1,19 +1,20 @@
 import {
-  NodeRemovedEvent, NodeRenamedEvent, NodeCreatedEvent, NodeSelectedEvent, NodeMovedEvent,
-  TreeModel, RenamableNode
+  NodeRemovedEvent,
+  NodeRenamedEvent,
+  NodeCreatedEvent,
+  NodeSelectedEvent,
+  NodeMovedEvent,
+  RenamableNode,
+  Tree
 } from './tree.types';
 import { Subject, Observable } from 'rxjs/Rx';
 import { Injectable, Inject, ElementRef } from '@angular/core';
 import { NodeDraggableService } from './draggable/node-draggable.service';
-import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
+import { NodeDraggableEvent } from './draggable/draggable.types';
 
-import * as TypeUtils from './utils/type.utils';
-import * as _ from 'lodash';
-
-interface DraggableEventHandlerOptions {
-  tree: TreeModel,
-  parentTree: TreeModel,
-  treeElementRef: ElementRef
+export interface DraggableEventHandlerOptions {
+  tree: Tree;
+  treeElementRef: ElementRef;
 }
 
 @Injectable()
@@ -25,122 +26,71 @@ export class TreeService {
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
 
   public constructor(@Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
-    this.nodeRemoved$.subscribe(this.onChildRemoved);
+    this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
   }
 
-  public toNodeValue(options): RenamableNode | string {
-    const {currentValue, newValue} = options;
-
-    if (TypeUtils.isValueEmpty(newValue)) {
-      return currentValue;
-    }
-
-    if (TypeUtils.isRenamable(currentValue)) {
-      return TypeUtils.applyNewValueToRenamable(currentValue as RenamableNode, newValue);
-    }
-
-    return newValue;
+  public unselectEventStream(tree: Tree): Observable<any> {
+    return this.nodeSelected$.filter((e: NodeSelectedEvent) => tree !== e.node);
   }
 
-  public unSelectEventStreamFor(tree: TreeModel): Observable<any> {
-    return this.nodeSelected$
-      .filter((e: NodeSelectedEvent) => tree !== e.node);
+  public fireNodeRemoved(tree: Tree): void {
+    this.nodeRemoved$.next(new NodeRemovedEvent(tree));
   }
 
-  public removeNode(tree: TreeModel, parentTree: TreeModel): void {
-    this.nodeRemoved$.next({node: tree, parent: parentTree});
+  public fireNodeCreated(tree: Tree): void {
+    this.nodeCreated$.next(new NodeCreatedEvent(tree));
   }
 
-  public createNode(tree: TreeModel, parentTree: TreeModel): void {
-    this.nodeCreated$.next({node: tree, parent: parentTree});
+  public fireNodeSelected(tree: Tree): void {
+    this.nodeSelected$.next(new NodeSelectedEvent(tree));
   }
 
-  public selectNode(tree: TreeModel): void {
-    this.nodeSelected$.next({node: tree});
+  public fireNodeRenamed(oldValue: RenamableNode | string, tree: Tree): void {
+    this.nodeRenamed$.next(new NodeRenamedEvent(tree, oldValue, tree.value));
   }
 
-  public renameNode(newValue: RenamableNode | string, tree: TreeModel, parentTree: TreeModel): void {
-    const oldValue = tree.value;
-    tree.value = newValue;
-
-    this.nodeRenamed$.next({
-      node: tree,
-      parent: parentTree,
-      oldValue,
-      newValue
-    });
+  public fireNodeMoved(tree: Tree, parent: Tree): void {
+    this.nodeMoved$.next(new NodeMovedEvent(tree, parent));
   }
 
   public addDragNDropBehaviourTo(options: DraggableEventHandlerOptions): void {
-    const {tree, parentTree, treeElementRef} = options;
+    const {tree, treeElementRef} = options;
 
     this.nodeDraggableService.draggableNodeEvents$
-      .filter((e: NodeDraggableEvent) => e.action === NodeDraggableEventAction.Remove)
-      .filter((e: NodeDraggableEvent) => e.captured.element === treeElementRef)
-      .subscribe((e: NodeDraggableEvent) => this.nodeRemoved$.next({node: e.captured.tree, parent: parentTree}));
-
-    this.nodeDraggableService.draggableNodeEvents$
-      .filter((e: NodeDraggableEvent) => e.action !== NodeDraggableEventAction.Remove)
       .filter((e: NodeDraggableEvent) => e.target === treeElementRef)
-      .filter((e: NodeDraggableEvent) => !this.hasChild(e.captured.tree, tree))
+      .filter((e: NodeDraggableEvent) => !e.captured.tree.isChild(tree))
       .subscribe((e: NodeDraggableEvent) => {
-        if (this.isSibling(e.captured.tree, parentTree)) {
-          return this.swapWithSibling(e.captured.tree, parentTree, tree);
+        if (tree.isSibling(e.captured.tree)) {
+          return this.swapWithSibling(e.captured.tree, tree);
         }
 
-        if (TypeUtils.isFolder(tree)) {
+        if (tree.isBranch()) {
           return this.moveNodeToThisTreeAndRemoveFromPreviousOne(e, tree);
         } else {
-          return this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, tree, parentTree);
+          return this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, tree);
         }
       });
   }
 
-  private onChildRemoved(e: NodeRemovedEvent): void {
-    const childIndex = _.findIndex(e.parent.children, (child: any) => child === e.node);
-    if (childIndex >= 0) {
-      e.parent.children.splice(childIndex, 1);
-    }
+  private moveNodeToThisTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: Tree): void {
+    this.fireNodeRemoved(e.captured.tree);
+
+    const addedChild = tree.addChild(e.captured.tree);
+
+    this.fireNodeMoved(addedChild, e.captured.tree.parent);
   }
 
-  private moveNodeToThisTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: TreeModel): void {
-    tree.children.push(e.captured.tree);
-    this.nodeDraggableService.draggableNodeEvents$.next(_.merge(e, {action: NodeDraggableEventAction.Remove}));
+  private moveNodeToParentTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: Tree): void {
+    this.fireNodeRemoved(e.captured.tree);
 
-    this.nodeMoved$.next({
-      node: e.captured.tree,
-      parent: tree
-    });
+    const addedSibling = tree.addSiblingAt(e.captured.tree, tree.positionInParent);
+
+    this.fireNodeMoved(addedSibling, e.captured.tree.parent);
   }
 
-  private moveNodeToParentTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: TreeModel, parentTree: TreeModel): void {
-    parentTree.children.splice(tree._indexInParent, 0, e.captured.tree);
-    this.nodeDraggableService.draggableNodeEvents$.next(_.merge(e, {action: NodeDraggableEventAction.Remove}));
+  private swapWithSibling(sibling: Tree, tree: Tree): void {
+    tree.swapWithSibling(sibling);
 
-    this.nodeMoved$.next({
-      node: e.captured.tree,
-      parent: parentTree
-    });
-  }
-
-  private hasChild(child: TreeModel, tree: TreeModel): boolean {
-    return _.includes(tree.children, child);
-  }
-
-  private isSibling(child: TreeModel, parentTree: TreeModel): boolean {
-    return parentTree && _.includes(parentTree.children, child);
-  }
-
-  private swapWithSibling(sibling: TreeModel, parentTree: TreeModel, tree: TreeModel): void {
-    const siblingIndex = parentTree.children.indexOf(sibling);
-    const thisTreeIndex = parentTree.children.indexOf(tree);
-
-    parentTree.children[siblingIndex] = tree;
-    parentTree.children[thisTreeIndex] = sibling;
-
-    tree._indexInParent = siblingIndex;
-    sibling._indexInParent = thisTreeIndex;
-
-    this.nodeMoved$.next({node: tree, parent: parentTree});
+    this.fireNodeMoved(sibling, sibling.parent);
   }
 }

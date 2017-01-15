@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { Component, ElementRef } from '@angular/core';
 import { TreeInternalComponent } from '../src/tree-internal.component';
 import { TreeComponent } from '../src/tree.component';
-import { TreeModel } from '../src/tree.types';
+import { TreeModel, Tree } from '../src/tree.types';
 import { TreeService } from '../src/tree.service';
 import { NodeMenuService } from '../src/menu/node-menu.service';
 import { NodeMenuComponent } from '../src/menu/node-menu.component';
@@ -25,7 +25,7 @@ const tree: TreeModel = {
   ]
 };
 
-describe('Tree', () => {
+describe('TreeInternalComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective],
@@ -50,7 +50,8 @@ describe('Tree', () => {
 
   it('should have properly set tree property', () => {
     fixture.detectChanges();
-    expect(componentInstance.tree).toEqual(tree);
+    expect(componentInstance.tree).toBeDefined();
+    expect(componentInstance.tree.value).toEqual('42');
   });
 });
 
@@ -58,7 +59,7 @@ describe('Tree', () => {
   template: '<div><tree [tree]="tree"></tree></div>'
 })
 class TestComponent {
-  public tree: TreeModel = tree;
+  public tree: Tree = new Tree(tree);
 
   public constructor(public treeHolder: ElementRef) {
   }

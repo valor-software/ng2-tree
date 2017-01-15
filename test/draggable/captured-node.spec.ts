@@ -1,11 +1,11 @@
 import { ElementRef } from '@angular/core';
 import { CapturedNode } from '../../src/draggable/captured-node';
-import { TreeModel } from '../../src/tree.types';
+import { Tree } from '../../src/tree.types';
 
 describe('Captured Node', () => {
   it('should be created with element and tree', () => {
     const element: ElementRef = {} as ElementRef;
-    const tree: TreeModel = { value: "42" };
+    const tree: Tree = new Tree({ value: "42" });
 
     const capturedNode = new CapturedNode(element, tree);
 
@@ -16,7 +16,7 @@ describe('Captured Node', () => {
   it('should know how to compare elements', () => {
     const element: ElementRef = {} as ElementRef;
     const element2: ElementRef = {} as ElementRef;
-    const tree: TreeModel = null;
+    const tree: Tree = null;
 
     const capturedNode = new CapturedNode(element, tree);
 
