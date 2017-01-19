@@ -314,7 +314,9 @@ export class AppComponent {
     },
     rightMenu: false,
     mainMenu: true,
-    expanded: false
+    expanded: false,
+    selectEvent: false,
+    editOnDouleClick: true
   };
 
   public onNodeRemoved(e: NodeEvent): void {

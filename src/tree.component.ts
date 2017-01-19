@@ -18,7 +18,7 @@ import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './utils/typ
     <li>
       <div (contextmenu)="showMenu($event)" [nodeDraggable]="element" [tree]="tree">
         <div class="folding" (click)="switchFoldingType($event, tree)" [ngClass]="getFoldingTypeCssClass(tree)"></div>
-        <div href="#" class="node-value" *ngIf="!isEditInProgress()" [class.node-selected]="isSelected" (click)="onNodeSelected($event)">{{tree.value}}</div>
+        <div href="#" class="node-value" *ngIf="!isEditInProgress()" [class.node-selected]="isSelected" (click)="onNodeSelected($event, tree)" (dblclick)="onNodeDoubleClicked($event, tree)">{{tree.value}}</div>
 
         <input type="text" class="node-value" *ngIf="isEditInProgress()"
                [nodeEditable]="tree.value"
@@ -338,10 +338,21 @@ export class TreeInternalComponent implements OnInit {
     node._status = TreeStatus.Modified;
   }
 
-  private onNodeSelected(e: MouseEvent): void {
+  private onNodeSelected(e: MouseEvent, tree: TreeModel): void {
     if (isLeftButtonClicked(e)) {
-      this.isSelected = true;
-      this.treeService.nodeSelected$.next({node: this.tree});
+      if (_.get(this, 'options.selectEvent', true)) {
+        this.isSelected = true;
+        this.treeService.nodeSelected$.next({node: this.tree});
+      } else {
+        this.switchFoldingType(e, tree)
+      }
+    }
+  }
+
+  private onNodeDoubleClicked(e: MouseEvent, tree: TreeModel): void {
+    if (_.get(this, 'options.editOnDouleClick', false)) {
+      this.onRenameSelected();
+      this.treeService.nodeSelected$.next({node: tree});
     }
   }
 }

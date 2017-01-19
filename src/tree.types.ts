@@ -55,11 +55,24 @@ export class TreeOptions {
 
   /* expanded - true / false - if true expands all nodes on initial loading */
   expanded?: boolean = true;
+
+  /* selectEvent - true / false
+   * if true - select event is separate event
+   * if false - selection a node it expands or it collapses
+   */
+  selectEvent: boolean = true;
+
+  /* editOnDoubleClick - true / false
+   * if true - when double click on a node is gets in edit mode
+   * if false - nothing changes
+   */
+  editOnDouleClick: boolean = false;
 }
 
 export interface TreeModel {
   value: string | RenamableNode;
   children?: Array<TreeModel>;
+  id?: string | number;
   options?: TreeModelOptions;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
