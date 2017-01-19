@@ -52,6 +52,12 @@ export class TreeInternalComponent implements OnInit {
   public options: TreeOptions;
 
   @Output()
+  public nodeExpanded: EventEmitter<NodeEvent> = new EventEmitter<NodeEvent>();
+
+  @Output()
+  public nodeCollapsed: EventEmitter<NodeEvent> = new EventEmitter<NodeEvent>();
+
+  @Output()
   public nodeRemoved: EventEmitter<NodeEvent> = new EventEmitter<NodeEvent>();
 
   private isLeaf: boolean;
@@ -198,9 +204,20 @@ export class TreeInternalComponent implements OnInit {
 
   private getNextFoldingType(node: TreeModel): FoldingType {
     if (node._foldingType === FoldingType.Expanded) {
+      this.treeService.nodeCollapsed$.next({
+        node: node
+      });
+
+      this.nodeCollapsed.emit({node: node});
+
       return FoldingType.Collapsed;
     }
 
+    this.treeService.nodeExpanded$.next({
+      node: node
+    });
+
+    this.nodeExpanded.emit({node: node});
     return FoldingType.Expanded;
   }
 
@@ -357,6 +374,12 @@ export class TreeComponent implements OnInit {
   public nodeSelected: EventEmitter<any> = new EventEmitter();
 
   @Output()
+  public nodeExpanded: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  public nodeCollapsed: EventEmitter<any> = new EventEmitter();
+
+  @Output()
   public nodeMoved: EventEmitter<any> = new EventEmitter();
 
   private menuOptions: any;
@@ -380,6 +403,14 @@ export class TreeComponent implements OnInit {
 
     this.treeService.nodeSelected$.subscribe((e: NodeEvent) => {
       this.nodeSelected.emit(e);
+    });
+
+    this.treeService.nodeExpanded$.subscribe((e: NodeEvent) => {
+      this.nodeExpanded.emit(e);
+    });
+
+    this.treeService.nodeCollapsed$.subscribe((e: NodeEvent) => {
+      this.nodeCollapsed.emit(e);
     });
 
     this.treeService.nodeMoved$.subscribe((e: NodeEvent) => {

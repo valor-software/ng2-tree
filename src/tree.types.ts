@@ -161,6 +161,12 @@ export interface NodeEvent {
 export interface NodeSelectedEvent extends NodeEvent {
 }
 
+export interface NodeExpandedEvent extends NodeEvent {
+}
+
+export interface NodeCollapsedEvent extends NodeEvent {
+}
+
 export interface NodeDestructiveEvent extends NodeEvent {
   parent: TreeModel;
 }

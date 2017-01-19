@@ -40,7 +40,9 @@ declare const alertify: any;
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
           (nodeMoved)="onNodeMoved($event)"
-          (nodeCreated)="onNodeCreated($event)">
+          (nodeCreated)="onNodeCreated($event)"
+          (nodeExpanded)="onNodeExpanded($event)"
+          (nodeCollapsed)="onNodeCollapsed($event)">
         </tree>
       </div>
     </div>
@@ -333,6 +335,14 @@ export class AppComponent {
 
   public onNodeSelected(e: NodeEvent): void {
     this.logEvent(e, 'Selected');
+  }
+
+  public onNodeExpanded(e: NodeEvent): void {
+    this.logEvent(e, 'Expanded');
+  }
+
+  public onNodeCollapsed(e: NodeEvent): void {
+    this.logEvent(e, 'Collapsed');
   }
 
   public onNodeCustom(e: NodeEvent, object: any): void {
