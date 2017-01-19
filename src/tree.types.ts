@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { MenuOptions } from './menu/menu.types.ts';
 
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
@@ -49,6 +50,9 @@ export class TreeOptions {
    */
   mainMenu?: boolean = false;
 
+  /* nodeMenuOptions - object containing all menu configurations */
+  menuOptions?: MenuOptions;
+
   /* expanded - true / false - if true expands all nodes on initial loading */
   expanded?: boolean = true;
 }
@@ -81,10 +85,8 @@ export class TreeModelOptions {
    */
   rightMenu?: boolean = true;
 
-  /* mainMenu - true / false - if true show a custom menu in the top right
-   * corner of the tree container
-   */
-  mainMenu?: boolean = false;
+  /* nodeMenuOptions - object containing all menu configurations */
+  menuOptions?: MenuOptions;
 
   /* expanded - true / false - if true expands all nodes on initial loading */
   expanded?: boolean = true;
@@ -105,7 +107,6 @@ export class TreeModelOptions {
       var result: TreeModelOptions = {
         icon: {},
         rightMenu: base.rightMenu,
-        mainMenu: base.mainMenu,
         expanded: base.expanded,
         applyToSubtree: true
       };
@@ -132,7 +133,6 @@ export class TreeModelOptions {
      * For default values take from TreeOptions
      */
     var defaults:TreeModelOptions = _.defaultsDeep({}, TreeModelOptions.convert(treeOptions), );
-    console.log(defaults.icon);
 
     if (_.get(sourceB, 'options.applyToSubtree') === false) {
       defaults.applyToSubtree = false;
@@ -177,4 +177,7 @@ export interface NodeCreatedEvent extends NodeDestructiveEvent {
 export interface NodeRenamedEvent extends NodeDestructiveEvent {
   newValue: string | RenamableNode;
   oldValue: string | RenamableNode;
+}
+
+export interface NodeCustomEvent extends NodeDestructiveEvent {
 }

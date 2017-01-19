@@ -3,7 +3,8 @@ import { TreeStatus, TreeModel, TreeModelOptions, TreeOptions, NodeIconOptions, 
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
-import { NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.types';
+import { NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/node-menu.types';
+import { MenuEvent, MenuAction, MenuItemSelectedEvent, MenuItemAction } from './menu/menu.types';
 import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.type';
 import { TreeService } from './tree.service';
 import { isLeftButtonClicked, isRightButtonClicked } from './utils/event.utils';
@@ -24,7 +25,7 @@ import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './utils/typ
                (valueChanged)="applyNewValue($event, tree)"/>
       </div>
 
-      <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
+      <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)" [menuOptions]="menuOptions"></node-menu>
 
       <template [ngIf]="isNodeExpanded()">
         <tree-internal [options]="options" *ngFor="let child of tree.children; let position = index"
@@ -56,6 +57,7 @@ export class TreeInternalComponent implements OnInit {
   private isLeaf: boolean;
   private isSelected: boolean = false;
   private isMenuVisible: boolean = false;
+  private menuOptions: any;
 
   public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
                      @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
@@ -69,6 +71,8 @@ export class TreeInternalComponent implements OnInit {
 
     this.isLeaf = !Array.isArray(this.tree.children);
     this.tree.options = TreeModelOptions.getOptions(this.tree, this.parentTree, this.options);
+
+    this.menuOptions = _.get(this.tree, 'options.menuOptions', undefined);
 
     this.setUpNodeSelectedEventHandler();
     this.setUpMenuEventHandler();
@@ -212,10 +216,10 @@ export class TreeInternalComponent implements OnInit {
 
   private onMenuItemSelected(e: NodeMenuItemSelectedEvent): void {
     switch (e.nodeMenuItemAction) {
-      case NodeMenuItemAction.NewTag:
+      case NodeMenuItemAction.NewLeaf:
         this.onNewSelected(e);
         break;
-      case NodeMenuItemAction.NewFolder:
+      case NodeMenuItemAction.NewNode:
         this.onNewSelected(e);
         break;
       case NodeMenuItemAction.Rename:
@@ -225,7 +229,7 @@ export class TreeInternalComponent implements OnInit {
         this.onRemoveSelected();
         break;
       default:
-        throw new Error(`Chosen menu item doesn't exist`);
+        e.nodeMenuItemAction.action({node: this.tree, parent: this.parentTree});
     }
   }
 
@@ -249,7 +253,7 @@ export class TreeInternalComponent implements OnInit {
     }
     const newNode: TreeModel = {value: '', _status: TreeStatus.New};
 
-    if (e.nodeMenuItemAction === NodeMenuItemAction.NewFolder) {
+    if (e.nodeMenuItemAction === NodeMenuItemAction.NewNode) {
       newNode.children = [];
     }
 
@@ -327,7 +331,10 @@ export class TreeInternalComponent implements OnInit {
 
 @Component({
   selector: 'tree',
-  template: `<tree-internal [tree]="tree" [options]="options"></tree-internal>`,
+  template: `
+  <menu *ngIf="isActiveMainMenu" [menuOptions]="menuOptions" [rootNode]="tree"></menu>
+  <tree-internal [tree]="tree" [options]="options"></tree-internal>
+  `,
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit {
@@ -352,6 +359,9 @@ export class TreeComponent implements OnInit {
   @Output()
   public nodeMoved: EventEmitter<any> = new EventEmitter();
 
+  private menuOptions: any;
+  private isActiveMainMenu: boolean = false;
+
   public constructor(@Inject(TreeService) private treeService: TreeService) {
   }
 
@@ -375,5 +385,9 @@ export class TreeComponent implements OnInit {
     this.treeService.nodeMoved$.subscribe((e: NodeEvent) => {
       this.nodeMoved.emit(e);
     });
+
+    this.isActiveMainMenu = _.get(this.options, 'mainMenu', false);
+    this.menuOptions = _.get(this.options, 'menuOptions', undefined);
   }
+
 }

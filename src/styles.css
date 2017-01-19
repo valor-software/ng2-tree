@@ -1,10 +1,39 @@
+.menu {
+    width: 100%;
+    position: relative;
+}
+
 .node-menu {
   position: relative;
   width: 150px;
 }
 
+.menu .menu-button {
+  float: right;
+}
+
+.menu .menu-button div {
+  content: '\25B6';
+  color: black;
+}
+
+.menu .menu-button .collapsed,
+.menu .menu-button .expanded {
+  display: inline-block;
+  width: 16px;
+}
+
+.menu .menu-button .collapsed:before {
+  content: '\25B6';
+}
+
+.menu .menu-button .expanded:before {
+  content: '\25BC';
+}
+
+.menu .menu-content,
 .node-menu .node-menu-content {
-  width: 100%;
+  width: auto;
   padding: 5px;
   position: absolute;
   border: 1px solid #bdbdbd;
@@ -15,11 +44,26 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.menu .menu-content {
+  right: 0;
+  top: 10px;
+}
+
+.menu .menu-content.collapsed {
+  display: none;
+}
+
+.menu .menu-content.expanded {
+  display: block;
+}
+
+.menu .menu-content li.menu-item,
 .node-menu .node-menu-content li.node-menu-item {
   list-style: none;
   padding: 3px;
 }
 
+.menu .menu-content .menu-item:hover,
 .node-menu .node-menu-content .node-menu-item:hover {
   border-radius: 5%;
   opacity: unset;
@@ -28,15 +72,18 @@
   transition: background-color 0.2s ease-out;
 }
 
+.menu .menu-content .menu-item .menu-item-icon,
 .node-menu .node-menu-content .node-menu-item .node-menu-item-icon {
   display: inline-block;
   width: 16px;
 }
 
-.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-tag:before {
+.menu .menu-content .menu-item .menu-item-icon.new-leaf:before,
+.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-leaf:before {
   content: '\25CF';
 }
-.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-folder:before {
+.menu .menu-content .menu-item .menu-item-icon.new-node:before,
+.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-node:before {
   content: '\25B6';
 }
 
@@ -48,6 +95,7 @@
   content: '\2716';
 }
 
+.menu .menu-content .menu-item .menu-item-value,
 .node-menu .node-menu-content .node-menu-item .node-menu-item-value {
   margin-left: 5px;
 }

@@ -311,6 +311,7 @@ export class AppComponent {
       nodeLeaf: 'fa fa-file-o'
     },
     rightMenu: false,
+    mainMenu: true,
     expanded: false
   };
 
@@ -332,6 +333,12 @@ export class AppComponent {
 
   public onNodeSelected(e: NodeEvent): void {
     this.logEvent(e, 'Selected');
+  }
+
+  public onNodeCustom(e: NodeEvent, object: any): void {
+    console.log('Custom');
+    console.log(e);
+    console.log(object);
   }
 
   public logEvent(e: NodeEvent, message: string): void {

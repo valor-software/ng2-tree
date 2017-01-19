@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
 import { NodeMenuService } from './node-menu.service';
-import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuEvent, NodeMenuAction } from './menu.types';
+import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuEvent, NodeMenuAction } from './node-menu.types';
+import { MenuOptions, MenuItem } from './menu.types';
 import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
 
 @Component({
@@ -18,31 +19,13 @@ import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
   `
 })
 export class NodeMenuComponent implements OnInit, OnDestroy {
+  @Input()
+  public menuOptions: MenuOptions;
+
   @Output()
   public menuItemSelected: EventEmitter<NodeMenuItemSelectedEvent> = new EventEmitter<NodeMenuItemSelectedEvent>();
 
-  public availableMenuItems: NodeMenuItem[] = [
-    {
-      name: 'New tag',
-      action: NodeMenuItemAction.NewTag,
-      cssClass: 'new-tag'
-    },
-    {
-      name: 'New folder',
-      action: NodeMenuItemAction.NewFolder,
-      cssClass: 'new-folder'
-    },
-    {
-      name: 'Rename',
-      action: NodeMenuItemAction.Rename,
-      cssClass: 'rename'
-    },
-    {
-      name: 'Remove',
-      action: NodeMenuItemAction.Remove,
-      cssClass: 'remove'
-    }
-  ];
+  public availableMenuItems: Array<MenuItem> = MenuOptions.getRightMenuItems(this.menuOptions);
 
   private disposersForGlobalListeners: Function[] = [];
 
@@ -53,15 +36,18 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'keyup', this.closeMenu.bind(this)));
     this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'click', this.closeMenu.bind(this)));
+    this.availableMenuItems = MenuOptions.getRightMenuItems(this.menuOptions);
   }
 
   public ngOnDestroy(): void {
     this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
   }
 
-  private onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {
+  private onMenuItemSelected(e: MouseEvent, selectedMenuItem: MenuItem): void {
     if (isLeftButtonClicked(e)) {
-      this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
+      if (selectedMenuItem.action !== undefined) {
+        this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
+      }
     }
   }
 
@@ -78,10 +64,4 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
       this.nodeMenuService.nodeMenuEvents$.next(nodeMenuEvent);
     }
   }
-}
-
-export interface NodeMenuItem {
-  name: string;
-  action: NodeMenuItemAction;
-  cssClass: string;
 }

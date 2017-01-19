@@ -1,4 +1,4 @@
-import { NodeRemovedEvent, NodeRenamedEvent, NodeCreatedEvent, NodeSelectedEvent, NodeMovedEvent } from './tree.types';
+import { NodeRemovedEvent, NodeRenamedEvent, NodeCreatedEvent, NodeSelectedEvent, NodeMovedEvent, NodeCustomEvent } from './tree.types';
 import { Subject } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
 
