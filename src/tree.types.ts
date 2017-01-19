@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { MenuOptions } from './menu/menu.types.ts';
+import { MenuOptions } from './menu/menu.types';
 
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
