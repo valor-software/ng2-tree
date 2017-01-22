@@ -36,7 +36,7 @@ export class NodeCreatedEvent extends NodeDestructiveEvent {
 }
 
 export class NodeRenamedEvent extends NodeDestructiveEvent {
-  public constructor(node: Tree, public newValue: string | RenamableNode, public oldValue: string | RenamableNode) {
+  public constructor(node: Tree, public oldValue: string | RenamableNode, public newValue: string | RenamableNode) {
     super(node);
   }
 }
@@ -199,7 +199,7 @@ export class Tree {
   }
 
   public removeItselfFromParent(): void {
-    this.parent.removeChild(this);
+    this.parent && this.parent.removeChild(this);
   }
 
   public switchFoldingType(): void {

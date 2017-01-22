@@ -5,6 +5,7 @@ import { NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.types
 import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.types';
 import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
+import { NodeDraggableEvent } from './draggable/draggable.types';
 
 @Component({
   selector: 'tree-internal',
@@ -47,9 +48,39 @@ export class TreeInternalComponent implements OnInit {
   public ngOnInit(): void {
     this.viewOptions = this.viewOptions || new TreeViewOptions();
 
-    this.treeService.unselectEventStream(this.tree).subscribe(() => this.isSelected = false);
-    this.nodeMenuService.hideMenuEventStream(this.element).subscribe(() => this.isMenuVisible = false);
-    this.treeService.addDragNDropBehaviourTo({tree: this.tree, treeElementRef: this.element});
+    this.nodeMenuService.hideMenuStream(this.element)
+      .subscribe(() => this.isMenuVisible = false);
+
+    this.treeService.unselectStream(this.tree)
+      .subscribe(() => this.isSelected = false);
+
+    this.treeService.draggedStream(this.tree, this.element)
+      .subscribe((e: NodeDraggableEvent) => {
+        if (this.tree.hasSibling(e.captured.tree)) {
+          this.swapWithSibling(e.captured.tree, this.tree);
+        } else if (this.tree.isBranch()) {
+          this.moveNodeToThisTreeAndRemoveFromPreviousOne(e, this.tree);
+        } else {
+          this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, this.tree);
+        }
+      });
+  }
+
+  private swapWithSibling(sibling: Tree, tree: Tree): void {
+    tree.swapWithSibling(sibling);
+    this.treeService.fireNodeMoved(sibling, sibling.parent);
+  }
+
+  private moveNodeToThisTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: Tree): void {
+    this.treeService.fireNodeRemoved(e.captured.tree);
+    const addedChild = tree.addChild(e.captured.tree);
+    this.treeService.fireNodeMoved(addedChild, e.captured.tree.parent);
+  }
+
+  private moveNodeToParentTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: Tree): void {
+    this.treeService.fireNodeRemoved(e.captured.tree);
+    const addedSibling = tree.addSibling(e.captured.tree, tree.positionInParent);
+    this.treeService.fireNodeMoved(addedSibling, e.captured.tree.parent);
   }
 
   public onNodeSelected(e: MouseEvent): void {

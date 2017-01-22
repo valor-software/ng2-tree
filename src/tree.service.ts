@@ -12,11 +12,6 @@ import { Injectable, Inject, ElementRef } from '@angular/core';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeDraggableEvent } from './draggable/draggable.types';
 
-export interface DraggableEventHandlerOptions {
-  tree: Tree;
-  treeElementRef: ElementRef;
-}
-
 @Injectable()
 export class TreeService {
   public nodeMoved$: Subject<NodeMovedEvent> = new Subject<NodeMovedEvent>();
@@ -29,7 +24,7 @@ export class TreeService {
     this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
   }
 
-  public unselectEventStream(tree: Tree): Observable<any> {
+  public unselectStream(tree: Tree): Observable<any> {
     return this.nodeSelected$.filter((e: NodeSelectedEvent) => tree !== e.node);
   }
 
@@ -53,44 +48,9 @@ export class TreeService {
     this.nodeMoved$.next(new NodeMovedEvent(tree, parent));
   }
 
-  public addDragNDropBehaviourTo(options: DraggableEventHandlerOptions): void {
-    const {tree, treeElementRef} = options;
-
-    this.nodeDraggableService.draggableNodeEvents$
-      .filter((e: NodeDraggableEvent) => e.target === treeElementRef)
+  public draggedStream(tree: Tree, element: ElementRef): Observable<NodeDraggableEvent> {
+    return this.nodeDraggableService.draggableNodeEvents$
+      .filter((e: NodeDraggableEvent) => e.target === element)
       .filter((e: NodeDraggableEvent) => !e.captured.tree.hasChild(tree))
-      .subscribe((e: NodeDraggableEvent) => {
-        if (tree.hasSibling(e.captured.tree)) {
-          return this.swapWithSibling(e.captured.tree, tree);
-        }
-
-        if (tree.isBranch()) {
-          return this.moveNodeToThisTreeAndRemoveFromPreviousOne(e, tree);
-        } else {
-          return this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, tree);
-        }
-      });
-  }
-
-  private moveNodeToThisTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: Tree): void {
-    this.fireNodeRemoved(e.captured.tree);
-
-    const addedChild = tree.addChild(e.captured.tree);
-
-    this.fireNodeMoved(addedChild, e.captured.tree.parent);
-  }
-
-  private moveNodeToParentTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: Tree): void {
-    this.fireNodeRemoved(e.captured.tree);
-
-    const addedSibling = tree.addSibling(e.captured.tree, tree.positionInParent);
-
-    this.fireNodeMoved(addedSibling, e.captured.tree.parent);
-  }
-
-  private swapWithSibling(sibling: Tree, tree: Tree): void {
-    tree.swapWithSibling(sibling);
-
-    this.fireNodeMoved(sibling, sibling.parent);
   }
 }

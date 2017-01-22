@@ -595,6 +595,14 @@ describe('Tree', () => {
     expect(masterTree.children[0]).toBe(servantNumber1Tree);
   });
 
+  it('should do nothing when some tries to remove a tree without a parent from parent simply cause it hasn\'t parent', () => {
+    const masterTree = new Tree({
+      value: 'Master'
+    });
+
+    masterTree.removeItselfFromParent();
+  });
+
   it('can swap its position in parent with sibling', () => {
     const masterTree = Tree.buildTreeFromModel({
       value: 'Master',
