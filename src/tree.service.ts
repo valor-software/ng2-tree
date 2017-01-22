@@ -58,9 +58,9 @@ export class TreeService {
 
     this.nodeDraggableService.draggableNodeEvents$
       .filter((e: NodeDraggableEvent) => e.target === treeElementRef)
-      .filter((e: NodeDraggableEvent) => !e.captured.tree.isChild(tree))
+      .filter((e: NodeDraggableEvent) => !e.captured.tree.hasChild(tree))
       .subscribe((e: NodeDraggableEvent) => {
-        if (tree.isSibling(e.captured.tree)) {
+        if (tree.hasSibling(e.captured.tree)) {
           return this.swapWithSibling(e.captured.tree, tree);
         }
 
@@ -83,7 +83,7 @@ export class TreeService {
   private moveNodeToParentTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: Tree): void {
     this.fireNodeRemoved(e.captured.tree);
 
-    const addedSibling = tree.addSiblingAt(e.captured.tree, tree.positionInParent);
+    const addedSibling = tree.addSibling(e.captured.tree, tree.positionInParent);
 
     this.fireNodeMoved(addedSibling, e.captured.tree.parent);
   }

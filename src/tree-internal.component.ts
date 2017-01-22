@@ -12,10 +12,10 @@ import * as EventUtils from './utils/event.utils';
   <ul class="tree" *ngIf="tree" [ngClass]="{rootless: !viewOptions.rootIsVisible}">
     <li>
       <div [ngClass]="{rootless: !viewOptions.rootIsVisible}" (contextmenu)="showMenu($event)" [nodeDraggable]="element" [tree]="tree">
-        <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.getFoldingTypeCssClass()"></div>
-        <div href="#" class="node-value" *ngIf="!tree.isEditInProgressOrNew()" [class.node-selected]="isSelected" (click)="onNodeSelected($event)">{{tree.value}}</div>
+        <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
+        <div href="#" class="node-value" *ngIf="!shouldShowInputForTreeValue()" [class.node-selected]="isSelected" (click)="onNodeSelected($event)">{{tree.value}}</div>
 
-        <input type="text" class="node-value" *ngIf="tree.isEditInProgressOrNew()"
+        <input type="text" class="node-value" *ngIf="shouldShowInputForTreeValue()"
                [nodeEditable]="tree.value"
                (valueChanged)="applyNewValue($event)"/>
       </div>
@@ -96,7 +96,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private onRenameSelected(): void {
-    this.tree.markAsEditInProgress();
+    this.tree.markAsBeingRenamed();
     this.isMenuVisible = false;
   }
 
@@ -105,11 +105,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   public applyNewValue(e: NodeEditableEvent): void {
-    if (e.action === NodeEditableEventAction.Cancel && Tree.isValueEmpty(e.value)) {
-      return this.treeService.fireNodeRemoved(this.tree);
-    }
-
-    if (this.tree.isNew() && Tree.isValueEmpty(e.value)) {
+    if ((e.action === NodeEditableEventAction.Cancel || this.tree.isNew()) && Tree.isValueEmpty(e.value)) {
       return this.treeService.fireNodeRemoved(this.tree);
     }
 
@@ -118,12 +114,16 @@ export class TreeInternalComponent implements OnInit {
       this.treeService.fireNodeCreated(this.tree);
     }
 
-    if (this.tree.isEditInProgress()) {
+    if (this.tree.isBeingRenamed()) {
       const oldValue = this.tree.value;
       this.tree.value = e.value;
       this.treeService.fireNodeRenamed(oldValue, this.tree);
     }
 
     this.tree.markAsModified();
+  }
+
+  public shouldShowInputForTreeValue(): boolean {
+    return this.tree.isNew() || this.tree.isBeingRenamed();
   }
 }

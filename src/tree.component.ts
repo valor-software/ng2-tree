@@ -37,7 +37,7 @@ export class TreeComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.tree = Tree.buildTree(this.treeModel);
+    this.tree = Tree.buildTreeFromModel(this.treeModel);
 
     this.treeService.nodeRemoved$.subscribe((e: NodeEvent) => {
       this.nodeRemoved.emit(e);
