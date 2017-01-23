@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Rx';
-import { NodeMenuEvent } from './node-menu.types';
+import { MenuEvent } from './menu.types';
 
 @Injectable()
 export class NodeMenuService {
-  public nodeMenuEvents$: Subject<NodeMenuEvent> = new Subject<NodeMenuEvent>();
+  public nodeMenuEvents$: Subject<MenuEvent> = new Subject<MenuEvent>();
 }

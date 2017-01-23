@@ -3,7 +3,6 @@ import { TreeStatus, TreeModel, TreeModelOptions, TreeOptions, NodeIconOptions, 
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeDraggableEventAction, NodeDraggableEvent } from './draggable/draggable.types';
-import { NodeMenuEvent, NodeMenuAction, NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/node-menu.types';
 import { MenuEvent, MenuAction, MenuItemSelectedEvent, MenuItemAction } from './menu/menu.types';
 import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.type';
 import { TreeService } from './tree.service';
@@ -93,8 +92,8 @@ export class TreeInternalComponent implements OnInit {
 
   private setUpMenuEventHandler(): void {
     this.nodeMenuService.nodeMenuEvents$
-      .filter((e: NodeMenuEvent) => this.element.nativeElement !== e.sender)
-      .filter((e: NodeMenuEvent) => e.action === NodeMenuAction.Close)
+      .filter((e: MenuEvent) => this.element.nativeElement !== e.sender)
+      .filter((e: MenuEvent) => e.action === MenuAction.Close)
       .subscribe(() => this.isMenuVisible = false);
   }
 
@@ -231,22 +230,25 @@ export class TreeInternalComponent implements OnInit {
 
   // MENU --------------------------------------------------------------------------------------------------------------
 
-  private onMenuItemSelected(e: NodeMenuItemSelectedEvent): void {
+  private onMenuItemSelected(e: MenuItemSelectedEvent): void {
+    console.log(e.nodeMenuItemAction);
     switch (e.nodeMenuItemAction) {
-      case NodeMenuItemAction.NewLeaf:
+      case MenuItemAction.NewLeaf:
         this.onNewSelected(e);
         break;
-      case NodeMenuItemAction.NewNode:
+      case MenuItemAction.NewNode:
         this.onNewSelected(e);
         break;
-      case NodeMenuItemAction.Rename:
+      case MenuItemAction.Rename:
         this.onRenameSelected();
         break;
-      case NodeMenuItemAction.Remove:
+      case MenuItemAction.Remove:
         this.onRemoveSelected();
         break;
       default:
-        e.nodeMenuItemAction.action({node: this.tree, parent: this.parentTree});
+        if (typeof e.nodeMenuItemAction.action === 'function') {
+          e.nodeMenuItemAction.action({node: this.tree, parent: this.parentTree});
+        }
     }
   }
 
@@ -264,13 +266,13 @@ export class TreeInternalComponent implements OnInit {
     this.nodeRemoved.emit({node: this.tree});
   }
 
-  private onNewSelected(e: NodeMenuItemSelectedEvent): void {
+  private onNewSelected(e: MenuItemSelectedEvent): void {
     if (!this.tree.children || !this.tree.children.push) {
       this.tree.children = [];
     }
     const newNode: TreeModel = {value: '', _status: TreeStatus.New};
 
-    if (e.nodeMenuItemAction === NodeMenuItemAction.NewNode) {
+    if (e.nodeMenuItemAction === MenuItemAction.NewNode) {
       newNode.children = [];
     }
 
@@ -294,7 +296,7 @@ export class TreeInternalComponent implements OnInit {
       this.isMenuVisible = !this.isMenuVisible;
       this.nodeMenuService.nodeMenuEvents$.next({
         sender: this.element.nativeElement,
-        action: NodeMenuAction.Close
+        action: MenuAction.Close
       });
       e.preventDefault();
     }
