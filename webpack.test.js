@@ -1,4 +1,6 @@
-var path = require('path');
+'use strict';
+
+const path = require('path');
 
 module.exports = {
     devtool: 'inline-source-map',
@@ -13,4 +15,4 @@ module.exports = {
         modulesDirectories: ['node_modules'],
         root: path.resolve('.', 'src')
     }
-}
+};

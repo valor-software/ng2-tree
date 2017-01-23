@@ -60,19 +60,18 @@ export interface TreeModel {
   options?: TreeModelOptions;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
-  _indexInParent?: number;
 }
 
 export class TreeModelOptions {
-  public static: boolean = false;
+  public static?: boolean;
 
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelOptions {
-    return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {static: false});
+    return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {'static': false});
   }
 }
 
-export class TreeViewOptions {
-  public rootIsVisible: boolean = true;
+export interface TreeViewOptions {
+  rootIsVisible?: boolean;
 }
 
 export enum TreeStatus {
@@ -138,7 +137,6 @@ export class Tree {
 
   private _addChild(child: Tree, position: number = _.size(this._children) || 0): Tree {
     child.parent = this;
-    child.node._indexInParent = position;
 
     if (Array.isArray(this._children)) {
       this._children.splice(position, 0, child);
@@ -158,13 +156,10 @@ export class Tree {
 
     this.parent._children[siblingIndex] = this;
     this.parent._children[thisTreeIndex] = sibling;
-
-    this.node._indexInParent = siblingIndex;
-    sibling.node._indexInParent = thisTreeIndex;
   }
 
   public get positionInParent(): number {
-    return this.node._indexInParent;
+    return _.indexOf(this.parent.children, this);
   }
 
   public isStatic(): boolean {
@@ -199,7 +194,11 @@ export class Tree {
   }
 
   public removeItselfFromParent(): void {
-    this.parent && this.parent.removeChild(this);
+    if (!this.parent) {
+      return;
+    }
+
+    this.parent.removeChild(this);
   }
 
   public switchFoldingType(): void {
@@ -253,8 +252,6 @@ export class Tree {
 
   public static buildTreeFromModel(model: TreeModel, parent: Tree = null): Tree {
     model.options = TreeModelOptions.merge(model, _.get(parent, 'node') as TreeModel);
-    model._indexInParent = model._indexInParent || 0;
-
     const tree = new Tree(_.omit(model, 'children') as TreeModel, parent);
 
     _.forEach(model.children, (child: TreeModel, index: number) => {

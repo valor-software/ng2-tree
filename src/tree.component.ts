@@ -4,7 +4,7 @@ import { TreeModel, TreeViewOptions, NodeEvent, Tree } from './tree.types';
 
 @Component({
   selector: 'tree',
-  template: `<tree-internal [tree]="tree" [viewOptions]="viewOptions"></tree-internal>`,
+  template: `<tree-internal [tree]="tree" [options]="options"></tree-internal>`,
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit {
@@ -14,7 +14,7 @@ export class TreeComponent implements OnInit {
   /* tslint:enable:no-input-rename */
 
   @Input()
-  public viewOptions: TreeViewOptions;
+  public options: TreeViewOptions;
 
   @Output()
   public nodeCreated: EventEmitter<any> = new EventEmitter();

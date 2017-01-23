@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
 import { NodeMenuService } from './node-menu.service';
-import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuEvent, NodeMenuAction } from './menu.types';
+import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuAction } from './menu.types';
 import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
 
 @Component({
@@ -68,12 +68,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   private closeMenu(e: MouseEvent | KeyboardEvent): void {
     const mouseClicked = e instanceof MouseEvent;
     if (mouseClicked || isEscapePressed(e as KeyboardEvent)) {
-      const nodeMenuEvent: NodeMenuEvent = {
-        sender: (e.target as HTMLElement),
-        action: NodeMenuAction.Close
-      };
-
-      this.nodeMenuService.nodeMenuEvents$.next(nodeMenuEvent);
+      this.nodeMenuService.fireMenuEvent(e.target as HTMLElement, NodeMenuAction.Close);
     }
   }
 }

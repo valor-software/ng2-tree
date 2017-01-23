@@ -10,15 +10,24 @@ import { NodeDraggableEvent } from './draggable/draggable.types';
 @Component({
   selector: 'tree-internal',
   template: `
-  <ul class="tree" *ngIf="tree" [ngClass]="{rootless: !viewOptions.rootIsVisible}">
+  <ul class="tree" *ngIf="tree" [ngClass]="{rootless: isRootHidden()}">
     <li>
-      <div [ngClass]="{rootless: !viewOptions.rootIsVisible}" (contextmenu)="showMenu($event)" [nodeDraggable]="element" [tree]="tree">
-        <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
-        <div href="#" class="node-value" *ngIf="!shouldShowInputForTreeValue()" [class.node-selected]="isSelected" (click)="onNodeSelected($event)">{{tree.value}}</div>
+      <div class="value-container"
+        [ngClass]="{rootless: isRootHidden()}" 
+        (contextmenu)="showMenu($event)" 
+        [nodeDraggable]="element"
+        [tree]="tree">
 
-        <input type="text" class="node-value" *ngIf="shouldShowInputForTreeValue()"
-               [nodeEditable]="tree.value"
-               (valueChanged)="applyNewValue($event)"/>
+        <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
+        <div class="node-value" 
+          *ngIf="!shouldShowInputForTreeValue()" 
+          [class.node-selected]="isSelected" 
+          (click)="onNodeSelected($event)">{{tree.value}}</div>
+
+        <input type="text" class="node-value" 
+           *ngIf="shouldShowInputForTreeValue()"
+           [nodeEditable]="tree.value"
+           (valueChanged)="applyNewValue($event)"/>
       </div>
 
       <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
@@ -35,7 +44,7 @@ export class TreeInternalComponent implements OnInit {
   public tree: Tree;
 
   @Input()
-  public viewOptions: TreeViewOptions;
+  public options: TreeViewOptions;
 
   public isSelected: boolean = false;
   private isMenuVisible: boolean = false;
@@ -46,7 +55,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.viewOptions = this.viewOptions || new TreeViewOptions();
+    this.options = this.options || { rootIsVisible: true };
 
     this.nodeMenuService.hideMenuStream(this.element)
       .subscribe(() => this.isMenuVisible = false);
@@ -156,5 +165,9 @@ export class TreeInternalComponent implements OnInit {
 
   public shouldShowInputForTreeValue(): boolean {
     return this.tree.isNew() || this.tree.isBeingRenamed();
+  }
+
+  public isRootHidden(): boolean {
+    return this.tree.isRoot() && !this.options.rootIsVisible;
   }
 }

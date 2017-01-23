@@ -4,6 +4,7 @@ import { NodeDraggableService } from '../../src/draggable/node-draggable.service
 import { CapturedNode } from '../../src/draggable/captured-node';
 import { ElementRef } from '@angular/core';
 import { NodeDraggableEvent } from '../../src/draggable/draggable.types';
+import { Tree } from '../../src/tree.types';
 
 describe('NodeDraggableService', function () {
   beforeEach(() => {
@@ -28,23 +29,47 @@ describe('NodeDraggableService', function () {
   it('should fire node dragged event', inject([NodeDraggableService], (nodeDraggableService) => {
     spyOn(nodeDraggableService.draggableNodeEvents$, 'next');
 
-    const stubCapturedNode = new CapturedNode(null, null);
+    const stubCapturedNode = new CapturedNode(null, new Tree({value: 'Master'}));
     const target = new ElementRef({});
 
     nodeDraggableService.fireNodeDragged(stubCapturedNode, target);
 
     expect(nodeDraggableService.draggableNodeEvents$.next).toHaveBeenCalledTimes(1);
+
     const event: NodeDraggableEvent = nodeDraggableService.draggableNodeEvents$.next.calls.argsFor(0)[0];
     expect(event.target).toBe(target);
     expect(event.captured).toBe(stubCapturedNode);
   }));
 
+  it('should not fire event if node is static', inject([NodeDraggableService], (nodeDraggableService) => {
+    const masterTree = Tree.buildTreeFromModel({
+      value: 'Master',
+      options: {
+        'static': true
+      }
+    });
+
+    spyOn(nodeDraggableService.draggableNodeEvents$, 'next');
+
+    const elementRef = new ElementRef(null);
+    nodeDraggableService.fireNodeDragged(new CapturedNode(elementRef, masterTree), elementRef);
+    expect(nodeDraggableService.draggableNodeEvents$.next).not.toHaveBeenCalled();
+  }));
+
+  it('should not fire event if there is no tree in captured node', inject([NodeDraggableService], (nodeDraggableService) => {
+    spyOn(nodeDraggableService.draggableNodeEvents$, 'next');
+
+    const elementRef = new ElementRef(null);
+    nodeDraggableService.fireNodeDragged(new CapturedNode(elementRef, null), elementRef);
+    expect(nodeDraggableService.draggableNodeEvents$.next).not.toHaveBeenCalled();
+  }));
+
   it('should capture node', inject([NodeDraggableService], (nodeDraggableService) => {
-      const stubCapturedNode = new CapturedNode(null, null);
+    const stubCapturedNode = new CapturedNode(null, null);
 
-      nodeDraggableService.captureNode(stubCapturedNode);
-      const actualCapturedNode = nodeDraggableService.getCapturedNode(stubCapturedNode);
+    nodeDraggableService.captureNode(stubCapturedNode);
+    const actualCapturedNode = nodeDraggableService.getCapturedNode(stubCapturedNode);
 
-      expect(actualCapturedNode).toBe(stubCapturedNode);
+    expect(actualCapturedNode).toBe(stubCapturedNode);
   }));
 });

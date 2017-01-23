@@ -24,7 +24,7 @@ declare const alertify: any;
         <p>Programming languages tree</p>
         <tree
           [tree]="pls"
-          [viewOptions]="treeViewOptions"
+          [options]="treeViewOptions"
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
@@ -63,7 +63,7 @@ export class AppComponent {
       {
         value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
         options: {
-          static: true
+          'static': true
         },
         children: [
           {value: 'Antiqua'},
@@ -147,26 +147,26 @@ export class AppComponent {
   };
 
   public onNodeRemoved(e: NodeEvent): void {
-    this.logEvent(e, 'Removed');
+    AppComponent.logEvent(e, 'Removed');
   }
 
   public onNodeMoved(e: NodeEvent): void {
-    this.logEvent(e, 'Moved');
+    AppComponent.logEvent(e, 'Moved');
   }
 
   public onNodeRenamed(e: NodeEvent): void {
-    this.logEvent(e, 'Renamed');
+    AppComponent.logEvent(e, 'Renamed');
   }
 
   public onNodeCreated(e: NodeEvent): void {
-    this.logEvent(e, 'Created');
+    AppComponent.logEvent(e, 'Created');
   }
 
   public onNodeSelected(e: NodeEvent): void {
-    this.logEvent(e, 'Selected');
+    AppComponent.logEvent(e, 'Selected');
   }
 
-  public logEvent(e: NodeEvent, message: string): void {
+  private static logEvent(e: NodeEvent, message: string): void {
     console.log(e);
     alertify.message(`${message}: ${e.node.value}`);
   }

@@ -10,6 +10,10 @@ export class NodeDraggableService {
   private capturedNode: CapturedNode;
 
   public fireNodeDragged(captured: CapturedNode, target: ElementRef): void {
+    if (!captured.tree || captured.tree.isStatic()) {
+      return;
+    }
+
     this.draggableNodeEvents$.next(new NodeDraggableEvent(captured, target));
   }
 
