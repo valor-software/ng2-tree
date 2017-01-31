@@ -1,6 +1,7 @@
-import { Component, EventEmitter, ViewChild, ElementRef, Input, Output, Renderer, Inject, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, ViewChild, ElementRef, Input, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MenuService } from './menu.service';
-import { MenuItemSelectedEvent, MenuItemAction, MenuEvent, MenuAction, MenuOptions, MenuItem } from './menu.types';
+import { MenuItemSelectedEvent, MenuItemAction, MenuEvent, MenuAction } from './menu.types';
+import { MenuOptions, MenuItem } from '../options.types';
 import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
 import { TreeModel, TreeStatus } from '../tree.types';
 
@@ -8,14 +9,14 @@ import { TreeModel, TreeStatus } from '../tree.types';
   selector: 'menu',
   template: `
   <div [ngClass]="menuOptions.menuClass">
-    <button [ngClass]="menuOptions.buttonClass" (click)="showMenu($event)">
-      <div #buttonIcon [ngClass]="menuOptions.buttonIconCollapsedClass"></div>
-      <span [ngClass]="menuOptions.buttonTextClass">Menu</span>
+    <button #button class="menu-button">
+      <div #buttonIcon class="collapsed"></div>
+      <span>Menu</span>
     </button>
-    <ul #menuContent [ngClass]="menuOptions.menuContentClass + ' ' + menuOptions.menuContentCollapsedClass">
-      <li [ngClass]="menuOptions.menuItemClass" *ngFor="let menuItem of availableMenuItems"
+    <ul #menuContent class="menu-content collapsed">
+      <li class="menu-item" *ngFor="let menuItem of availableMenuItems"
           (click)="onMenuItemSelected($event, menuItem)">
-        <div [ngClass]="'menu-item-icon ' + menuItem.cssClass"></div>
+        <div class="menu-item-icon" [ngClass]="menuItem.cssClass"></div>
         <span>{{menuItem.name}}</span>
       </li>
     </ul>
@@ -23,7 +24,7 @@ import { TreeModel, TreeStatus } from '../tree.types';
   `
 
 })
-export class MenuComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MenuComponent implements OnInit, OnDestroy {
   @Input()
   public menuOptions: MenuOptions;
 
@@ -34,30 +35,28 @@ export class MenuComponent implements OnInit, OnDestroy, AfterViewInit {
   public menuItemSelected: EventEmitter<MenuItemSelectedEvent> = new EventEmitter<MenuItemSelectedEvent>();
 
   @ViewChild('menuContent') menuContent: ElementRef;
+  @ViewChild('button') button: ElementRef;
   @ViewChild('buttonIcon') buttonIcon: ElementRef;
 
-  public availableMenuItems: Array<MenuItem> = MenuOptions.getMainMenuItems(this.menuOptions);
+  public availableMenuItems: Array<MenuItem>;
 
+  private disposersForListeners: Function[] = [];
   private disposersForGlobalListeners: Function[] = [];
-  private isMenuVisible: boolean;
+  private isMenuVisible: boolean = false;
 
   public constructor(@Inject(Renderer) private renderer: Renderer,
                      @Inject(MenuService) private menuService: MenuService) {
   }
 
   public ngOnInit(): void {
-    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'keyup', this.closeMenu.bind(this)));
-    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'click', this.closeMenu.bind(this)));
-    this.menuOptions = new MenuOptions(this.menuOptions);
-    this.availableMenuItems = MenuOptions.getMainMenuItems(this.menuOptions);
     this.isMenuVisible = false;
+    this.menuOptions = new MenuOptions(this.menuOptions);
+    this.availableMenuItems = MenuOptions.getMainMenuItems(this.menuOptions, this.rootNode);
+    this.disposersForListeners.push(this.renderer.listen(this.button.nativeElement, 'click', this.showMenu.bind(this)));
   }
 
   public ngOnDestroy(): void {
     this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
-  }
-
-  public ngAfterViewInit() {
   }
 
   private onMenuItemSelected(e: MouseEvent, selectedMenuItem: MenuItem): void {
@@ -93,36 +92,54 @@ export class MenuComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private closeMenu(e: MouseEvent | KeyboardEvent): void {
+  private fireCloseMenu(e: MouseEvent | KeyboardEvent): void {
     const mouseClicked = e instanceof MouseEvent;
     const escapePressed = e instanceof KeyboardEvent && isEscapePressed(e);
 
-    if (this.isMenuVisible) {
-      if (escapePressed || mouseClicked) {
-        console.log('close');
-        this.menuContent.nativeElement.className = this.menuContent.nativeElement.className.replace(this.menuOptions.menuContentExpandedClass, this.menuOptions.menuContentCollapsedClass);
-        this.buttonIcon.nativeElement.className = this.buttonIcon.nativeElement.className.replace(this.menuOptions.buttonIconExpandedClass, this.menuOptions.buttonIconCollapsedClass);
-        const nodeMenuEvent: MenuEvent = {
-          sender: (e.target as HTMLElement),
-          action: MenuAction.Close
-        };
-
-        this.menuService.menuEvents$.next(nodeMenuEvent);
+    if (escapePressed || mouseClicked) {
+      let isLocalElementClicked = false;
+      for (let i = 0; i < this.button.nativeElement.children.length; i++) {
+        isLocalElementClicked = isLocalElementClicked || this.button.nativeElement.children[i] === e.target;
       }
+      console.log(isLocalElementClicked);
+      if (!isLocalElementClicked) {
+        this.closeMenu(e);
+      }
+    }
+  }
+
+  private closeMenu(e: MouseEvent | KeyboardEvent): void {
+    if (this.isMenuVisible) {
+      console.log('close');
+      this.isMenuVisible = !this.isMenuVisible;
+      this.disposersForListeners.forEach((dispose: Function) => dispose());
+      this.disposersForListeners = [];
+      this.disposersForListeners.push(this.renderer.listen(this.button.nativeElement, 'click', this.showMenu.bind(this)));
+
+      this.menuContent.nativeElement.className = this.menuContent.nativeElement.className.replace('expanded', 'collapsed');
+      this.buttonIcon.nativeElement.className = this.buttonIcon.nativeElement.className.replace('expanded', 'collapsed');
+
+      this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
+      this.disposersForGlobalListeners = [];
     }
   }
 
   // MENU --------------------------------------------------------------------------------------------------------------
 
   private showMenu(e: MouseEvent): void {
-    if (this.rootNode.options.static) {
-      return;
-    }
-
     if (isLeftButtonClicked(e)) {
+      console.log('showMenu');
+      this.disposersForListeners.forEach((dispose: Function) => dispose());
+      this.disposersForListeners = [];
+      this.disposersForListeners.push(this.renderer.listen(this.button.nativeElement, 'click', this.closeMenu.bind(this)));
+
+      this.menuContent.nativeElement.className = this.menuContent.nativeElement.className.replace('collapsed', 'expanded');
+      this.buttonIcon.nativeElement.className = this.buttonIcon.nativeElement.className.replace('collapsed', 'expanded');
+
+      this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'keydown', this.fireCloseMenu.bind(this)));
+      this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'click', this.fireCloseMenu.bind(this)));
+
       this.isMenuVisible = !this.isMenuVisible;
-      this.menuContent.nativeElement.className = this.menuContent.nativeElement.className.replace(this.menuOptions.menuContentCollapsedClass, this.menuOptions.menuContentExpandedClass);
-      this.buttonIcon.nativeElement.className = this.buttonIcon.nativeElement.className.replace(this.menuOptions.buttonIconCollapsedClass, this.menuOptions.buttonIconExpandedClass);
     }
   }
 

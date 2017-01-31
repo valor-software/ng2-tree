@@ -1,6 +1,6 @@
 .menu {
-    width: 100%;
-    position: relative;
+  width: 100%;
+  position: relative;
 }
 
 .node-menu {
@@ -132,6 +132,21 @@ tree-internal .tree li div {
   box-sizing: border-box;
 }
 
+tree-internal .tree .node-container {
+  width: 100%;
+}
+
+tree-internal .tree .node-container:hover .node-left-menu,
+tree-internal .tree .node-container .node-left-menu.active {
+  display: inline-block;
+}
+
+tree-internal .tree .node-left-menu {
+  height: 100%;
+  width: auto;
+  display: none;
+}
+
 tree-internal .tree .node-value {
   display: inline-block;
   color: #212121;
@@ -153,6 +168,11 @@ tree-internal .tree .node-value:hover:after {
 
 tree-internal .tree .node-selected:after {
   width: 100%;
+}
+
+tree-internal .tree .node-left-menu:before {
+  content: '\2026';
+  color: #757575;
 }
 
 tree-internal .tree .folding {

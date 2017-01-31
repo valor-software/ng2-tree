@@ -23,10 +23,16 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   @Input()
   public menuOptions: MenuOptions;
 
+  @Input()
+  public type: string;
+
+  @Input()
+  public node: TreeModel;
+
   @Output()
   public menuItemSelected: EventEmitter<MenuItemSelectedEvent> = new EventEmitter<MenuItemSelectedEvent>();
 
-  public availableMenuItems: Array<MenuItem> = MenuOptions.getRightMenuItems(this.menuOptions);
+  public availableMenuItems: Array<MenuItem>;
 
   private disposersForGlobalListeners: Function[] = [];
 
@@ -35,13 +41,22 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'keyup', this.closeMenu.bind(this)));
-    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'click', this.closeMenu.bind(this)));
-    this.availableMenuItems = MenuOptions.getRightMenuItems(this.menuOptions);
+    this.availableMenuItems = MenuOptions.getNodeMenuItems(this.menuOptions, this.node);
+    if (this.type === 'left') {
+      this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'click', this.setEventListeners.bind(this)));
+    } else {
+      this.setEventListeners();
+    }
   }
 
   public ngOnDestroy(): void {
     this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
+  }
+
+  public setEventListeners(): void {
+    this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
+    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'keyup', this.closeMenu.bind(this)));
+    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'mousedown', this.closeMenu.bind(this)));
   }
 
   private onMenuItemSelected(e: MouseEvent, selectedMenuItem: MenuItem): void {
