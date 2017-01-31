@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
 import { NodeMenuService } from './node-menu.service';
 import { MenuItemSelectedEvent, MenuItemAction, MenuEvent, MenuAction } from './menu.types';
-import { MenuOptions, MenuItem } from './menu.types';
+import { MenuOptions, MenuItem } from '../options.types';
+import { TreeModel } from '../tree.types';
 import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
 
 @Component({
