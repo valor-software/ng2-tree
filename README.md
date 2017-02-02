@@ -24,7 +24,7 @@ export class MyModule {
 }
 ```
 
-As soon as the previous step is done we need to give ng2-tree a model to render - this can be accomplished by populating its `[tree]` attribute with an object that confirms to `TreeModel` interface (see [API](#wrench-api)):
+As soon as the previous step is done we need to give ng2-tree a model to render - this can be accomplished by populating its `[tree]` attribute with an object that conforms to `TreeModel` interface (see [API](#wrench-api)):
 
 ```typescript
 // 1 - import required classes and interfaces
@@ -93,6 +93,7 @@ Here is the fully stuffed *tree* tag that you can use in your templates:
 ```html
     <tree
       [tree]="tree"
+      [options]="options"
       (nodeRemoved)="handleRemoved($event)"
       (nodeRenamed)="handleRenamed($event)"
       (nodeSelected)="handleSelected($event)"
@@ -121,6 +122,7 @@ Here is the definition of TreeModel interface:
 interface TreeModel {
   value: string | RenamableNode;
   children?: Array<TreeModel>;
+  options?: TreeModelOptions;
 }
 ```
 
@@ -195,6 +197,26 @@ Here is an example of such a node in the `TreeModel` object:
     ]
   };
 ```
+
+Apart from that `TreeModel` interface has optional field called `options` of type `TreeModelOptions`. 
+
+Here is an example of its usage:
+
+```typescript
+{
+  value: 'Prototype-based programming',
+  options: {
+    'static': true
+  },
+  children: [
+    {value: 'JavaScript'},
+    {value: 'CoffeeScript'},
+    {value: 'Lua'},
+  ]
+}
+```
+
+Right know only one option is supported - `static`. This option makes it impossible to drag tree or modify it in some way, though you still can select nodes in the static tree. `static` option that is defined on parent is automatically applied on children as well. If you don't want to see all the children static as well - you can override option in child node.   
 
 ### events (nodeMoved, nodeSelected, nodeRenamed, nodeRemoved, nodeCreated)
 
