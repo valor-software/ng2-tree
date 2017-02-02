@@ -16,6 +16,7 @@
   "bugs": {
     "url": "https://github.com/valor-software/ng2-tree/issues"
   },
+  "private": true,
   "keywords": [
     "tree",
     "ng2",
@@ -32,15 +33,15 @@
   "scripts": {
     "flow.compile": "npm run flow.compile:common && npm run flow.compile:system",
     "flow.compile:common": "ngc -p tsconfig-aot.json",
-    "flow.compile:system": "node .config/umd-bundler.js",
-    "flow.clean": "rimraf build demo-build bundles factories '{src,demo}/**/*.{d.ts,js.map,js,ngfactory.ts,shim.ts,metadata.json}' 'index.{js,js.map,d.ts,metadata.json}'",
+    "flow.compile:system": "node umd-bundler.js",
+    "flow.clean": "rimraf build demo-dist dist bundles factories",
     "flow.deploy:gh-pages": "npm run flow.build && gulp deploy",
-    "flow.tslint": "tslint \"**/*.ts\" -c tslint.json --type-check -t prose -e \"**/*.d.ts\" -e \"node_modules/**\" -e \"test/**\" -e \"factories/**\" -e \"demo/**\" -e \"demo-build/**\"",
+    "flow.tslint": "tslint \"**/*.ts\" -c tslint.json --type-check -t prose -e \"node_modules/**\" -e \"test/**\" -e \"factories/**\" -e \"dist/**\" -e \"demo/**\" -e \"demo-dist/**\"",
     "flow.lint": "npm run flow.tslint",
     "flow.build": "npm run flow.clean && npm run flow.compile && webpack --progress --color",
     "flow.serve": "webpack-dev-server --hot --inline --colors --display-error-details --display-cached",
-    "prepublish": "npm run flow.clean && npm run flow.lint && npm run test &&  npm run flow.compile",
-    "postpublish": "npm run flow.deploy:gh-pages",
+    "pre:publish": "npm run flow.clean && npm run flow.lint && npm run test &&  npm run flow.compile",
+    "post:publish": "npm run flow.deploy:gh-pages",
     "start": "npm run flow.serve",
     "test": "karma start karma.conf.js"
   },

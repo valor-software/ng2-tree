@@ -66,7 +66,7 @@ export class TreeModelOptions {
   public static?: boolean;
 
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelOptions {
-    return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {'static': false});
+    return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {static: false});
   }
 }
 
