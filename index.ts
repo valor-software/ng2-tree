@@ -1,10 +1,14 @@
 import {
-  Tree,
   TreeModel,
-  TreeModelOptions,
-  TreeViewOptions,
+  TreeModelSettings,
+  Ng2TreeSettings,
   RenamableNode,
-  FoldingType,
+  FoldingType
+} from './src/tree.types';
+
+import { Tree } from './src/tree';
+
+import {
   NodeEvent,
   NodeCreatedEvent,
   NodeRemovedEvent,
@@ -12,7 +16,7 @@ import {
   NodeMovedEvent,
   NodeSelectedEvent,
   NodeDestructiveEvent
-} from './src/tree.types';
+} from './src/tree.events';
 
 import { TreeComponent } from './src/tree.component';
 import { TreeModule } from './src/tree.module';
@@ -20,8 +24,8 @@ import { TreeModule } from './src/tree.module';
 export {
   Tree,
   TreeModel,
-  TreeModelOptions,
-  TreeViewOptions,
+  TreeModelSettings,
+  Ng2TreeSettings,
   RenamableNode,
   FoldingType,
   NodeEvent,

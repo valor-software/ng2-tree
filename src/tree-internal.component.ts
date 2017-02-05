@@ -1,11 +1,12 @@
 import { Input, Component, OnInit, ElementRef, Inject } from '@angular/core';
-import { TreeViewOptions, Tree } from './tree.types';
+import { Ng2TreeSettings } from './tree.types';
+import { Tree } from './tree';
 import { NodeMenuService } from './menu/node-menu.service';
-import { NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.types';
-import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.types';
+import { NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.events';
+import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.events';
 import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
-import { NodeDraggableEvent } from './draggable/draggable.types';
+import { NodeDraggableEvent } from './draggable/draggable.events';
 
 @Component({
   selector: 'tree-internal',
@@ -44,7 +45,7 @@ export class TreeInternalComponent implements OnInit {
   public tree: Tree;
 
   @Input()
-  public options: TreeViewOptions;
+  public settings: Ng2TreeSettings;
 
   public isSelected: boolean = false;
   private isMenuVisible: boolean = false;
@@ -55,7 +56,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.options = this.options || { rootIsVisible: true };
+    this.settings = this.settings || { rootIsVisible: true };
 
     this.nodeMenuService.hideMenuStream(this.element)
       .subscribe(() => this.isMenuVisible = false);
@@ -168,6 +169,6 @@ export class TreeInternalComponent implements OnInit {
   }
 
   public isRootHidden(): boolean {
-    return this.tree.isRoot() && !this.options.rootIsVisible;
+    return this.tree.isRoot() && !this.settings.rootIsVisible;
   }
 }

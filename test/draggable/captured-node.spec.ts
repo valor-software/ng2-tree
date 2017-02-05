@@ -1,6 +1,6 @@
 import { ElementRef } from '@angular/core';
 import { CapturedNode } from '../../src/draggable/captured-node';
-import { Tree } from '../../src/tree.types';
+import { Tree } from '../../src/tree';
 
 describe('Captured Node', () => {
   it('should be created with element and tree', () => {

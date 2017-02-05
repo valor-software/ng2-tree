@@ -3,14 +3,14 @@ import { By } from '@angular/platform-browser';
 import { Component, ElementRef, DebugElement } from '@angular/core';
 import { TreeInternalComponent } from '../src/tree-internal.component';
 import { TreeComponent } from '../src/tree.component';
-import { TreeModel, TreeViewOptions } from '../src/tree.types';
+import { TreeModel, Ng2TreeSettings } from '../src/tree.types';
 import { TreeService } from '../src/tree.service';
 import { NodeMenuService } from '../src/menu/node-menu.service';
 import { NodeMenuComponent } from '../src/menu/node-menu.component';
 import { NodeDraggableService } from '../src/draggable/node-draggable.service';
 import { NodeDraggableDirective } from '../src/draggable/node-draggable.directive';
 import { NodeEditableDirective } from '../src/editable/node-editable.directive';
-import { NodeMenuAction } from '../src/menu/menu.types';
+import { NodeMenuAction } from '../src/menu/menu.events';
 import * as EventUtils from '../src/utils/event.utils';
 import { CapturedNode } from '../src/draggable/captured-node';
 
@@ -49,7 +49,7 @@ const tree2: TreeModel = {
 
 const tree3: TreeModel = {
   value: 'Face',
-  options: {
+  settings: {
     'static': true
   },
   children: [
@@ -58,7 +58,7 @@ const tree3: TreeModel = {
       children: [
         {
           value: 'Retina',
-          options: {
+          settings: {
             'static': false
           }
         },
@@ -781,7 +781,7 @@ describe('TreeInternalComponent', () => {
   template: `
   <div><tree id="master" [tree]="tree"></tree></div>
   <div><tree id="lord" [tree]="tree2"></tree></div>
-  <div><tree id="face" [tree]="tree3" [options]="treeViewOptions"></tree></div>
+  <div><tree id="face" [tree]="tree3" [settings]="settings"></tree></div>
 `
 })
 class TestComponent {
@@ -789,7 +789,7 @@ class TestComponent {
   public tree2: TreeModel = tree2;
   public tree3: TreeModel = tree3;
 
-  public treeViewOptions: TreeViewOptions = {
+  public settings: Ng2TreeSettings = {
     rootIsVisible: false
   };
 

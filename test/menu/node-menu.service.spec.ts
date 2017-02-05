@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { NodeMenuService } from '../../src/menu/node-menu.service';
 import { Subject } from 'rxjs/Rx';
 import { ElementRef } from '@angular/core';
-import { NodeMenuEvent, NodeMenuAction } from '../../src/menu/menu.types';
+import { NodeMenuEvent, NodeMenuAction } from '../../src/menu/menu.events';
 
 let nodeMenuService;
 

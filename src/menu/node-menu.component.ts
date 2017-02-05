@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
 import { NodeMenuService } from './node-menu.service';
-import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuAction } from './menu.types';
+import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuAction } from './menu.events';
 import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
 
 @Component({

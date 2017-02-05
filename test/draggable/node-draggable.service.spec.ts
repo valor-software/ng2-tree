@@ -3,8 +3,8 @@ import { Subject } from 'rxjs';
 import { NodeDraggableService } from '../../src/draggable/node-draggable.service';
 import { CapturedNode } from '../../src/draggable/captured-node';
 import { ElementRef } from '@angular/core';
-import { NodeDraggableEvent } from '../../src/draggable/draggable.types';
-import { Tree } from '../../src/tree.types';
+import { NodeDraggableEvent } from '../../src/draggable/draggable.events';
+import { Tree } from '../../src/tree';
 
 describe('NodeDraggableService', function () {
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe('NodeDraggableService', function () {
   it('should not fire event if node is static', inject([NodeDraggableService], (nodeDraggableService) => {
     const masterTree = Tree.buildTreeFromModel({
       value: 'Master',
-      options: {
+      settings: {
         'static': true
       }
     });

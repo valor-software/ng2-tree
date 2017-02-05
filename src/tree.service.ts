@@ -3,14 +3,14 @@ import {
   NodeRenamedEvent,
   NodeCreatedEvent,
   NodeSelectedEvent,
-  NodeMovedEvent,
-  RenamableNode,
-  Tree
-} from './tree.types';
+  NodeMovedEvent
+} from './tree.events';
+import { RenamableNode } from './tree.types';
+import { Tree } from './tree';
 import { Subject, Observable } from 'rxjs/Rx';
 import { Injectable, Inject, ElementRef } from '@angular/core';
 import { NodeDraggableService } from './draggable/node-draggable.service';
-import { NodeDraggableEvent } from './draggable/draggable.types';
+import { NodeDraggableEvent } from './draggable/draggable.events';
 
 @Injectable()
 export class TreeService {

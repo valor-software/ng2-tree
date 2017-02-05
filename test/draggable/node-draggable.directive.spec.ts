@@ -4,8 +4,8 @@ import { Component, ElementRef } from '@angular/core';
 import { NodeDraggableDirective } from '../../src/draggable/node-draggable.directive';
 import { NodeDraggableService } from '../../src/draggable/node-draggable.service';
 import { CapturedNode } from '../../src/draggable/captured-node';
-import { NodeDraggableEvent } from '../../src/draggable/draggable.types';
-import { Tree } from '../../src/tree.types';
+import { NodeDraggableEvent } from '../../src/draggable/draggable.events';
+import { Tree } from '../../src/tree';
 
 let fixture;
 let directiveEl;

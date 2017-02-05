@@ -2,12 +2,16 @@ import { TestBed } from '@angular/core/testing';
 import { TreeService } from '../src/tree.service';
 import { Subject } from 'rxjs/Rx';
 import { NodeDraggableService } from '../src/draggable/node-draggable.service';
+import { Tree } from '../src/tree';
 import {
-  Tree, NodeRemovedEvent, NodeMovedEvent, NodeCreatedEvent, NodeSelectedEvent,
+  NodeRemovedEvent,
+  NodeMovedEvent,
+  NodeCreatedEvent,
+  NodeSelectedEvent,
   NodeRenamedEvent
-} from '../src/tree.types';
+} from '../src/tree.events';
 import { ElementRef } from '@angular/core';
-import { NodeDraggableEvent } from '../src/draggable/draggable.types';
+import { NodeDraggableEvent } from '../src/draggable/draggable.events';
 import { CapturedNode } from '../src/draggable/captured-node';
 
 let treeService;

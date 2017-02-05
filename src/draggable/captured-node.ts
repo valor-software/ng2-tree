@@ -1,4 +1,4 @@
-import { Tree } from '../tree.types';
+import { Tree } from '../tree';
 import { ElementRef } from '@angular/core';
 
 export class CapturedNode {

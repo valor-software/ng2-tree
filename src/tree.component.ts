@@ -1,10 +1,12 @@
 import { Input, Component, OnInit, EventEmitter, Output, Inject } from '@angular/core';
 import { TreeService } from './tree.service';
-import { TreeModel, TreeViewOptions, NodeEvent, Tree } from './tree.types';
+import { TreeModel, Ng2TreeSettings } from './tree.types';
+import { NodeEvent } from './tree.events';
+import { Tree } from './tree';
 
 @Component({
   selector: 'tree',
-  template: `<tree-internal [tree]="tree" [options]="options"></tree-internal>`,
+  template: `<tree-internal [tree]="tree" [settings]="settings"></tree-internal>`,
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit {
@@ -14,7 +16,7 @@ export class TreeComponent implements OnInit {
   /* tslint:enable:no-input-rename */
 
   @Input()
-  public options: TreeViewOptions;
+  public settings: Ng2TreeSettings;
 
   @Output()
   public nodeCreated: EventEmitter<any> = new EventEmitter();

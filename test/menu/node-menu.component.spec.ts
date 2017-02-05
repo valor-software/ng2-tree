@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { EventEmitter } from '@angular/core';
 import { NodeMenuComponent } from '../../src/menu/node-menu.component';
 import { NodeMenuService } from '../../src/menu/node-menu.service';
-import { NodeMenuItemAction, NodeMenuAction, NodeMenuEvent } from '../../src/menu/menu.types';
+import { NodeMenuItemAction, NodeMenuAction, NodeMenuEvent } from '../../src/menu/menu.events';
 import { MouseButtons, Keys } from '../../src/utils/event.utils';
 
 let fixture;

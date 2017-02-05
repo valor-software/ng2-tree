@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Component, EventEmitter } from '@angular/core';
 import { NodeEditableDirective } from '../../src/editable/node-editable.directive';
-import { NodeEditableEvent, NodeEditableEventAction } from '../../src/editable/editable.types';
+import { NodeEditableEvent, NodeEditableEventAction } from '../../src/editable/editable.events';
 import { TreeModel } from '../../src/tree.types';
 
 let fixture;
