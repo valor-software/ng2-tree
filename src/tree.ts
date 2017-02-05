@@ -8,12 +8,21 @@ export class Tree {
     this._children = isFolder ? [] : null;
   }
 
+  /**
+   * Get children of the current tree.
+   * @returns {Tree[]} The children of the current tree.
+   */
   public get children(): Tree[] {
     return this._children;
   }
 
+  /**
+   * Create a new node in the current tree.
+   * @param {boolean} isFolder - A flag that indicates whether a new node should be a folder. Leaf will be created by default
+   * @returns {Tree} A newly created child node.
+   */
   public createNode(isFolder: boolean): Tree {
-    const tree = new Tree({value: ''}, null, isFolder);
+    const tree = new Tree({ value: '' }, null, isFolder);
     tree.markAsNew();
 
     if (this.isLeaf()) {
@@ -23,10 +32,18 @@ export class Tree {
     }
   };
 
+  /**
+   * Get the value of the current node
+   * @returns {(string|RenamableNode)} The value of the node.
+   */
   public get value(): any {
     return this.node.value;
   }
 
+  /**
+   * Set the value of the current node
+   * @param {(string|RenamableNode)} value - The new value of the node.
+   */
   public set value(value: any) {
     if (typeof value !== 'string' && !Tree.isRenamable(value)) {
       return;
@@ -40,13 +57,25 @@ export class Tree {
     }
   }
 
-  public addSibling(child: Tree, position?: number): Tree {
+  /**
+   * Adds a sibling node for the current node. This won't work if the current node is a root.
+   * @param {Tree} sibling - A node that should become a sibling.
+   * @param [number] position - Position in which sibling will be inserted. By default it will be inserted at the last position in parent.
+   * @returns {Tree} A newly inserted sibling, or null if you are trying to make a sibling for the root.
+   */
+  public addSibling(sibling: Tree, position?: number): Tree {
     if (_.isArray(_.get(this.parent, 'children'))) {
-      return this.parent.addChild(child, position);
+      return this.parent.addChild(sibling, position);
     }
     return null;
   }
 
+  /**
+   * Adds a child node for the current node.
+   * @param {Tree} child - A node that should become a child.
+   * @param [number] position - Position in which child will be inserted. By default it will be inserted at the last position in parent.
+   * @returns {Tree} A newly inserted child.
+   */
   public addChild(child: Tree, position?: number): Tree {
     return this._addChild(Tree.cloneTreeShallow(child), position);
   }
@@ -62,6 +91,10 @@ export class Tree {
     return child;
   }
 
+  /**
+   * Swaps position of the current node with the given sibling.
+   * @param {Tree} sibling - A sibling with which current node shold swap its position.
+   */
   public swapWithSibling(sibling: Tree): void {
     if (!this.hasSibling(sibling)) {
       return;
