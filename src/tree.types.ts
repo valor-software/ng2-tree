@@ -22,6 +22,12 @@ export interface TreeModel {
 }
 
 export class TreeModelSettings {
+  /**
+   * "static" property when set to true makes it impossible to drag'n'drop tree or call a menu on it.
+   * @name TreeModelSettings#static
+   * @type boolean
+   * @default false
+   */
   public static?: boolean;
 
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
@@ -30,6 +36,11 @@ export class TreeModelSettings {
 }
 
 export interface Ng2TreeSettings {
+  /**
+   * Indicates root visibility in the tree. When true - root is invisible.
+   * @name Ng2TreeSettings#rootIsVisible
+   * @type boolean
+   */
   rootIsVisible?: boolean;
 }
 
@@ -40,6 +51,15 @@ export enum TreeStatus {
 }
 
 export interface RenamableNode {
+  /**
+   * Set new value of the renamable node. Implementation of this method is up to user.
+   * @param {string} name - A new value of the node.
+   */
   setName(name: string): void;
+
+  /**
+   * Get string representation of the node. Implementation of this method is up to user.
+   * @returns {string} - A node string representation.
+   */
   toString(): string;
 }
