@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NodeEvent, TreeModel, RenamableNode } from '../index';
+import { NodeEvent, TreeModel, TreeComponent, RenamableNode } from '../index';
 
 require('../src/styles.css');
 
@@ -45,6 +45,10 @@ declare const alertify: any;
           (nodeCollapsed)="onNodeCollapsed($event)">
         </tree>
       </div>
+      <button (click)="fireClickOnNode($event)">Fire Select</button>
+      <button (click)="fireUnClickOnNode($event)">Fire Deselect</button>
+      <button (click)="fireExpandOnNode($event)">Fire Expand</button>
+      <button (click)="fireCollapseOnNode($event)">Fire Collapse</button>
     </div>
     `,
   styles: [`
@@ -157,6 +161,7 @@ export class AppComponent {
 
   public files: TreeModel = {
     value: '/',
+    id: 1,
     options: {
       expanded: true,
       applyToSubtree: false
@@ -164,36 +169,40 @@ export class AppComponent {
     children: [
       {
         value: 'bin',
+        id: 2,
         children: [
-          {value: 'bash'},
-          {value: 'umount'},
-          {value: 'cp'},
-          {value: 'less'},
-          {value: 'rmdir'},
-          {value: 'touch'},
-          {value: 'chgrp'},
-          {value: 'chmod'},
-          {value: 'chown'},
-          {value: 'nano'}
+          {value: 'bash', id: 3},
+          {value: 'umount', id: 4},
+          {value: 'cp', id: 5},
+          {value: 'less', id: 6},
+          {value: 'rmdir', id: 7},
+          {value: 'touch', id: 8},
+          {value: 'chgrp', id: 9},
+          {value: 'chmod', id: 10},
+          {value: 'chown', id: 11},
+          {value: 'nano', id: 12}
         ]
       },
       {
         value: 'boot',
+        id: 13,
         children: [
           {
             value: 'grub',
+            id: 14,
             children: [
-              {value: 'fonts'},
-              {value: 'gfxblacklist.txt'},
-              {value: 'grub.cfg'},
-              {value: 'grubenv'},
-              {value: 'i386-pc'},
-              {value: 'locale'},
-              {value: 'unicode.pf2'}
+              {value: 'fonts', id: 15},
+              {value: 'gfxblacklist.txt', id: 16},
+              {value: 'grub.cfg', id: 17},
+              {value: 'grubenv', id: 18},
+              {value: 'i386-pc', id: 19},
+              {value: 'locale', id: 20},
+              {value: 'unicode.pf2', id: 21}
             ]
           },
           {
             value: 'lost+found',
+            id: 22,
             options: {
               cssClasses: {
                 nodeExpanded: 'fa fa-circle',
@@ -203,26 +212,28 @@ export class AppComponent {
             },
             children: []
           },
-          {value: 'abi-4.4.0-57-generic'},
-          {value: 'config-4.4.0-57-generic'},
-          {value: 'initrd.img-4.4.0-47-generic'},
-          {value: 'initrd.img-4.4.0-57-generic'},
-          {value: 'memtest86+.bin'},
-          {value: 'System.map-4.4.0-57-generic'},
-          {value: 'memtest86+.elf'},
-          {value: 'vmlinuz-4.4.0-57-generic'},
-          {value: 'memtest86+_multiboot.bin'}
+          {value: 'abi-4.4.0-57-generic', id: 23},
+          {value: 'config-4.4.0-57-generic', id: 24},
+          {value: 'initrd.img-4.4.0-47-generic', id: 25},
+          {value: 'initrd.img-4.4.0-57-generic', id: 26},
+          {value: 'memtest86+.bin', id: 27},
+          {value: 'System.map-4.4.0-57-generic', id: 28},
+          {value: 'memtest86+.elf', id: 29},
+          {value: 'vmlinuz-4.4.0-57-generic', id: 30},
+          {value: 'memtest86+_multiboot.bin', id: 31}
         ]
       },
-      {value: 'build', children: [{value: 'php5-XxiyHJ'}]},
-      {value: 'cdrom', children: []},
-      {value: 'dev', children: []},
-      {value: 'etc', children: []},
+      {value: 'build', id: 32, children: [{value: 'php5-XxiyHJ', id: 33}]},
+      {value: 'cdrom', id: 34, children: []},
+      {value: 'dev', id: 35, children: []},
+      {value: 'etc', id: 36, children: []},
       {
         value: 'home',
+        id: 37,
         children: [
           {
             value: 'firstUser',
+            id: 38,
             options: {
               drag: false,
               cssClasses: {
@@ -235,35 +246,39 @@ export class AppComponent {
             children: [
               {
                 value: 'Documents',
+                id: 39,
                 children: [
                   {
                     value: 'home',
+                    id: 40,
                     children: [
                       {
                         value: 'bills',
+                        id: 41,
                         children: [
-                          {value: '2016-07-01-mobile.pdf', options: {cssClasses: {nodeLeaf: 'fa fa-file-pdf-o'}}},
-                          {value: '2016-07-01-electricity.pdf', options: {cssClasses: {nodeLeaf: 'fa fa-file-excel-o'}}},
-                          {value: '2016-07-01-water.pdf', options: {cssClasses: {nodeLeaf: 'fa fa-file-sound-o'}}},
-                          {value: '2016-07-01-internet.pdf', options: {cssClasses: {nodeLeaf: 'fa fa-file-word-o'}}},
-                          {value: '2016-08-01-mobile.pdf', options: {cssClasses: {nodeLeaf: 'fa fa-file-archive-o'}}},
-                          {value: '2016-10-01-internet.pdf', options: {cssClasses: {nodeLeaf: 'fa fa-file-pdf-o'}}}
+                          {value: '2016-07-01-mobile.pdf', id: 42, options: {cssClasses: {nodeLeaf: 'fa fa-file-pdf-o'}}},
+                          {value: '2016-07-01-electricity.pdf', id: 43, options: {cssClasses: {nodeLeaf: 'fa fa-file-excel-o'}}},
+                          {value: '2016-07-01-water.pdf', id: 44, options: {cssClasses: {nodeLeaf: 'fa fa-file-sound-o'}}},
+                          {value: '2016-07-01-internet.pdf', id: 45, options: {cssClasses: {nodeLeaf: 'fa fa-file-word-o'}}},
+                          {value: '2016-08-01-mobile.pdf', id: 46, options: {cssClasses: {nodeLeaf: 'fa fa-file-archive-o'}}},
+                          {value: '2016-10-01-internet.pdf', id: 47, options: {cssClasses: {nodeLeaf: 'fa fa-file-pdf-o'}}}
                         ]
                       },
-                      {value: 'photos', children: []}
+                      {value: 'photos', id: 48, children: []}
                     ]
                   }
                 ]
               },
-              {value: 'Downloads', children: []},
-              {value: 'Desktop', children: []},
-              {value: 'Pictures', children: []},
-              {value: 'Music', children: []},
-              {value: 'Public', children: []}
+              {value: 'Downloads', id: 49, children: []},
+              {value: 'Desktop', id: 50, children: []},
+              {value: 'Pictures', id: 51, children: []},
+              {value: 'Music', id: 52, children: []},
+              {value: 'Public', id: 53, children: []}
             ]
           },
           {
             value: 'secondUser',
+            id: 54,
             options: {
               cssClasses: {
                 nodeCollapsed: 'fa fa-folder-o',
@@ -272,37 +287,38 @@ export class AppComponent {
               }
             },
             children: [
-              {value: 'Documents', children: []},
+              {value: 'Documents', id: 55, children: []},
               {
                 value: 'Downloads',
+                id: 56,
                 children: [
-                  {value: 'Actobat3'},
-                  {value: 'Complib'},
-                  {value: 'Eudora'},
-                  {value: 'java'},
-                  {value: 'drivers'},
-                  {value: 'kathy'}
+                  {value: 'Actobat3', id: 57},
+                  {value: 'Complib', id: 58},
+                  {value: 'Eudora', id: 59},
+                  {value: 'java', id: 60},
+                  {value: 'drivers', id: 61},
+                  {value: 'kathy', id: 62}
                 ]
               },
-              {value: 'Desktop', children: []},
-              {value: 'Pictures', children: []},
-              {value: 'Music', children: []},
-              {value: 'Public', children: []}
+              {value: 'Desktop', id: 63, children: []},
+              {value: 'Pictures', id: 64, children: []},
+              {value: 'Music', id: 65, children: []},
+              {value: 'Public', id: 66, children: []}
             ]
           }
         ]
       },
-      {value: 'lib', children: [] },
-      {value: 'media', children: [] },
-      {value: 'opt', children: [] },
-      {value: 'proc', children: [] },
-      {value: 'root', children: [] },
-      {value: 'run', children: [] },
-      {value: 'sbin', children: [] },
-      {value: 'srv', children: [] },
-      {value: 'sys', children: [] },
-      {value: 'usr', children: [] },
-      {value: 'var', children: [] }
+      {value: 'lib', id: 67, children: [] },
+      {value: 'media', id: 68, children: [] },
+      {value: 'opt', id: 69, children: [] },
+      {value: 'proc', id: 70, children: [] },
+      {value: 'root', id: 71, children: [] },
+      {value: 'run', id: 72, children: [] },
+      {value: 'sbin', id: 73, children: [] },
+      {value: 'srv', id: 74, children: [] },
+      {value: 'sys', id: 75, children: [] },
+      {value: 'usr', id: 76, children: [] },
+      {value: 'var', id: 77, children: [] }
     ]
   };
 
@@ -321,6 +337,21 @@ export class AppComponent {
     selectEvent: false,
     editOnDouleClick: true
   };
+
+  private filesNodes = [];
+
+  constructor() {
+    this.getNodes(this.files);
+  }
+
+  public getNodes(tree: TreeModel): void {
+    this.filesNodes[tree.id] = tree;
+    if (tree.children !== undefined) {
+      for (let i = 0; i < tree.children.length; i++) {
+        this.getNodes(tree.children[i]);
+      }
+    }
+  }
 
   public onNodeRemoved(e: NodeEvent): void {
     this.logEvent(e, 'Removed');
@@ -359,5 +390,85 @@ export class AppComponent {
   public logEvent(e: NodeEvent, message: string): void {
     console.log(e);
     alertify.message(`${message}: ${e.node.value}`);
+  }
+
+  public fireClickOnNode(e: MouseEvent): void {
+    console.log('in fireClickOnNode');
+    if (this.filesNodes[5] !== undefined) {
+      console.log(this.filesNodes[5]);
+      if (this.filesNodes[5].api !== undefined) {
+        console.log(this.filesNodes[5].api);
+        if (this.filesNodes[5].api.select !== undefined) {
+          console.log(this.filesNodes[5].api.select);
+          this.filesNodes[5].api.select(e, this.filesNodes[5]);
+        } else {
+          console.log('no select function');
+        }
+      } else {
+        console.log('no api available');
+      }
+    } else {
+      console.log('no node available');
+    }
+  }
+
+  public fireUnClickOnNode(e: MouseEvent): void {
+    console.log('in fireUnClickOnNode');
+    if (this.filesNodes[5] !== undefined) {
+      console.log(this.filesNodes[5]);
+      if (this.filesNodes[5].api !== undefined) {
+        console.log(this.filesNodes[5].api);
+        if (this.filesNodes[5].api.deselect !== undefined) {
+          console.log(this.filesNodes[5].api.deselect);
+          this.filesNodes[5].api.deselect(e, this.filesNodes[5]);
+        } else {
+          console.log('no deselect function');
+        }
+      } else {
+        console.log('no api available');
+      }
+    } else {
+      console.log('no node available');
+    }
+  }
+
+  public fireExpandOnNode(e: MouseEvent): void {
+    console.log('in fireExpandOnNode');
+    if (this.filesNodes[5] !== undefined) {
+      console.log(this.filesNodes[5]);
+      if (this.filesNodes[5].api !== undefined) {
+        console.log(this.filesNodes[5].api);
+        if (this.filesNodes[5].api.deselect !== undefined) {
+          console.log(this.filesNodes[5].api.deselect);
+          this.filesNodes[5].api.deselect(e, this.filesNodes[5]);
+        } else {
+          console.log('no expand function');
+        }
+      } else {
+        console.log('no api available');
+      }
+    } else {
+      console.log('no node available');
+    }
+  }
+
+  public fireCollapseOnNode(e: MouseEvent): void {
+    console.log('in fireCollapseOnNode');
+    if (this.filesNodes[5] !== undefined) {
+      console.log(this.filesNodes[5]);
+      if (this.filesNodes[5].api !== undefined) {
+        console.log(this.filesNodes[5].api);
+        if (this.filesNodes[5].api.deselect !== undefined) {
+          console.log(this.filesNodes[5].api.deselect);
+          this.filesNodes[5].api.deselect(e, this.filesNodes[5]);
+        } else {
+          console.log('no collapse function');
+        }
+      } else {
+        console.log('no api available');
+      }
+    } else {
+      console.log('no node available');
+    }
   }
 }

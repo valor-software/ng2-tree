@@ -20,7 +20,7 @@ import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './utils/typ
         <div class="folding" (click)="switchFoldingType($event, tree)" [ngClass]="getFoldingTypeCssClass(tree)"></div>
         <div href="#" class="node-value"
               *ngIf="!isEditInProgress()"
-              [class.node-selected]="isSelected"
+              [class.node-selected]="tree.systems.isSelected"
               (click)="onNodeSelected($event, tree)"
               (dblclick)="onNodeDoubleClicked($event, tree)">
           <i [ngClass]="getNodeIconCssClass(tree)"></i>
@@ -32,11 +32,11 @@ import { applyNewValueToRenamable, isRenamable, isValueEmpty } from './utils/typ
               (valueChanged)="applyNewValue($event, tree)"/>
 
         <div #leftMenuButton [ngClass]="getLeftMenuCssClass()" *ngIf="tree.options.leftMenu" (click)="showLeftMenu($event)"></div>
-        <node-menu [type]="'left'" *ngIf="isLeftMenuVisible && tree.options.leftMenu" (menuItemSelected)="onMenuItemSelected($event)" [menuOptions]="leftMenuOptions" [node]="tree"></node-menu>
+        <node-menu [type]="'left'" *ngIf="tree.systems.isLeftMenuVisible && tree.options.leftMenu" (menuItemSelected)="onMenuItemSelected($event)" [menuOptions]="leftMenuOptions" [node]="tree"></node-menu>
 
       </div>
 
-      <node-menu [type]="'right'" *ngIf="isRightMenuVisible" (menuItemSelected)="onMenuItemSelected($event)" [menuOptions]="rightMenuOptions" [node]="tree"></node-menu>
+      <node-menu [type]="'right'" *ngIf="tree.systems.isRightMenuVisible" (menuItemSelected)="onMenuItemSelected($event)" [menuOptions]="rightMenuOptions" [node]="tree"></node-menu>
 
       <template [ngIf]="isNodeExpanded()">
         <tree-internal [options]="options" *ngFor="let child of tree.children; let position = index"
@@ -73,10 +73,6 @@ export class TreeInternalComponent implements OnInit {
 
   @ViewChild('leftMenuButton') leftMenuButton: ElementRef;
 
-  private isLeaf: boolean;
-  private isSelected: boolean = false;
-  private isRightMenuVisible: boolean = false;
-  private isLeftMenuVisible: boolean = false;
   private leftMenuOptions: MenuOptions;
   private rightMenuOptions: MenuOptions;
 
@@ -89,32 +85,71 @@ export class TreeInternalComponent implements OnInit {
   public ngOnInit(): void {
     this.indexInParent = 0;
     this.tree._indexInParent = this.indexInParent;
+    this.tree.systems = {
+      isLeaf: false,
+      isSelected: false,
+      isExpanded: false,
+      isRightMenuVisible: false,
+      isLeftMenuVisible: false
+    };
 
-    this.isLeaf = !Array.isArray(this.tree.children);
+    this.tree.systems.isLeaf = !Array.isArray(this.tree.children);
     this.tree.options = TreeModelOptions.getOptions(this.tree, this.parentTree, this.options);
 
-    this.isSelected = _.get(this.tree, 'options.selected', false);
+    this.tree.systems.isSelected = _.get(this.tree, 'options.selected', false);
 
     if (_.get(this.tree, 'options.rightMenu', true)) {
-      this.isRightMenuVisible = false;
+      this.tree.systems.isRightMenuVisible = false;
       this.rightMenuOptions = _.get(this.tree, 'options.rightMenuOptions', undefined);
       this.setUpRightMenuEventHandler();
     }
 
     if (_.get(this.tree, 'options.leftMenu', false)) {
-      this.isLeftMenuVisible = false
+      this.tree.systems.isLeftMenuVisible = false
       this.leftMenuOptions = _.get(this.tree, 'options.leftMenuOptions', undefined);
       this.setUpLeftMenuEventHandler();
     }
 
     this.setUpNodeSelectedEventHandler();
     this.setUpDraggableEventHandler();
+
+    this.initializeApi();
+  }
+
+  private initializeApi() {
+    this.tree.api = {
+      select: undefined,
+      deselect: undefined,
+      expand: undefined,
+      collapse: undefined,
+      service: this.treeService
+    };
+
+    this.tree.api.select = function(e: MouseEvent, tree: TreeModel) {
+      tree.systems.isSelected = true;
+      tree.api.service.nodeSelected$.next({node: tree});
+    }
+
+    this.tree.api.deselect = function(e: MouseEvent, tree: TreeModel) {
+      tree.systems.isSelected = false;
+    }
+  }
+
+  public onNodeSelected(e: MouseEvent, tree: TreeModel): void {
+    if (isLeftButtonClicked(e)) {
+      if (_.get(this, 'options.selectEvent', true)) {
+        this.tree.systems.isSelected = true;
+        this.treeService.nodeSelected$.next({node: this.tree});
+      } else {
+        this.switchFoldingType(e, tree);
+      }
+    }
   }
 
   private setUpNodeSelectedEventHandler(): void {
     this.treeService.nodeSelected$
       .filter((e: NodeSelectedEvent) => this.tree !== e.node)
-      .subscribe(() => this.isSelected = false);
+      .subscribe(() => this.tree.systems.isSelected = false);
   }
 
   private setUpRightMenuEventHandler(): void {
@@ -124,7 +159,7 @@ export class TreeInternalComponent implements OnInit {
       .filter((e: MenuEvent) => e.action === MenuAction.Close)
       .subscribe(() => {
         console.log('close right');
-        this.isRightMenuVisible = false;
+        this.tree.systems.isRightMenuVisible = false;
       });
   }
 
@@ -135,7 +170,7 @@ export class TreeInternalComponent implements OnInit {
       .filter((e: MenuEvent) => e.action === MenuAction.Close)
       .subscribe(() => {
         console.log('close left');
-        this.isLeftMenuVisible = false;
+        this.tree.systems.isLeftMenuVisible = false;
         if (_.get(this, 'leftMenuButton.nativeElement.classList', undefined) !== undefined) {
           this.leftMenuButton.nativeElement.classList.remove('active');
         }
@@ -193,7 +228,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private isFolder(): boolean {
-    return !this.isLeaf;
+    return !this.tree.systems.isLeaf;
   }
 
   private hasChild(child: TreeModel): boolean {
@@ -318,7 +353,7 @@ export class TreeInternalComponent implements OnInit {
 
   private onRenameSelected(): void {
     this.tree._status = TreeStatus.EditInProgress;
-    this.isRightMenuVisible = false;
+    this.tree.systems.isRightMenuVisible = false;
   }
 
   private onRemoveSelected(): void {
@@ -340,8 +375,8 @@ export class TreeInternalComponent implements OnInit {
       newNode.children = [];
     }
 
-    this.isLeaf ? this.parentTree.children.push(newNode) : this.tree.children.push(newNode);
-    this.isRightMenuVisible = false;
+    this.tree.systems.isLeaf ? this.parentTree.children.push(newNode) : this.tree.children.push(newNode);
+    this.tree.systems.isRightMenuVisible = false;
   }
 
   private onChildRemoved(e: NodeEvent, parent: TreeModel = this.tree): void {
@@ -357,10 +392,10 @@ export class TreeInternalComponent implements OnInit {
     }
 
     if (isLeftButtonClicked(e) && _.get(this.tree, 'options.leftMenu', false)) {
-      this.isLeftMenuVisible = !this.isLeftMenuVisible;
+      this.tree.systems.isLeftMenuVisible = !this.tree.systems.isLeftMenuVisible;
     }
 
-    if (this.isLeftMenuVisible) {
+    if (this.tree.systems.isLeftMenuVisible) {
       this.leftMenuButton.nativeElement.classList.add('active');
     }
   }
@@ -371,7 +406,7 @@ export class TreeInternalComponent implements OnInit {
     }
 
     if (isRightButtonClicked(e) && _.get(this.tree, 'options.rightMenu', true)) {
-      this.isRightMenuVisible = !this.isRightMenuVisible;
+      this.tree.systems.isRightMenuVisible = !this.tree.systems.isRightMenuVisible;
       this.nodeMenuService.nodeMenuEvents$.next({
         sender: this.element.nativeElement,
         action: MenuAction.Close
@@ -418,17 +453,6 @@ export class TreeInternalComponent implements OnInit {
     node._status = TreeStatus.Modified;
   }
 
-  private onNodeSelected(e: MouseEvent, tree: TreeModel): void {
-    if (isLeftButtonClicked(e)) {
-      if (_.get(this, 'options.selectEvent', true)) {
-        this.isSelected = true;
-        this.treeService.nodeSelected$.next({node: this.tree});
-      } else {
-        this.switchFoldingType(e, tree)
-      }
-    }
-  }
-
   private onNodeDoubleClicked(e: MouseEvent, tree: TreeModel): void {
     if (_.get(this, 'options.editOnDouleClick', false)) {
       this.onRenameSelected();
@@ -473,6 +497,9 @@ export class TreeComponent implements OnInit {
   @Output()
   public nodeMoved: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild(TreeInternalComponent)
+  public treeInternalComponent: TreeInternalComponent;
+
   private mainMenuOptions: MenuOptions;
   private hasMainMenu: boolean = false;
 
@@ -516,4 +543,8 @@ export class TreeComponent implements OnInit {
     );
   }
 
+  public triggerSelection(e: MouseEvent, node: TreeModel): void {
+    console.log(node.id);
+    this.treeInternalComponent.onNodeSelected(e, node);
+  }
 }

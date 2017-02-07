@@ -25,12 +25,30 @@ export class FoldingType {
   }
 }
 
+export interface TreeApi {
+  select: any;
+  deselect: any;
+  expand: any;
+  collapse: any;
+  service: any;
+}
+
+export interface TreeSystems {
+  isSelected: boolean;
+  isExpanded: boolean;
+  isLeaf: boolean;
+  isRightMenuVisible: boolean;
+  isLeftMenuVisible: boolean;
+}
+
 export interface TreeModel {
   value: string | RenamableNode;
   children?: Array<TreeModel>;
   hasNodeChildren?: boolean;
   hasLeafChildren?: boolean;
   id?: string | number;
+  api?: TreeApi;
+  systems?: TreeSystems;
   parentId?: string | number;
   options?: TreeModelOptions;
   _status?: TreeStatus;
