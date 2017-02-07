@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
 import { NodeMenuService } from './node-menu.service';
-import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuEvent, NodeMenuAction } from './menu.types';
+import { MenuItemSelectedEvent, MenuItemAction, MenuEvent, MenuAction } from './menu.types';
+import { MenuOptions, MenuItem } from '../options.types';
+import { TreeModel } from '../tree.types';
 import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
 
 @Component({
@@ -18,31 +20,19 @@ import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
   `
 })
 export class NodeMenuComponent implements OnInit, OnDestroy {
-  @Output()
-  public menuItemSelected: EventEmitter<NodeMenuItemSelectedEvent> = new EventEmitter<NodeMenuItemSelectedEvent>();
+  @Input()
+  public menuOptions: MenuOptions;
 
-  public availableMenuItems: NodeMenuItem[] = [
-    {
-      name: 'New tag',
-      action: NodeMenuItemAction.NewTag,
-      cssClass: 'new-tag'
-    },
-    {
-      name: 'New folder',
-      action: NodeMenuItemAction.NewFolder,
-      cssClass: 'new-folder'
-    },
-    {
-      name: 'Rename',
-      action: NodeMenuItemAction.Rename,
-      cssClass: 'rename'
-    },
-    {
-      name: 'Remove',
-      action: NodeMenuItemAction.Remove,
-      cssClass: 'remove'
-    }
-  ];
+  @Input()
+  public type: string;
+
+  @Input()
+  public node: TreeModel;
+
+  @Output()
+  public menuItemSelected: EventEmitter<MenuItemSelectedEvent> = new EventEmitter<MenuItemSelectedEvent>();
+
+  public availableMenuItems: Array<MenuItem>;
 
   private disposersForGlobalListeners: Function[] = [];
 
@@ -51,17 +41,29 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'keyup', this.closeMenu.bind(this)));
-    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'click', this.closeMenu.bind(this)));
+    this.availableMenuItems = MenuOptions.getNodeMenuItems(this.menuOptions, this.node);
+    if (this.type === 'left') {
+      this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'click', this.setEventListeners.bind(this)));
+    } else {
+      this.setEventListeners();
+    }
   }
 
   public ngOnDestroy(): void {
     this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
   }
 
-  private onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {
+  public setEventListeners(): void {
+    this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
+    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'keyup', this.closeMenu.bind(this)));
+    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'mousedown', this.closeMenu.bind(this)));
+  }
+
+  private onMenuItemSelected(e: MouseEvent, selectedMenuItem: MenuItem): void {
     if (isLeftButtonClicked(e)) {
-      this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
+      if (selectedMenuItem.action !== undefined) {
+        this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
+      }
     }
   }
 
@@ -70,18 +72,12 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
     const escapePressed = e instanceof KeyboardEvent && isEscapePressed(e);
 
     if (escapePressed || mouseClicked) {
-      const nodeMenuEvent: NodeMenuEvent = {
+      const nodeMenuEvent: MenuEvent = {
         sender: (e.target as HTMLElement),
-        action: NodeMenuAction.Close
+        action: MenuAction.Close
       };
 
       this.nodeMenuService.nodeMenuEvents$.next(nodeMenuEvent);
     }
   }
-}
-
-export interface NodeMenuItem {
-  name: string;
-  action: NodeMenuItemAction;
-  cssClass: string;
 }

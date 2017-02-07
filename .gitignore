@@ -34,3 +34,6 @@ yarn.lock
 yarn-error.log
 
 *.metadata.json
+
+#Untrack editors files
+.*.swp
