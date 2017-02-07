@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NodeEvent, TreeModel, TreeComponent, RenamableNode } from '../index';
+import { NodeEvent, TreeModel, RenamableNode } from '../index';
 
 require('../src/styles.css');
 
@@ -400,7 +400,7 @@ export class AppComponent {
         console.log(this.filesNodes[5].api);
         if (this.filesNodes[5].api.select !== undefined) {
           console.log(this.filesNodes[5].api.select);
-          this.filesNodes[5].api.select(e, this.filesNodes[5]);
+          this.filesNodes[5].api.select(this.filesNodes[5]);
         } else {
           console.log('no select function');
         }
@@ -420,7 +420,7 @@ export class AppComponent {
         console.log(this.filesNodes[5].api);
         if (this.filesNodes[5].api.deselect !== undefined) {
           console.log(this.filesNodes[5].api.deselect);
-          this.filesNodes[5].api.deselect(e, this.filesNodes[5]);
+          this.filesNodes[5].api.deselect(this.filesNodes[5]);
         } else {
           console.log('no deselect function');
         }
@@ -440,7 +440,7 @@ export class AppComponent {
         console.log(this.filesNodes[5].api);
         if (this.filesNodes[5].api.deselect !== undefined) {
           console.log(this.filesNodes[5].api.deselect);
-          this.filesNodes[5].api.deselect(e, this.filesNodes[5]);
+          this.filesNodes[5].api.deselect(this.filesNodes[5]);
         } else {
           console.log('no expand function');
         }
@@ -460,7 +460,7 @@ export class AppComponent {
         console.log(this.filesNodes[5].api);
         if (this.filesNodes[5].api.deselect !== undefined) {
           console.log(this.filesNodes[5].api.deselect);
-          this.filesNodes[5].api.deselect(e, this.filesNodes[5]);
+          this.filesNodes[5].api.deselect(this.filesNodes[5]);
         } else {
           console.log('no collapse function');
         }

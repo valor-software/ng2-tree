@@ -125,12 +125,12 @@ export class TreeInternalComponent implements OnInit {
       service: this.treeService
     };
 
-    this.tree.api.select = function(e: MouseEvent, tree: TreeModel) {
+    this.tree.api.select = function(tree: TreeModel) {
       tree.systems.isSelected = true;
       tree.api.service.nodeSelected$.next({node: tree});
     }
 
-    this.tree.api.deselect = function(e: MouseEvent, tree: TreeModel) {
+    this.tree.api.deselect = function(tree: TreeModel) {
       tree.systems.isSelected = false;
     }
   }
