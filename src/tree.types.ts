@@ -15,53 +15,51 @@ export class FoldingType {
 
 export interface TreeModel {
   value: string | RenamableNode;
-  children?: Array<TreeModel>;
-  options?: TreeModelOptions; 
+  children?: TreeModel[];
+  settings?: TreeModelSettings;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
-  _indexInParent?: number;
 }
 
-export class TreeModelOptions {
-  static: boolean = false;
+export class TreeModelSettings {
+  /**
+   * "static" property when set to true makes it impossible to drag'n'drop tree or call a menu on it.
+   * @name TreeModelSettings#static
+   * @type boolean
+   * @default false
+   */
+  public static?: boolean;
 
-  static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelOptions {
-    return _.defaults({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), {static: false});
+  public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
+    return _.defaults({}, _.get(sourceA, 'settings'), _.get(sourceB, 'settings'), {static: false});
   }
+}
+
+export interface Ng2TreeSettings {
+  /**
+   * Indicates root visibility in the tree. When true - root is invisible.
+   * @name Ng2TreeSettings#rootIsVisible
+   * @type boolean
+   */
+  rootIsVisible?: boolean;
 }
 
 export enum TreeStatus {
   New,
   Modified,
-  EditInProgress
+  IsBeingRenamed
 }
 
 export interface RenamableNode {
+  /**
+   * Set new value of the renamable node. Implementation of this method is up to user.
+   * @param {string} name - A new value of the node.
+   */
   setName(name: string): void;
+
+  /**
+   * Get string representation of the node. Implementation of this method is up to user.
+   * @returns {string} - A node string representation.
+   */
   toString(): string;
-}
-
-export interface NodeEvent {
-  node: TreeModel;
-}
-
-export interface NodeSelectedEvent extends NodeEvent {
-}
-
-export interface NodeDestructiveEvent extends NodeEvent {
-  parent: TreeModel;
-}
-
-export interface NodeMovedEvent extends NodeDestructiveEvent {
-}
-
-export interface NodeRemovedEvent extends NodeDestructiveEvent {
-}
-
-export interface NodeCreatedEvent extends NodeDestructiveEvent {
-}
-
-export interface NodeRenamedEvent extends NodeDestructiveEvent {
-  newValue: string | RenamableNode;
-  oldValue: string | RenamableNode;
 }

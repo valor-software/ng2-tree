@@ -15,7 +15,7 @@ const zlib = require('zlib');
 const async = require('async');
 const Builder = require('systemjs-builder');
 
-const pkg = require('../package.json');
+const pkg = require('./package.json');
 const name = pkg.name;
 const targetFolder = path.resolve('./bundles');
 
@@ -76,7 +76,7 @@ function buildSystemJs(options) {
     builder.config(config);
 
     return builder
-      .buildStatic('index', dest, {format: 'umd'})
+      .buildStatic('dist/index', dest, {format: 'umd'})
       .then(() => {
         console.log('Build complete.');
         cb();

@@ -1,8 +1,7 @@
 import { Directive, ElementRef, Input, Inject, Renderer, OnDestroy, OnInit } from '@angular/core';
-import { TreeModel } from '../tree.types';
 import { NodeDraggableService } from './node-draggable.service';
 import { CapturedNode } from './captured-node';
-import { NodeDraggableEvent } from './draggable.types';
+import { Tree } from '../tree';
 
 @Directive({
   selector: '[nodeDraggable]'
@@ -14,20 +13,19 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   public nodeDraggable: ElementRef;
 
   @Input()
-  public tree: TreeModel;
+  public tree: Tree;
 
   private nodeNativeElement: HTMLElement;
   private disposersForDragListeners: Function[] = [];
 
-  public constructor(@Inject(ElementRef) private element: ElementRef,
+  public constructor(@Inject(ElementRef) public element: ElementRef,
                      @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
                      @Inject(Renderer) private renderer: Renderer) {
-
     this.nodeNativeElement = element.nativeElement;
   }
 
   public ngOnInit(): void {
-    if (!this.tree.options.static) {
+    if (!this.tree.isStatic()) {
       this.renderer.setElementAttribute(this.nodeNativeElement, 'draggable', 'true');
       this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragenter', this.handleDragEnter.bind(this)));
       this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragover', this.handleDragOver.bind(this)));
@@ -114,11 +112,6 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   }
 
   private notifyThatNodeWasDropped(): void {
-    const event: NodeDraggableEvent = {
-      captured: this.nodeDraggableService.getCapturedNode(),
-      target: this.nodeDraggable
-    };
-
-    this.nodeDraggableService.draggableNodeEvents$.next(event);
+    this.nodeDraggableService.fireNodeDragged(this.nodeDraggableService.getCapturedNode(), this.nodeDraggable);
   }
 }

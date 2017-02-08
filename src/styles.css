@@ -143,3 +143,11 @@ tree-internal .tree .folding.node-leaf:before {
   content: '\25CF';
   color: #757575;
 }
+
+tree-internal ul.rootless {
+  padding: 0;
+}
+
+tree-internal div.rootless {
+  display: none !important;
+}

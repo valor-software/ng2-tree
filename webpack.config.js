@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 const webpackConfig = require('ng2-webpack-config').webpack.dev({
   src: 'demo',
-  dist: 'demo-build',
+  dist: 'demo-dist',
   htmlIndexes: ['index.html'],
   entry: {
     main: ['./demo/polyfills.ts', './demo/vendor.ts', './demo/index.ts']

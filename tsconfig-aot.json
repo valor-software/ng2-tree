@@ -11,6 +11,7 @@
     "declaration": true,
     "skipLibCheck": true,
     "stripInternal": true,
+    "outDir": "dist",
     "suppressImplicitAnyIndexErrors": true,
     "lib": ["dom", "es6"],
     "typeRoots": [
