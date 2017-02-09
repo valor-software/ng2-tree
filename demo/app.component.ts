@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NodeEvent, TreeModel, RenamableNode } from '../index';
+import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from '../index';
+
+require('../src/styles.css');
 
 declare const alertify: any;
 
@@ -10,7 +12,7 @@ declare const alertify: any;
       <div class="tree-container">
         <p>Fonts tree</p>
         <tree
-          [tree]="fonts" 
+          [tree]="fonts"
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
@@ -20,8 +22,9 @@ declare const alertify: any;
       </div>
       <div class="tree-container">
         <p>Programming languages tree</p>
-        <tree 
-          [tree]="pls" 
+        <tree
+          [tree]="pls"
+          [settings]="settings"
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
@@ -46,15 +49,22 @@ declare const alertify: any;
     .tree-demo-app .tree-container p {
       color: #40a070;
       font-size: 2em;
-    } 
+    }
   `]
 })
 export class AppComponent {
+  public settings: Ng2TreeSettings = {
+    rootIsVisible: false
+  };
+
   public fonts: TreeModel = {
     value: 'Fonts',
     children: [
       {
-        value: 'Serif',
+        value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
+        settings: {
+          'static': true
+        },
         children: [
           {value: 'Antiqua'},
           {value: 'DejaVu Serif'},
@@ -137,26 +147,26 @@ export class AppComponent {
   };
 
   public onNodeRemoved(e: NodeEvent): void {
-    this.logEvent(e, 'Removed');
+    AppComponent.logEvent(e, 'Removed');
   }
 
   public onNodeMoved(e: NodeEvent): void {
-    this.logEvent(e, 'Moved');
+    AppComponent.logEvent(e, 'Moved');
   }
 
   public onNodeRenamed(e: NodeEvent): void {
-    this.logEvent(e, 'Renamed');
+    AppComponent.logEvent(e, 'Renamed');
   }
 
   public onNodeCreated(e: NodeEvent): void {
-    this.logEvent(e, 'Created');
+    AppComponent.logEvent(e, 'Created');
   }
 
   public onNodeSelected(e: NodeEvent): void {
-    this.logEvent(e, 'Selected');
+    AppComponent.logEvent(e, 'Selected');
   }
 
-  public logEvent(e: NodeEvent, message: string): void {
+  private static logEvent(e: NodeEvent, message: string): void {
     console.log(e);
     alertify.message(`${message}: ${e.node.value}`);
   }
