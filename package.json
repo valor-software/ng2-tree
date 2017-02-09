@@ -1,6 +1,6 @@
 {
   "name": "ng2-tree",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "description": "angular2 component for visualizing data that can be naturally represented as a tree",
   "main": "index.js",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "flow.lint": "npm run flow.tslint",
     "flow.build": "npm run flow.clean && npm run flow.compile && webpack --progress --color",
     "flow.serve": "webpack-dev-server --hot --inline --colors --display-error-details --display-cached",
-    "pre:publish": "npm run flow.clean && npm run flow.lint && npm run test && npm run flow.compile && cp src/styles.css dist",
+    "pre:publish": "npm run flow.clean && npm run flow.lint && npm run test && npm run flow.compile && mkdir -p dist && cp src/styles.css dist && cp README.md dist && cp --parents media/* dist",
     "post:publish": "npm run flow.deploy:gh-pages",
     "start": "npm run flow.serve",
     "test": "karma start karma.conf.js"
