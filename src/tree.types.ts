@@ -34,11 +34,14 @@ export interface TreeApi {
 }
 
 export interface TreeSystems {
-  isSelected: boolean;
-  isExpanded: boolean;
-  isLeaf: boolean;
-  isRightMenuVisible: boolean;
-  isLeftMenuVisible: boolean;
+  isSelected?: boolean;
+  isExpanded?: boolean;
+  isLeaf?: boolean;
+  isRightMenuVisible?: boolean;
+  isLeftMenuVisible?: boolean;
+  foldingType?: FoldingType;
+  status?: TreeStatus;
+  indexInParent?: number;
 }
 
 export interface TreeModel {
@@ -51,9 +54,6 @@ export interface TreeModel {
   systems?: TreeSystems;
   parentId?: string | number;
   options?: TreeModelOptions;
-  _status?: TreeStatus;
-  _foldingType?: FoldingType;
-  _indexInParent?: number;
 }
 
 export enum TreeStatus {

@@ -76,7 +76,8 @@ export class AppComponent {
       {
         value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
         options: {
-          static: true
+          static: true,
+          selected: true
         },
         children: [
           {value: 'Antiqua'},
@@ -434,13 +435,13 @@ export class AppComponent {
 
   public fireExpandOnNode(e: MouseEvent): void {
     console.log('in fireExpandOnNode');
-    if (this.filesNodes[5] !== undefined) {
-      console.log(this.filesNodes[5]);
-      if (this.filesNodes[5].api !== undefined) {
-        console.log(this.filesNodes[5].api);
-        if (this.filesNodes[5].api.deselect !== undefined) {
-          console.log(this.filesNodes[5].api.deselect);
-          this.filesNodes[5].api.deselect(this.filesNodes[5]);
+    if (this.filesNodes[13] !== undefined) {
+      console.log(this.filesNodes[13]);
+      if (this.filesNodes[13].api !== undefined) {
+        console.log(this.filesNodes[13].api);
+        if (this.filesNodes[13].api.deselect !== undefined) {
+          console.log(this.filesNodes[13].api.deselect);
+          this.filesNodes[13].api.expand(this.filesNodes[13]);
         } else {
           console.log('no expand function');
         }
@@ -454,13 +455,13 @@ export class AppComponent {
 
   public fireCollapseOnNode(e: MouseEvent): void {
     console.log('in fireCollapseOnNode');
-    if (this.filesNodes[5] !== undefined) {
-      console.log(this.filesNodes[5]);
-      if (this.filesNodes[5].api !== undefined) {
-        console.log(this.filesNodes[5].api);
-        if (this.filesNodes[5].api.deselect !== undefined) {
-          console.log(this.filesNodes[5].api.deselect);
-          this.filesNodes[5].api.deselect(this.filesNodes[5]);
+    if (this.filesNodes[13] !== undefined) {
+      console.log(this.filesNodes[13]);
+      if (this.filesNodes[13].api !== undefined) {
+        console.log(this.filesNodes[13].api);
+        if (this.filesNodes[13].api.deselect !== undefined) {
+          console.log(this.filesNodes[13].api.deselect);
+          this.filesNodes[13].api.collapse(this.filesNodes[13]);
         } else {
           console.log('no collapse function');
         }

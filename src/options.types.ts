@@ -225,12 +225,18 @@ export class TreeModelOptions extends Options{
      * For default values take from TreeOptions
      */
     let defaults: TreeModelOptions = _.defaultsDeep({}, TreeModelOptions.convert(treeOptions));
+    var resultOptions;
 
     if (_.get(sourceB, 'options.applyToSubtree') === false) {
       defaults.applyToSubtree = false;
-      return _.defaultsDeep({}, _.get(sourceA, 'options'), defaults);
+      resultOptions = _.defaultsDeep({}, _.get(sourceA, 'options'), defaults);
+    } else {
+      resultOptions = _.defaultsDeep({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), defaults);
+      if (_.get(sourceB, 'options.selected', false)) {
+        resultOptions.selected = false;
+      }
     }
 
-    return _.defaultsDeep({}, _.get(sourceA, 'options'), _.get(sourceB, 'options'), defaults);
+    return resultOptions;
   }
 }

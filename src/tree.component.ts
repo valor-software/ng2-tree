@@ -84,19 +84,24 @@ export class TreeInternalComponent implements OnInit {
 
   public ngOnInit(): void {
     this.indexInParent = 0;
-    this.tree._indexInParent = this.indexInParent;
     this.tree.systems = {
-      isLeaf: false,
       isSelected: false,
+      isLeaf: false,
       isExpanded: false,
       isRightMenuVisible: false,
-      isLeftMenuVisible: false
+      isLeftMenuVisible: false,
+      foldingType: undefined,
+      status: undefined,
+      indexInParent: this.indexInParent
     };
 
     this.tree.systems.isLeaf = !Array.isArray(this.tree.children);
     this.tree.options = TreeModelOptions.getOptions(this.tree, this.parentTree, this.options);
 
     this.tree.systems.isSelected = _.get(this.tree, 'options.selected', false);
+    if (this.tree.systems.isSelected) {
+      this.treeService.nodeSelected$.next({node: this.tree});
+    }
 
     if (_.get(this.tree, 'options.rightMenu', true)) {
       this.tree.systems.isRightMenuVisible = false;
@@ -132,6 +137,20 @@ export class TreeInternalComponent implements OnInit {
 
     this.tree.api.deselect = function(tree: TreeModel) {
       tree.systems.isSelected = false;
+    }
+
+    this.tree.api.expand = function(tree: TreeModel) {
+      if (tree.systems.foldingType === FoldingType.Collapsed) {
+        tree.systems.foldingType = FoldingType.Expanded;
+        tree.api.service.nodeExpanded$.next({node: tree});
+      }
+    }
+
+    this.tree.api.collapse = function(tree: TreeModel) {
+      if (tree.systems.foldingType === FoldingType.Expanded) {
+        tree.systems.foldingType = FoldingType.Collapsed;
+        tree.api.service.nodeCollapsed$.next({node: tree});
+      }
     }
   }
 
@@ -223,8 +242,8 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private isEditInProgress(): boolean {
-    return this.tree._status === TreeStatus.EditInProgress
-      || this.tree._status === TreeStatus.New;
+    return this.tree.systems.status === TreeStatus.EditInProgress
+      || this.tree.systems.status === TreeStatus.New;
   }
 
   private isFolder(): boolean {
@@ -246,8 +265,8 @@ export class TreeInternalComponent implements OnInit {
     this.parentTree.children[siblingIndex] = this.tree;
     this.parentTree.children[thisTreeIndex] = sibling;
 
-    this.tree._indexInParent = siblingIndex;
-    sibling._indexInParent = thisTreeIndex;
+    this.tree.systems.indexInParent = siblingIndex;
+    sibling.systems.indexInParent = thisTreeIndex;
 
     this.treeService.nodeMoved$.next({
       node: this.tree,
@@ -258,7 +277,7 @@ export class TreeInternalComponent implements OnInit {
   // FOLDING -----------------------------------------------------------------------------------------------------------
 
   private isNodeExpanded(): boolean {
-    return this.tree._foldingType === FoldingType.Expanded;
+    return this.tree.systems.foldingType === FoldingType.Expanded;
   }
 
   private switchFoldingType(e: any, tree: TreeModel): void {
@@ -266,7 +285,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private getNodeIconCssClass(node: TreeModel): string {
-    if (node._foldingType === FoldingType.Leaf) {
+    if (node.systems.foldingType === FoldingType.Leaf) {
       return _.get(node, 'options.cssClasses.leafIcon', 'node-icon');
     }
 
@@ -278,7 +297,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private getFoldingTypeCssClass(node: TreeModel): string {
-    if (!node._foldingType) {
+    if (!node.systems.foldingType) {
       if (node.children) {
         if (
           !_.get(node, 'options.expandEmptyNode', true)
@@ -289,43 +308,39 @@ export class TreeInternalComponent implements OnInit {
         }
 
         if (_.get(node, 'options.expanded') === false) {
-          node._foldingType = FoldingType.Collapsed;
+          node.systems.foldingType = FoldingType.Collapsed;
         } else {
-          node._foldingType = FoldingType.Expanded;
+          node.systems.foldingType = FoldingType.Expanded;
         }
       } else {
-        node._foldingType = FoldingType.Leaf;
+        node.systems.foldingType = FoldingType.Leaf;
       }
     }
 
-    return node._foldingType.getCssClass(node.options);
+    return node.systems.foldingType.getCssClass(node.options);
   }
 
   private getNextFoldingType(node: TreeModel): FoldingType {
-    if (node._foldingType === FoldingType.Expanded) {
-      this.treeService.nodeCollapsed$.next({
-        node: node
-      });
+    if (node.systems.foldingType === FoldingType.Expanded) {
+      this.treeService.nodeCollapsed$.next({node: node});
 
       this.nodeCollapsed.emit({node: node});
 
       return FoldingType.Collapsed;
     }
 
-    this.treeService.nodeExpanded$.next({
-      node: node
-    });
+    this.treeService.nodeExpanded$.next({node: node});
 
     this.nodeExpanded.emit({node: node});
     return FoldingType.Expanded;
   }
 
   private handleFoldingType(parent: TreeModel, node: TreeModel): void {
-    if (node._foldingType === FoldingType.Leaf) {
+    if (node.systems.foldingType === FoldingType.Leaf) {
       return;
     }
 
-    node._foldingType = this.getNextFoldingType(node);
+    node.systems.foldingType = this.getNextFoldingType(node);
   }
 
   // MENU --------------------------------------------------------------------------------------------------------------
@@ -352,7 +367,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private onRenameSelected(): void {
-    this.tree._status = TreeStatus.EditInProgress;
+    this.tree.systems.status = TreeStatus.EditInProgress;
     this.tree.systems.isRightMenuVisible = false;
   }
 
@@ -369,7 +384,8 @@ export class TreeInternalComponent implements OnInit {
     if (!this.tree.children || !this.tree.children.push) {
       this.tree.children = [];
     }
-    const newNode: TreeModel = {value: '', _status: TreeStatus.New};
+    const newNode: TreeModel = {value: '', systems: this.tree.systems};
+    newNode.systems.status = TreeStatus.New;
 
     if (e.nodeMenuItemAction === MenuItemAction.NewNode) {
       newNode.children = [];
@@ -421,7 +437,7 @@ export class TreeInternalComponent implements OnInit {
         return this.nodeRemoved.emit({node: this.tree});
       }
 
-      node._status = TreeStatus.Modified;
+      node.systems.status = TreeStatus.Modified;
       return;
     }
 
@@ -437,11 +453,11 @@ export class TreeInternalComponent implements OnInit {
       node.value = e.value;
     }
 
-    if (node._status === TreeStatus.New) {
+    if (node.systems.status === TreeStatus.New) {
       this.treeService.nodeCreated$.next({node, parent: this.parentTree});
     }
 
-    if (node._status === TreeStatus.EditInProgress) {
+    if (node.systems.status === TreeStatus.EditInProgress) {
       this.treeService.nodeRenamed$.next({
         node,
         parent: this.parentTree,
@@ -450,7 +466,7 @@ export class TreeInternalComponent implements OnInit {
       });
     }
 
-    node._status = TreeStatus.Modified;
+    node.systems.status = TreeStatus.Modified;
   }
 
   private onNodeDoubleClicked(e: MouseEvent, tree: TreeModel): void {

@@ -72,7 +72,8 @@ export class MenuComponent implements OnInit, OnDestroy {
             if (!this.rootNode.children || !this.rootNode.children.push) {
               this.rootNode.children = [];
             }
-            var newNode: TreeModel = {value: '', _status: TreeStatus.New};
+            var newNode: TreeModel = {value: '', systems: this.rootNode.systems};
+            newNode.systems.status = TreeStatus.New;
             this.rootNode.children.push(newNode)
             break;
           case MenuItemAction.NewNode.name:
@@ -80,7 +81,8 @@ export class MenuComponent implements OnInit, OnDestroy {
             if (!this.rootNode.children || !this.rootNode.children.push) {
               this.rootNode.children = [];
             }
-            var newNode: TreeModel = {value: '', _status: TreeStatus.New};
+            var newNode: TreeModel = {value: '', systems: this.rootNode.systems};
+            newNode.systems.status = TreeStatus.New;
             newNode.children = [];
             this.rootNode.children.push(newNode)
             break;
