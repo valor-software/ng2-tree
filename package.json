@@ -40,7 +40,7 @@
     "flow.lint": "npm run flow.tslint",
     "flow.build": "npm run flow.clean && npm run flow.compile && webpack --progress --color",
     "flow.serve": "webpack-dev-server --hot --inline --colors --display-error-details --display-cached",
-    "pre:publish": "npm run flow.clean && npm run flow.lint && npm run test &&  npm run flow.compile",
+    "pre:publish": "npm run flow.clean && npm run flow.lint && npm run test && npm run flow.compile && cp src/styles.css dist",
     "post:publish": "npm run flow.deploy:gh-pages",
     "start": "npm run flow.serve",
     "test": "karma start karma.conf.js"

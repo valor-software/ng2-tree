@@ -1,7 +1,7 @@
 #!/usr/bin/node
 
 const _ = require('lodash');
-const fs = require('fs'); 
+const fs = require('fs');
 const shell = require('shelljs');
 const pkg = require('./package.json');
 
