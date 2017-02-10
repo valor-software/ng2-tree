@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from '../index';
 
 require('../src/styles.css');
@@ -10,7 +10,7 @@ declare const alertify: any;
   template: `
     <div class="tree-demo-app">
       <div class="tree-container">
-        <p>Fonts tree</p>
+        <p class="tree-title">Fonts tree</p>
         <tree
           [tree]="fonts"
           (nodeRemoved)="onNodeRemoved($event)"
@@ -21,7 +21,8 @@ declare const alertify: any;
         </tree>
       </div>
       <div class="tree-container">
-        <p>Programming languages tree</p>
+        <p class="tree-title">Programming languages tree</p>
+        <p class="notice">this tree is loaded asynchronously</p>
         <tree
           [tree]="pls"
           [settings]="settings"
@@ -46,13 +47,18 @@ declare const alertify: any;
       vertical-align: top;
       width: 500px;
     }
-    .tree-demo-app .tree-container p {
+    .tree-title {
       color: #40a070;
       font-size: 2em;
     }
+    .notice {
+      color: #e91e63;
+      font-size: 1.2em;
+      font-style: italic;
+    }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public settings: Ng2TreeSettings = {
     rootIsVisible: false
   };
@@ -66,17 +72,17 @@ export class AppComponent {
           'static': true
         },
         children: [
-          {value: 'Antiqua'},
-          {value: 'DejaVu Serif'},
-          {value: 'Garamond'},
-          {value: 'Georgia'},
-          {value: 'Times New Roman'},
+          { value: 'Antiqua' },
+          { value: 'DejaVu Serif' },
+          { value: 'Garamond' },
+          { value: 'Georgia' },
+          { value: 'Times New Roman' },
           {
             value: 'Slab serif',
             children: [
-              {value: 'Candida'},
-              {value: 'Swift'},
-              {value: 'Guardian Egyptian'}
+              { value: 'Candida' },
+              { value: 'Swift' },
+              { value: 'Guardian Egyptian' }
             ]
           }
         ]
@@ -84,67 +90,73 @@ export class AppComponent {
       {
         value: 'Sans-serif',
         children: [
-          {value: 'Arial'},
-          {value: 'Century Gothic'},
-          {value: 'DejaVu Sans'},
-          {value: 'Futura'},
-          {value: 'Geneva'},
-          {value: 'Liberation Sans'}
+          { value: 'Arial' },
+          { value: 'Century Gothic' },
+          { value: 'DejaVu Sans' },
+          { value: 'Futura' },
+          { value: 'Geneva' },
+          { value: 'Liberation Sans' }
         ]
       },
       {
         value: 'Monospace',
         children: [
-          {value: 'Input Mono'},
-          {value: 'Roboto Mono'},
-          {value: 'Liberation Mono'},
-          {value: 'Hack'},
-          {value: 'Consolas'},
-          {value: 'Menlo'},
-          {value: 'Source Code Pro'}
+          { value: 'Input Mono' },
+          { value: 'Roboto Mono' },
+          { value: 'Liberation Mono' },
+          { value: 'Hack' },
+          { value: 'Consolas' },
+          { value: 'Menlo' },
+          { value: 'Source Code Pro' }
         ]
       }
     ]
   };
 
-  public pls: TreeModel = {
-    value: 'Programming languages by programming paradigm',
-    children: [
-      {
-        value: 'Aspect-oriented programming',
-        children: [
-          {value: 'AspectJ'},
-          {value: 'AspectC++'}
-        ]
-      },
-      {
-        value: 'Object-oriented programming',
+  public pls: TreeModel;
+
+  public ngOnInit(): void {
+    setTimeout(() => {
+      this.pls = {
+        value: 'Programming languages by programming paradigm',
         children: [
           {
-            value: {
-              name: 'Java',
-              setName(name: string): void {
-                this.name = name;
-              },
-              toString(): string {
-                return this.name;
-              }
-            } as RenamableNode
+            value: 'Aspect-oriented programming',
+            children: [
+              { value: 'AspectJ' },
+              { value: 'AspectC++' }
+            ]
           },
-          {value: 'C++'},
-          {value: 'C#'}
+          {
+            value: 'Object-oriented programming',
+            children: [
+              {
+                value: {
+                  name: 'Java',
+                  setName(name: string): void {
+                    this.name = name;
+                  },
+                  toString(): string {
+                    return this.name;
+                  }
+                } as RenamableNode
+              },
+              { value: 'C++' },
+              { value: 'C#' }
+            ]
+          },
+          {
+            value: 'Prototype-based programming',
+            children: [
+              { value: 'JavaScript' },
+              { value: 'CoffeeScript' },
+              { value: 'TypeScript' }
+            ]
+          }
         ]
-      },
-      {
-        value: 'Prototype-based programming',
-        children: [
-          {value: 'JavaScript'},
-          {value: 'CoffeeScript'},
-          {value: 'TypeScript'}
-        ]
-      }
-    ]
-  };
+      };
+    }, 2000);
+  }
 
   public onNodeRemoved(e: NodeEvent): void {
     AppComponent.logEvent(e, 'Removed');
