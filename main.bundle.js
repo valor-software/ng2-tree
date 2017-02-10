@@ -47926,9 +47926,16 @@
 	        this.nodeSelected = new core_1.EventEmitter();
 	        this.nodeMoved = new core_1.EventEmitter();
 	    }
+	    TreeComponent.prototype.ngOnChanges = function (changes) {
+	        if (!this.treeModel) {
+	            this.tree = TreeComponent.EMPTY_TREE;
+	        }
+	        else {
+	            this.tree = tree_1.Tree.buildTreeFromModel(this.treeModel);
+	        }
+	    };
 	    TreeComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.tree = tree_1.Tree.buildTreeFromModel(this.treeModel);
 	        this.treeService.nodeRemoved$.subscribe(function (e) {
 	            _this.nodeRemoved.emit(e);
 	        });
@@ -47945,6 +47952,7 @@
 	            _this.nodeMoved.emit(e);
 	        });
 	    };
+	    TreeComponent.EMPTY_TREE = new tree_1.Tree({ value: '' });
 	    __decorate([
 	        core_1.Input('tree'), 
 	        __metadata('design:type', Object)
@@ -95009,45 +95017,50 @@
 	                }
 	            ]
 	        };
-	        this.pls = {
-	            value: 'Programming languages by programming paradigm',
-	            children: [
-	                {
-	                    value: 'Aspect-oriented programming',
-	                    children: [
-	                        { value: 'AspectJ' },
-	                        { value: 'AspectC++' }
-	                    ]
-	                },
-	                {
-	                    value: 'Object-oriented programming',
-	                    children: [
-	                        {
-	                            value: {
-	                                name: 'Java',
-	                                setName: function (name) {
-	                                    this.name = name;
-	                                },
-	                                toString: function () {
-	                                    return this.name;
-	                                }
-	                            }
-	                        },
-	                        { value: 'C++' },
-	                        { value: 'C#' }
-	                    ]
-	                },
-	                {
-	                    value: 'Prototype-based programming',
-	                    children: [
-	                        { value: 'JavaScript' },
-	                        { value: 'CoffeeScript' },
-	                        { value: 'TypeScript' }
-	                    ]
-	                }
-	            ]
-	        };
 	    }
+	    AppComponent.prototype.ngOnInit = function () {
+	        var _this = this;
+	        setTimeout(function () {
+	            _this.pls = {
+	                value: 'Programming languages by programming paradigm',
+	                children: [
+	                    {
+	                        value: 'Aspect-oriented programming',
+	                        children: [
+	                            { value: 'AspectJ' },
+	                            { value: 'AspectC++' }
+	                        ]
+	                    },
+	                    {
+	                        value: 'Object-oriented programming',
+	                        children: [
+	                            {
+	                                value: {
+	                                    name: 'Java',
+	                                    setName: function (name) {
+	                                        this.name = name;
+	                                    },
+	                                    toString: function () {
+	                                        return this.name;
+	                                    }
+	                                }
+	                            },
+	                            { value: 'C++' },
+	                            { value: 'C#' }
+	                        ]
+	                    },
+	                    {
+	                        value: 'Prototype-based programming',
+	                        children: [
+	                            { value: 'JavaScript' },
+	                            { value: 'CoffeeScript' },
+	                            { value: 'TypeScript' }
+	                        ]
+	                    }
+	                ]
+	            };
+	        }, 2000);
+	    };
 	    AppComponent.prototype.onNodeRemoved = function (e) {
 	        AppComponent.logEvent(e, 'Removed');
 	    };
@@ -95070,8 +95083,8 @@
 	    AppComponent = __decorate([
 	        core_1.Component({
 	            selector: 'app',
-	            template: "\n    <div class=\"tree-demo-app\">\n      <div class=\"tree-container\">\n        <p>Fonts tree</p>\n        <tree\n          [tree]=\"fonts\"\n          (nodeRemoved)=\"onNodeRemoved($event)\"\n          (nodeRenamed)=\"onNodeRenamed($event)\"\n          (nodeSelected)=\"onNodeSelected($event)\"\n          (nodeMoved)=\"onNodeMoved($event)\"\n          (nodeCreated)=\"onNodeCreated($event)\">\n        </tree>\n      </div>\n      <div class=\"tree-container\">\n        <p>Programming languages tree</p>\n        <tree\n          [tree]=\"pls\"\n          [settings]=\"settings\"\n          (nodeRemoved)=\"onNodeRemoved($event)\"\n          (nodeRenamed)=\"onNodeRenamed($event)\"\n          (nodeSelected)=\"onNodeSelected($event)\"\n          (nodeMoved)=\"onNodeMoved($event)\"\n          (nodeCreated)=\"onNodeCreated($event)\">\n        </tree>\n      </div>\n    </div>\n    ",
-	            styles: ["\n   .tree-demo-app {\n      margin: auto;\n      width: -moz-fit-content;\n      width: -webkit-fit-content;\n      width: fit-content;\n    }\n    .tree-demo-app .tree-container {\n      float: left;\n      vertical-align: top;\n      width: 500px;\n    }\n    .tree-demo-app .tree-container p {\n      color: #40a070;\n      font-size: 2em;\n    }\n  "]
+	            template: "\n    <div class=\"tree-demo-app\">\n      <div class=\"tree-container\">\n        <p class=\"tree-title\">Fonts tree</p>\n        <tree\n          [tree]=\"fonts\"\n          (nodeRemoved)=\"onNodeRemoved($event)\"\n          (nodeRenamed)=\"onNodeRenamed($event)\"\n          (nodeSelected)=\"onNodeSelected($event)\"\n          (nodeMoved)=\"onNodeMoved($event)\"\n          (nodeCreated)=\"onNodeCreated($event)\">\n        </tree>\n      </div>\n      <div class=\"tree-container\">\n        <p class=\"tree-title\">Programming languages tree</p>\n        <p class=\"notice\">this tree is loaded asynchronously</p>\n        <tree\n          [tree]=\"pls\"\n          [settings]=\"settings\"\n          (nodeRemoved)=\"onNodeRemoved($event)\"\n          (nodeRenamed)=\"onNodeRenamed($event)\"\n          (nodeSelected)=\"onNodeSelected($event)\"\n          (nodeMoved)=\"onNodeMoved($event)\"\n          (nodeCreated)=\"onNodeCreated($event)\">\n        </tree>\n      </div>\n    </div>\n    ",
+	            styles: ["\n   .tree-demo-app {\n      margin: auto;\n      width: -moz-fit-content;\n      width: -webkit-fit-content;\n      width: fit-content;\n    }\n    .tree-demo-app .tree-container {\n      float: left;\n      vertical-align: top;\n      width: 500px;\n    }\n    .tree-title {\n      color: #40a070;\n      font-size: 2em;\n    }\n    .notice {\n      color: #e91e63;\n      font-size: 1.2em;\n      font-style: italic;\n    }\n  "]
 	        }), 
 	        __metadata('design:paramtypes', [])
 	    ], AppComponent);
