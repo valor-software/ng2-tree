@@ -3,7 +3,7 @@
 const path = require('path');
 
 module.exports = {
-    devtool: 'inline-source-map',
+    // devtool: 'inline-source-map',
     module: {
         loaders: [
             { loader: 'raw', test: /\.(css|html)$/ },
