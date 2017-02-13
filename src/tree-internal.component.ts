@@ -14,18 +14,18 @@ import { NodeDraggableEvent } from './draggable/draggable.events';
   <ul class="tree" *ngIf="tree" [ngClass]="{rootless: isRootHidden()}">
     <li>
       <div class="value-container"
-        [ngClass]="{rootless: isRootHidden()}" 
-        (contextmenu)="showMenu($event)" 
+        [ngClass]="{rootless: isRootHidden()}"
+        (contextmenu)="showMenu($event)"
         [nodeDraggable]="element"
         [tree]="tree">
 
         <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
-        <div class="node-value" 
-          *ngIf="!shouldShowInputForTreeValue()" 
-          [class.node-selected]="isSelected" 
+        <div class="node-value"
+          *ngIf="!shouldShowInputForTreeValue()"
+          [class.node-selected]="isSelected"
           (click)="onNodeSelected($event)">{{tree.value}}</div>
 
-        <input type="text" class="node-value" 
+        <input type="text" class="node-value"
            *ngIf="shouldShowInputForTreeValue()"
            [nodeEditable]="tree.value"
            (valueChanged)="applyNewValue($event)"/>
