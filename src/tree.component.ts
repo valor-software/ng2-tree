@@ -44,7 +44,7 @@ export class TreeComponent implements OnInit, OnChanges {
     if (!this.treeModel) {
       this.tree = TreeComponent.EMPTY_TREE;
     } else {
-      this.tree = Tree.buildTreeFromModel(this.treeModel);
+      this.tree = new Tree(this.treeModel);
     }
   }
 

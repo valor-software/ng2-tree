@@ -42,7 +42,7 @@ describe('NodeDraggableService', function () {
   }));
 
   it('should not fire event if node is static', inject([NodeDraggableService], (nodeDraggableService) => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       settings: {
         'static': true
@@ -71,5 +71,15 @@ describe('NodeDraggableService', function () {
     const actualCapturedNode = nodeDraggableService.getCapturedNode(stubCapturedNode);
 
     expect(actualCapturedNode).toBe(stubCapturedNode);
+  }));
+
+  it('should release captured node', inject([NodeDraggableService], (nodeDraggableService) => {
+    const stubCapturedNode = new CapturedNode(null, null);
+
+    nodeDraggableService.captureNode(stubCapturedNode);
+    expect(nodeDraggableService.getCapturedNode(stubCapturedNode)).toBe(stubCapturedNode);
+
+    nodeDraggableService.releaseCapturedNode();
+    expect(nodeDraggableService.getCapturedNode(stubCapturedNode)).toBeNull();
   }));
 });

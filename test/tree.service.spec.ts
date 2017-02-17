@@ -105,7 +105,7 @@ describe('TreeService', () => {
   });
 
   it('removes node from parent when when appropriate event fires', done => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
         {value: 'Servant#1'},
@@ -127,7 +127,7 @@ describe('TreeService', () => {
   });
 
   it('should produce drag event for the same element and not on captured node children', done => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
         {value: 'Servant#1'},
