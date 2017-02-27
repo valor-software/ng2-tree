@@ -44,7 +44,9 @@
     "post:publish": "npm run flow.deploy:gh-pages",
     "start": "npm run flow.serve",
     "test": "npm run flow.clean && karma start karma.conf.js",
-    "test:cover": "COVERAGE=enabled npm run test"
+    "e2e": "protractor protractor.conf.js",
+    "test:cover": "COVERAGE=enabled npm run test",
+    "postinstall": "webdriver-manager update"
   },
   "devDependencies": {
     "@angular/common": "2.4.5",
@@ -68,6 +70,7 @@
     "gulp-gh-pages": "0.5.4",
     "istanbul-instrumenter-loader": "2.0.0",
     "jasmine-core": "2.5.2",
+    "jasmine-spec-reporter": "~3.2.0",
     "karma": "1.4.0",
     "karma-coverage-istanbul-reporter": "0.2.0",
     "karma-jasmine": "1.1.0",
@@ -90,6 +93,8 @@
     "typescript": "2.0.10",
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",
-    "zone.js": "0.7.6"
+    "zone.js": "0.7.6",
+    "protractor": "~5.1.0",
+    "ts-node": "~2.0.0"
   }
 }
