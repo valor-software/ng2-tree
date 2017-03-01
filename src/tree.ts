@@ -15,17 +15,16 @@ export class Tree {
   public node: TreeModel;
   public parent: Tree;
 
-  public constructor(node: TreeModel, parent: Tree = null, isBranch: boolean = false) {
-    this.buildTreeFromModel(node, parent, isBranch);
-  }
-
   /**
    * Build an instance of Tree from an object implementing TreeModel interface.
    * @param {TreeModel} model - A model that is used to build a tree.
    * @param {Tree} [parent] - An optional parent if you want to build a tree from the model that should be a child of an existing Tree instance.
    * @param {boolean} [isBranch] - An option that makes a branch from created tree. Branch can have children.
-   * @static
    */
+  public constructor(node: TreeModel, parent: Tree = null, isBranch: boolean = false) {
+    this.buildTreeFromModel(node, parent, isBranch);
+  }
+
   private buildTreeFromModel(model: TreeModel, parent: Tree, isBranch: boolean): void {
     this.parent = parent;
     this.node = _.extend(_.omit(model, 'children') as TreeModel, {
@@ -45,6 +44,11 @@ export class Tree {
     }
   }
 
+  /**
+   * Check whether children of the node are being loaded.
+   * Makes sense only for nodes that define `loadChildren` function.
+   * @returns {boolean} A flag indicating that children are being loaded.
+   */
   public childrenAreBeingLoaded(): boolean {
     return (this._childrenLoadingState === ChildrenLoadingState.Loading);
   }
@@ -55,6 +59,11 @@ export class Tree {
      && (!!this._loadChildren);
   }
 
+  /**
+   * Check whether children of the node should be loaded and not loaded yet.
+   * Makes sense only for nodes that define `loadChildren` function.
+   * @returns {boolean} A flag indicating that children should be loaded for the current node.
+   */
   public childrenShouldBeLoaded(): boolean {
     return !!this._loadChildren;
   }
@@ -67,6 +76,11 @@ export class Tree {
     return this._children;
   }
 
+  /**
+   * By getting value from this property you start process of loading node's children using `loadChildren` function.
+   * Once children are loaded `loadChildren` function won't be called anymore and loaded for the first time children are emitted in case of subsequent calls.
+   * @returns {Observable<Tree[]>} An observable which emits children once they are loaded.
+   */
   public get childrenAsync(): Observable<Tree[]> {
     if(this.canLoadChildren()) {
       setTimeout(() => this._childrenLoadingState = ChildrenLoadingState.Loading);

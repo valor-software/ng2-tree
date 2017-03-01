@@ -3,7 +3,8 @@ import {
   TreeModelSettings,
   Ng2TreeSettings,
   RenamableNode,
-  FoldingType
+  FoldingType,
+  ChildrenLoadingFunction
 } from './src/tree.types';
 
 import { Tree } from './src/tree';
