@@ -110,6 +110,7 @@ Voila! That's pretty much it - enjoy :blush:
 
 ## :eyes: Demo
 Feel free to examine the [demo](https://valor-software.github.io/ng2-tree) and its [sources](demo/) to find out how things are wired.
+Also there is [another demo built with Angular CLI](https://github.com/rychkog/ng2-tree-demo).
 
 ## :wrench: API
 
