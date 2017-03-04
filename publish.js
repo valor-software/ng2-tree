@@ -8,7 +8,6 @@ const pkg = require('./package.json');
 shell.exec('npm run pre:publish');
 fs.writeFileSync('dist/package.json', JSON.stringify(_.omit(pkg, ['private']), null, 2), {encoding: 'utf-8'});
 
-if (process.env.PUBLISH_ON_NPM) {
-  shell.exec('npm publish dist');
-  shell.exec('npm run post:publish');
-}
+shell.exec('npm publish dist');
+shell.exec('npm run post:publish');
+
