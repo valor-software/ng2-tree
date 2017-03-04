@@ -19,15 +19,15 @@ describe('Tree', () => {
     const renamableNode = {
       name: '42',
       age: 'millions years',
-      setName (value: string): void {
+      setName(value: string): void {
         this.name = value;
       },
-      toString (): string {
+      toString(): string {
         return this.name;
       }
     };
 
-    const tree = new Tree({value: renamableNode});
+    const tree = new Tree({ value: renamableNode });
 
     tree.value = '12';
     expect(tree.value.toString()).toEqual('12');
@@ -46,28 +46,28 @@ describe('Tree', () => {
       }
     };
 
-    const tree = new Tree({value: renamableNode});
+    const tree = new Tree({ value: renamableNode });
 
-    tree.value = {setName: () => {}, toString: () => 'Hi!'};
+    tree.value = { setName: () => { }, toString: () => 'Hi!' };
     expect(tree.value.toString()).toEqual('Hi!');
   });
 
   it('should be able to apply value to regular node', () => {
-    const tree = new Tree({value: 'bla'});
+    const tree = new Tree({ value: 'bla' });
 
     tree.value = '12';
     expect(tree.value).toEqual('12');
   });
 
   it('assigns only RenamableNodes and strings as values', () => {
-    const tree = new Tree({value: 'bla'});
+    const tree = new Tree({ value: 'bla' });
 
     tree.value = ['boo!'];
     expect(tree.value).toEqual('bla');
   });
 
   it('should not apply value if it is empty', () => {
-    const tree = new Tree({value: 'bla'});
+    const tree = new Tree({ value: 'bla' });
 
     tree.value = '';
     expect(tree.value).toEqual('bla');
@@ -81,8 +81,8 @@ describe('Tree', () => {
 
   it('should know how to detect Renamable node', () => {
     const renamableNode = {
-      setName: () => {},
-      toString: () => {}
+      setName: () => { },
+      toString: () => { }
     };
 
     const renamableNodeImposter = {
@@ -103,23 +103,23 @@ describe('Tree', () => {
     const fonts: TreeModel = {
       value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
       children: [
-        {value: 'Antiqua'},
-        {value: 'DejaVu Serif'},
-        {value: 'Garamond'},
-        {value: 'Georgia'},
-        {value: 'Times New Roman'},
+        { value: 'Antiqua' },
+        { value: 'DejaVu Serif' },
+        { value: 'Garamond' },
+        { value: 'Georgia' },
+        { value: 'Times New Roman' },
         {
           value: 'Slab serif',
           children: [
-            {value: 'Candida'},
-            {value: 'Swift'},
-            {value: 'Guardian Egyptian'}
+            { value: 'Candida' },
+            { value: 'Swift' },
+            { value: 'Guardian Egyptian' }
           ]
         }
       ]
     };
 
-    const tree = Tree.buildTreeFromModel(fonts);
+    const tree = new Tree(fonts);
     expect(tree).not.toBeFalsy('Constructed tree should exist');
     expect(tree instanceof Tree).toBe(true, 'tree should be instance of Tree');
     expect(tree.value).toEqual(fonts.value);
@@ -132,21 +132,21 @@ describe('Tree', () => {
     expect(slabSerifFontsTree.children.length).toEqual(3);
     expect(slabSerifFontsTree.children[1].value).toEqual('Swift');
     expect(slabSerifFontsTree.children[1].positionInParent).toEqual(1);
-   });
+  });
 
   it('builds completely new structure from TreeModel and changes to TreeModel should not affect built Tree', () => {
     const fonts: TreeModel = {
       value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
       children: [
-        {value: 'Antiqua'},
-        {value: 'DejaVu Serif'},
-        {value: 'Garamond'},
-        {value: 'Georgia'},
-        {value: 'Times New Roman'},
+        { value: 'Antiqua' },
+        { value: 'DejaVu Serif' },
+        { value: 'Garamond' },
+        { value: 'Georgia' },
+        { value: 'Times New Roman' },
       ]
     };
 
-    const tree = Tree.buildTreeFromModel(fonts);
+    const tree = new Tree(fonts);
 
     fonts.children[0].value = 'bla';
 
@@ -158,17 +158,17 @@ describe('Tree', () => {
     const fonts: TreeModel = {
       value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
       children: [
-        {value: 'Antiqua'},
-        {value: 'DejaVu Serif'},
-        {value: 'Garamond'},
-        {value: 'Georgia'},
-        {value: 'Times New Roman'},
+        { value: 'Antiqua' },
+        { value: 'DejaVu Serif' },
+        { value: 'Garamond' },
+        { value: 'Georgia' },
+        { value: 'Times New Roman' },
       ]
     };
 
     spyOn(TreeModelSettings, 'merge');
 
-    Tree.buildTreeFromModel(fonts);
+    new Tree(fonts);
 
     expect(TreeModelSettings.merge).toHaveBeenCalledTimes(6);
     expect(TreeModelSettings.merge).toHaveBeenCalledWith(fonts, undefined);
@@ -178,19 +178,21 @@ describe('Tree', () => {
     const fonts: TreeModel = {
       value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
       children: [
-        {value: 'Antiqua'},
-        {value: 'DejaVu Serif'},
-        {value: 'Garamond'},
-        {value: 'Georgia'},
-        {value: 'Times New Roman'},
+        { value: 'Antiqua' },
+        { value: 'DejaVu Serif' },
+        { value: 'Garamond' },
+        { value: 'Georgia' },
+        { value: 'Times New Roman' },
       ]
     };
 
-    const tree = Tree.buildTreeFromModel(fonts);
-    const child = new Tree({value: 'Master', children: [
-      {value: 'Servant#1'},
-      {value: 'Servant#2'},
-    ]});
+    const tree = new Tree(fonts);
+    const child = new Tree({
+      value: 'Master', children: [
+        { value: 'Servant#1' },
+        { value: 'Servant#2' },
+      ]
+    });
 
     const addedChild = tree.addChild(child);
 
@@ -203,16 +205,16 @@ describe('Tree', () => {
     const fonts: TreeModel = {
       value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
       children: [
-        {value: 'Antiqua'},
-        {value: 'DejaVu Serif'},
-        {value: 'Garamond'},
-        {value: 'Georgia'},
-        {value: 'Times New Roman'},
+        { value: 'Antiqua' },
+        { value: 'DejaVu Serif' },
+        { value: 'Garamond' },
+        { value: 'Georgia' },
+        { value: 'Times New Roman' },
       ]
     };
 
-    const tree = Tree.buildTreeFromModel(fonts);
-    const child = new Tree({value: 'Master'});
+    const tree = new Tree(fonts);
+    const child = new Tree({ value: 'Master' });
 
     const addedChild = tree.addChild(child);
     addedChild.value = 'Boo!';
@@ -225,20 +227,20 @@ describe('Tree', () => {
     const fonts: TreeModel = {
       value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
       children: [
-        {value: 'Antiqua'},
-        {value: 'DejaVu Serif'},
-        {value: 'Garamond'},
-        {value: 'Georgia'},
-        {value: 'Times New Roman'},
+        { value: 'Antiqua' },
+        { value: 'DejaVu Serif' },
+        { value: 'Garamond' },
+        { value: 'Georgia' },
+        { value: 'Times New Roman' },
       ]
     };
 
-    const tree = Tree.buildTreeFromModel(fonts);
-    const servantTree = Tree.buildTreeFromModel({
+    const tree = new Tree(fonts);
+    const servantTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -250,15 +252,15 @@ describe('Tree', () => {
   });
 
   it('adds child to tree with no children at creation moment', () => {
-    const tree = Tree.buildTreeFromModel({
+    const tree = new Tree({
       value: 'Recipient',
     });
 
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -272,16 +274,16 @@ describe('Tree', () => {
   });
 
   it('adds child to tree with a not array children property', () => {
-    const tree = Tree.buildTreeFromModel({
+    const tree = new Tree({
       value: 'Recipient',
       children: null
     });
 
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -294,12 +296,24 @@ describe('Tree', () => {
     expect(addedChild.children[1].value).toEqual('Servant#2');
   });
 
+  it('cannot add sibling if there is no parent: root node', () => {
+    const tree = new Tree({
+      value: 'Recipient',
+      children: null
+    });
+
+    const addedSibling = tree.addSibling(new Tree({value: 'bla'}));
+
+    expect(addedSibling).toBeNull();
+    expect(tree.parent).toBeNull();
+  });
+
   it('creates child node (leaf)', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -314,11 +328,11 @@ describe('Tree', () => {
   });
 
   it('creates sibling node (leaf)', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -336,11 +350,11 @@ describe('Tree', () => {
   });
 
   it('creates child node (branch)', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -355,12 +369,12 @@ describe('Tree', () => {
   });
 
   it('creates static tree', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       settings: { 'static': true },
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -368,11 +382,11 @@ describe('Tree', () => {
   });
 
   it('creates non-static tree by default', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -382,12 +396,12 @@ describe('Tree', () => {
   });
 
   it('creates static tree and makes all children static as well', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       settings: { 'static': true },
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -397,12 +411,12 @@ describe('Tree', () => {
   });
 
   it('creates static tree and makes all children static as well: children can override static option', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       settings: { 'static': true },
       children: [
-        {value: 'Servant#1', settings: { 'static': false }},
-        {value: 'Servant#2'}
+        { value: 'Servant#1', settings: { 'static': false } },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -412,11 +426,11 @@ describe('Tree', () => {
   });
 
   it('knows that it is branch', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -425,7 +439,7 @@ describe('Tree', () => {
   });
 
   it('knows that it is leaf', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master'
     });
 
@@ -434,11 +448,11 @@ describe('Tree', () => {
   });
 
   it('knows that it is root', () => {
-    const servantTree = Tree.buildTreeFromModel({
+    const servantTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -448,11 +462,11 @@ describe('Tree', () => {
   });
 
   it('knows its siblings', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -466,17 +480,17 @@ describe('Tree', () => {
   });
 
   it('knows its children', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
     const servantNumber1Tree = masterTree.children[0];
     const servantNumber2Tree = masterTree.children[1];
-    const imposter = new Tree({value: 'HA-HA-HA!!!'});
+    const imposter = new Tree({ value: 'HA-HA-HA!!!' });
 
     expect(masterTree.hasChild(servantNumber1Tree)).toEqual(true);
     expect(masterTree.hasChild(servantNumber2Tree)).toEqual(true);
@@ -486,11 +500,11 @@ describe('Tree', () => {
   });
 
   it('can remove children', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -505,15 +519,15 @@ describe('Tree', () => {
   });
 
   it('cannot remove node that is not a child', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
-    const imposter = new Tree({value: 'HA-HA-HA!!!'});
+    const imposter = new Tree({ value: 'HA-HA-HA!!!' });
 
     masterTree.removeChild(imposter);
 
@@ -523,11 +537,11 @@ describe('Tree', () => {
   });
 
   it('can remove itself from parent', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -550,11 +564,11 @@ describe('Tree', () => {
   });
 
   it('can swap its position in parent with sibling', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -571,15 +585,15 @@ describe('Tree', () => {
   });
 
   it('cannot swap its position in parent with node that is not its sibling', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
-    const imposter = new Tree({value: 'HA-HA-HA!!!'});
+    const imposter = new Tree({ value: 'HA-HA-HA!!!' });
 
     const servantNumber1Tree = masterTree.children[0];
     const servantNumber2Tree = masterTree.children[1];
@@ -594,7 +608,7 @@ describe('Tree', () => {
   });
 
   it('has "Leaf" folding type if it is leaf (by default for leaves)', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master'
     });
 
@@ -604,7 +618,7 @@ describe('Tree', () => {
   });
 
   it('cannot switch "Leaf" folding type', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master'
     });
 
@@ -616,11 +630,11 @@ describe('Tree', () => {
   });
 
   it('has "Expanded" folding type if it is branch and expanded (by default for branches)', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -630,11 +644,11 @@ describe('Tree', () => {
   });
 
   it('can switch "Branch" folding type', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -653,7 +667,7 @@ describe('Tree', () => {
   });
 
   it('has undefined status by default', () => {
-    const masterTree = Tree.buildTreeFromModel({
+    const masterTree = new Tree({
       value: 'Master'
     });
 
@@ -663,23 +677,88 @@ describe('Tree', () => {
   });
 
   it('can be marked as new', () => {
-    const masterTree = new Tree({value: 'Master'});
+    const masterTree = new Tree({ value: 'Master' });
 
     masterTree.markAsNew();
     expect(masterTree.isNew()).toEqual(true);
   });
 
   it('can be marked as modified', () => {
-    const masterTree = new Tree({value: 'Master'});
+    const masterTree = new Tree({ value: 'Master' });
 
     masterTree.markAsModified();
     expect(masterTree.isModified()).toEqual(true);
   });
 
   it('can be marked as being renamed', () => {
-    const masterTree = new Tree({value: 'Master'});
+    const masterTree = new Tree({ value: 'Master' });
 
     masterTree.markAsBeingRenamed();
     expect(masterTree.isBeingRenamed()).toEqual(true);
+  });
+
+  it('can load its children asynchronously', (done: Function) => {
+    const tree = new Tree({
+      value: 'AsyncParent',
+      loadChildren: (callback: Function) => {
+        setTimeout(() => {
+          callback([
+            { value: 'Child#1' },
+            { value: 'Child#2' }
+          ]);
+        }, 10);
+      }
+    });
+
+    tree.switchFoldingType();
+    tree.childrenAsync.subscribe((children: Tree[]) => {
+      expect(tree.children.length).toEqual(2);
+      expect(tree.children[0].value).toEqual(children[0].value);
+      expect(tree.children[1].value).toEqual(children[1].value);
+      done();
+    });
+  });
+
+  it('can load its children asynchronously: loads children only once', (done: Function) => {
+    let loadCount = 0;
+    const tree = new Tree({
+      value: 'AsyncParent',
+      loadChildren: (callback: Function) => {
+        loadCount++;
+        setTimeout(() => {
+          callback([
+            { value: 'Child#1' },
+            { value: 'Child#2' }
+          ]);
+        }, 10);
+      }
+    });
+
+    tree.switchFoldingType();
+    tree.childrenAsync.subscribe(() => {
+      tree.childrenAsync.subscribe((children: Tree[]) => {
+        expect(loadCount).toEqual(1, 'children should be loaded only once');
+        expect(tree.children.length).toEqual(2);
+        expect(tree.children[0].value).toEqual(children[0].value);
+        expect(tree.children[1].value).toEqual(children[1].value);
+        done();
+      });
+    });
+  });
+
+  it('can load its children asynchronously: node with async children should be collapsed by defualt', () => {
+    const tree = new Tree({
+      value: 'AsyncParent',
+      loadChildren: (callback: Function) => {
+        setTimeout(() => {
+          callback([
+            { value: 'Child#1' },
+            { value: 'Child#2' }
+          ]);
+        }, 10);
+      }
+    });
+
+    expect(tree.foldingType).toEqual(FoldingType.Collapsed);
   });
 });

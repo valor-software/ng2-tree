@@ -1,11 +1,71 @@
 import * as _ from 'lodash';
-import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings } from './tree.types';
+import { Observable, Observer } from 'rxjs';
+import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings, ChildrenLoadingFunction } from './tree.types';
+
+enum ChildrenLoadingState {
+  NotStarted,
+  Loading,
+  Completed
+}
 
 export class Tree {
   private _children: Tree[];
+  private _loadChildren: ChildrenLoadingFunction;
+  private _childrenLoadingState: ChildrenLoadingState = ChildrenLoadingState.NotStarted;
+  public node: TreeModel;
+  public parent: Tree;
 
-  public constructor(public node: TreeModel, public parent: Tree = null, isBranch: boolean = false) {
-    this._children = isBranch ? [] : null;
+  /**
+   * Build an instance of Tree from an object implementing TreeModel interface.
+   * @param {TreeModel} model - A model that is used to build a tree.
+   * @param {Tree} [parent] - An optional parent if you want to build a tree from the model that should be a child of an existing Tree instance.
+   * @param {boolean} [isBranch] - An option that makes a branch from created tree. Branch can have children.
+   */
+  public constructor(node: TreeModel, parent: Tree = null, isBranch: boolean = false) {
+    this.buildTreeFromModel(node, parent, isBranch);
+  }
+
+  private buildTreeFromModel(model: TreeModel, parent: Tree, isBranch: boolean): void {
+    this.parent = parent;
+    this.node = _.extend(_.omit(model, 'children') as TreeModel, {
+      settings: TreeModelSettings.merge(model, _.get(parent, 'node') as TreeModel)
+    }) as TreeModel;
+
+    if (_.isFunction(this.node.loadChildren)) {
+      this._loadChildren = this.node.loadChildren;
+    } else {
+      _.forEach(_.get(model, 'children') as TreeModel[], (child: TreeModel, index: number) => {
+        this._addChild(new Tree(child, this), index);
+      });
+    }
+
+    if (!Array.isArray(this._children)) {
+      this._children = this.node.loadChildren || isBranch ? [] : null;
+    }
+  }
+
+  /**
+   * Check whether children of the node are being loaded.
+   * Makes sense only for nodes that define `loadChildren` function.
+   * @returns {boolean} A flag indicating that children are being loaded.
+   */
+  public childrenAreBeingLoaded(): boolean {
+    return (this._childrenLoadingState === ChildrenLoadingState.Loading);
+  }
+
+  private canLoadChildren(): boolean {
+    return (this._childrenLoadingState === ChildrenLoadingState.NotStarted)
+     && (this.foldingType === FoldingType.Expanded)
+     && (!!this._loadChildren);
+  }
+
+  /**
+   * Check whether children of the node should be loaded and not loaded yet.
+   * Makes sense only for nodes that define `loadChildren` function.
+   * @returns {boolean} A flag indicating that children should be loaded for the current node.
+   */
+  public childrenShouldBeLoaded(): boolean {
+    return !!this._loadChildren;
   }
 
   /**
@@ -14,6 +74,27 @@ export class Tree {
    */
   public get children(): Tree[] {
     return this._children;
+  }
+
+  /**
+   * By getting value from this property you start process of loading node's children using `loadChildren` function.
+   * Once children are loaded `loadChildren` function won't be called anymore and loaded for the first time children are emitted in case of subsequent calls.
+   * @returns {Observable<Tree[]>} An observable which emits children once they are loaded.
+   */
+  public get childrenAsync(): Observable<Tree[]> {
+    if(this.canLoadChildren()) {
+      setTimeout(() => this._childrenLoadingState = ChildrenLoadingState.Loading);
+      return new Observable((observer: Observer<Tree[]>) => {
+        this._loadChildren((children: TreeModel[]) => {
+          this._children = _.map(children, (child: TreeModel) => new Tree(child, this));
+          this._childrenLoadingState = ChildrenLoadingState.Completed;
+          observer.next(this.children);
+          observer.complete();
+        });
+      });
+    }
+
+    return Observable.of(this.children);
   }
 
   /**
@@ -215,7 +296,9 @@ export class Tree {
    */
   public get foldingType(): FoldingType {
     if (!this.node._foldingType) {
-      if (this._children) {
+      if (this.childrenShouldBeLoaded()) {
+        this.node._foldingType = FoldingType.Collapsed;
+      } else if (this._children) {
         this.node._foldingType = FoldingType.Expanded;
       } else {
         this.node._foldingType = FoldingType.Leaf;
@@ -270,24 +353,6 @@ export class Tree {
   }
 
   // STATIC METHODS ----------------------------------------------------------------------------------------------------
-
-  /**
-   * Build an instance of Tree from an object implementing TreeModel interface.
-   * @param {TreeModel} model - A model that is used to build a tree.
-   * @param {Tree} [parent] - An optional parent if you want to build a tree from the model that should be a child of an existing Tree instance.
-   * @returns {Tree} A tree build from given model (with parent if it was given)
-   * @static
-   */
-  public static buildTreeFromModel(model: TreeModel, parent: Tree = null): Tree {
-    model.settings = TreeModelSettings.merge(model, _.get(parent, 'node') as TreeModel);
-    const tree = new Tree(_.omit(model, 'children') as TreeModel, parent);
-
-    _.forEach(model.children, (child: TreeModel, index: number) => {
-      tree._addChild(Tree.buildTreeFromModel(child, tree), index);
-    });
-
-    return tree;
-  }
 
   /**
    * Check that value passed is not empty (it doesn't consist of only whitespace symbols).

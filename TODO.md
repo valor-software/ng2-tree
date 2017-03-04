@@ -1,0 +1,2 @@
+- Cover with protractor e2e test async children loading
+- Document `Tree` class

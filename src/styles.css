@@ -151,3 +151,29 @@ tree-internal ul.rootless {
 tree-internal div.rootless {
   display: none !important;
 }
+
+tree-internal .loading-children:after {
+  content: ' loading ...';
+  color: #6a1b9a;
+  font-style: italic;
+  font-size: 0.9em;
+  animation-name: loading-children;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes loading-children {
+  0%    { color: #f3e5f5; }
+  12.5% { color: #e1bee7; }
+  25%   { color: #ce93d8; }
+  37.5% { color: #ba68c8; }
+  50%   { color: #ab47bc; }
+  62.5% { color: #9c27b0; }
+  75%   { color: #8e24aa; }
+  87.5% { color: #7b1fa2; }
+  100%  { color: #6a1b9a; }
+}
+
+
+
