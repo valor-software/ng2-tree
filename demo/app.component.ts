@@ -99,16 +99,22 @@ export class AppComponent implements OnInit {
         ]
       },
       {
-        value: 'Monospace',
-        children: [
-          { value: 'Input Mono' },
-          { value: 'Roboto Mono' },
-          { value: 'Liberation Mono' },
-          { value: 'Hack' },
-          { value: 'Consolas' },
-          { value: 'Menlo' },
-          { value: 'Source Code Pro' }
-        ]
+        value: 'Monospace - With ASYNC CHILDREN',
+        // children property is ignored if "loadChildren" is present
+        children: [{value: 'I am the font that will be ignored'}],
+        loadChildren: (callback) => {
+          setTimeout(() => {
+            callback([
+              { value: 'Input Mono' },
+              { value: 'Roboto Mono' },
+              { value: 'Liberation Mono' },
+              { value: 'Hack' },
+              { value: 'Consolas' },
+              { value: 'Menlo' },
+              { value: 'Source Code Pro' }
+            ]);
+          }, 5000);
+        }
       }
     ]
   };

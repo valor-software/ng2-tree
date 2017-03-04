@@ -1,0 +1,12 @@
+- JSDoc should be generated on every publish and accessible.
+- Add ability for searching nodes in the tree.
+- Add ability of tree filtering.
+- Expand, Collapse etc. should also generate events.
+- It should be possible to override menu icons and items, remove/hide existing menu items, add user handlers for particular menu items.
+- It should be possible to override tree node styles, icons, collapse-expand on a node level.
+- Support mobile devices:
+  - Styling on mobile.
+  - Detect current issues and pain using ng2-tree on mobile devices.
+  - Expose API for managing tree programmatically (expand, collapse, new node, etc.).
+- Move tests and demo to angular-cli.
+- Add hooks before tree detructive actions (prevent deletion if hook doesn't apply for example. It is needed to confirm an action before executing it - for example node removal).

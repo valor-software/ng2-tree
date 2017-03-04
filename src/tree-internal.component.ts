@@ -7,6 +7,7 @@ import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.
 import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'tree-internal',
@@ -14,18 +15,20 @@ import { NodeDraggableEvent } from './draggable/draggable.events';
   <ul class="tree" *ngIf="tree" [ngClass]="{rootless: isRootHidden()}">
     <li>
       <div class="value-container"
-        [ngClass]="{rootless: isRootHidden()}" 
-        (contextmenu)="showMenu($event)" 
+        [ngClass]="{rootless: isRootHidden()}"
+        (contextmenu)="showMenu($event)"
         [nodeDraggable]="element"
         [tree]="tree">
 
         <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
-        <div class="node-value" 
-          *ngIf="!shouldShowInputForTreeValue()" 
-          [class.node-selected]="isSelected" 
-          (click)="onNodeSelected($event)">{{tree.value}}</div>
+        <div class="node-value"
+          *ngIf="!shouldShowInputForTreeValue()"
+          [class.node-selected]="isSelected"
+          (click)="onNodeSelected($event)">
+            {{tree.value}}<span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
+        </div>
 
-        <input type="text" class="node-value" 
+        <input type="text" class="node-value"
            *ngIf="shouldShowInputForTreeValue()"
            [nodeEditable]="tree.value"
            (valueChanged)="applyNewValue($event)"/>
@@ -34,7 +37,7 @@ import { NodeDraggableEvent } from './draggable/draggable.events';
       <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
 
       <template [ngIf]="tree.isNodeExpanded()">
-        <tree-internal *ngFor="let child of tree.children" [tree]="child"></tree-internal>
+        <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child"></tree-internal>
       </template>
     </li>
   </ul>
@@ -48,7 +51,7 @@ export class TreeInternalComponent implements OnInit {
   public settings: Ng2TreeSettings;
 
   public isSelected: boolean = false;
-  private isMenuVisible: boolean = false;
+  public isMenuVisible: boolean = false;
 
   public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
                      @Inject(TreeService) private treeService: TreeService,
