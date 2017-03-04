@@ -41,11 +41,11 @@ function getSystemJsBundleConfig(cb) {
     map: {
       typescript: './node_modules/typescript/lib/typescript',
       '@angular': './node_modules/@angular',
-      rxjs: './node_modules/rxjs',
+      rxjs: './node_modules/rxjs/bundles',
       lodash: './node_modules/lodash/lodash'
     },
     paths: {
-      '*': '*.js'
+      '*': '*.js',
     },
     meta: {
       './node_modules/@angular/*': {build: false},

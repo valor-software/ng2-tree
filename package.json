@@ -40,13 +40,18 @@
     "flow.lint": "npm run flow.tslint",
     "flow.build": "npm run flow.clean && npm run flow.compile && webpack --progress --color",
     "flow.serve": "webpack-dev-server --hot --inline --colors --display-error-details --display-cached",
-    "pre:publish": "npm run flow.clean && npm run flow.lint && npm run test && npm run flow.compile && mkdir -p dist && cp src/styles.css dist && cp README.md dist && cp --parents media/* dist",
+    "pre:publish": "npm run flow.clean && npm run flow.lint && npm run test && npm run flow.compile && mkdir -p dist && cp src/styles.css dist && cp README.md dist && cp -R media dist",
     "post:publish": "npm run flow.deploy:gh-pages",
     "start": "npm run flow.serve",
     "test": "npm run flow.clean && karma start karma.conf.js",
     "e2e": "protractor protractor.conf.js",
     "test:cover": "COVERAGE=enabled npm run test",
-    "postinstall": "webdriver-manager update"
+    "postinstall": "webdriver-manager update",
+    "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
+    "github-release": "conventional-github-releaser -p angular",
+    "preversion": "npm run flow.lint && npm test && npm run e2e",
+    "version": "npm run changelog && git add CHANGELOG.md",
+    "postversion": "PUBLISH_ON_NPM=true git push origin master && git push --tags && npm run github-release && node publish.js"
   },
   "devDependencies": {
     "@angular/common": "2.4.5",
@@ -64,6 +69,9 @@
     "alertifyjs": "1.7.1",
     "async": "2.1.4",
     "codelyzer": "~2.0.0-beta.4",
+    "conventional-changelog": "1.1.0",
+    "conventional-changelog-cli": "1.2.0",
+    "conventional-github-releaser": "1.1.3",
     "core-js": "2.4.1",
     "css-loader": "0.26.1",
     "gulp": "3.9.1",
@@ -83,18 +91,18 @@
     "ng2-webpack-config": "0.0.5",
     "phantomjs-polyfill": "0.0.2",
     "phantomjs-prebuilt": "2.1.14",
+    "protractor": "~5.1.0",
     "rimraf": "2.5.4",
     "rxjs": "5.0.3",
     "style-loader": "0.13.1",
     "systemjs-builder": "0.16.0",
     "ts-helpers": "1.1.2",
+    "ts-node": "~2.0.0",
     "tslint": "4.4.2",
     "tslint-config-valorsoft": "1.2.0",
     "typescript": "2.0.10",
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",
-    "zone.js": "0.7.6",
-    "protractor": "~5.1.0",
-    "ts-node": "~2.0.0"
+    "zone.js": "0.7.6"
   }
 }
