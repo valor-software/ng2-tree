@@ -34,7 +34,7 @@
     "flow.compile": "npm run flow.compile:common && npm run flow.compile:system",
     "flow.compile:common": "ngc -p tsconfig-aot.json",
     "flow.compile:system": "node umd-bundler.js",
-    "flow.clean": "rimraf coverage build demo-dist dist bundles factories",
+    "flow.clean": "rimraf coverage build demo-dist dist bundles factories .publish",
     "flow.deploy:gh-pages": "npm run flow.build && gulp deploy",
     "flow.tslint": "tslint \"**/*.ts\" -c tslint.json --type-check -t prose -e \"node_modules/**\" -e \"test/**\" -e \"factories/**\" -e \"dist/**\" -e \"demo/**\" -e \"demo-dist/**\"",
     "flow.lint": "npm run flow.tslint",
@@ -48,7 +48,7 @@
     "test:cover": "COVERAGE=enabled npm run test",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
     "github-release": "conventional-github-releaser -p angular",
-    "preversion": "npm run flow.lint && npm test && npm run e2e",
+    "preversion": "npm run flow.lint && npm test",
     "version": "npm run changelog && git add CHANGELOG.md",
     "postversion": "git push origin master && git push --tags && npm run github-release && node publish.js"
   },
