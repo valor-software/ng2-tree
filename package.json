@@ -46,7 +46,6 @@
     "test": "npm run flow.clean && karma start karma.conf.js",
     "e2e": "protractor protractor.conf.js",
     "test:cover": "COVERAGE=enabled npm run test",
-    "postinstall": "webdriver-manager update",
     "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
     "github-release": "conventional-github-releaser -p angular",
     "preversion": "npm run flow.lint && npm test && npm run e2e",
