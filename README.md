@@ -9,6 +9,8 @@ ng2-tree is a simple [Angular 2](https://github.com/angular/angular) component f
 - [:wrench: API](#wrench-api)
   - [tree](#tree)
   - [[tree]](#tree)
+    - [Load children asynchronously](#load-children-asynchronously)
+    - [Configure node via TreeModelSettings](#configure-node-via-treemodelsettings)
   - [[settings]](#settings)
   - [`Tree` class](#tree-class)
   - [events (nodeMoved, nodeSelected, nodeRenamed, nodeRemoved, nodeCreated)](#events-nodemoved-nodeselected-noderenamed-noderemoved-nodecreated)
@@ -230,9 +232,29 @@ Here is an example of such a node in the `TreeModel` object:
   };
 ```
 
+#### Load children asynchronously
+
 Another worth noting thing is `loadChildren`. This function on `TreeModel` allows you to load its __children asynchronously__.
+
+```typescript
+{
+  value: 'Prototype-based programming',
+  loadChildren: (callback) => {
+    setTimeout(() => {
+      callback([
+        {value: 'JavaScript'},
+        {value: 'CoffeeScript'},
+        {value: 'TypeScript'},
+      ]);
+    }, 5000);
+  }
+}
+```
+
 Node that defines this function is collapsed by default. At the moment of clicking 'Expand' arrow it starts loading its children by calling given function.
 If `loadChildren` function is given to the node - `children` property is ignored. For more details - have a look at the [Demo](#eyes-demo).
+
+#### Configure node via TreeModelSettings
 
 Apart from that `TreeModel` interface has an optional field called `settings` of type `TreeModelSettings`.
 
