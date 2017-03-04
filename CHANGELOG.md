@@ -1,3 +1,14 @@
+<a name="2.0.0-alpha.5"></a>
+# [2.0.0-alpha.5](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.4...v2.0.0-alpha.5) (2017-03-04)
+
+
+### Bug Fixes
+
+* **scripts:** do not update web-driver on postinstall ([fadd8de](https://github.com/valor-software/ng2-tree/commit/fadd8de))
+* **scripts:** remove not ready things from scripts ([c74b977](https://github.com/valor-software/ng2-tree/commit/c74b977))
+
+
+
 <a name="2.0.0-alpha.4"></a>
 # 2.0.0-alpha.4 (2017-03-04)
 
