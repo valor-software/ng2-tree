@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NodeMenuService } from './node-menu.service';
 import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuAction } from './menu.events';
 import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
@@ -7,9 +7,9 @@ import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
   selector: 'node-menu',
   template: `
     <div class="node-menu">
-      <ul class="node-menu-content">
+      <ul class="node-menu-content" #menuContainer>
         <li class="node-menu-item" *ngFor="let menuItem of availableMenuItems"
-            (click)="onMenuItemSelected($event, menuItem)">
+          (click)="onMenuItemSelected($event, menuItem)">
           <div class="node-menu-item-icon {{menuItem.cssClass}}"></div>
           <span class="node-menu-item-value">{{menuItem.name}}</span>
         </li>
@@ -20,6 +20,8 @@ import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
 export class NodeMenuComponent implements OnInit, OnDestroy {
   @Output()
   public menuItemSelected: EventEmitter<NodeMenuItemSelectedEvent> = new EventEmitter<NodeMenuItemSelectedEvent>();
+
+  @ViewChild('menuContainer') public menuContainer: any;
 
   public availableMenuItems: NodeMenuItem[] = [
     {
@@ -52,7 +54,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'keyup', this.closeMenu.bind(this)));
-    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'click', this.closeMenu.bind(this)));
+    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'mousedown', this.closeMenu.bind(this)));
   }
 
   public ngOnDestroy(): void {
@@ -62,12 +64,13 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   public onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {
     if (isLeftButtonClicked(e)) {
       this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
+      this.nodeMenuService.fireMenuEvent(e.target as HTMLElement, NodeMenuAction.Close);
     }
   }
 
   private closeMenu(e: MouseEvent | KeyboardEvent): void {
     const mouseClicked = e instanceof MouseEvent;
-    if (mouseClicked || isEscapePressed(e as KeyboardEvent)) {
+    if (mouseClicked && !(this.menuContainer.nativeElement !== e.target && this.menuContainer.nativeElement.contains(e.target)) || isEscapePressed(e as KeyboardEvent)) {
       this.nodeMenuService.fireMenuEvent(e.target as HTMLElement, NodeMenuAction.Close);
     }
   }

@@ -26,6 +26,22 @@ export interface TreeModel {
 
 export class TreeModelSettings {
   /**
+   * "leftMenu" property when set to true makes left menu available.
+   * @name TreeModelSettings#leftMenu
+   * @type boolean
+   * @default false
+   */
+  public leftMenu?: boolean;
+
+  /**
+   * "rightMenu" property when set to true makes right menu available.
+   * @name TreeModelSettings#rightMenu
+   * @type boolean
+   * @default true
+   */
+  public rightMenu?: boolean;
+
+  /**
    * "static" property when set to true makes it impossible to drag'n'drop tree or call a menu on it.
    * @name TreeModelSettings#static
    * @type boolean
@@ -34,7 +50,7 @@ export class TreeModelSettings {
   public static?: boolean;
 
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
-    return _.defaults({}, _.get(sourceA, 'settings'), _.get(sourceB, 'settings'), {static: false});
+    return _.defaults({}, _.get(sourceA, 'settings'), _.get(sourceB, 'settings'), {static: false, leftMenu: false, rightMenu: true});
   }
 }
 
