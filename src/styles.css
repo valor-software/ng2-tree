@@ -103,6 +103,17 @@ tree-internal .tree .node-value:hover:after {
   width: 100%;
 }
 
+tree-internal .tree .node-left-menu {
+  display: inline-block;
+  height: 100%;
+  width: auto;
+}
+
+tree-internal .tree .node-left-menu:before {
+  content: '\2026';
+  color: #757575;
+}
+
 tree-internal .tree .node-selected:after {
   width: 100%;
 }
