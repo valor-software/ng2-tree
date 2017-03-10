@@ -205,6 +205,22 @@ export class Tree {
   }
 
   /**
+   * Check whether or not this tree has a left menu.
+   * @returns {boolean} A flag indicating whether or not this has a left menu.
+   */
+  public hasLeftMenu(): boolean {
+    return !_.get(this.node.settings, 'static', false) && _.get(this.node.settings, 'leftMenu', false);
+  }
+
+  /**
+   * Check whether or not this tree has a right menu.
+   * @returns {boolean} A flag indicating whether or not this has a right menu.
+   */
+  public hasRightMenu(): boolean {
+    return !_.get(this.node.settings, 'static', false) && _.get(this.node.settings, 'rightMenu', false);
+  }
+
+  /**
    * Check whether this tree is "Leaf" or not.
    * @returns {boolean} A flag indicating whether or not this tree is a "Leaf".
    */

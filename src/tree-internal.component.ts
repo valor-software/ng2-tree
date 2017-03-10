@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
     <li>
       <div class="value-container"
         [ngClass]="{rootless: isRootHidden()}"
-        (contextmenu)="showMenu($event)"
+        (contextmenu)="showRightMenu($event)"
         [nodeDraggable]="element"
         [tree]="tree">
 
@@ -32,9 +32,16 @@ import { Observable } from 'rxjs';
            *ngIf="shouldShowInputForTreeValue()"
            [nodeEditable]="tree.value"
            (valueChanged)="applyNewValue($event)"/>
+
+        <div class="node-left-menu" #leftMenuButton
+          *ngIf="tree.hasLeftMenu()" (click)="showLeftMenu($event)">
+        </div>
+        <node-menu *ngIf="tree.hasLeftMenu() && isLeftMenuVisible"
+          (menuItemSelected)="onMenuItemSelected($event)">
+        </node-menu>
       </div>
 
-      <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
+      <node-menu *ngIf="isRightMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
 
       <template [ngIf]="tree.isNodeExpanded()">
         <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child"></tree-internal>
@@ -51,7 +58,8 @@ export class TreeInternalComponent implements OnInit {
   public settings: Ng2TreeSettings;
 
   public isSelected: boolean = false;
-  public isMenuVisible: boolean = false;
+  public isRightMenuVisible: boolean = false;
+  public isLeftMenuVisible: boolean = false;
 
   public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
                      @Inject(TreeService) private treeService: TreeService,
@@ -62,7 +70,10 @@ export class TreeInternalComponent implements OnInit {
     this.settings = this.settings || { rootIsVisible: true };
 
     this.nodeMenuService.hideMenuStream(this.element)
-      .subscribe(() => this.isMenuVisible = false);
+      .subscribe(() => {
+        this.isRightMenuVisible = false;
+        this.isLeftMenuVisible = false;
+      });
 
     this.treeService.unselectStream(this.tree)
       .subscribe(() => this.isSelected = false);
@@ -103,16 +114,30 @@ export class TreeInternalComponent implements OnInit {
     }
   }
 
-  public showMenu(e: MouseEvent): void {
-    if (this.tree.isStatic()) {
+  public showRightMenu(e: MouseEvent): void {
+    if (!this.tree.hasRightMenu()) {
       return;
     }
 
     if (EventUtils.isRightButtonClicked(e)) {
-      this.isMenuVisible = !this.isMenuVisible;
+      this.isRightMenuVisible = !this.isRightMenuVisible;
       this.nodeMenuService.hideMenuForAllNodesExcept(this.element);
     }
     e.preventDefault();
+  }
+
+  public showLeftMenu(e: MouseEvent): void {
+    if (!this.tree.hasLeftMenu()) {
+      return;
+    }
+
+    if (EventUtils.isLeftButtonClicked(e)) {
+      this.isLeftMenuVisible = !this.isLeftMenuVisible;
+      this.nodeMenuService.hideMenuForAllNodesExcept(this.element);
+      if (this.isLeftMenuVisible) {
+        e.preventDefault();
+      }
+    }
   }
 
   public onMenuItemSelected(e: NodeMenuItemSelectedEvent): void {
@@ -136,12 +161,14 @@ export class TreeInternalComponent implements OnInit {
 
   private onNewSelected(e: NodeMenuItemSelectedEvent): void {
     this.tree.createNode(e.nodeMenuItemAction === NodeMenuItemAction.NewFolder);
-    this.isMenuVisible = false;
+    this.isRightMenuVisible = false;
+    this.isLeftMenuVisible = false;
   }
 
   private onRenameSelected(): void {
     this.tree.markAsBeingRenamed();
-    this.isMenuVisible = false;
+    this.isRightMenuVisible = false;
+    this.isLeftMenuVisible = false;
   }
 
   private onRemoveSelected(): void {
