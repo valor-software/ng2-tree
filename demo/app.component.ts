@@ -33,6 +33,18 @@ declare const alertify: any;
           (nodeCreated)="onNodeCreated($event)">
         </tree>
       </div>
+      <div class="tree-container">
+        <p class="tree-title">Directory/File structure</p>
+        <p class="notice">this tree has advanced configurations</p>
+        <tree
+          [tree]="dfs"
+          (nodeRemoved)="onNodeRemoved($event)"
+          (nodeRenamed)="onNodeRenamed($event)"
+          (nodeSelected)="onNodeSelected($event)"
+          (nodeMoved)="onNodeMoved($event)"
+          (nodeCreated)="onNodeCreated($event)">
+        </tree>
+    </div>
     </div>
     `,
   styles: [`
@@ -120,6 +132,23 @@ export class AppComponent implements OnInit {
   };
 
   public pls: TreeModel;
+
+  public dfs: TreeModel = {
+    value: '/',
+    settings: {
+      leftMenu: true,
+      rightMenu: false
+    },
+    children: [
+      {
+         value: 'bin',
+         children: [
+           {value: 'bash'},
+		   {value: 'umount'}
+         ]
+      }
+    ]
+  };
 
   public ngOnInit(): void {
     setTimeout(() => {
