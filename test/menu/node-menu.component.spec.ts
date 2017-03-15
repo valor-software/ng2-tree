@@ -115,7 +115,7 @@ describe('NodeMenuComponent', () => {
     spyOn(nodeMenuService.nodeMenuEvents$, 'next');
 
     const event = document.createEvent("MouseEvents");
-    event.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    event.initMouseEvent('mousedown', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     document.dispatchEvent(event);
 
     const expectedNodeMenuEvent: NodeMenuEvent = {

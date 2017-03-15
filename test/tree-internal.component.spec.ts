@@ -21,6 +21,10 @@ let lordInternalTreeEl;
 let lordComponentInstance;
 let faceInternalTreeEl;
 let faceComponentInstance;
+let rightMenuInternalTreeEl;
+let rightMenuComponentInstance;
+let leftMenuInternalTreeEl;
+let leftMenuComponentInstance;
 let nodeMenuService;
 let nodeDraggableService;
 let treeService;
@@ -104,22 +108,6 @@ describe('TreeInternalComponent', () => {
   it('should have properly set tree property', () => {
     expect(masterComponentInstance.tree).toBeDefined();
     expect(masterComponentInstance.tree.value).toEqual('Master');
-  });
-
-  it('should hide menu when appropriate event has occurred', () => {
-    spyOn(nodeMenuService, 'hideMenuForAllNodesExcept');
-
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    masterInternalTreeEl.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.isMenuVisible).toEqual(true);
-    expect(event.preventDefault).toHaveBeenCalled();
-    expect(nodeMenuService.hideMenuForAllNodesExcept).toHaveBeenCalledTimes(1);
-    expect(nodeMenuService.hideMenuForAllNodesExcept).toHaveBeenCalledWith(masterComponentInstance.element);
   });
 
   it('should unselect selected node when another node is selected', () => {
@@ -396,304 +384,6 @@ describe('TreeInternalComponent', () => {
     expect(children.length).toEqual(2);
   });
 
-  it('should show menu on node', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    masterInternalTreeEl.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.isMenuVisible).toEqual(true);
-    const menus = masterInternalTreeEl.queryAll(By.css('.node-menu'));
-
-    expect(menus.length).toEqual(1);
-    expect(menus[0].queryAll(By.css('.node-menu-item')).length).toEqual(4);
-  });
-
-  it('should remove node by click on appropriate menu item', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    const servantEls = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
-    const servant1El = servantEls[0];
-
-    servant1El.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(servant1El.componentInstance.isMenuVisible).toEqual(true);
-    const menu = servant1El.query(By.css('.node-menu'));
-
-    const menuItemRemove: DebugElement = menu.query(By.css('.remove')).parent;
-
-    const eventRemove = {button: EventUtils.MouseButtons.Left};
-    menuItemRemove.triggerEventHandler('click', eventRemove);
-
-    fixture.detectChanges();
-
-    const remainedSevantEls = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
-    expect(remainedSevantEls.length).toEqual(1);
-    expect(remainedSevantEls[0].componentInstance.tree.value).toEqual('Servant#2');
-  });
-
-  it('should hide menu on click outside of menu', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    const servantEls = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
-    const servant1El = servantEls[0];
-
-    servant1El.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(servant1El.componentInstance.isMenuVisible).toEqual(true);
-    expect(servant1El.query(By.css('.node-menu'))).toBeDefined();
-
-    nodeMenuService.fireMenuEvent(null, NodeMenuAction.Close);
-
-    fixture.detectChanges();
-
-    expect(servant1El.componentInstance.isMenuVisible).toEqual(false);
-    expect(servant1El.query(By.css('.node-menu'))).toBeNull();
-  });
-
-  it('should rename node on enter', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    masterInternalTreeEl.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(masterInternalTreeEl.componentInstance.isMenuVisible).toEqual(true);
-    const menu = masterInternalTreeEl.query(By.css('.node-menu'));
-
-    const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
-
-    const eventRename = {button: EventUtils.MouseButtons.Left};
-    menuItemRename.triggerEventHandler('click', eventRename);
-
-    fixture.detectChanges();
-
-    const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
-    expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'bla'}});
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.tree.value).toEqual('bla');
-  });
-
-  it('should rename node on blur', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    masterInternalTreeEl.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(masterInternalTreeEl.componentInstance.isMenuVisible).toEqual(true);
-    const menu = masterInternalTreeEl.query(By.css('.node-menu'));
-
-    const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
-
-    const eventRename = {button: EventUtils.MouseButtons.Left};
-    menuItemRename.triggerEventHandler('click', eventRename);
-
-    fixture.detectChanges();
-
-    const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
-    expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('blur', {target: {value: 'bla'}});
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.tree.value).toEqual('bla');
-  });
-
-  it('should cancel renaming node on escape pressed', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    masterInternalTreeEl.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(masterInternalTreeEl.componentInstance.isMenuVisible).toEqual(true);
-    const menu = masterInternalTreeEl.query(By.css('.node-menu'));
-
-    const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
-
-    const eventRename = {button: EventUtils.MouseButtons.Left};
-    menuItemRename.triggerEventHandler('click', eventRename);
-
-    fixture.detectChanges();
-
-    const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
-    expect(inputRename).toBeDefined();
-    inputRename.nativeElement.value = '121212';
-    inputRename.triggerEventHandler('keyup.esc', {target: {value: 'bla'}});
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.tree.value).toEqual('Master');
-  });
-
-  it('should not rename node on empty input', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    masterInternalTreeEl.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(masterInternalTreeEl.componentInstance.isMenuVisible).toEqual(true);
-    const menu = masterInternalTreeEl.query(By.css('.node-menu'));
-
-    const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
-
-    const eventRename = {button: EventUtils.MouseButtons.Left};
-    menuItemRename.triggerEventHandler('click', eventRename);
-
-    fixture.detectChanges();
-
-    const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
-    expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('blur', {target: {value: ''}});
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.tree.value).toEqual('Master');
-  });
-
-  it('should create a leaf child when NewTag operation activated on a branch node', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    masterInternalTreeEl.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(masterInternalTreeEl.componentInstance.isMenuVisible).toEqual(true);
-    const menu = masterInternalTreeEl.query(By.css('.node-menu'));
-
-    const menuNewTag: DebugElement = menu.query(By.css('.new-tag')).parent;
-
-    const eventRename = {button: EventUtils.MouseButtons.Left};
-    menuNewTag.triggerEventHandler('click', eventRename);
-
-    fixture.detectChanges();
-
-    const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
-    expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'bla'}});
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.tree.children.length).toEqual(3);
-    expect(masterComponentInstance.tree.children[2].value).toEqual('bla');
-    expect(masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value').innerText).toEqual('bla');
-  });
-
-  it('should create a sibling leaf when NewTag operation was activated on a node that is leaf', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    const servant1El = masterInternalTreeEl.query(By.directive(TreeInternalComponent));
-
-    servant1El.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(servant1El.componentInstance.isMenuVisible).toEqual(true);
-    const menu = servant1El.query(By.css('.node-menu'));
-
-    const menuNewTag: DebugElement = menu.query(By.css('.new-tag')).parent;
-
-    const eventRename = {button: EventUtils.MouseButtons.Left};
-    menuNewTag.triggerEventHandler('click', eventRename);
-
-    fixture.detectChanges();
-
-    const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
-    expect(inputRename).toBeTruthy();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'bla'}});
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.tree.children.length).toEqual(3);
-    expect(masterComponentInstance.tree.children[2].value).toEqual('bla');
-    expect(masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value').innerText).toEqual('bla');
-  });
-
-  it('should not create a node with empty value', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    masterInternalTreeEl.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(masterInternalTreeEl.componentInstance.isMenuVisible).toEqual(true);
-    const menu = masterInternalTreeEl.query(By.css('.node-menu'));
-
-    const menuNewTag: DebugElement = menu.query(By.css('.new-tag')).parent;
-
-    const eventRename = {button: EventUtils.MouseButtons.Left};
-    menuNewTag.triggerEventHandler('click', eventRename);
-
-    fixture.detectChanges();
-
-    const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
-    expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: '\r\n\t '}});
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.tree.children.length).toEqual(2);
-    expect(masterComponentInstance.tree.children[0].value).toEqual('Servant#1');
-    expect(masterComponentInstance.tree.children[1].value).toEqual('Servant#2');
-
-    const servantEls = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
-    expect(servantEls.length).toEqual(2);
-    expect(servantEls[0].nativeElement.querySelector('.node-value').innerText).toEqual('Servant#1');
-    expect(servantEls[1].nativeElement.querySelector('.node-value').innerText).toEqual('Servant#2');
-  });
-
-  it('should create a branch node when NewFolder operation activated', () => {
-    const event = jasmine.createSpyObj('e', ['preventDefault']);
-    event.button = EventUtils.MouseButtons.Right;
-
-    masterInternalTreeEl.query(By.css('.value-container')).triggerEventHandler('contextmenu', event);
-
-    fixture.detectChanges();
-
-    expect(masterInternalTreeEl.componentInstance.isMenuVisible).toEqual(true);
-    const menu = masterInternalTreeEl.query(By.css('.node-menu'));
-
-    const menuNewTag: DebugElement = menu.query(By.css('.new-folder')).parent;
-
-    const eventRename = {button: EventUtils.MouseButtons.Left};
-    menuNewTag.triggerEventHandler('click', eventRename);
-
-    fixture.detectChanges();
-
-    const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
-    expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'Branch'}});
-
-    fixture.detectChanges();
-
-    expect(masterComponentInstance.tree.children.length).toEqual(3);
-    expect(masterComponentInstance.tree.children[2].value).toEqual('Branch');
-    expect(masterComponentInstance.tree.children[2].isBranch()).toEqual(true);
-    expect(masterComponentInstance.tree.children[2].children).toBeDefined();
-    expect(masterComponentInstance.tree.children[2].children.length).toEqual(0);
-    expect(masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value').innerText).toEqual('Branch');
-  });
-
   it('shouldn\'t show root of the tree', () => {
     expect(faceComponentInstance.tree.isRoot()).toEqual(true, 'Element that has rootless class should be a root of the tree');
 
@@ -720,11 +410,11 @@ describe('TreeInternalComponent', () => {
 
       fixture.detectChanges();
 
-      expect(faceComponentInstance.isMenuVisible).toEqual(false);
+      expect(faceComponentInstance.isRightMenuVisible).toEqual(false);
       expect(faceInternalTreeEl.query(By.css('.node-menu'))).toEqual(null);
 
       const childEl = faceInternalTreeEl.query(By.directive(TreeInternalComponent));
-      expect(childEl.componentInstance.isMenuVisible).toEqual(false);
+      expect(childEl.componentInstance.isRightMenuVisible).toEqual(false);
       expect(childEl.query(By.css('.node-menu'))).toEqual(null);
     });
 
@@ -739,7 +429,7 @@ describe('TreeInternalComponent', () => {
       fixture.detectChanges();
 
       expect(childEl.componentInstance.tree.value).toEqual('Retina');
-      expect(childEl.componentInstance.isMenuVisible).toEqual(true);
+      expect(childEl.componentInstance.isRightMenuVisible).toEqual(true);
       expect(childEl.query(By.css('.node-menu'))).toBeTruthy();
     });
 
