@@ -265,7 +265,9 @@ Here is an example of its usage:
 {
   value: 'Prototype-based programming',
   settings: {
-    'static': true
+    'static': true,
+	'rightMenu': true,
+	'leftMenu': true
   },
   children: [
     {value: 'JavaScript'},
@@ -275,8 +277,11 @@ Here is an example of its usage:
 }
 ```
 
-Right now only one option is supported - `static`. This option makes it impossible to drag a tree or modify it in a some way, though you still can select nodes in the static tree and appropriate events will be generated.
-`static` option that's defined on a `parent` is automatically applied to its children. If you don't want to make `static` all the children, then you can override `settings` of the child node.
+* `static` - This option makes it impossible to drag a tree or modify it in a some way, though you still can select nodes in the static tree and appropriate events will be generated.
+* `rightMenu` - This option allows you to activate (true, by default) or deactivate (false) right menu when clicking with right button of a mouse.
+* `leftMenu` - This option allows you to activate (true) or deactivate (false, by default) left menu.
+
+All options that's defined on a `parent` are automatically applied to children. If you want you can override them by `settings` of the child node.
 
 ### [settings]
 
