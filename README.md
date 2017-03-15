@@ -147,6 +147,7 @@ Here is the definition of the `TreeModel` interface:
 ```typescript
 interface TreeModel {
   value: string | RenamableNode;
+  id: string | number;
   children?: Array<TreeModel>;
   loadChildren?: ChildrenLoadingFunction;
   settings?: TreeModelSettings;
