@@ -16,6 +16,8 @@ import {
   NodeRenamedEvent,
   NodeMovedEvent,
   NodeSelectedEvent,
+  NodeExpandedEvent,
+  NodeCollapsedEvent,
   NodeDestructiveEvent
 } from './src/tree.events';
 
@@ -35,6 +37,8 @@ export {
   NodeRenamedEvent,
   NodeMovedEvent,
   NodeSelectedEvent,
+  NodeExpandedEvent,
+  NodeCollapsedEvent,
   NodeDestructiveEvent,
   TreeComponent,
   TreeModule

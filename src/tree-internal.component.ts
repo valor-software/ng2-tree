@@ -20,7 +20,7 @@ import { Observable } from 'rxjs';
         [nodeDraggable]="element"
         [tree]="tree">
 
-        <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
+        <div class="folding" (click)="onSwitchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
         <div class="node-value"
           *ngIf="!shouldShowInputForTreeValue()"
           [class.node-selected]="isSelected"
@@ -62,7 +62,7 @@ export class TreeInternalComponent implements OnInit {
   public isLeftMenuVisible: boolean = false;
 
   public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
-                     @Inject(TreeService) private treeService: TreeService,
+                     @Inject(TreeService) public treeService: TreeService,
                      @Inject(ElementRef) public element: ElementRef) {
   }
 
@@ -173,6 +173,11 @@ export class TreeInternalComponent implements OnInit {
 
   private onRemoveSelected(): void {
     this.treeService.fireNodeRemoved(this.tree);
+  }
+
+  private onSwitchFoldingType(): void {
+    this.tree.switchFoldingType();
+	this.treeService.fireNodeSwitchFoldingType(this.tree);
   }
 
   public applyNewValue(e: NodeEditableEvent): void {

@@ -35,6 +35,12 @@ export class TreeComponent implements OnInit, OnChanges {
   @Output()
   public nodeMoved: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public nodeExpanded: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  public nodeCollapsed: EventEmitter<any> = new EventEmitter();
+
   public tree: Tree;
 
   public constructor(@Inject(TreeService) private treeService: TreeService) {
@@ -67,6 +73,14 @@ export class TreeComponent implements OnInit, OnChanges {
 
     this.treeService.nodeMoved$.subscribe((e: NodeEvent) => {
       this.nodeMoved.emit(e);
+    });
+
+    this.treeService.nodeExpanded$.subscribe((e: NodeEvent) => {
+      this.nodeExpanded.emit(e);
+    });
+
+    this.treeService.nodeCollapsed$.subscribe((e: NodeEvent) => {
+      this.nodeCollapsed.emit(e);
     });
   }
 }

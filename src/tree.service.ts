@@ -3,7 +3,9 @@ import {
   NodeRenamedEvent,
   NodeCreatedEvent,
   NodeSelectedEvent,
-  NodeMovedEvent
+  NodeMovedEvent,
+  NodeExpandedEvent,
+  NodeCollapsedEvent
 } from './tree.events';
 import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
@@ -19,6 +21,8 @@ export class TreeService {
   public nodeRenamed$: Subject<NodeRenamedEvent> = new Subject<NodeRenamedEvent>();
   public nodeCreated$: Subject<NodeCreatedEvent> = new Subject<NodeCreatedEvent>();
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
+  public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
+  public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
 
   public constructor(@Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
     this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
@@ -46,6 +50,26 @@ export class TreeService {
 
   public fireNodeMoved(tree: Tree, parent: Tree): void {
     this.nodeMoved$.next(new NodeMovedEvent(tree, parent));
+  }
+
+  public fireNodeSwitchFoldingType(tree: Tree): void {
+    if (tree.isLeaf()) {
+      return;
+    }
+
+    if (tree.isNodeExpanded()) {
+      this.fireNodeExpanded(tree);
+    } else {
+      this.fireNodeCollapsed(tree);
+    }
+  }
+
+  private fireNodeExpanded(tree: Tree): void {
+    this.nodeExpanded$.next(new NodeExpandedEvent(tree));
+  }
+
+  private fireNodeCollapsed(tree: Tree): void {
+    this.nodeCollapsed$.next(new NodeCollapsedEvent(tree));
   }
 
   public draggedStream(tree: Tree, element: ElementRef): Observable<NodeDraggableEvent> {
