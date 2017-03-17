@@ -761,4 +761,57 @@ describe('Tree', () => {
 
     expect(tree.foldingType).toEqual(FoldingType.Collapsed);
   });
+
+  it('can add custome template to a node or a leaf before it\'s name', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      settings: {
+        templates: {
+          node: '<i class="folder"></i>',
+          leaf: '<i class="file"></i>'
+        }
+      },
+      children: [
+        { value: 'Servant#1' },
+        {
+          value: 'Servant#2',
+          children: [
+            { value: 'Servant#2.1' }
+          ]
+        }
+      ]
+    });
+
+    expect(masterTree.nodeTemplate).toEqual('<i class="folder"></i>');
+    expect(masterTree.children[0].nodeTemplate).toEqual('<i class="file"></i>');
+    expect(masterTree.children[1].nodeTemplate).toEqual('<i class="folder"></i>');
+  });
+
+  it('can add custome template to an element which opens left menu of a node', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      settings: {
+        templates: {
+          leftMenu: '<i class="navigation"></i>'
+        }
+      },
+      children: [
+        { value: 'Servant#1' },
+        {
+          value: 'Servant#2',
+          settings: {
+            leftMenu: true
+          },
+          children: [
+            { value: 'Servant#2.1' }
+          ]
+        }
+      ]
+    });
+
+    expect(masterTree.leftMenuTemplate).toEqual('');
+    expect(masterTree.children[0].leftMenuTemplate).toEqual('');
+    expect(masterTree.children[1].leftMenuTemplate).toEqual('<i class="navigation"></i>');
+  });
+
 });

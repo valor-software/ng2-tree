@@ -109,7 +109,7 @@ tree-internal .tree .node-left-menu {
   width: auto;
 }
 
-tree-internal .tree .node-left-menu:before {
+tree-internal .tree .node-left-menu span:before {
   content: '\2026';
   color: #757575;
 }

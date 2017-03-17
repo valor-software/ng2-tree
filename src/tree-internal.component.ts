@@ -20,12 +20,14 @@ import { Observable } from 'rxjs';
         [nodeDraggable]="element"
         [tree]="tree">
 
-        <div class="folding" (click)="onSwitchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
+        <div class="folding" (click)="onSwitchFoldingType()" [ngClass]="tree.foldingCssClass"></div>
         <div class="node-value"
           *ngIf="!shouldShowInputForTreeValue()"
           [class.node-selected]="isSelected"
           (click)="onNodeSelected($event)">
-            {{tree.value}}<span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
+            <div [innerHTML]="tree.nodeTemplate"></div>
+            <span class="node-name">{{ tree.value }}</span>
+            <span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
         </div>
 
         <input type="text" class="node-value"
@@ -33,8 +35,7 @@ import { Observable } from 'rxjs';
            [nodeEditable]="tree.value"
            (valueChanged)="applyNewValue($event)"/>
 
-        <div class="node-left-menu" #leftMenuButton
-          *ngIf="tree.hasLeftMenu()" (click)="showLeftMenu($event)">
+        <div class="node-left-menu" *ngIf="tree.hasLeftMenu()" (click)="showLeftMenu($event)" [innerHTML]="tree.leftMenuTemplate">
         </div>
         <node-menu *ngIf="tree.hasLeftMenu() && isLeftMenuVisible"
           (menuItemSelected)="onMenuItemSelected($event)">
