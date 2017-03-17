@@ -174,4 +174,56 @@ describe('TreeService', () => {
 
     draggableService.fireNodeDragged(new CapturedNode(elementRef, masterTree), elementRef);
   });
+
+  it('does not fire "expanded", "collapsed" events for a leaf node', () => {
+    const masterTree = new Tree({
+      value: 'Master'
+    });
+
+    spyOn(treeService.nodeExpanded$, 'next');
+    spyOn(treeService.nodeCollapsed$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.nodeExpanded$.next).not.toHaveBeenCalled();
+    expect(treeService.nodeCollapsed$.next).not.toHaveBeenCalled();
+  });
+
+  it('fires "expanded" event for expanded tree', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      children: [
+        {value: 'Servant#1'},
+        {value: 'Servant#2'}
+      ]
+    });
+
+    spyOn(treeService.nodeExpanded$, 'next');
+    spyOn(treeService.nodeCollapsed$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.nodeExpanded$.next).toHaveBeenCalled();
+    expect(treeService.nodeCollapsed$.next).not.toHaveBeenCalled();
+  });
+
+  it('fires "collapsed" event for not expanded tree', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      children: [
+        {value: 'Servant#1'},
+        {value: 'Servant#2'}
+      ]
+    });
+
+    masterTree.switchFoldingType();
+
+    spyOn(treeService.nodeExpanded$, 'next');
+    spyOn(treeService.nodeCollapsed$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.nodeCollapsed$.next).toHaveBeenCalled();
+    expect(treeService.nodeExpanded$.next).not.toHaveBeenCalled();
+  });
 });

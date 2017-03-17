@@ -25,7 +25,35 @@ export interface TreeModel {
   _foldingType?: FoldingType;
 }
 
+export interface CssClasses {
+  /* The class or classes that should be added to the expanded node */
+  expanded?: string;
+
+  /* The class or classes that should be added to the collapsed node */
+  collapsed?: string;
+
+  /* The class or classes that should be added to the expanded to the leaf */
+  leaf?: string;
+}
+
+export interface Templates {
+  /* A template for a node */
+  node?: string;
+
+  /* A template for a leaf node */
+  leaf?: string;
+
+  /* A template for left menu html element */
+  leftMenu?: string;
+}
+
 export class TreeModelSettings {
+  /* cssClasses - set custom css classes which will be used for a tree */
+  public cssClasses?: CssClasses;
+
+  /* Templates - set custom html templates to be used in a tree */
+  public templates?: Templates;
+
   /**
    * "leftMenu" property when set to true makes left menu available.
    * @name TreeModelSettings#leftMenu
@@ -51,7 +79,7 @@ export class TreeModelSettings {
   public static?: boolean;
 
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
-    return _.defaults({}, _.get(sourceA, 'settings'), _.get(sourceB, 'settings'), {static: false, leftMenu: false, rightMenu: true});
+    return _.defaultsDeep({}, _.get(sourceA, 'settings'), _.get(sourceB, 'settings'), {static: false, leftMenu: false, rightMenu: true});
   }
 }
 

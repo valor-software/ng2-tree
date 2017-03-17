@@ -1,5 +1,5 @@
 import { Tree } from '../src/tree';
-import { TreeModel, TreeModelSettings, FoldingType } from '../src/tree.types';
+import { TreeModel, TreeModelSettings, FoldingType, CssClasses } from '../src/tree.types';
 
 describe('Tree', () => {
   it('should detect empty string', () => {
@@ -38,10 +38,10 @@ describe('Tree', () => {
     const renamableNode = {
       name: '42',
       age: 'millions years',
-      setName: function (value) {
+      setName(value: string): void {
         this.name = value;
       },
-      toString: function () {
+      toString(): string {
         return this.name;
       }
     };
@@ -81,8 +81,8 @@ describe('Tree', () => {
 
   it('should know how to detect Renamable node', () => {
     const renamableNode = {
-      setName: () => { },
-      toString: () => { }
+      setName: () => {},
+      toString: () => {}
     };
 
     const renamableNodeImposter = {
@@ -761,4 +761,111 @@ describe('Tree', () => {
 
     expect(tree.foldingType).toEqual(FoldingType.Collapsed);
   });
+
+  it('can add a custom template to the node or leaf', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      settings: {
+        templates: {
+          node: '<i class="folder"></i>',
+          leaf: '<i class="file"></i>'
+        }
+      },
+      children: [
+        { value: 'Servant#1' },
+        {
+          value: 'Servant#2',
+          children: [
+            { value: 'Servant#2.1' }
+          ]
+        }
+      ]
+    });
+
+    expect(masterTree.nodeTemplate).toEqual('<i class="folder"></i>');
+    expect(masterTree.children[0].nodeTemplate).toEqual('<i class="file"></i>');
+    expect(masterTree.children[1].nodeTemplate).toEqual('<i class="folder"></i>');
+  });
+
+  it('can add a css classes for expanded, collapsed nodes', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      settings: {
+        cssClasses: {
+          expanded: 'fa fa-caret-down',
+          collapsed: 'fa fa-caret-right',
+          leaf: 'fa'
+        },
+        templates: {
+          node: '<i class="folder"></i>',
+          leaf: '<i class="file"></i>'
+        }
+      },
+      children: [
+        { value: 'Servant#1' },
+        {
+          value: 'Servant#2',
+          children: [
+            { value: 'Servant#2.1' }
+          ]
+        }
+      ]
+    });
+
+    expect(masterTree.isNodeExpanded()).toEqual(true, 'initially node is expanded');
+    expect(masterTree.foldingCssClass).toEqual('fa fa-caret-down');
+
+    masterTree.switchFoldingType();
+
+    expect(masterTree.isNodeExpanded()).toEqual(false, 'node is collapsed');
+    expect(masterTree.foldingCssClass).toEqual('fa fa-caret-right');
+  });
+
+  it('can add a css classes for leaf nodes', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      settings: {
+        cssClasses: {
+          expanded: 'fa fa-caret-down',
+          collapsed: 'fa fa-caret-right',
+          leaf: 'fa'
+        },
+        templates: {
+          node: '<i class="folder"></i>',
+          leaf: '<i class="file"></i>'
+        }
+      }
+    });
+
+    expect(masterTree.isLeaf()).toEqual(true, 'Node without children is leaf');
+    expect(masterTree.foldingCssClass).toEqual('fa');
+  });
+
+  it('can add custom template to an element which opens left menu of a node', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      settings: {
+        templates: {
+          leftMenu: '<i class="navigation"></i>'
+        }
+      },
+      children: [
+        { value: 'Servant#1' },
+        {
+          value: 'Servant#2',
+          settings: {
+            leftMenu: true
+          },
+          children: [
+            { value: 'Servant#2.1' }
+          ]
+        }
+      ]
+    });
+
+    expect(masterTree.leftMenuTemplate).toEqual('');
+    expect(masterTree.children[0].leftMenuTemplate).toEqual('');
+    expect(masterTree.children[1].leftMenuTemplate).toEqual('<i class="navigation"></i>');
+  });
+
 });

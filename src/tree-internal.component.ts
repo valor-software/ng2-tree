@@ -20,12 +20,14 @@ import { Observable } from 'rxjs';
         [nodeDraggable]="element"
         [tree]="tree">
 
-        <div class="folding" (click)="onSwitchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
+        <div class="folding" (click)="onSwitchFoldingType()" [ngClass]="tree.foldingCssClass"></div>
         <div class="node-value"
           *ngIf="!shouldShowInputForTreeValue()"
           [class.node-selected]="isSelected"
           (click)="onNodeSelected($event)">
-            {{tree.value}}<span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
+            <div *ngIf="tree.nodeTemplate" class="node-template" [innerHTML]="tree.nodeTemplate"></div>
+            {{ tree.value }}
+            <span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
         </div>
 
         <input type="text" class="node-value"
@@ -33,8 +35,7 @@ import { Observable } from 'rxjs';
            [nodeEditable]="tree.value"
            (valueChanged)="applyNewValue($event)"/>
 
-        <div class="node-left-menu" #leftMenuButton
-          *ngIf="tree.hasLeftMenu()" (click)="showLeftMenu($event)">
+        <div class="node-left-menu" *ngIf="tree.hasLeftMenu()" (click)="showLeftMenu($event)" [innerHTML]="tree.leftMenuTemplate">
         </div>
         <node-menu *ngIf="tree.hasLeftMenu() && isLeftMenuVisible"
           (menuItemSelected)="onMenuItemSelected($event)">
@@ -175,9 +176,9 @@ export class TreeInternalComponent implements OnInit {
     this.treeService.fireNodeRemoved(this.tree);
   }
 
-  private onSwitchFoldingType(): void {
+  public onSwitchFoldingType(): void {
     this.tree.switchFoldingType();
-	this.treeService.fireNodeSwitchFoldingType(this.tree);
+    this.treeService.fireNodeSwitchFoldingType(this.tree);
   }
 
   public applyNewValue(e: NodeEditableEvent): void {

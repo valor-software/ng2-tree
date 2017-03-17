@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from '../index';
 
 require('../src/styles.css');
+require('../node_modules/font-awesome/css/font-awesome.min.css');
 
 declare const alertify: any;
 
@@ -140,6 +141,17 @@ export class AppComponent implements OnInit {
   public dfs: TreeModel = {
     value: '/',
     id: 1,
+    settings: {
+      cssClasses: {
+        expanded: 'fa fa-caret-down',
+        collapsed: 'fa fa-caret-right',
+        leaf: 'fa'
+      },
+      templates: {
+        node: '<i class="fa fa-folder-o"></i>',
+        leaf: '<i class="fa fa-file-o"></i>'
+      }
+    },
     children: [
       {
         value: 'bin',
@@ -265,13 +277,21 @@ export class AppComponent implements OnInit {
             ]
           },
           {
-            value: 'secondUser',
+            value: 'secondUser - left menu templates',
             id: 54,
+            settings: {
+              leftMenu: true
+            },
             children: [
               {value: 'Documents', id: 55, children: []},
               {
-                value: 'Downloads',
+                value: 'Downloads - custom left menu template',
                 id: 56,
+                settings: {
+                  templates: {
+                    leftMenu: '<i class="fa fa-navicon"></i>'
+                  }
+                },
                 children: [
                   {value: 'Actobat3', id: 57},
                   {value: 'Complib', id: 58},
