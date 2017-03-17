@@ -271,8 +271,18 @@ Here is an example of its usage:
   value: 'Prototype-based programming',
   settings: {
     'static': true,
-	'rightMenu': true,
-	'leftMenu': true
+    'rightMenu': true,
+    'leftMenu': true,
+    'cssClasses': {
+      'expanded': 'fa fa-caret-down fa-lg',
+      'collapsed': 'fa fa-caret-right fa-lg',
+      'inactive:': 'fa fa-lg'
+    },
+    'templates': {
+      'node': '<i class="fa fa-folder-o fa-lg"></i>',
+      'leaf': '<i class="fa fa-file-o fa-lg"></i>',
+      'leftMenu': '<i class="fa fa-navicon fa-lg"></i>'
+    }
   },
   children: [
     {value: 'JavaScript'},
@@ -282,9 +292,17 @@ Here is an example of its usage:
 }
 ```
 
-* `static` - This option makes it impossible to drag a tree or modify it in a some way, though you still can select nodes in the static tree and appropriate events will be generated.
-* `rightMenu` - This option allows you to activate (true, by default) or deactivate (false) right menu when clicking with right button of a mouse.
-* `leftMenu` - This option allows you to activate (true) or deactivate (false, by default) left menu.
+* `static` - Boolean - This option makes it impossible to drag a tree or modify it in a some way, though you still can select nodes in the static tree and appropriate events will be generated.
+* `rightMenu` - Boolan - This option allows you to activate (true, by default) or deactivate (false) right menu when clicking with right button of a mouse.
+* `leftMenu` - Boolean - This option allows you to activate (true) or deactivate (false, by default) left menu.
+* `cssClasses` - Object:
+  * `expanded` - String - It specifies a css class (or classes) for an item which represents expanded state of a node. The item is clickable and it transitions the node to the collapsed state
+  * `collapsed` - String - It specifies a css class (or classes) for an item which represents collapsed state of a node. The item is clickable and it transitions the node to the expanded state
+  * `inactive` - String - It specifies a css class (or classes) for an item which represents a node without an option to expand or collapse - in other words: a leaf node.
+* `templates` - Object:
+  * `node` - String - It specifies a html template which will be included to the left of the node's value.
+  * `leaf` - String - It specifies a html template which will be included to the left of the left node's value.
+  * `leftMenu` - String - It specifies a html template to the right of the node's value. This template becomes clickable and on the click node's menu appears.
 
 All options that's defined on a `parent` are automatically applied to children. If you want you can override them by `settings` of the child node.
 
