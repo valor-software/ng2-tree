@@ -347,6 +347,8 @@ describe('TreeInternalComponent', () => {
 
   it('should be possible to collapse node', () => {
     const foldingControl = masterInternalTreeEl.query(By.css('.folding'));
+    spyOn(masterComponentInstance.treeService.nodeExpanded$, 'next');
+    spyOn(masterComponentInstance.treeService.nodeCollapsed$, 'next');
 
     expect(masterInternalTreeEl.componentInstance.tree.isNodeExpanded()).toEqual(true);
 
@@ -355,23 +357,28 @@ describe('TreeInternalComponent', () => {
     fixture.detectChanges();
 
     expect(masterInternalTreeEl.componentInstance.tree.isNodeExpanded()).toEqual(false);
-    const children = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
+    expect(masterComponentInstance.treeService.nodeExpanded$.next).toHaveBeenCalledTimes(0);
+    expect(masterComponentInstance.treeService.nodeCollapsed$.next).toHaveBeenCalledTimes(1);
 
+    const children = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     expect(children.length).toEqual(0);
   });
 
   it('should be possible to expand node', () => {
     const foldingControl = masterInternalTreeEl.query(By.css('.folding'));
+    spyOn(masterComponentInstance.treeService.nodeExpanded$, 'next');
+    spyOn(masterComponentInstance.treeService.nodeCollapsed$, 'next');
 
     expect(masterInternalTreeEl.componentInstance.tree.isNodeExpanded()).toEqual(true);
 
     foldingControl.triggerEventHandler('click');
 
     fixture.detectChanges();
-
     expect(masterInternalTreeEl.componentInstance.tree.isNodeExpanded()).toEqual(false);
-    let children = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
+    expect(masterComponentInstance.treeService.nodeExpanded$.next).toHaveBeenCalledTimes(0);
+    expect(masterComponentInstance.treeService.nodeCollapsed$.next).toHaveBeenCalledTimes(1);
 
+    let children = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     expect(children.length).toEqual(0);
 
     foldingControl.triggerEventHandler('click');
@@ -379,8 +386,10 @@ describe('TreeInternalComponent', () => {
     fixture.detectChanges();
 
     expect(masterInternalTreeEl.componentInstance.tree.isNodeExpanded()).toEqual(true);
-    children = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
+    expect(masterComponentInstance.treeService.nodeExpanded$.next).toHaveBeenCalledTimes(1);
+    expect(masterComponentInstance.treeService.nodeCollapsed$.next).toHaveBeenCalledTimes(1);
 
+    children = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     expect(children.length).toEqual(2);
   });
 

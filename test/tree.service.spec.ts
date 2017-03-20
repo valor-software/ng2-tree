@@ -8,7 +8,9 @@ import {
   NodeMovedEvent,
   NodeCreatedEvent,
   NodeSelectedEvent,
-  NodeRenamedEvent
+  NodeRenamedEvent,
+  NodeExpandedEvent,
+  NodeCollapsedEvent
 } from '../src/tree.events';
 import { ElementRef } from '@angular/core';
 import { NodeDraggableEvent } from '../src/draggable/draggable.events';
@@ -34,6 +36,8 @@ describe('TreeService', () => {
     expect(treeService.nodeRenamed$ instanceof Subject).toBe(true);
     expect(treeService.nodeCreated$ instanceof Subject).toBe(true);
     expect(treeService.nodeSelected$ instanceof Subject).toBe(true);
+    expect(treeService.nodeExpanded$ instanceof Subject).toBe(true);
+    expect(treeService.nodeCollapsed$ instanceof Subject).toBe(true);
   });
 
   it('fires node removed events', () => {
@@ -89,6 +93,28 @@ describe('TreeService', () => {
 
     expect(treeService.nodeRenamed$.next).toHaveBeenCalledTimes(1);
     expect(treeService.nodeRenamed$.next).toHaveBeenCalledWith(new NodeRenamedEvent(tree, 'Bla', tree.value));
+  });
+
+  it('fires node expanded events', () => {
+    spyOn(treeService.nodeExpanded$, 'next');
+
+    const tree = new Tree({value: 'Master'});
+
+    treeService.fireNodeExpanded(tree);
+
+    expect(treeService.nodeExpanded$.next).toHaveBeenCalledTimes(1);
+    expect(treeService.nodeExpanded$.next).toHaveBeenCalledWith(new NodeExpandedEvent(tree));
+  });
+
+  it('fires node collapsed events', () => {
+    spyOn(treeService.nodeCollapsed$, 'next');
+
+    const tree = new Tree({value: 'Master'});
+
+    treeService.fireNodeCollapsed(tree);
+
+    expect(treeService.nodeCollapsed$.next).toHaveBeenCalledTimes(1);
+    expect(treeService.nodeCollapsed$.next).toHaveBeenCalledWith(new NodeCollapsedEvent(tree));
   });
 
   it('fires events on which other tree should remove selection', done => {

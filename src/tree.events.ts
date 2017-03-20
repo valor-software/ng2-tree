@@ -41,3 +41,15 @@ export class NodeRenamedEvent extends NodeDestructiveEvent {
     super(node);
   }
 }
+
+export class NodeExpandedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
+export class NodeCollapsedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
