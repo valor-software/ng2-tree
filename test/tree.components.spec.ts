@@ -10,6 +10,7 @@ import { NodeMenuComponent } from '../src/menu/node-menu.component';
 import { NodeDraggableService } from '../src/draggable/node-draggable.service';
 import { NodeDraggableDirective } from '../src/draggable/node-draggable.directive';
 import { NodeEditableDirective } from '../src/editable/node-editable.directive';
+import { SafeHtmlPipe } from '../src/utils/safe-html.pipe';
 
 let fixture: ComponentFixture<TestComponent>;
 let componentInstance: TreeComponent;
@@ -18,8 +19,8 @@ let componentEl: DebugElement;
 describe('TreeComponent (the one that wraps TreeInternalComponent)', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective],
-      providers: [NodeMenuService, NodeDraggableService, TreeService]
+      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
+      providers: [NodeMenuService, NodeDraggableService, TreeService, SafeHtmlPipe]
     });
 
     fixture = TestBed.createComponent(TestComponent);

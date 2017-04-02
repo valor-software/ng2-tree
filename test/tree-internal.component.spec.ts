@@ -13,6 +13,7 @@ import { NodeEditableDirective } from '../src/editable/node-editable.directive';
 import { NodeMenuAction } from '../src/menu/menu.events';
 import * as EventUtils from '../src/utils/event.utils';
 import { CapturedNode } from '../src/draggable/captured-node';
+import { SafeHtmlPipe } from '../src/utils/safe-html.pipe';
 
 let fixture;
 let masterInternalTreeEl;
@@ -28,6 +29,7 @@ let leftMenuComponentInstance;
 let nodeMenuService;
 let nodeDraggableService;
 let treeService;
+let safeHtml;
 
 const tree: TreeModel = {
   value: 'Master',
@@ -76,8 +78,8 @@ const tree3: TreeModel = {
 describe('TreeInternalComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective],
-      providers: [NodeMenuService, NodeDraggableService, TreeService]
+      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
+      providers: [NodeMenuService, NodeDraggableService, TreeService, SafeHtmlPipe]
     });
 
     fixture = TestBed.createComponent(TestComponent);
@@ -94,6 +96,7 @@ describe('TreeInternalComponent', () => {
     nodeMenuService = TestBed.get(NodeMenuService);
     nodeDraggableService = TestBed.get(NodeDraggableService);
     treeService = TestBed.get(TreeService);
+    safeHtml = TestBed.get(SafeHtmlPipe);
 
     fixture.detectChanges();
   });
@@ -103,6 +106,7 @@ describe('TreeInternalComponent', () => {
     expect(nodeMenuService).not.toBeNull();
     expect(nodeDraggableService).not.toBeNull();
     expect(treeService).not.toBeNull();
+    expect(safeHtml).not.toBeNull();
   });
 
   it('should have properly set tree property', () => {
@@ -473,7 +477,7 @@ describe('TreeInternalComponent', () => {
       expect(nodeValues[3].innerText).toEqual('Eyebrow');
       expect(nodeValues[4].innerText).toEqual('Lips');
     });
-  })
+  });
 });
 
 @Component({
