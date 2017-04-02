@@ -367,7 +367,7 @@ export class Tree {
   /**
    * Check whether a given value can be considered RenamableNode.
    * @param {any} value - A value to check.
-   * @returns {boolan} - A flag indicating whether given value is Renamable node or not.
+   * @returns {boolean} - A flag indicating whether given value is Renamable node or not.
    * @static
    */
   public static isRenamable(value: any): value is RenamableNode {
