@@ -29,6 +29,13 @@ module.exports = config => {
     webpack: require('./webpack.test.js'),
     webpackServer: {
       noInfo: true
-    }
+    },
+    // If browser does not capture in given timeout [ms], kill it
+    //captureTimeout: 60000,
+
+    // to avoid [PhantomJS 2.1.1 (Windows 8 0.0.0)]: Disconnected (1 times), because no message in 10000 ms.
+    browserDisconnectTimeout : 10000, // default 2000
+    browserDisconnectTolerance : 1, // default 0
+    browserNoActivityTimeout : 60000 //default 10000
   });
 };
