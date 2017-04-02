@@ -72,7 +72,8 @@ export class AppComponent implements OnInit {
           'static': true
         },
         children: [
-          { value: 'Antiqua' },
+          // added class and id for e2e testing for HTML tags support
+          { value: '<a href="#" id="antiqua" class="test">Antiqua</a> with HTML tags.'},
           { value: 'DejaVu Serif' },
           { value: 'Garamond' },
           { value: 'Georgia' },

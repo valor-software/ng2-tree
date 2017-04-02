@@ -8,10 +8,18 @@ import { NodeEditableDirective } from './editable/node-editable.directive';
 import { NodeMenuComponent } from './menu/node-menu.component';
 import { NodeMenuService } from './menu/node-menu.service';
 import { TreeService } from './tree.service';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [NodeDraggableDirective, TreeComponent, NodeEditableDirective, NodeMenuComponent, TreeInternalComponent],
+  declarations: [
+    NodeDraggableDirective,
+    TreeComponent,
+    NodeEditableDirective,
+    NodeMenuComponent,
+    TreeInternalComponent,
+    SafeHtmlPipe
+  ],
   exports: [TreeComponent],
   providers: [NodeDraggableService, NodeMenuService, TreeService]
 })

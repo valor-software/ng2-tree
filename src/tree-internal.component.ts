@@ -25,7 +25,8 @@ import { Observable } from 'rxjs';
           *ngIf="!shouldShowInputForTreeValue()"
           [class.node-selected]="isSelected"
           (click)="onNodeSelected($event)">
-            {{tree.value}}<span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
+            <span [innerHTML]="tree.value | safeHtml"></span>
+            <span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
         </div>
 
         <input type="text" class="node-value"
