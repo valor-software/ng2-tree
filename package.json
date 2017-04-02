@@ -50,7 +50,8 @@
     "github-release": "conventional-github-releaser -p angular",
     "preversion": "npm run flow.lint && npm test",
     "version": "npm run changelog && git add CHANGELOG.md",
-    "postversion": "git push origin master && git push --tags && npm run github-release && node publish.js"
+    "postversion": "git push origin master && git push --tags && npm run github-release && node publish.js",
+    "webdriver-update": "node ./node_modules/protractor/bin/webdriver-manager update"
   },
   "devDependencies": {
     "@angular/common": "2.4.5",

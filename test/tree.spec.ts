@@ -134,6 +134,33 @@ describe('Tree', () => {
     expect(slabSerifFontsTree.children[1].positionInParent).toEqual(1);
   });
 
+  it('should build a Tree from TreeModel with HTML tags', () => {
+    const tags: TreeModel = {
+      value: '<a href="#">Awesome Tree</a>',
+      children: [
+        { value: '<b>Strong text</b>' },
+        {
+          value: '<span id="test">Spanned text</span>',
+          children: [
+            { value: '<em>Candida</em>' }
+          ]
+        }
+      ]
+    };
+
+    const tree = new Tree(tags);
+    expect(tree).not.toBeFalsy('Constructed tree should exist');
+    expect(tree instanceof Tree).toBe(true, 'tree should be instance of Tree');
+    expect(tree.value).toEqual(tags.value);
+    expect(tree.children.length).toEqual(2);
+    expect(tree.children[0].value).toEqual(tags.children[0].value);
+
+    const next_sibling = tree.children[1];
+    expect(next_sibling.value).toEqual(tags.children[1].value);
+    expect(next_sibling.children.length).toEqual(1);
+    expect(next_sibling.children[0].value).toEqual(tags.children[1].children[0].value);
+  });
+
   it('builds completely new structure from TreeModel and changes to TreeModel should not affect built Tree', () => {
     const fonts: TreeModel = {
       value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
