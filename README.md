@@ -40,9 +40,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { TreeModule } from 'ng2-tree';
 
 @NgModule({
-  declarations: [MyComponent],
+  declarations: [AppComponent],
   imports:      [BrowserModule, TreeModule],
-  bootstrap:    [MyComponent]
+  bootstrap:    [AppComponent]
 })
 export class MyModule {
 }
@@ -69,7 +69,7 @@ class MyComponent {
         children: [
           {value: 'Java'},
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -77,7 +77,7 @@ class MyComponent {
         children: [
           {value: 'JavaScript'},
           {value: 'CoffeeScript'},
-          {value: 'Lua'},
+          {value: 'Lua'}
         ]
       }
     ]
@@ -164,7 +164,7 @@ As you can see - object that conforms to this interface has a recursive nature, 
         children: [
           {value: 'Java'},
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -172,7 +172,7 @@ As you can see - object that conforms to this interface has a recursive nature, 
         children: [
           {value: 'JavaScript'},
           {value: 'CoffeeScript'},
-          {value: 'Lua'},
+          {value: 'Lua'}
         ]
       }
     ]
@@ -214,7 +214,7 @@ Here is an example of such a node in the `TreeModel` object:
             }
           },
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -224,7 +224,7 @@ Here is an example of such a node in the `TreeModel` object:
             callback([
               {value: 'JavaScript'},
               {value: 'CoffeeScript'},
-              {value: 'TypeScript'},
+              {value: 'TypeScript'}
             ]);
           }, 5000);
         }
@@ -245,7 +245,7 @@ Another worth noting thing is `loadChildren`. This function on `TreeModel` allow
       callback([
         {value: 'JavaScript'},
         {value: 'CoffeeScript'},
-        {value: 'TypeScript'},
+        {value: 'TypeScript'}
       ]);
     }, 5000);
   }
@@ -270,7 +270,7 @@ Here is an example of its usage:
   children: [
     {value: 'JavaScript'},
     {value: 'CoffeeScript'},
-    {value: 'Lua'},
+    {value: 'Lua'}
   ]
 }
 ```
