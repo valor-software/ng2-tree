@@ -134,28 +134,28 @@ describe('TreeInternalComponent', () => {
 
     fixture.detectChanges();
 
-    expect(masterComponentInstance.isSelected).toEqual(true);
+    expect(masterComponentInstance.tree.isSelected).toEqual(true);
     expect(allNodeValues[0].nativeElement.classList.contains('node-selected')).toEqual(true);
 
     const servantNumber1El = allNodeValues[1].parent.parent.parent.parent;
     const servantNumber2El = allNodeValues[2].parent.parent.parent.parent;
 
-    expect(servantNumber1El.componentInstance.isSelected).toEqual(false);
+    expect(servantNumber1El.componentInstance.tree.isSelected).toEqual(false);
     expect(allNodeValues[1].nativeElement.classList.contains('node-selected')).toEqual(false);
 
-    expect(servantNumber2El.componentInstance.isSelected).toEqual(false);
+    expect(servantNumber2El.componentInstance.tree.isSelected).toEqual(false);
     expect(allNodeValues[2].nativeElement.classList.contains('node-selected')).toEqual(false);
 
     allNodeValues[1].triggerEventHandler('click', event);
 
     fixture.detectChanges();
-    expect(masterComponentInstance.isSelected).toEqual(false);
+    expect(masterComponentInstance.tree.isSelected).toEqual(false);
     expect(allNodeValues[0].nativeElement.classList.contains('node-selected')).toEqual(false);
 
-    expect(servantNumber1El.componentInstance.isSelected).toEqual(true);
+    expect(servantNumber1El.componentInstance.tree.isSelected).toEqual(true);
     expect(allNodeValues[1].nativeElement.classList.contains('node-selected')).toEqual(true);
 
-    expect(servantNumber2El.componentInstance.isSelected).toEqual(false);
+    expect(servantNumber2El.componentInstance.tree.isSelected).toEqual(false);
     expect(allNodeValues[2].nativeElement.classList.contains('node-selected')).toEqual(false);
   });
 
