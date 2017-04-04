@@ -14,6 +14,7 @@ export class Tree {
   private _childrenLoadingState: ChildrenLoadingState = ChildrenLoadingState.NotStarted;
   public node: TreeModel;
   public parent: Tree;
+  public isSelected: boolean;
 
   /**
    * Build an instance of Tree from an object implementing TreeModel interface.

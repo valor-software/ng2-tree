@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
         <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
         <div class="node-value"
           *ngIf="!shouldShowInputForTreeValue()"
-          [class.node-selected]="isSelected"
+          [class.node-selected]="tree.isSelected"
           (click)="onNodeSelected($event)">
             {{tree.value}}<span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
         </div>
@@ -50,7 +50,6 @@ export class TreeInternalComponent implements OnInit {
   @Input()
   public settings: Ng2TreeSettings;
 
-  public isSelected: boolean = false;
   public isMenuVisible: boolean = false;
 
   public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
@@ -65,7 +64,7 @@ export class TreeInternalComponent implements OnInit {
       .subscribe(() => this.isMenuVisible = false);
 
     this.treeService.unselectStream(this.tree)
-      .subscribe(() => this.isSelected = false);
+      .subscribe(() => this.tree.isSelected = false);
 
     this.treeService.draggedStream(this.tree, this.element)
       .subscribe((e: NodeDraggableEvent) => {
@@ -98,7 +97,7 @@ export class TreeInternalComponent implements OnInit {
 
   public onNodeSelected(e: MouseEvent): void {
     if (EventUtils.isLeftButtonClicked(e)) {
-      this.isSelected = true;
+      this.tree.isSelected = true;
       this.treeService.fireNodeSelected(this.tree);
     }
   }
