@@ -9,4 +9,4 @@
   - Detect current issues and pain using ng2-tree on mobile devices.
   - Expose API for managing tree programmatically (expand, collapse, new node, etc.).
 - Move tests and demo to angular-cli.
-- Add hooks before tree detructive actions (prevent deletion if hook doesn't apply for example. It is needed to confirm an action before executing it - for example node removal).
+- Add hooks before tree destructive actions (prevent deletion if hook doesn't apply for example. It is needed to confirm an action before executing it - for example node removal).
