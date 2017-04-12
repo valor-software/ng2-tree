@@ -206,7 +206,7 @@ export class Tree {
 
   /**
    * Check whether or not this tree has a left menu.
-   * @returns {boolean} A flag indicating whether or not this has a left menu.
+   * @returns {boolean} A flag indicating whether or not this tree has a left menu.
    */
   public hasLeftMenu(): boolean {
     return !_.get(this.node.settings, 'static', false) && _.get(this.node.settings, 'leftMenu', false);
@@ -214,7 +214,7 @@ export class Tree {
 
   /**
    * Check whether or not this tree has a right menu.
-   * @returns {boolean} A flag indicating whether or not this has a right menu.
+   * @returns {boolean} A flag indicating whether or not this tree has a right menu.
    */
   public hasRightMenu(): boolean {
     return !_.get(this.node.settings, 'static', false) && _.get(this.node.settings, 'rightMenu', false);
@@ -307,20 +307,76 @@ export class Tree {
   }
 
   /**
+   * Set a current folding type: expanded, collapsed or leaf.
+   */
+  private _setFoldingType(): void {
+    if (this.childrenShouldBeLoaded()) {
+      this.node._foldingType = FoldingType.Collapsed;
+    } else if (this._children) {
+      this.node._foldingType = FoldingType.Expanded;
+    } else {
+      this.node._foldingType = FoldingType.Leaf;
+    }
+  }
+
+  /**
    * Get a current folding type: expanded, collapsed or leaf.
    * @returns {FoldingType} A folding type of the current tree.
    */
   public get foldingType(): FoldingType {
     if (!this.node._foldingType) {
-      if (this.childrenShouldBeLoaded()) {
-        this.node._foldingType = FoldingType.Collapsed;
-      } else if (this._children) {
-        this.node._foldingType = FoldingType.Expanded;
-      } else {
-        this.node._foldingType = FoldingType.Leaf;
-      }
+      this._setFoldingType();
     }
     return this.node._foldingType;
+  }
+
+  /**
+   * Get a css class for element which displayes folding state - expanded, collapsed or leaf
+   * @returns {string} A string icontaining css class (classes)
+   */
+  public get foldingCssClass(): string {
+    return this.getCssClassesFromSettings() || this.foldingType.cssClass;
+  }
+
+  private getCssClassesFromSettings(): string {
+    if (!this.node._foldingType) {
+      this._setFoldingType();
+    }
+
+    if (this.node._foldingType === FoldingType.Collapsed) {
+       return _.get(this.node.settings, 'cssClasses.collapsed', null);
+    } else if (this.node._foldingType === FoldingType.Expanded) {
+       return _.get(this.node.settings, 'cssClasses.expanded', null);
+    }
+
+    return _.get(this.node.settings, 'cssClasses.leaf', null);
+  }
+
+  /**
+   * Get a html template to render before every node's name.
+   * @returns {string} A string representing a html template.
+   */
+  public get nodeTemplate(): string {
+    return this.getTemplateFromSettings();
+  }
+
+  private getTemplateFromSettings(): string {
+    if (this.isLeaf()) {
+      return _.get(this.node.settings, 'templates.leaf', '');
+    } else {
+      return _.get(this.node.settings, 'templates.node', '');
+    }
+  }
+
+  /**
+   * Get a html template to render for an element activatin left menu of a node.
+   * @returns {string} A string representing a html template.
+   */
+  public get leftMenuTemplate(): string {
+    if (this.hasLeftMenu()) {
+      return _.get(this.node.settings, 'templates.leftMenu', '<span></span>');
+    }
+    return '';
   }
 
   /**
