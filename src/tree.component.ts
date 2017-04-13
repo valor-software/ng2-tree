@@ -1,12 +1,13 @@
-import { Input, Component, OnInit, EventEmitter, Output, Inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Input, Component, OnInit, EventEmitter, Output, Inject, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { TreeService } from './tree.service';
 import * as TreeTypes from './tree.types';
 import { NodeEvent } from './tree.events';
 import { Tree } from './tree';
+import { TreeController } from './tree-controller';
 
 @Component({
   selector: 'tree',
-  template: `<tree-internal [tree]="tree" [settings]="settings"></tree-internal>`,
+  template: `<tree-internal #rootComponent [tree]="tree" [settings]="settings"></tree-internal>`,
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit, OnChanges {
@@ -42,6 +43,7 @@ export class TreeComponent implements OnInit, OnChanges {
   public nodeCollapsed: EventEmitter<any> = new EventEmitter();
 
   public tree: Tree;
+  @ViewChild('rootComponent') public rootComponent;
 
   public constructor(@Inject(TreeService) private treeService: TreeService) {
   }
@@ -82,5 +84,13 @@ export class TreeComponent implements OnInit, OnChanges {
     this.treeService.nodeCollapsed$.subscribe((e: NodeEvent) => {
       this.nodeCollapsed.emit(e);
     });
+  }
+
+  public getController(): TreeController {
+    return this.rootComponent.controller;
+  }
+
+  public getControllerByNodeId(id: number | string): TreeController {
+    return this.treeService.getController(id);
   }
 }

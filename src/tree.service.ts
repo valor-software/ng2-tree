@@ -7,8 +7,9 @@ import {
   NodeExpandedEvent,
   NodeCollapsedEvent
 } from './tree.events';
-import { RenamableNode } from './tree.types';
+import { RenamableNode, TreeModel } from './tree.types';
 import { Tree } from './tree';
+import { TreeController } from './tree-controller';
 import { Subject, Observable } from 'rxjs/Rx';
 import { Injectable, Inject, ElementRef } from '@angular/core';
 import { NodeDraggableService } from './draggable/node-draggable.service';
@@ -23,6 +24,8 @@ export class TreeService {
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
   public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
   public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
+
+  private controllers: Map<string | number, TreeController> = new Map();
 
   public constructor(@Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
     this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
@@ -72,5 +75,27 @@ export class TreeService {
     return this.nodeDraggableService.draggableNodeEvents$
       .filter((e: NodeDraggableEvent) => e.target === element)
       .filter((e: NodeDraggableEvent) => !e.captured.tree.hasChild(tree));
+  }
+
+  public setController(id: string | number, controller: TreeController): void {
+    this.controllers.set(id, controller);
+  }
+
+  public deleteController(id: string | number): void {
+    if (this.controllers.has(id)) {
+      this.controllers.delete(id);
+    }
+  }
+
+  public getController(id: string | number): TreeController {
+    if (this.controllers.has(id)) {
+      return this.controllers.get(id);
+    }
+
+    return null;
+  }
+
+  public hasController(id: string | number): boolean {
+    return this.controllers.has(id);
   }
 }
