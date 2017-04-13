@@ -3,6 +3,8 @@ import { TreeService } from '../src/tree.service';
 import { Subject } from 'rxjs/Rx';
 import { NodeDraggableService } from '../src/draggable/node-draggable.service';
 import { Tree } from '../src/tree';
+import { TreeController } from '../src/tree-controller';
+import { TreeInternalComponent } from '../src/tree-internal.component';
 import {
   NodeRemovedEvent,
   NodeMovedEvent,
@@ -66,11 +68,10 @@ describe('TreeService', () => {
     spyOn(treeService.nodeCreated$, 'next');
 
     const tree = new Tree({value: 'Master'});
-
-    treeService.fireNodeCreated(tree, parent);
+    treeService.fireNodeCreated(tree);
 
     expect(treeService.nodeCreated$.next).toHaveBeenCalledTimes(1);
-    expect(treeService.nodeCreated$.next).toHaveBeenCalledWith(new NodeCreatedEvent(tree));
+    expect(treeService.nodeCreated$.next).toHaveBeenCalledWith(new NodeCreatedEvent(tree, undefined));
   });
 
   it('fires node selected events', () => {

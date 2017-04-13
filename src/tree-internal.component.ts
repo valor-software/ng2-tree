@@ -1,6 +1,7 @@
-import { Input, Component, OnInit, ElementRef, Inject } from '@angular/core';
+import { Input, Component, OnInit, OnDestroy, ElementRef, Inject } from '@angular/core';
 import * as TreeTypes from './tree.types';
 import { Tree } from './tree';
+import { TreeController } from './tree-controller';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.events';
 import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.events';
@@ -8,6 +9,7 @@ import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
 import { Observable } from 'rxjs/Rx';
+import * as _get from 'lodash/get';
 
 @Component({
   selector: 'tree-internal',
@@ -16,6 +18,7 @@ import { Observable } from 'rxjs/Rx';
     <li>
       <div class="value-container"
         [ngClass]="{rootless: isRootHidden()}"
+        [class.selected]="isSelected"
         (contextmenu)="showRightMenu($event)"
         [nodeDraggable]="element"
         [tree]="tree">
@@ -51,7 +54,7 @@ import { Observable } from 'rxjs/Rx';
   </ul>
   `
 })
-export class TreeInternalComponent implements OnInit {
+export class TreeInternalComponent implements OnInit, OnDestroy {
   @Input()
   public tree: Tree;
 
@@ -61,6 +64,7 @@ export class TreeInternalComponent implements OnInit {
   public isSelected = false;
   public isRightMenuVisible = false;
   public isLeftMenuVisible = false;
+  public controller: TreeController;
 
   public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
                      @Inject(TreeService) public treeService: TreeService,
@@ -68,6 +72,11 @@ export class TreeInternalComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.controller = new TreeController(this);
+    if (_get(this.tree, 'node.id', '')) {
+      this.treeService.setController(this.tree.node.id, this.controller);
+    }
+
     this.settings = this.settings || { rootIsVisible: true };
 
     this.nodeMenuService.hideMenuStream(this.element)
@@ -89,6 +98,12 @@ export class TreeInternalComponent implements OnInit {
           this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, this.tree);
         }
       });
+  }
+
+  public ngOnDestroy(): void {
+    if (_get(this.tree, 'node.id', '')) {
+      this.treeService.deleteController(this.tree.node.id);
+    }
   }
 
   private swapWithSibling(sibling: Tree, tree: Tree): void {
@@ -173,6 +188,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private onRemoveSelected(): void {
+    this.treeService.deleteController(_get(this.tree, 'node.id', ''));
     this.treeService.fireNodeRemoved(this.tree);
   }
 
@@ -188,7 +204,7 @@ export class TreeInternalComponent implements OnInit {
 
     if (this.tree.isNew()) {
       this.tree.value = e.value;
-      this.treeService.fireNodeCreated(this.tree);
+      this.treeService.fireNodeCreated(this.tree, this.controller);
     }
 
     if (this.tree.isBeingRenamed()) {

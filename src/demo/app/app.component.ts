@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from '../../../index';
 
 declare const alertify: any;
@@ -9,7 +9,7 @@ declare const alertify: any;
     <div class="tree-demo-app">
       <div class="tree-container">
         <p class="tree-title">Fonts tree</p>
-        <tree
+        <tree #treeFonts
           [tree]="fonts"
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
@@ -36,13 +36,28 @@ declare const alertify: any;
       <div class="tree-container">
         <p class="tree-title">Directory/File structure</p>
         <p class="notice">this tree has advanced configurations</p>
-        <tree
-          [tree]="dfs"
+        <div class="tree-controlls">
+          <p>Try otside manipulations of the tree</p>
+          <button (click)="handleActionOnFFS(13, 'select')">Select 'boot' node</button>
+          <button (click)="handleActionOnFFS(2, 'collapse')">Collapse 'bin' node</button>
+          <button (click)="handleActionOnFFS(2, 'expand')">Expand 'bin' node</button>
+          <button (click)="renameFFS(21)">Rename 'unicode.pf2' to 'unicode.pf'</button>
+          <button (click)="handleActionOnFFS(12, 'remove')">Remove 'nano'</button>
+          <button (click)="handleActionOnFFS(52, 'reloadChildren')">Reload Music's children</button>
+          <button (click)="setChildrenFFS(36)">Set 'etc' children</button>
+          <button (click)="addChildFFS(2, { value: 'ping'})">Add a child with name 'ping' to 'bin'</button>
+          <button (click)="addChildFFS(22, { value: 'lost'})">Add a child with name 'lost' to 'lost+found'</button>
+          <button (click)="addChildFFS(22, { value: 'found', children: []})">Add a child with name 'found' to 'lost+found'</button>
+          <button (click)="addChildFFS(36, { value: 'found', children: []})">Add a child with name 'found' to 'etc'</button>
+          <button (click)="addChildFFS(78, { value: 'Voodo People'})">Add a child with name 'Voodo People' to '2Cellos'</button>
+        </div>
+        <tree #treeFFS
+          [tree]="ffs"
           (nodeRemoved)="onNodeRemoved($event)"
           (nodeRenamed)="onNodeRenamed($event)"
           (nodeSelected)="onNodeSelected($event)"
           (nodeMoved)="onNodeMoved($event)"
-          (nodeCreated)="onNodeCreated($event)"
+          (nodeCreated)="onNodeFFSCreated($event)"
           (nodeExpanded)="onNodeExpanded($event)"
           (nodeCollapsed)="onNodeCollapsed($event)">
         </tree>
@@ -94,50 +109,54 @@ export class AppComponent implements OnInit {
     children: [
       {
         value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
+        id: 1,
         settings: {
           'static': true
         },
         children: [
-          {value: '<a href="#" id="antiqua" class="test">Antiqua</a> with HTML tags.'},
-          {value: 'DejaVu Serif'},
-          {value: 'Garamond'},
-          {value: 'Georgia'},
-          {value: 'Times New Roman'},
+          {value: '<a href="#" id="antiqua" class="test">Antiqua</a> with HTML tags.', id: 2},
+          {value: 'DejaVu Serif', id: 3},
+          {value: 'Garamond', id: 4},
+          {value: 'Georgia', id: 5},
+          {value: 'Times New Roman', id: 6},
           {
             value: 'Slab serif',
+            id: 7,
             children: [
-              {value: 'Candida'},
-              {value: 'Swift'},
-              {value: 'Guardian Egyptian'}
+              {value: 'Candida', id: 8},
+              {value: 'Swift', id: 9},
+              {value: 'Guardian Egyptian', id: 10}
             ]
           }
         ]
       },
       {
         value: 'Sans-serif',
+        id: 11,
         children: [
-          {value: 'Arial'},
-          {value: 'Century Gothic'},
-          {value: 'DejaVu Sans'},
-          {value: 'Futura'},
-          {value: 'Geneva'},
-          {value: 'Liberation Sans'}
+          {value: 'Arial', id: 12},
+          {value: 'Century Gothic', id: 13},
+          {value: 'DejaVu Sans', id: 14},
+          {value: 'Futura', id: 15},
+          {value: 'Geneva', id: 16},
+          {value: 'Liberation Sans', id: 17}
         ]
       },
       {
         value: 'Monospace - With ASYNC CHILDREN',
+        id: 18,
         // children property is ignored if "loadChildren" is present
         children: [{value: 'I am the font that will be ignored'}],
         loadChildren: (callback) => {
           setTimeout(() => {
             callback([
-              {value: 'Input Mono'},
-              {value: 'Roboto Mono'},
-              {value: 'Liberation Mono'},
-              {value: 'Hack'},
-              {value: 'Consolas'},
-              {value: 'Menlo'},
-              {value: 'Source Code Pro'}
+              {value: 'Input Mono', id: 19},
+              {value: 'Roboto Mono', id: 20},
+              {value: 'Liberation Mono', id: 21},
+              {value: 'Hack', id: 22},
+              {value: 'Consolas', id: 23},
+              {value: 'Menlo', id: 24},
+              {value: 'Source Code Pro', id: 25}
             ]);
           }, 5000);
         }
@@ -145,9 +164,11 @@ export class AppComponent implements OnInit {
     ]
   };
 
+  @ViewChild('treeFonts') public treeFonts;
+
   public pls: TreeModel;
 
-  public dfs: TreeModel = {
+  public ffs: TreeModel = {
     value: '/',
     id: 1,
     settings: {
@@ -245,7 +266,21 @@ export class AppComponent implements OnInit {
       },
       {value: 'cdrom', id: 34, children: []},
       {value: 'dev', id: 35, children: []},
-      {value: 'etc', id: 36, children: []},
+      {
+        value: 'etc',
+        id: 36,
+        loadChildren: (callback) => {
+          console.log('callback function called to load etc`s children');
+          setTimeout(() => {
+            callback([
+              { value: 'apache2', id: 82, children: [] },
+              { value: 'nginx', id: 83, children: [] },
+              { value: 'dhcp', id: 84, children: [] },
+              { value: 'dpkg', id: 85, children: [] }
+            ]);
+          });
+        }
+      },
       {
         value: 'home',
         id: 37,
@@ -346,6 +381,9 @@ export class AppComponent implements OnInit {
       {value: 'var', id: 77, children: []}
     ]
   };
+  private lastFFSNodeId = 86;
+
+  @ViewChild('treeFFS') public treeFFS;
 
   private static logEvent(e: NodeEvent, message: string): void {
     console.log(e);
@@ -411,6 +449,13 @@ export class AppComponent implements OnInit {
     AppComponent.logEvent(e, 'Created');
   }
 
+  public onNodeFFSCreated(e: NodeEvent, controller): void {
+    AppComponent.logEvent(e, 'Created');
+    if (controller) {
+      controller.changeNodeId(++this.lastFFSNodeId);
+    }
+  }
+
   public onNodeSelected(e: NodeEvent): void {
     AppComponent.logEvent(e, 'Selected');
   }
@@ -421,5 +466,48 @@ export class AppComponent implements OnInit {
 
   public onNodeCollapsed(e: NodeEvent): void {
     AppComponent.logEvent(e, 'Collapsed');
+  }
+
+  public handleActionOnFFS(id: number | string, action: string) {
+    const treeController = this.treeFFS.getControllerByNodeId(id);
+    if (treeController && typeof treeController[action] === 'function') {
+      treeController[action]();
+    } else {
+      console.log('There isn`t a controller for a node with id - ' + id);
+    }
+  }
+
+  public renameFFS(id: number | string) {
+    const treeController = this.treeFFS.getControllerByNodeId(id);
+    if (treeController) {
+      treeController.rename('unicode.pf');
+    } else {
+      console.log('There isn`t a controller for a node with id - ' + id);
+    }
+  }
+
+  public setChildrenFFS(id: number | string) {
+    const treeController = this.treeFFS.getControllerByNodeId(id);
+    if (treeController && typeof treeController.setChildren === 'function') {
+      treeController.setChildren([
+        { value: 'apache2', id: 82, children: [] },
+        { value: 'nginx', id: 83, children: [] },
+        { value: 'dhcp', id: 84, children: [] },
+        { value: 'dpkg', id: 85, children: [] },
+        { value: 'gdb', id: 86, children: [] }
+      ]);
+    } else {
+      console.log('There isn`t a controller for a node with id - ' + id);
+    }
+  }
+
+  public addChildFFS(id: number | string, newNode: TreeModel) {
+    newNode.id = ++this.lastFFSNodeId;
+    const treeController = this.treeFFS.getControllerByNodeId(id);
+    if (treeController) {
+      treeController.addChild(newNode);
+    } else {
+      console.log('There isn`t a controller for a node with id - ' + id);
+    }
   }
 }

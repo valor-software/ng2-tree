@@ -165,13 +165,39 @@ export class Tree {
   }
 
   /**
+   * By calling this method you start process of loading node's children using `loadChildren` function.
+   */
+  public reloadChildren(): void {
+    if (this.childrenShouldBeLoaded()) {
+      this._childrenLoadingState = ChildrenLoadingState.Loading;
+      this._loadChildren((children: TreeModel[]) => {
+        this._children = _map(children, (child: TreeModel) => new Tree(child, this));
+        this._childrenLoadingState = ChildrenLoadingState.Completed;
+      });
+    }
+  }
+
+  /**
+   * By calling this method you will remove all current children of a treee and create new.
+   */
+  public setChildren(children: Array<TreeModel>): void {
+    this._children = _map(children, (child: TreeModel) => new Tree(child, this));
+    if (this.childrenShouldBeLoaded()) {
+      this._childrenLoadingState = ChildrenLoadingState.Completed;
+    }
+  }
+
+  /**
    * Create a new node in the current tree.
    * @param {boolean} isBranch - A flag that indicates whether a new node should be a "Branch". "Leaf" node will be created by default
+   * @param {TreeModel} model - Tree model of the new node which will be inserted. Empty node will be created by default and it will fire edit mode of this node
    * @returns {Tree} A newly created child node.
    */
-  public createNode(isBranch: boolean): Tree {
-    const tree = new Tree({ value: '' }, null, isBranch);
-    tree.markAsNew();
+  public createNode(isBranch: boolean, model: TreeModel = { value: '' }): Tree {
+    const tree = new Tree(model, this, isBranch);
+    if (!model.id) {
+      tree.markAsNew();
+    }
 
     if (this.childrenShouldBeLoaded() && !(this.childrenAreBeingLoaded() || this.childrenWereLoaded())) {
       return null;
