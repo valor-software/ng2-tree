@@ -71,7 +71,7 @@ class MyComponent {
         children: [
           {value: 'Java'},
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -79,7 +79,7 @@ class MyComponent {
         children: [
           {value: 'JavaScript'},
           {value: 'CoffeeScript'},
-          {value: 'Lua'},
+          {value: 'Lua'}
         ]
       }
     ]
@@ -169,7 +169,7 @@ As you can see - object that conforms to this interface has a recursive nature, 
         children: [
           {value: 'Java'},
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -177,7 +177,7 @@ As you can see - object that conforms to this interface has a recursive nature, 
         children: [
           {value: 'JavaScript'},
           {value: 'CoffeeScript'},
-          {value: 'Lua'},
+          {value: 'Lua'}
         ]
       }
     ]
@@ -219,7 +219,7 @@ Here is an example of such a node in the `TreeModel` object:
             }
           },
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -229,7 +229,7 @@ Here is an example of such a node in the `TreeModel` object:
             callback([
               {value: 'JavaScript'},
               {value: 'CoffeeScript'},
-              {value: 'TypeScript'},
+              {value: 'TypeScript'}
             ]);
           }, 5000);
         }
@@ -250,7 +250,7 @@ Another worth noting thing is `loadChildren`. This function on `TreeModel` allow
       callback([
         {value: 'JavaScript'},
         {value: 'CoffeeScript'},
-        {value: 'TypeScript'},
+        {value: 'TypeScript'}
       ]);
     }, 5000);
   }
@@ -287,13 +287,13 @@ Here is an example of its usage:
   children: [
     {value: 'JavaScript'},
     {value: 'CoffeeScript'},
-    {value: 'Lua'},
+    {value: 'Lua'}
   ]
 }
 ```
 
 * `static` - Boolean - This option makes it impossible to drag a tree or modify it in a some way, though you still can select nodes in the static tree and appropriate events will be generated.
-* `rightMenu` - Boolan - This option allows you to activate (true, by default) or deactivate (false) right menu when clicking with right button of a mouse.
+* `rightMenu` - Boolean - This option allows you to activate (true, by default) or deactivate (false) right menu when clicking with right button of a mouse.
 * `leftMenu` - Boolean - This option allows you to activate (true) or deactivate (false, by default) left menu.
 * `cssClasses` - Object:
   * `expanded` - String - It specifies a css class (or classes) for an item which represents expanded state of a node. The item is clickable and it transitions the node to the collapsed state
