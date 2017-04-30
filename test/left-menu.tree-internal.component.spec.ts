@@ -13,6 +13,7 @@ import { NodeEditableDirective } from '../src/editable/node-editable.directive';
 import { NodeMenuAction } from '../src/menu/menu.events';
 import * as EventUtils from '../src/utils/event.utils';
 import { CapturedNode } from '../src/draggable/captured-node';
+import { SafeHtmlPipe } from '../src/utils/safe-html.pipe';
 
 let fixture;
 let masterInternalTreeEl;
@@ -120,7 +121,7 @@ const tree3: TreeModel = {
 describe('LeftMenu-TreeInternalComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective],
+      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
       providers: [NodeMenuService, NodeDraggableService, TreeService]
     });
 

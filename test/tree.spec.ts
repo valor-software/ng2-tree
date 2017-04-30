@@ -134,6 +134,15 @@ describe('Tree', () => {
     expect(slabSerifFontsTree.children[1].positionInParent).toEqual(1);
   });
 
+  it('should build a Tree with html as a value', () => {
+    const tags: TreeModel = {
+      value: '<a href="#">Awesome Tree</a>'
+    };
+
+    const tree = new Tree(tags);
+    expect(tree.value).toEqual(tags.value);
+  });
+
   it('builds completely new structure from TreeModel and changes to TreeModel should not affect built Tree', () => {
     const fonts: TreeModel = {
       value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
