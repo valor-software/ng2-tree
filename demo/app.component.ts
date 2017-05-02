@@ -51,6 +51,7 @@ declare const alertify: any;
         </tree>
       </div>
     </div>
+    <server-tree>Loading</server-tree>
     `,
   styles: [`
    .tree-demo-app {

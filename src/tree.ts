@@ -10,6 +10,7 @@ enum ChildrenLoadingState {
 
 export class Tree {
   private _children: Tree[];
+  private _childrenObservable: Observable<Tree[]>;
   private _loadChildren: ChildrenLoadingFunction;
   private _childrenLoadingState: ChildrenLoadingState = ChildrenLoadingState.NotStarted;
   public node: TreeModel;
@@ -91,9 +92,9 @@ export class Tree {
    * @returns {Observable<Tree[]>} An observable which emits children once they are loaded.
    */
   public get childrenAsync(): Observable<Tree[]> {
-    if(this.canLoadChildren()) {
-      setTimeout(() => this._childrenLoadingState = ChildrenLoadingState.Loading);
-      return new Observable((observer: Observer<Tree[]>) => {
+    if (this.canLoadChildren() && !this._childrenObservable) {
+      setTimeout(() => this._childrenLoadingState = ChildrenLoadingState.Loading, 0);
+      this._childrenObservable = new Observable((observer: Observer<Tree[]>) => {
         this._loadChildren((children: TreeModel[]) => {
           this._children = _.map(children, (child: TreeModel) => new Tree(child, this));
           this._childrenLoadingState = ChildrenLoadingState.Completed;
@@ -101,9 +102,13 @@ export class Tree {
           observer.complete();
         });
       });
+      return this._childrenObservable;
+    } else if (!this._childrenObservable) {
+      return Observable.of(this.children);
     }
 
-    return Observable.of(this.children);
+    return this._childrenObservable;
+
   }
 
   /**
