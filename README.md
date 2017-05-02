@@ -1,5 +1,7 @@
 # :herb: ng2-tree
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/valor-software/ng2-tree.svg)](https://greenkeeper.io/)
+
 ng2-tree is a simple [Angular 2](https://github.com/angular/angular) component for visualizing data that can be naturally represented as a tree.
 
 <!-- TOC -->
