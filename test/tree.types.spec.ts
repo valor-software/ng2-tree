@@ -17,6 +17,7 @@ describe('FoldingType', () => {
   it('should have correct cssClass per folding type', () => {
     expect(FoldingType.Expanded.cssClass).toEqual('node-expanded');
     expect(FoldingType.Collapsed.cssClass).toEqual('node-collapsed');
+    expect(FoldingType.Empty.cssClass).toEqual('node-empty');
     expect(FoldingType.Leaf.cssClass).toEqual('node-leaf');
   });
 });

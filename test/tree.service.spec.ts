@@ -189,6 +189,21 @@ describe('TreeService', () => {
     expect(treeService.nodeCollapsed$.next).not.toHaveBeenCalled();
   });
 
+  it('does not fire "expanded", "collapsed" events for a empty node', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      children: []
+    });
+
+    spyOn(treeService.nodeExpanded$, 'next');
+    spyOn(treeService.nodeCollapsed$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.nodeExpanded$.next).not.toHaveBeenCalled();
+    expect(treeService.nodeCollapsed$.next).not.toHaveBeenCalled();
+  });
+
   it('fires "expanded" event for expanded tree', () => {
     const masterTree = new Tree({
       value: 'Master',

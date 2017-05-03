@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
   public static Collapsed: FoldingType = new FoldingType('node-collapsed');
+  public static Empty: FoldingType = new FoldingType('node-empty');
   public static Leaf: FoldingType = new FoldingType('node-leaf');
 
   public constructor(private _cssClass: string) {
@@ -31,6 +32,9 @@ export interface CssClasses {
 
   /* The class or classes that should be added to the collapsed node */
   collapsed?: string;
+
+  /* The class or classes that should be added to the empty node */
+  empty?: string;
 
   /* The class or classes that should be added to the expanded to the leaf */
   leaf?: string;
