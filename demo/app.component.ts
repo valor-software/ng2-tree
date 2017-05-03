@@ -73,6 +73,13 @@ declare const alertify: any;
       font-size: 1.2em;
       font-style: italic;
     }
+    :host /deep/ .fa {
+      cursor: pointer;
+    }
+    :host /deep/ .fa.disabled {
+      cursor: inherit;
+      color: #757575;
+    }
   `]
 })
 export class AppComponent implements OnInit {
@@ -273,7 +280,21 @@ export class AppComponent implements OnInit {
               {value: 'Downloads', id: 49, children: []},
               {value: 'Desktop', id: 50, children: []},
               {value: 'Pictures', id: 51, children: []},
-              {value: 'Music', id: 52, children: []},
+              {
+                value: 'Music',
+                id: 52,
+                children: [{value: 'won\'t be displayed'}],
+                loadChildren: (callback) => {
+                  setTimeout(() => {
+                    callback([
+                      {value: '2Cellos', id: 78, children: []},
+                      {value: 'Michael Jackson', id: 79, children: []},
+                      {value: 'AC/DC', id: 80, children: []},
+                      {value: 'Adel', id: 81, children: []}
+                    ]);
+                  }, 5000);
+                }
+              },
               {value: 'Public', id: 53, children: []}
             ]
           },
