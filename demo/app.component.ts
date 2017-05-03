@@ -145,6 +145,7 @@ export class AppComponent implements OnInit {
       cssClasses: {
         expanded: 'fa fa-caret-down',
         collapsed: 'fa fa-caret-right',
+        empty: 'fa fa-caret-right disabled',
         leaf: 'fa'
       },
       templates: {

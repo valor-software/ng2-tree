@@ -336,6 +336,70 @@ describe('Tree', () => {
     expect(child.positionInParent).toEqual(2);
   });
 
+  it('cannot create child node when children are loaded async', () => {
+    const servantTree = new Tree({
+      value: 'Master',
+      loadChildren: (callback: Function) => {
+        setTimeout(() => {
+          callback([
+            { value: 'Servant#1' },
+            { value: 'Servant#2' }
+          ]);
+        }, 10);
+      }
+    });
+
+    const child = servantTree.createNode(false);
+
+    expect(child).toEqual(null);
+    expect(servantTree.hasChild(child)).toEqual(false);
+  });
+
+  it('can create tree without any children', () => {
+    const master = new Tree({
+      value: 'Master',
+      children: []
+    });
+
+    expect(master.isRoot()).toEqual(true);
+    expect(master.isBranch()).toEqual(true);
+    expect(master.children).toEqual([]);
+    expect(master.isLeaf()).toEqual(false);
+    expect(master.isNodeExpanded()).toEqual(false);
+    expect(master.isNodeCollapsed()).toEqual(false);
+    expect(master.foldingType).toEqual(FoldingType.Empty);
+  });
+
+  it('creating a child to a collapsed node, will expand it', () => {
+    const servantTree = new Tree({
+      value: 'Master',
+      children: [
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
+      ]
+    });
+
+    expect(servantTree.isNodeExpanded()).toEqual(true);
+    expect(servantTree.isNodeCollapsed()).toEqual(false);
+
+    servantTree.switchFoldingType();
+
+    expect(servantTree.isNodeExpanded()).toEqual(false);
+    expect(servantTree.isNodeCollapsed()).toEqual(true);
+
+    const child = servantTree.createNode(true);
+
+    expect(servantTree.isNodeExpanded()).toEqual(true);
+    expect(servantTree.isNodeCollapsed()).toEqual(false);
+
+    expect(servantTree.hasChild(child)).toEqual(true);
+    expect(child.value).toEqual('');
+    expect(child.children).toEqual([]);
+    expect(child.isLeaf()).toEqual(false);
+    expect(child.isNew()).toEqual(true);
+    expect(child.positionInParent).toEqual(2);
+  });
+
   it('creates sibling node (leaf)', () => {
     const servantTree = new Tree({
       value: 'Master',
@@ -488,6 +552,17 @@ describe('Tree', () => {
     expect(servantNumber2Tree.hasSibling(servantNumber1Tree)).toEqual(true);
   });
 
+  it('knows its not leaf', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      children: []
+    });
+
+    expect(masterTree.isRoot()).toEqual(true);
+    expect(masterTree.isLeaf()).toEqual(false);
+    expect(masterTree.hasChildren()).toEqual(false);
+  });
+
   it('knows its children', () => {
     const masterTree = new Tree({
       value: 'Master',
@@ -623,6 +698,7 @@ describe('Tree', () => {
 
     expect(masterTree.isLeaf()).toEqual(true);
     expect(masterTree.isNodeExpanded()).toEqual(false);
+    expect(masterTree.isNodeCollapsed()).toEqual(false);
     expect(masterTree.foldingType).toEqual(FoldingType.Leaf);
   });
 
@@ -638,6 +714,31 @@ describe('Tree', () => {
     expect(masterTree.foldingType).toEqual(FoldingType.Leaf);
   });
 
+  it('has "Empty" folding type if it is branch and has no children', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      children: []
+    });
+
+    expect(masterTree.isBranch()).toEqual(true);
+    expect(masterTree.isNodeExpanded()).toEqual(false);
+    expect(masterTree.isNodeCollapsed()).toEqual(false);
+    expect(masterTree.foldingType).toEqual(FoldingType.Empty);
+  });
+
+  it('cannot switch "Empty" folding type', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+       children: []
+    });
+
+    expect(masterTree.foldingType).toEqual(FoldingType.Empty);
+
+    masterTree.switchFoldingType();
+
+    expect(masterTree.foldingType).toEqual(FoldingType.Empty);
+  });
+
   it('has "Expanded" folding type if it is branch and expanded (by default for branches)', () => {
     const masterTree = new Tree({
       value: 'Master',
@@ -649,6 +750,7 @@ describe('Tree', () => {
 
     expect(masterTree.isBranch()).toEqual(true);
     expect(masterTree.isNodeExpanded()).toEqual(true);
+    expect(masterTree.isNodeCollapsed()).toEqual(false);
     expect(masterTree.foldingType).toEqual(FoldingType.Expanded);
   });
 
@@ -663,16 +765,19 @@ describe('Tree', () => {
 
     expect(masterTree.foldingType).toEqual(FoldingType.Expanded);
     expect(masterTree.isNodeExpanded()).toEqual(true);
+    expect(masterTree.isNodeCollapsed()).toEqual(false);
 
     masterTree.switchFoldingType();
 
     expect(masterTree.foldingType).toEqual(FoldingType.Collapsed);
     expect(masterTree.isNodeExpanded()).toEqual(false);
+    expect(masterTree.isNodeCollapsed()).toEqual(true);
 
     masterTree.switchFoldingType();
 
     expect(masterTree.foldingType).toEqual(FoldingType.Expanded);
     expect(masterTree.isNodeExpanded()).toEqual(true);
+    expect(masterTree.isNodeCollapsed()).toEqual(false);
   });
 
   it('has undefined status by default', () => {
@@ -724,6 +829,34 @@ describe('Tree', () => {
       expect(tree.children.length).toEqual(2);
       expect(tree.children[0].value).toEqual(children[0].value);
       expect(tree.children[1].value).toEqual(children[1].value);
+      done();
+    });
+  });
+
+  it('has right statuses while loading its children asynchronously', (done: Function) => {
+    const tree = new Tree({
+      value: 'AsyncParent',
+      loadChildren: (callback: Function) => {
+        setTimeout(() => {
+          callback([
+            { value: 'Child#1' },
+            { value: 'Child#2' }
+          ]);
+        }, 200);
+      }
+    });
+
+    tree.switchFoldingType();
+    expect(tree.childrenWereLoaded()).toEqual(false);
+    setTimeout(() => {
+      expect(tree.childrenAreBeingLoaded()).toEqual(true);
+    }, 110);
+    tree.childrenAsync.subscribe((children: Tree[]) => {
+      expect(tree.children.length).toEqual(2);
+      expect(tree.children[0].value).toEqual(children[0].value);
+      expect(tree.children[1].value).toEqual(children[1].value);
+      expect(tree.childrenWereLoaded()).toEqual(true);
+      expect(tree.childrenAreBeingLoaded()).toEqual(false);
       done();
     });
   });
@@ -829,6 +962,28 @@ describe('Tree', () => {
 
     expect(masterTree.isNodeExpanded()).toEqual(false, 'node is collapsed');
     expect(masterTree.foldingCssClass).toEqual('fa fa-caret-right');
+  });
+
+  it('can add a css classes for empty nodes', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      settings: {
+        cssClasses: {
+          empty: 'fa fa-caret-left'
+        }
+      },
+      children: []
+    });
+
+    expect(masterTree.isNodeExpanded()).toEqual(false, 'initially node is not expanded');
+    expect(masterTree.isNodeCollapsed()).toEqual(false, 'initially node is not collapsed');
+    expect(masterTree.foldingCssClass).toEqual('fa fa-caret-left');
+
+    masterTree.switchFoldingType();
+
+    expect(masterTree.isNodeExpanded()).toEqual(false, 'node cannot collapsed');
+    expect(masterTree.isNodeCollapsed()).toEqual(false, 'node cannot expand');
+    expect(masterTree.foldingCssClass).toEqual('fa fa-caret-left');
   });
 
   it('can add a css classes for leaf nodes', () => {
