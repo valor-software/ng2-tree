@@ -744,6 +744,7 @@ describe('Tree', () => {
     });
 
     tree.switchFoldingType();
+    expect(tree.childrenAsync === tree.childrenAsync).toEqual(true, 'observable for children loading gets created just once');
     tree.childrenAsync.subscribe(() => {
       tree.childrenAsync.subscribe((children: Tree[]) => {
         expect(loadCount).toEqual(1, 'children should be loaded only once');

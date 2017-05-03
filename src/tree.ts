@@ -82,9 +82,16 @@ export class Tree {
    * @returns {Observable<Tree[]>} An observable which emits children once they are loaded.
    */
   public get childrenAsync(): Observable<Tree[]> {
-    if(this.canLoadChildren()) {
-      setTimeout(() => this._childrenLoadingState = ChildrenLoadingState.Loading);
-      return new Observable((observer: Observer<Tree[]>) => {
+    if (this.canLoadChildren()) {
+      return this.childrenAsyncOnce();
+    }
+    return Observable.of(this.children);
+  }
+
+  private childrenAsyncOnce: () => Observable<Tree[]> = _.once(() => {
+    return new Observable((observer: Observer<Tree[]>) => {
+      setTimeout(() => {
+        this._childrenLoadingState = ChildrenLoadingState.Loading;
         this._loadChildren((children: TreeModel[]) => {
           this._children = _.map(children, (child: TreeModel) => new Tree(child, this));
           this._childrenLoadingState = ChildrenLoadingState.Completed;
@@ -92,10 +99,8 @@ export class Tree {
           observer.complete();
         });
       });
-    }
-
-    return Observable.of(this.children);
-  }
+    });
+  });
 
   /**
    * Create a new node in the current tree.
