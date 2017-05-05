@@ -1,36 +1,21 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "outDir": "./dist/out-tsc",
+    "baseUrl": "src",
+    "sourceMap": true,
+    "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "noImplicitAny": false,
-    "removeComments": true,
-    "declaration": false,
     "skipLibCheck": true,
-    "stripInternal": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "lib": ["dom", "es6"],
+    "target": "es5",
     "typeRoots": [
-      "./node_modules/@types"
+      "node_modules/@types"
     ],
-    "types": [
-      "jasmine",
-      "node",
-      "webpack"
+    "lib": [
+      "es2016",
+      "dom"
     ]
-  },
-  "exclude": [
-    "node_modules",
-    "factories",
-    "**/*-aot.ts"
-  ],
-  "files": [
-    "./index.ts"
-  ],
-  "angularCompilerOptions": {
-    "genDir": "factories"
   }
 }

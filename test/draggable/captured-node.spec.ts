@@ -5,7 +5,7 @@ import { Tree } from '../../src/tree';
 describe('Captured Node', () => {
   it('should be created with element and tree', () => {
     const element: ElementRef = {} as ElementRef;
-    const tree: Tree = new Tree({ value: "42" });
+    const tree: Tree = new Tree({ value: '42' });
 
     const capturedNode = new CapturedNode(element, tree);
 

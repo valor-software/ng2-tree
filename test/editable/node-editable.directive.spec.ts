@@ -42,7 +42,7 @@ describe('NodeEditableDirective', () => {
   it('should set value the host element', () => {
     fixture.detectChanges();
 
-    expect(directiveEl.nativeElement.value).toEqual("42");
+    expect(directiveEl.nativeElement.value).toEqual('42');
   });
 
   it('should apply new value once user pressed enter', () => {

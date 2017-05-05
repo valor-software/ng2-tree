@@ -46,23 +46,23 @@ export class TreeDataProvider {
       result: { static: true, leftMenu: true, rightMenu: false, cssClasses: { expanded: 'arrow-down-o', collapsed: 'arrow-right-o', empty: 'arrow-gray-o', leaf: 'dot-o' } }
     },
     'first node property of templates has higher priority': {
-      treeModelA: { value: "12", settings: { templates: { node: '<i class="folder-o"></i>' } } },
-      treeModelB: { value: "42", settings: { templates: { node: '<i class="folder"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation"></i>' } } },
+      treeModelA: { value: '12', settings: { templates: { node: '<i class="folder-o"></i>' } } },
+      treeModelB: { value: '42', settings: { templates: { node: '<i class="folder"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation"></i>' } } },
       result: { static: false, leftMenu: false, rightMenu: true, templates: { node: '<i class="folder-o"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation"></i>' } }
     },
     'first leaf property in templates has higher priority': {
-      treeModelA: { value: "12", settings: { templates: { leaf: '<i class="file-o"></i>' } } },
-      treeModelB: { value: "42", settings: { templates: { node: '<i class="folder"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation"></i>' } } },
+      treeModelA: { value: '12', settings: { templates: { leaf: '<i class="file-o"></i>' } } },
+      treeModelB: { value: '42', settings: { templates: { node: '<i class="folder"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation"></i>' } } },
       result: { static: false, leftMenu: false, rightMenu: true, templates: { node: '<i class="folder"></i>', leaf: '<i class="file-o"></i>', leftMenu: '<i class="navigation"></i>' } }
     },
     'first leftMenu property in templates has higher priority': {
-      treeModelA: { value: "12", settings: { templates: { leftMenu: '<i class="navigation-o"></i>' } } },
-      treeModelB: { value: "42", settings: { templates: { node: '<i class="folder"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation"></i>' } } },
+      treeModelA: { value: '12', settings: { templates: { leftMenu: '<i class="navigation-o"></i>' } } },
+      treeModelB: { value: '42', settings: { templates: { node: '<i class="folder"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation"></i>' } } },
       result: { static: false, leftMenu: false, rightMenu: true, templates: { node: '<i class="folder"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation-o"></i>' } }
     },
     'first properties of templates has higher priority': {
-      treeModelA: { value: "12", settings: { templates: { node: '<i class="folder-o"></i>', leaf: '<i class="file-o"></i>', leftMenu: '<i class="navigation-o"></i>' } } },
-      treeModelB: { value: "42", settings: { templates: { node: '<i class="folder"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation"></i>' } } },
+      treeModelA: { value: '12', settings: { templates: { node: '<i class="folder-o"></i>', leaf: '<i class="file-o"></i>', leftMenu: '<i class="navigation-o"></i>' } } },
+      treeModelB: { value: '42', settings: { templates: { node: '<i class="folder"></i>', leaf: '<i class="file"></i>', leftMenu: '<i class="navigation"></i>' } } },
       result: { static: false, leftMenu: false, rightMenu: true, templates: { node: '<i class="folder-o"></i>', leaf: '<i class="file-o"></i>', leftMenu: '<i class="navigation-o"></i>' } }
     },
     'second properties of templates in settings has priority, if first source doesn\'t have them': {

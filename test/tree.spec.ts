@@ -177,7 +177,7 @@ describe('Tree', () => {
 
     spyOn(TreeModelSettings, 'merge');
 
-    new Tree(fonts);
+    const tree = new Tree(fonts);
 
     expect(TreeModelSettings.merge).toHaveBeenCalledTimes(6);
     expect(TreeModelSettings.merge).toHaveBeenCalledWith(fonts, undefined);

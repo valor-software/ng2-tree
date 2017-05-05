@@ -8,28 +8,28 @@ describe('Tree App', () => {
     page = new TreePage();
   });
 
-  it('should have a tree where first node value is "Fonts"', () => {
+  it('should have a tree where first node value is "Fonts"', async () => {
     page.navigateTo();
-    expect(page.getFirstNodeValueText()).toEqual('Fonts');
+    expect(await page.getFirstNodeValueText()).toEqual('Fonts');
   });
 
-  it('should load node children asynchronously', () => {
+  it('should load node children asynchronously', async () => {
     page.navigateTo();
 
     page.getAsyncChildrenNodeFolding().click();
 
     const firstAsyncChild = page.getFirstAsyncChild();
-    expect(browser.isElementPresent(firstAsyncChild)).toBe(true);
-    expect(firstAsyncChild.getText()).toEqual('Input Mono');
-    expect(page.getLastAsyncChild().getText()).toEqual('Source Code Pro');
+    expect(await browser.isElementPresent(firstAsyncChild)).toBe(true);
+    expect(await firstAsyncChild.getText()).toEqual('Input Mono');
+    expect(await page.getLastAsyncChild().getText()).toEqual('Source Code Pro');
   });
 
-  it('Should render tree node with HTML tags', () => {
+  it('Should render tree node with HTML tags', async () => {
     page.navigateTo();
 
     const antiquaNode = page.getAntiquaNode();
     expect(browser.isElementPresent(antiquaNode)).toBeTruthy();
-    expect(antiquaNode.getText()).toEqual('Antiqua');
+    expect(await antiquaNode.getText()).toEqual('Antiqua');
 
     const attrs = {id: 'antiqua', class: 'test'};
 

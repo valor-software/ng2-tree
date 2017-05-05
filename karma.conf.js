@@ -1,39 +1,45 @@
-'use strict';
+// Karma configuration file, see link for more information
+// https://karma-runner.github.io/0.13/config/configuration-file.html
 
-module.exports = config => {
+module.exports = function (config) {
   config.set({
+    basePath: '',
+    frameworks: ['jasmine', '@angular/cli'],
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-coverage-istanbul-reporter'),
+      require('karma-phantomjs-launcher'),
+      require('@angular/cli/plugins/karma')
+    ],
+    client:{
+      clearContext: false // leave Jasmine Spec Runner output visible in browser
+    },
+    files: [
+      { pattern: './test/test.ts', watched: false }
+    ],
+    preprocessors: {
+      './test/test.ts': ['@angular/cli']
+    },
+    mime: {
+      'text/x-typescript': ['ts','tsx']
+    },
+    coverageIstanbulReporter: {
+      reports: [ 'html', 'lcovonly' ],
+      fixWebpackSourcePaths: true
+    },
+    angularCli: {
+      environment: 'dev'
+    },
+    reporters: config.angularCli && config.angularCli.codeCoverage
+              ? ['progress', 'coverage-istanbul']
+              : ['progress', 'kjhtml'],
+    port: 9876,
+    colors: true,
+    logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['PhantomJS'],
-    files: [
-      { pattern: 'test.bundle.js', watched: false }
-    ],
-    frameworks: ['jasmine'],
-    logLevel: config.LOG_INFO,
-    phantomJsLauncher: {
-      exitOnResourceError: true
-    },
-    port: 9876,
-    preprocessors: {
-      'test.bundle.js': ['webpack', 'sourcemap']
-    },
-    reporters: process.env.COVERAGE === 'enabled' ? ['spec', 'karma-remap-istanbul'] : ['spec'],
-    remapIstanbulReporter: {
-      reports: {
-        html: 'coverage'
-      }
-    },
-    coverageReporter: {
-      includeAllSources: true
-    },
-    singleRun: true,
-    webpack: require('./webpack.test.js'),
-    webpackServer: {
-      noInfo: true
-    },
-
-    // to avoid [PhantomJS 2.1.1 (Windows 8 0.0.0)]: Disconnected (1 times), because no message in 10000 ms error.
-    browserDisconnectTimeout : 10000, // default 2000
-    browserDisconnectTolerance : 1,   // default 0
-    browserNoActivityTimeout : 60000  //default 10000
+    singleRun: true
   });
 };
