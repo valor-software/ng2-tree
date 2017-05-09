@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/valor-software/ng2-tree/issues"
   },
-  "private": true,
+  "private": false,
   "keywords": [
     "tree",
     "ng2",
