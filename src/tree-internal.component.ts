@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
         [tree]="tree">
 
         <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
-        <div class="node-value"
+        <div [ngClass]="[tree.node.typeModel,'node-value']"
           *ngIf="!shouldShowInputForTreeValue()"
           [class.node-selected]="isSelected"
           (click)="onNodeSelected($event)">

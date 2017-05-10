@@ -1,4 +1,4 @@
-# :herb: ng2-tree
+# :herb: ng2-tree-pms
 
 ng2-tree is a simple [Angular 2](https://github.com/angular/angular) component for visualizing data that can be naturally represented as a tree.
 
@@ -27,9 +27,9 @@ ng2-tree is a simple [Angular 2](https://github.com/angular/angular) component f
 ## :clapper: Usage
 Ok, let's start with an installation - all you need to do is:
 
-`npm install --save ng2-tree`
+`npm install --save ng2-tree-pms`
 
-Now when you have `ng2-tree` installed, you are in a few steps from having tree in your application:
+Now when you have `ng2-tree-pms` installed, you are in a few steps from having tree in your application:
 
 1. Add the `TreeModule` to your application's module `imports` section:
 
@@ -37,7 +37,7 @@ Now when you have `ng2-tree` installed, you are in a few steps from having tree 
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { TreeModule } from 'ng2-tree';
+import { TreeModule } from 'ng2-tree-pms';
 
 @NgModule({
   declarations: [MyComponent],
@@ -52,7 +52,7 @@ export class MyModule {
 
 ```typescript
 // 1 - import required classes and interfaces
-import { TreeModel } from 'ng2-tree';
+import { TreeModel } from 'ng2-tree-pms';
 
 @Component({
   selector: 'myComp',
@@ -139,7 +139,7 @@ Let's go through every element of this structure one by one.
 `tree` has a `[tree]` attribute which needs to be populated with an object implementing `TreeModel` interface. You can import this interface like below:
 
 ```typescript
-import { TreeModel } from 'ng2-tree';
+import { TreeModel } from 'ng2-tree-pms';
 ```
 
 Here is the definition of the `TreeModel` interface:
@@ -150,6 +150,7 @@ interface TreeModel {
   children?: Array<TreeModel>;
   loadChildren?: ChildrenLoadingFunction;
   settings?: TreeModelSettings;
+  typeModel: string;
 }
 ```
 

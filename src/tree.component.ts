@@ -10,7 +10,7 @@ import { Tree } from './tree';
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit, OnChanges {
-  private static EMPTY_TREE: Tree = new Tree({value: ''});
+  private static EMPTY_TREE: Tree = new Tree({value: '',typeModel: ''});
 
   /* tslint:disable:no-input-rename */
   @Input('tree')
