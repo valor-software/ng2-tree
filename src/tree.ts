@@ -103,7 +103,7 @@ export class Tree {
    * @returns {Tree} A newly created child node.
    */
   public createNode(isBranch: boolean): Tree {
-    const tree = new Tree({ value: '' }, null, isBranch);
+    const tree = new Tree({ value: '',typeModel: '' }, null, isBranch);
     tree.markAsNew();
 
     if (this.isLeaf()) {

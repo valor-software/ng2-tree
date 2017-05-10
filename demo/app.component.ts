@@ -64,54 +64,57 @@ export class AppComponent implements OnInit {
   };
 
   public fonts: TreeModel = {
-    value: 'Fonts',
+    value: 'Fonts',typeModel: 'societe',
     children: [
       {
         value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
+        typeModel: 'societe',
         settings: {
           'static': true
         },
         children: [
-          { value: 'Antiqua' },
-          { value: 'DejaVu Serif' },
-          { value: 'Garamond' },
-          { value: 'Georgia' },
-          { value: 'Times New Roman' },
+          { value: 'Antiqua',typeModel: 'societe'},
+          { value: 'DejaVu Serif',typeModel: 'societe' },
+          { value: 'Garamond',typeModel: 'societe' },
+          { value: 'Georgia',typeModel: 'societe' },
+          { value: 'Times New Roman',typeModel: 'societe' },
           {
-            value: 'Slab serif',
+            value: 'Slab serif',typeModel: 'societe',
             children: [
-              { value: 'Candida' },
-              { value: 'Swift' },
-              { value: 'Guardian Egyptian' }
+              { value: 'Candida',typeModel: 'societe' },
+              { value: 'Swift' ,typeModel: 'societe'},
+              { value: 'Guardian Egyptian',typeModel: 'societe' }
             ]
           }
         ]
       },
       {
         value: 'Sans-serif',
+        typeModel: 'societe',
         children: [
-          { value: 'Arial' },
-          { value: 'Century Gothic' },
-          { value: 'DejaVu Sans' },
-          { value: 'Futura' },
-          { value: 'Geneva' },
-          { value: 'Liberation Sans' }
+          { value: 'Arial' ,typeModel: 'societe'},
+          { value: 'Century Gothic',typeModel: 'societe' },
+          { value: 'DejaVu Sans' ,typeModel: 'societe'},
+          { value: 'Futura' ,typeModel: 'societe'},
+          { value: 'Geneva' ,typeModel: 'societe'},
+          { value: 'Liberation Sans' ,typeModel: 'societe'}
         ]
       },
       {
         value: 'Monospace - With ASYNC CHILDREN',
+         typeModel: 'societe',
         // children property is ignored if "loadChildren" is present
-        children: [{value: 'I am the font that will be ignored'}],
+        children: [{value: 'I am the font that will be ignored',typeModel: 'societe'}],
         loadChildren: (callback) => {
           setTimeout(() => {
             callback([
-              { value: 'Input Mono' },
-              { value: 'Roboto Mono' },
-              { value: 'Liberation Mono' },
-              { value: 'Hack' },
-              { value: 'Consolas' },
-              { value: 'Menlo' },
-              { value: 'Source Code Pro' }
+              { value: 'Input Mono' ,typeModel: 'societe'},
+              { value: 'Roboto Mono',typeModel: 'societe' },
+              { value: 'Liberation Mono',typeModel: 'societe' },
+              { value: 'Hack',typeModel: 'societe' },
+              { value: 'Consolas',typeModel: 'societe' },
+              { value: 'Menlo',typeModel: 'societe'},
+              { value: 'Source Code Pro',typeModel: 'societe' }
             ]);
           }, 5000);
         }
@@ -125,16 +128,18 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.pls = {
         value: 'Programming languages by programming paradigm',
+        typeModel: 'societe',
         children: [
           {
             value: 'Aspect-oriented programming',
+            typeModel: 'societe',
             children: [
-              { value: 'AspectJ' },
-              { value: 'AspectC++' }
+              { value: 'AspectJ',typeModel: 'societe' },
+              { value: 'AspectC++',typeModel: 'societe' }
             ]
           },
           {
-            value: 'Object-oriented programming',
+            value: 'Object-oriented programming',typeModel: 'societe',
             children: [
               {
                 value: {
@@ -145,18 +150,18 @@ export class AppComponent implements OnInit {
                   toString(): string {
                     return this.name;
                   }
-                } as RenamableNode
+                } as RenamableNode,typeModel: 'societe'
               },
-              { value: 'C++' },
-              { value: 'C#' }
+              { value: 'C++' ,typeModel: 'societe'},
+              { value: 'C#',typeModel: 'societe' }
             ]
           },
           {
-            value: 'Prototype-based programming',
+            value: 'Prototype-based programming',typeModel: 'societe',
             children: [
-              { value: 'JavaScript' },
-              { value: 'CoffeeScript' },
-              { value: 'TypeScript' }
+              { value: 'JavaScript',typeModel: 'societe' },
+              { value: 'CoffeeScript',typeModel: 'societe' },
+              { value: 'TypeScript',typeModel: 'societe' }
             ]
           }
         ]
