@@ -1,6 +1,6 @@
 {
   "name": "ng2-tree-pms",
-  "version": "0.0.1-beta",
+  "version": "0.0.1-beta-1",
   "description": "angular2 component for visualizing data that can be naturally represented as a tree",
   "main": "index.js",
   "license": "MIT",
