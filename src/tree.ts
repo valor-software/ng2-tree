@@ -22,7 +22,7 @@ export class Tree {
    * @param {boolean} [isBranch] - An option that makes a branch from created tree. Branch can have children.
    */
   public constructor(node: TreeModel, parent: Tree = null, isBranch: boolean = false) {
-    this.buildTreeFromModel(node, parent, isBranch);
+    this.buildTreeFromModel(node, parent, isBranch || Array.isArray(node.children));
   }
 
   private buildTreeFromModel(model: TreeModel, parent: Tree, isBranch: boolean): void {
@@ -51,6 +51,15 @@ export class Tree {
    */
   public childrenAreBeingLoaded(): boolean {
     return (this._childrenLoadingState === ChildrenLoadingState.Loading);
+  }
+
+  /**
+   * Check whether children of the node were loaded.
+   * Makes sense only for nodes that define `loadChildren` function.
+   * @returns {boolean} A flag indicating that children were loaded.
+   */
+  public childrenWereLoaded(): boolean {
+    return (this._childrenLoadingState === ChildrenLoadingState.Completed);
   }
 
   private canLoadChildren(): boolean {
@@ -111,6 +120,9 @@ export class Tree {
     const tree = new Tree({ value: '' }, null, isBranch);
     tree.markAsNew();
 
+    if (this.childrenShouldBeLoaded() && !(this.childrenAreBeingLoaded() || this.childrenWereLoaded())) {
+      return null;
+    }
     if (this.isLeaf()) {
       return this.addSibling(tree);
     } else {
@@ -173,6 +185,11 @@ export class Tree {
       this._children.splice(position, 0, child);
     } else {
       this._children = [child];
+    }
+
+    this._setFoldingType();
+    if (this.isNodeCollapsed()) {
+      this.switchFoldingType();
     }
     return child;
   }
@@ -242,6 +259,14 @@ export class Tree {
   }
 
   /**
+   * Check whether this tree has children.
+   * @returns {boolean} A flag indicating whether or not this tree has children.
+   */
+  public hasChildren(): boolean {
+    return !_.isEmpty(this._children) || this.childrenShouldBeLoaded();
+  }
+
+  /**
    * Check whether this tree is a root or not. The root is the tree (node) that doesn't have parent (or technically its parent is null).
    * @returns {boolean} A flag indicating whether or not this tree is the root.
    */
@@ -278,6 +303,7 @@ export class Tree {
     if (childIndex >= 0) {
       this._children.splice(childIndex, 1);
     }
+    this._setFoldingType();
   }
 
   /**
@@ -296,7 +322,7 @@ export class Tree {
    * If node is a "Branch" and it is expanded, then by invoking current method state of the tree should be switched to "collapsed" and vice versa.
    */
   public switchFoldingType(): void {
-    if (this.isLeaf()) {
+    if (this.isLeaf() || !this.hasChildren()) {
       return;
     }
 
@@ -305,10 +331,18 @@ export class Tree {
 
   /**
    * Check that tree is expanded.
-   * @returns {boolean} A flag indicating whether current tree is expanded. Always returns false for the "Leaf" tree.
+   * @returns {boolean} A flag indicating whether current tree is expanded. Always returns false for the "Leaf" tree and for an empty tree.
    */
   public isNodeExpanded(): boolean {
     return this.foldingType === FoldingType.Expanded;
+  }
+
+  /**
+   * Check that tree is collapsed.
+   * @returns {boolean} A flag indicating whether current tree is collapsed. Always returns false for the "Leaf" tree and for an empty tree.
+   */
+  public isNodeCollapsed(): boolean {
+    return this.foldingType === FoldingType.Collapsed;
   }
 
   /**
@@ -317,8 +351,10 @@ export class Tree {
   private _setFoldingType(): void {
     if (this.childrenShouldBeLoaded()) {
       this.node._foldingType = FoldingType.Collapsed;
-    } else if (this._children) {
+    } else if (this._children && !_.isEmpty(this._children)) {
       this.node._foldingType = FoldingType.Expanded;
+    } else if (Array.isArray(this._children)) {
+      this.node._foldingType = FoldingType.Empty;
     } else {
       this.node._foldingType = FoldingType.Leaf;
     }
@@ -352,6 +388,8 @@ export class Tree {
        return _.get(this.node.settings, 'cssClasses.collapsed', null);
     } else if (this.node._foldingType === FoldingType.Expanded) {
        return _.get(this.node.settings, 'cssClasses.expanded', null);
+    } else if (this.node._foldingType === FoldingType.Empty) {
+       return _.get(this.node.settings, 'cssClasses.empty', null);
     }
 
     return _.get(this.node.settings, 'cssClasses.leaf', null);

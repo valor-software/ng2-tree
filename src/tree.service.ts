@@ -53,13 +53,9 @@ export class TreeService {
   }
 
   public fireNodeSwitchFoldingType(tree: Tree): void {
-    if (tree.isLeaf()) {
-      return;
-    }
-
     if (tree.isNodeExpanded()) {
       this.fireNodeExpanded(tree);
-    } else {
+    } else if (tree.isNodeCollapsed()) {
       this.fireNodeCollapsed(tree);
     }
   }

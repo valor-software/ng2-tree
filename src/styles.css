@@ -144,6 +144,17 @@ tree-internal .tree .folding.node-expanded:before {
   color: #757575;
 }
 
+tree-internal .tree .folding.node-empty {
+  color: #212121;
+  text-align: center;
+  font-size: 0.89em;
+}
+
+tree-internal .tree .folding.node-empty:before {
+  content: '\25B6';
+  color: #757575;
+}
+
 tree-internal .tree .folding.node-leaf {
   color: #212121;
   text-align: center;
