@@ -22,10 +22,6 @@ let lordInternalTreeEl;
 let lordComponentInstance;
 let faceInternalTreeEl;
 let faceComponentInstance;
-let rightMenuInternalTreeEl;
-let rightMenuComponentInstance;
-let leftMenuInternalTreeEl;
-let leftMenuComponentInstance;
 let nodeMenuService;
 let nodeDraggableService;
 let treeService;
@@ -74,6 +70,26 @@ const tree3: TreeModel = {
     {value: 'Lips'}
   ]
 };
+
+@Component({
+  template: `
+    <div><tree id="master" [tree]="tree"></tree></div>
+    <div><tree id="lord" [tree]="tree2"></tree></div>
+    <div><tree id="face" [tree]="tree3" [settings]="settings"></tree></div>
+  `
+})
+class TestComponent {
+  public tree: TreeModel = tree;
+  public tree2: TreeModel = tree2;
+  public tree3: TreeModel = tree3;
+
+  public settings: Ng2TreeSettings = {
+    rootIsVisible: false
+  };
+
+  public constructor(public treeHolder: ElementRef) {
+  }
+}
 
 describe('TreeInternalComponent', () => {
   beforeEach(() => {
@@ -479,23 +495,3 @@ describe('TreeInternalComponent', () => {
     });
   });
 });
-
-@Component({
-  template: `
-  <div><tree id="master" [tree]="tree"></tree></div>
-  <div><tree id="lord" [tree]="tree2"></tree></div>
-  <div><tree id="face" [tree]="tree3" [settings]="settings"></tree></div>
-`
-})
-class TestComponent {
-  public tree: TreeModel = tree;
-  public tree2: TreeModel = tree2;
-  public tree3: TreeModel = tree3;
-
-  public settings: Ng2TreeSettings = {
-    rootIsVisible: false
-  };
-
-  public constructor(public treeHolder: ElementRef) {
-  }
-}

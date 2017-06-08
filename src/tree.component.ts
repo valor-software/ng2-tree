@@ -1,6 +1,6 @@
 import { Input, Component, OnInit, EventEmitter, Output, Inject, OnChanges, SimpleChanges } from '@angular/core';
 import { TreeService } from './tree.service';
-import { TreeModel, Ng2TreeSettings } from './tree.types';
+import * as TreeTypes from './tree.types';
 import { NodeEvent } from './tree.events';
 import { Tree } from './tree';
 
@@ -14,11 +14,11 @@ export class TreeComponent implements OnInit, OnChanges {
 
   /* tslint:disable:no-input-rename */
   @Input('tree')
-  public treeModel: TreeModel;
+  public treeModel: TreeTypes.TreeModel;
   /* tslint:enable:no-input-rename */
 
   @Input()
-  public settings: Ng2TreeSettings;
+  public settings: TreeTypes.Ng2TreeSettings;
 
   @Output()
   public nodeCreated: EventEmitter<any> = new EventEmitter();

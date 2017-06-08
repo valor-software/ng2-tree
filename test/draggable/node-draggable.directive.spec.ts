@@ -12,6 +12,18 @@ let directiveEl;
 let directiveInstance;
 let nodeDraggableService;
 
+@Component({
+  template: '<div id="draggableTarget" [nodeDraggable]="draggableTarget" [tree]="tree"></div>'
+})
+class TestComponent {
+  public tree: Tree = new Tree({
+    value: '42'
+  });
+
+  public constructor(public draggableTarget: ElementRef) {
+  }
+}
+
 describe('NodeDraggableDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -268,15 +280,3 @@ describe('NodeDraggableDirective', () => {
 
   it('TODO: should not make tree draggable if it is static', () => {});
 });
-
-@Component({
-  template: '<div id="draggableTarget" [nodeDraggable]="draggableTarget" [tree]="tree"></div>'
-})
-class TestComponent {
-  public tree: Tree = new Tree({
-    value: '42'
-  });
-
-  public constructor(public draggableTarget: ElementRef) {
-  }
-}

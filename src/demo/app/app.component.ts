@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from '../index';
-
-require('../src/styles.css');
-require('../node_modules/font-awesome/css/font-awesome.min.css');
+import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from '../../../index';
 
 declare const alertify: any;
 
@@ -51,31 +48,36 @@ declare const alertify: any;
         </tree>
       </div>
     </div>
-    `,
+  `,
   styles: [`
-   .tree-demo-app {
+    .tree-demo-app {
       margin: auto;
       width: -moz-fit-content;
       width: -webkit-fit-content;
       width: fit-content;
     }
+
     .tree-demo-app .tree-container {
       float: left;
       vertical-align: top;
       width: 500px;
     }
+
     .tree-title {
       color: #40a070;
       font-size: 2em;
     }
+
     .notice {
       color: #e91e63;
       font-size: 1.2em;
       font-style: italic;
     }
+
     :host /deep/ .fa {
       cursor: pointer;
     }
+
     :host /deep/ .fa.disabled {
       cursor: inherit;
       color: #757575;
@@ -96,17 +98,17 @@ export class AppComponent implements OnInit {
           'static': true
         },
         children: [
-          { value: '<a href="#" id="antiqua" class="test">Antiqua</a> with HTML tags.'},
-          { value: 'DejaVu Serif' },
-          { value: 'Garamond' },
-          { value: 'Georgia' },
-          { value: 'Times New Roman' },
+          {value: '<a href="#" id="antiqua" class="test">Antiqua</a> with HTML tags.'},
+          {value: 'DejaVu Serif'},
+          {value: 'Garamond'},
+          {value: 'Georgia'},
+          {value: 'Times New Roman'},
           {
             value: 'Slab serif',
             children: [
-              { value: 'Candida' },
-              { value: 'Swift' },
-              { value: 'Guardian Egyptian' }
+              {value: 'Candida'},
+              {value: 'Swift'},
+              {value: 'Guardian Egyptian'}
             ]
           }
         ]
@@ -114,12 +116,12 @@ export class AppComponent implements OnInit {
       {
         value: 'Sans-serif',
         children: [
-          { value: 'Arial' },
-          { value: 'Century Gothic' },
-          { value: 'DejaVu Sans' },
-          { value: 'Futura' },
-          { value: 'Geneva' },
-          { value: 'Liberation Sans' }
+          {value: 'Arial'},
+          {value: 'Century Gothic'},
+          {value: 'DejaVu Sans'},
+          {value: 'Futura'},
+          {value: 'Geneva'},
+          {value: 'Liberation Sans'}
         ]
       },
       {
@@ -129,13 +131,13 @@ export class AppComponent implements OnInit {
         loadChildren: (callback) => {
           setTimeout(() => {
             callback([
-              { value: 'Input Mono' },
-              { value: 'Roboto Mono' },
-              { value: 'Liberation Mono' },
-              { value: 'Hack' },
-              { value: 'Consolas' },
-              { value: 'Menlo' },
-              { value: 'Source Code Pro' }
+              {value: 'Input Mono'},
+              {value: 'Roboto Mono'},
+              {value: 'Liberation Mono'},
+              {value: 'Hack'},
+              {value: 'Consolas'},
+              {value: 'Menlo'},
+              {value: 'Source Code Pro'}
             ]);
           }, 5000);
         }
@@ -331,19 +333,24 @@ export class AppComponent implements OnInit {
           }
         ]
       },
-      {value: 'lib', id: 67, children: [] },
-      {value: 'media', id: 68, children: [] },
-      {value: 'opt', id: 69, children: [] },
-      {value: 'proc', id: 70, children: [] },
-      {value: 'root', id: 71, children: [] },
-      {value: 'run', id: 72, children: [] },
-      {value: 'sbin', id: 73, children: [] },
-      {value: 'srv', id: 74, children: [] },
-      {value: 'sys', id: 75, children: [] },
-      {value: 'usr', id: 76, children: [] },
-      {value: 'var', id: 77, children: [] }
+      {value: 'lib', id: 67, children: []},
+      {value: 'media', id: 68, children: []},
+      {value: 'opt', id: 69, children: []},
+      {value: 'proc', id: 70, children: []},
+      {value: 'root', id: 71, children: []},
+      {value: 'run', id: 72, children: []},
+      {value: 'sbin', id: 73, children: []},
+      {value: 'srv', id: 74, children: []},
+      {value: 'sys', id: 75, children: []},
+      {value: 'usr', id: 76, children: []},
+      {value: 'var', id: 77, children: []}
     ]
   };
+
+  private static logEvent(e: NodeEvent, message: string): void {
+    console.log(e);
+    alertify.message(`${message}: ${e.node.value}`);
+  }
 
   public ngOnInit(): void {
     setTimeout(() => {
@@ -353,8 +360,8 @@ export class AppComponent implements OnInit {
           {
             value: 'Aspect-oriented programming',
             children: [
-              { value: 'AspectJ' },
-              { value: 'AspectC++' }
+              {value: 'AspectJ'},
+              {value: 'AspectC++'}
             ]
           },
           {
@@ -371,16 +378,16 @@ export class AppComponent implements OnInit {
                   }
                 } as RenamableNode
               },
-              { value: 'C++' },
-              { value: 'C#' }
+              {value: 'C++'},
+              {value: 'C#'}
             ]
           },
           {
             value: 'Prototype-based programming',
             children: [
-              { value: 'JavaScript' },
-              { value: 'CoffeeScript' },
-              { value: 'TypeScript' }
+              {value: 'JavaScript'},
+              {value: 'CoffeeScript'},
+              {value: 'TypeScript'}
             ]
           }
         ]
@@ -414,10 +421,5 @@ export class AppComponent implements OnInit {
 
   public onNodeCollapsed(e: NodeEvent): void {
     AppComponent.logEvent(e, 'Collapsed');
-  }
-
-  private static logEvent(e: NodeEvent, message: string): void {
-    console.log(e);
-    alertify.message(`${message}: ${e.node.value}`);
   }
 }

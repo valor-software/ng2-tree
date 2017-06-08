@@ -1,28 +1,14 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "sourceMap": true,
     "noImplicitAny": false,
-    "removeComments": true,
     "declaration": true,
-    "skipLibCheck": true,
     "stripInternal": true,
     "outDir": "dist",
-    "suppressImplicitAnyIndexErrors": true,
-    "lib": ["dom", "es6"],
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "types": [
-      "node",
-      "webpack"
-    ]
+    "suppressImplicitAnyIndexErrors": true
   },
   "exclude": [
+    "src/demo",
     "node_modules",
     "factories",
     "**/*-aot.ts"
