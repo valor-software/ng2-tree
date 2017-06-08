@@ -45,6 +45,14 @@ const tree: TreeModel = {
   ]
 };
 
+@Component({
+  template: `<div><tree id="master" [tree]="tree"></tree></div>`
+})
+class TestComponent {
+  public tree: TreeModel = tree;
+  public constructor(public treeHolder: ElementRef) {}
+}
+
 describe('settings on tree model', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -95,11 +103,3 @@ describe('settings on tree model', () => {
     });
   });
 });
-
-@Component({
-  template: `<div><tree id="master" [tree]="tree"></tree></div>`
-})
-class TestComponent {
-  public tree: TreeModel = tree;
-  public constructor(public treeHolder: ElementRef) {}
-}

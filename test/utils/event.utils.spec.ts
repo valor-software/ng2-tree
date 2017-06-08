@@ -37,5 +37,5 @@ describe('EventUtils', () => {
   it('should have correct MouseButtons bindings', () => {
     expect(EventUtils.MouseButtons.Left).toEqual(0);
     expect(EventUtils.MouseButtons.Right).toEqual(2);
-  })
+  });
 });

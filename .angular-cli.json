@@ -19,10 +19,14 @@
       "testTsconfig": "../test/tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css",
-        "../node_modules/font-awesome/css/font-awesome.min.css"
+        "../node_modules/alertifyjs/build/css/alertify.css",
+        "../node_modules/alertifyjs/build/css/themes/default.css",
+        "../node_modules/font-awesome/css/font-awesome.min.css",
+        "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/alertifyjs/build/alertify.js"
+      ],
       "environmentSource": "demo/environments/environment.ts",
       "environments": {
         "dev": "demo/environments/environment.ts",

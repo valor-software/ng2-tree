@@ -118,6 +118,22 @@ const tree3: TreeModel = {
   ]
 };
 
+@Component({
+  template: `
+    <div><tree id="master" [tree]="tree"></tree></div>
+    <div><tree id="left-menu" [tree]="tree2"></tree></div>
+    <div><tree id="static" [tree]="tree3"></tree></div>
+  `
+})
+class TestComponent {
+  public tree: TreeModel = tree;
+  public tree2: TreeModel = tree2;
+  public tree3: TreeModel = tree3;
+
+  public constructor(public treeHolder: ElementRef) {
+  }
+}
+
 describe('LeftMenu-TreeInternalComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -622,19 +638,3 @@ describe('LeftMenu-TreeInternalComponent', () => {
     });
   });
 });
-
-@Component({
-  template: `
-  <div><tree id="master" [tree]="tree"></tree></div>
-  <div><tree id="left-menu" [tree]="tree2"></tree></div>
-  <div><tree id="static" [tree]="tree3"></tree></div>
-`
-})
-class TestComponent {
-  public tree: TreeModel = tree;
-  public tree2: TreeModel = tree2;
-  public tree3: TreeModel = tree3;
-
-  public constructor(public treeHolder: ElementRef) {
-  }
-}

@@ -74,7 +74,7 @@ export class Tree {
     const tree = new Tree(_clone(origin.node));
     tree._children = origin._children;
     return tree;
-  };
+  }
 
   private static applyNewValueToRenamable(value: RenamableNode, newValue: string): RenamableNode {
     const renamableValue: RenamableNode = _merge({}, value as RenamableNode);
@@ -181,7 +181,7 @@ export class Tree {
     } else {
       return this.addChild(tree);
     }
-  };
+  }
 
   /**
    * Get the value of the current node

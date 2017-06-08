@@ -69,9 +69,7 @@
       "single"
     ],
     "radix": true,
-    "semicolon": [
-      "always"
-    ],
+    "semicolon": true,
     "triple-equals": [
       true,
       "allow-null-check"
@@ -95,7 +93,11 @@
       "check-decl",
       "check-operator",
       "check-separator",
-      "check-type"
+      "check-type",
+      "check-module",
+      "check-type",
+      "check-typecast",
+      "check-preblock"
     ],
 
     "directive-selector": [true, "attribute", "", "camelCase"],

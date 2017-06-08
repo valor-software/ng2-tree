@@ -71,6 +71,26 @@ const tree3: TreeModel = {
   ]
 };
 
+@Component({
+  template: `
+    <div><tree id="master" [tree]="tree"></tree></div>
+    <div><tree id="lord" [tree]="tree2"></tree></div>
+    <div><tree id="face" [tree]="tree3" [settings]="settings"></tree></div>
+  `
+})
+class TestComponent {
+  public tree: TreeModel = tree;
+  public tree2: TreeModel = tree2;
+  public tree3: TreeModel = tree3;
+
+  public settings: Ng2TreeSettings = {
+    rootIsVisible: false
+  };
+
+  public constructor(public treeHolder: ElementRef) {
+  }
+}
+
 describe('TreeInternalComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -475,23 +495,3 @@ describe('TreeInternalComponent', () => {
     });
   });
 });
-
-@Component({
-  template: `
-  <div><tree id="master" [tree]="tree"></tree></div>
-  <div><tree id="lord" [tree]="tree2"></tree></div>
-  <div><tree id="face" [tree]="tree3" [settings]="settings"></tree></div>
-`
-})
-class TestComponent {
-  public tree: TreeModel = tree;
-  public tree2: TreeModel = tree2;
-  public tree3: TreeModel = tree3;
-
-  public settings: Ng2TreeSettings = {
-    rootIsVisible: false
-  };
-
-  public constructor(public treeHolder: ElementRef) {
-  }
-}

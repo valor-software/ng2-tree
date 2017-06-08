@@ -16,6 +16,15 @@ let fixture: ComponentFixture<TestComponent>;
 let componentInstance: TreeComponent;
 let componentEl: DebugElement;
 
+@Component({
+  template: `
+    <div><tree [tree]="model"></tree></div>
+  `
+})
+class TestComponent {
+  public model: TreeModel;
+}
+
 describe('TreeComponent (the one that wraps TreeInternalComponent)', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -53,12 +62,3 @@ describe('TreeComponent (the one that wraps TreeInternalComponent)', () => {
     expect(componentInstance.treeModel.value).toEqual('42');
   });
 });
-
-@Component({
-  template: `
-    <div><tree [tree]="model"></tree></div>
-  `
-})
-class TestComponent {
-  public model: TreeModel;
-}

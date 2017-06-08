@@ -9,6 +9,15 @@ let fixture;
 let directiveEl;
 let directiveInstance;
 
+@Component({
+  template: '<div id="editableTarget" [nodeEditable]="tree.value"></div>'
+})
+class TestComponent {
+  public tree: TreeModel = {
+    value: '42'
+  };
+}
+
 describe('NodeEditableDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -82,12 +91,3 @@ describe('NodeEditableDirective', () => {
     expect(directiveInstance.valueChanged.emit).toHaveBeenCalledTimes(1);
   });
 });
-
-@Component({
-  template: '<div id="editableTarget" [nodeEditable]="tree.value"></div>'
-})
-class TestComponent {
-  public tree: TreeModel = {
-    value: '42'
-  };
-}
