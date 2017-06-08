@@ -42,7 +42,7 @@ function getSystemJsBundleConfig(cb) {
       typescript: './node_modules/typescript/lib/typescript',
       '@angular': './node_modules/@angular',
       rxjs: './node_modules/rxjs/bundles',
-      lodash: './node_modules/lodash/lodash'
+      lodash: './node_modules/lodash'
     },
     paths: {
       '*': '*.js',
