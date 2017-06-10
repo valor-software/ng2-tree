@@ -1,4 +1,10 @@
 language: node_js
 node_js:
   - "8"
-script: npm run lint && npm test
+install:
+  - yarn global add codecov
+script:
+  - yarn
+  - yarn lint && yarn test:cov
+after_success:
+  - codecov -f coverage/lcov.info

@@ -1,6 +1,7 @@
 # :herb: ng2-tree
 
-ng2-tree is a simple [Angular 2](https://github.com/angular/angular) component for visualizing data that can be naturally represented as a tree.
+[![Travis](https://img.shields.io/travis/valor-software/ng2-tree.svg?style=flat-square)]()
+[![Codecov](https://img.shields.io/codecov/c/github/valor-software/ng2-tree.svg?style=flat-square)]()
 
 <!-- TOC -->
 
