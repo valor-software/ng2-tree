@@ -1,7 +1,7 @@
 # :herb: ng2-tree
 
 [![Travis](https://img.shields.io/travis/valor-software/ng2-tree.svg?style=flat-square)](https://travis-ci.org/valor-software/ng2-tree)
-[![Codecov](https://img.shields.io/codecov/c/github/valor-software/ng2-tree.svg](https://codecov.io/github/valor-software/ng2-tree)
+[![Codecov](https://img.shields.io/codecov/c/github/valor-software/ng2-tree.svg?style=flat-square)](https://codecov.io/github/valor-software/ng2-tree)
 
 <!-- TOC -->
 
