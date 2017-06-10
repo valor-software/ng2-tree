@@ -1,5 +1,6 @@
 # :herb: ng2-tree
 
+[![npm](https://img.shields.io/npm/v/ng2-tree.svg?style=flat-square)](https://www.npmjs.com/package/ng2-tree)
 [![Travis](https://img.shields.io/travis/valor-software/ng2-tree.svg?style=flat-square)](https://travis-ci.org/valor-software/ng2-tree)
 [![Codecov](https://img.shields.io/codecov/c/github/valor-software/ng2-tree.svg?style=flat-square)](https://codecov.io/github/valor-software/ng2-tree)
 
@@ -112,7 +113,7 @@ class MyComponent {
 Voila! That's pretty much it - enjoy :blush:
 
 ## :eyes: Demo
-Feel free to examine the [demo](https://valor-software.github.io/ng2-tree) and its [sources](demo/) to find out how things are wired.
+Feel free to examine the [demo](https://valor-software.github.io/ng2-tree/index.html) and its [sources](src/demo) to find out how things are wired.
 Also there is [another demo built with Angular CLI](https://github.com/rychkog/ng2-tree-demo).
 
 ## :wrench: API

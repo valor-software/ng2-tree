@@ -1,3 +1,21 @@
+<a name="2.0.0-alpha.6"></a>
+# [2.0.0-alpha.6](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.5...v2.0.0-alpha.6) (2017-06-10)
+
+
+### Bug Fixes
+
+* **async-children:** create observable for aysnc children only once (fixes [#80](https://github.com/valor-software/ng2-tree/issues/80)) ([c74e1b4](https://github.com/valor-software/ng2-tree/commit/c74e1b4))
+* **tree:** option to have an empty folder node (no children) ([ac4f777](https://github.com/valor-software/ng2-tree/commit/ac4f777)), closes [#87](https://github.com/valor-software/ng2-tree/issues/87)
+
+
+### Features
+
+* add cssClasses setting for folding elements and html templates for node and left menu activation elements ([adc3c78](https://github.com/valor-software/ng2-tree/commit/adc3c78))
+* **html value:** render html properly in a node.value ([baa62f4](https://github.com/valor-software/ng2-tree/commit/baa62f4))
+* **tree:** add left menu and an option to control availability of menus ([1afb6fc](https://github.com/valor-software/ng2-tree/commit/1afb6fc))
+
+
+
 <a name="2.0.0-alpha.5"></a>
 # [2.0.0-alpha.5](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.4...v2.0.0-alpha.5) (2017-03-04)
 
