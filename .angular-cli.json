@@ -5,32 +5,32 @@
   },
   "apps": [
     {
-      "root": "src",
+      "root": "src/demo",
       "outDir": "dist-demo",
       "assets": [
         "assets",
         "favicon.ico"
       ],
-      "index": "demo/index.html",
-      "main": "demo/main.ts",
-      "polyfills": "demo/polyfills.ts",
-      "test": "../test/test.ts",
-      "tsconfig": "demo/tsconfig.app.json",
-      "testTsconfig": "../test/tsconfig.spec.json",
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "../../test/test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "../../test/tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "../node_modules/alertifyjs/build/css/alertify.css",
-        "../node_modules/alertifyjs/build/css/themes/default.css",
-        "../node_modules/font-awesome/css/font-awesome.min.css",
-        "styles.css"
+        "../../node_modules/alertifyjs/build/css/alertify.css",
+        "../../node_modules/alertifyjs/build/css/themes/default.css",
+        "../../node_modules/font-awesome/css/font-awesome.min.css",
+        "../styles.css"
       ],
       "scripts": [
-        "../node_modules/alertifyjs/build/alertify.js"
+        "../../node_modules/alertifyjs/build/alertify.js"
       ],
-      "environmentSource": "demo/environments/environment.ts",
+      "environmentSource": "environments/environment.ts",
       "environments": {
-        "dev": "demo/environments/environment.ts",
-        "prod": "demo/environments/environment.prod.ts"
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
       }
     }
   ],
