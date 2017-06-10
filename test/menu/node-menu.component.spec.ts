@@ -34,7 +34,7 @@ describe('NodeMenuComponent', () => {
   it('should have basic menu items', () => {
     expect(fixture.componentInstance.availableMenuItems.length).toEqual(4);
     expect(fixture.componentInstance.availableMenuItems[0]).toEqual({
-      name: "New tag",
+      name: 'New tag',
       action: NodeMenuItemAction.NewTag,
       cssClass: 'new-tag'
     });
@@ -114,8 +114,8 @@ describe('NodeMenuComponent', () => {
 
     spyOn(nodeMenuService.nodeMenuEvents$, 'next');
 
-    const event = document.createEvent("MouseEvents");
-    event.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    const event = document.createEvent('MouseEvents');
+    event.initMouseEvent('mousedown', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     document.dispatchEvent(event);
 
     const expectedNodeMenuEvent: NodeMenuEvent = {
@@ -167,7 +167,7 @@ describe('NodeMenuComponent', () => {
 
     componentInstance.ngOnDestroy();
 
-    const mouseEvent = document.createEvent("MouseEvents");
+    const mouseEvent = document.createEvent('MouseEvents');
     mouseEvent.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 
     const keyboardEvent: any = document.createEvent('Events');

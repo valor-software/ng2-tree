@@ -1,5 +1,5 @@
 import { Input, Component, OnInit, ElementRef, Inject } from '@angular/core';
-import { Ng2TreeSettings } from './tree.types';
+import * as TreeTypes from './tree.types';
 import { Tree } from './tree';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.events';
@@ -7,7 +7,7 @@ import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.
 import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'tree-internal',
@@ -16,29 +16,37 @@ import { Observable } from 'rxjs';
     <li>
       <div class="value-container"
         [ngClass]="{rootless: isRootHidden()}"
-        (contextmenu)="showMenu($event)"
+        (contextmenu)="showRightMenu($event)"
         [nodeDraggable]="element"
         [tree]="tree">
 
-        <div class="folding" (click)="tree.switchFoldingType()" [ngClass]="tree.foldingType.cssClass"></div>
+        <div class="folding" (click)="onSwitchFoldingType()" [ngClass]="tree.foldingCssClass"></div>
         <div class="node-value"
           *ngIf="!shouldShowInputForTreeValue()"
           [class.node-selected]="isSelected"
           (click)="onNodeSelected($event)">
-            {{tree.value}}<span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
+            <div *ngIf="tree.nodeTemplate" class="node-template" [innerHTML]="tree.nodeTemplate | safeHtml"></div>
+            <span class="node-name" [innerHTML]="tree.value | safeHtml"></span>
+            <span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
         </div>
 
         <input type="text" class="node-value"
            *ngIf="shouldShowInputForTreeValue()"
            [nodeEditable]="tree.value"
            (valueChanged)="applyNewValue($event)"/>
+
+        <div class="node-left-menu" *ngIf="tree.hasLeftMenu()" (click)="showLeftMenu($event)" [innerHTML]="tree.leftMenuTemplate">
+        </div>
+        <node-menu *ngIf="tree.hasLeftMenu() && isLeftMenuVisible"
+          (menuItemSelected)="onMenuItemSelected($event)">
+        </node-menu>
       </div>
 
-      <node-menu *ngIf="isMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
+      <node-menu *ngIf="isRightMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
 
-      <template [ngIf]="tree.isNodeExpanded()">
+      <ng-template [ngIf]="tree.isNodeExpanded()">
         <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child"></tree-internal>
-      </template>
+      </ng-template>
     </li>
   </ul>
   `
@@ -48,13 +56,14 @@ export class TreeInternalComponent implements OnInit {
   public tree: Tree;
 
   @Input()
-  public settings: Ng2TreeSettings;
+  public settings: TreeTypes.Ng2TreeSettings;
 
-  public isSelected: boolean = false;
-  public isMenuVisible: boolean = false;
+  public isSelected = false;
+  public isRightMenuVisible = false;
+  public isLeftMenuVisible = false;
 
   public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
-                     @Inject(TreeService) private treeService: TreeService,
+                     @Inject(TreeService) public treeService: TreeService,
                      @Inject(ElementRef) public element: ElementRef) {
   }
 
@@ -62,7 +71,10 @@ export class TreeInternalComponent implements OnInit {
     this.settings = this.settings || { rootIsVisible: true };
 
     this.nodeMenuService.hideMenuStream(this.element)
-      .subscribe(() => this.isMenuVisible = false);
+      .subscribe(() => {
+        this.isRightMenuVisible = false;
+        this.isLeftMenuVisible = false;
+      });
 
     this.treeService.unselectStream(this.tree)
       .subscribe(() => this.isSelected = false);
@@ -103,16 +115,30 @@ export class TreeInternalComponent implements OnInit {
     }
   }
 
-  public showMenu(e: MouseEvent): void {
-    if (this.tree.isStatic()) {
+  public showRightMenu(e: MouseEvent): void {
+    if (!this.tree.hasRightMenu()) {
       return;
     }
 
     if (EventUtils.isRightButtonClicked(e)) {
-      this.isMenuVisible = !this.isMenuVisible;
+      this.isRightMenuVisible = !this.isRightMenuVisible;
       this.nodeMenuService.hideMenuForAllNodesExcept(this.element);
     }
     e.preventDefault();
+  }
+
+  public showLeftMenu(e: MouseEvent): void {
+    if (!this.tree.hasLeftMenu()) {
+      return;
+    }
+
+    if (EventUtils.isLeftButtonClicked(e)) {
+      this.isLeftMenuVisible = !this.isLeftMenuVisible;
+      this.nodeMenuService.hideMenuForAllNodesExcept(this.element);
+      if (this.isLeftMenuVisible) {
+        e.preventDefault();
+      }
+    }
   }
 
   public onMenuItemSelected(e: NodeMenuItemSelectedEvent): void {
@@ -136,16 +162,23 @@ export class TreeInternalComponent implements OnInit {
 
   private onNewSelected(e: NodeMenuItemSelectedEvent): void {
     this.tree.createNode(e.nodeMenuItemAction === NodeMenuItemAction.NewFolder);
-    this.isMenuVisible = false;
+    this.isRightMenuVisible = false;
+    this.isLeftMenuVisible = false;
   }
 
   private onRenameSelected(): void {
     this.tree.markAsBeingRenamed();
-    this.isMenuVisible = false;
+    this.isRightMenuVisible = false;
+    this.isLeftMenuVisible = false;
   }
 
   private onRemoveSelected(): void {
     this.treeService.fireNodeRemoved(this.tree);
+  }
+
+  public onSwitchFoldingType(): void {
+    this.tree.switchFoldingType();
+    this.treeService.fireNodeSwitchFoldingType(this.tree);
   }
 
   public applyNewValue(e: NodeEditableEvent): void {

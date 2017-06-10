@@ -103,6 +103,17 @@ tree-internal .tree .node-value:hover:after {
   width: 100%;
 }
 
+tree-internal .tree .node-left-menu {
+  display: inline-block;
+  height: 100%;
+  width: auto;
+}
+
+tree-internal .tree .node-left-menu span:before {
+  content: '\2026';
+  color: #757575;
+}
+
 tree-internal .tree .node-selected:after {
   width: 100%;
 }
@@ -130,6 +141,17 @@ tree-internal .tree .folding.node-expanded {
 
 tree-internal .tree .folding.node-expanded:before {
   content: '\25BC';
+  color: #757575;
+}
+
+tree-internal .tree .folding.node-empty {
+  color: #212121;
+  text-align: center;
+  font-size: 0.89em;
+}
+
+tree-internal .tree .folding.node-empty:before {
+  content: '\25B6';
   color: #757575;
 }
 

@@ -13,12 +13,14 @@ ng2-tree is a simple [Angular 2](https://github.com/angular/angular) component f
     - [Configure node via TreeModelSettings](#configure-node-via-treemodelsettings)
   - [[settings]](#settings)
   - [`Tree` class](#tree-class)
-  - [events (nodeMoved, nodeSelected, nodeRenamed, nodeRemoved, nodeCreated)](#events-nodemoved-nodeselected-noderenamed-noderemoved-nodecreated)
+  - [events (nodeMoved, nodeSelected, nodeRenamed, nodeRemoved, nodeCreated, nodeExpanded, nodeCollapsed)](#events-nodemoved-nodeselected-noderenamed-noderemoved-nodecreated-nodeexpanded-nodecollapsed)
     - [NodeSelectedEvent](#nodeselectedevent)
     - [NodeMovedEvent](#nodemovedevent)
     - [NodeRemovedEvent](#noderemovedevent)
     - [NodeCreatedEvent](#nodecreatedevent)
     - [NodeRenamedEvent](#noderenamedevent)
+    - [NodeExpandedEvent](#nodeexpandedevent)
+    - [NodeCollapsedEvent](#nodecollapsedevent)
 - [Changes that should be taken into account in order to migrate from __ng2-tree V1__ to __ng2-tree V2__](#changes-that-should-be-taken-into-account-in-order-to-migrate-from-__ng2-tree-v1__-to-__ng2-tree-v2__)
 - [:bulb: Want to help?](#bulb-want-to-help)
 
@@ -69,7 +71,7 @@ class MyComponent {
         children: [
           {value: 'Java'},
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -77,7 +79,7 @@ class MyComponent {
         children: [
           {value: 'JavaScript'},
           {value: 'CoffeeScript'},
-          {value: 'Lua'},
+          {value: 'Lua'}
         ]
       }
     ]
@@ -124,7 +126,9 @@ Here is the fully stuffed *tree* tag that you can use in your templates:
       (nodeRenamed)="handleRenamed($event)"
       (nodeSelected)="handleSelected($event)"
       (nodeMoved)="handleMoved($event)"
-      (nodeCreated)="handleCreated($event)">
+      (nodeCreated)="handleCreated($event)"
+      (nodeExpanded)="handleExpanded($event)"
+      (nodeCollapsed)="handleCollapsed($event)">
     </tree>
 ```
 
@@ -147,6 +151,7 @@ Here is the definition of the `TreeModel` interface:
 ```typescript
 interface TreeModel {
   value: string | RenamableNode;
+  id: string | number;
   children?: Array<TreeModel>;
   loadChildren?: ChildrenLoadingFunction;
   settings?: TreeModelSettings;
@@ -164,7 +169,7 @@ As you can see - object that conforms to this interface has a recursive nature, 
         children: [
           {value: 'Java'},
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -172,7 +177,7 @@ As you can see - object that conforms to this interface has a recursive nature, 
         children: [
           {value: 'JavaScript'},
           {value: 'CoffeeScript'},
-          {value: 'Lua'},
+          {value: 'Lua'}
         ]
       }
     ]
@@ -214,7 +219,7 @@ Here is an example of such a node in the `TreeModel` object:
             }
           },
           {value: 'C++'},
-          {value: 'C#'},
+          {value: 'C#'}
         ]
       },
       {
@@ -224,7 +229,7 @@ Here is an example of such a node in the `TreeModel` object:
             callback([
               {value: 'JavaScript'},
               {value: 'CoffeeScript'},
-              {value: 'TypeScript'},
+              {value: 'TypeScript'}
             ]);
           }, 5000);
         }
@@ -245,7 +250,7 @@ Another worth noting thing is `loadChildren`. This function on `TreeModel` allow
       callback([
         {value: 'JavaScript'},
         {value: 'CoffeeScript'},
-        {value: 'TypeScript'},
+        {value: 'TypeScript'}
       ]);
     }, 5000);
   }
@@ -265,18 +270,41 @@ Here is an example of its usage:
 {
   value: 'Prototype-based programming',
   settings: {
-    'static': true
+    'static': true,
+    'rightMenu': true,
+    'leftMenu': true,
+    'cssClasses': {
+      'expanded': 'fa fa-caret-down fa-lg',
+      'collapsed': 'fa fa-caret-right fa-lg',
+      'leaf:': 'fa fa-lg'
+    },
+    'templates': {
+      'node': '<i class="fa fa-folder-o fa-lg"></i>',
+      'leaf': '<i class="fa fa-file-o fa-lg"></i>',
+      'leftMenu': '<i class="fa fa-navicon fa-lg"></i>'
+    }
   },
   children: [
     {value: 'JavaScript'},
     {value: 'CoffeeScript'},
-    {value: 'Lua'},
+    {value: 'Lua'}
   ]
 }
 ```
 
-Right now only one option is supported - `static`. This option makes it impossible to drag a tree or modify it in a some way, though you still can select nodes in the static tree and appropriate events will be generated.
-`static` option that's defined on a `parent` is automatically applied to its children. If you don't want to make `static` all the children, then you can override `settings` of the child node.
+* `static` - Boolean - This option makes it impossible to drag a tree or modify it in a some way, though you still can select nodes in the static tree and appropriate events will be generated.
+* `rightMenu` - Boolean - This option allows you to activate (true, by default) or deactivate (false) right menu when clicking with right button of a mouse.
+* `leftMenu` - Boolean - This option allows you to activate (true) or deactivate (false, by default) left menu.
+* `cssClasses` - Object:
+  * `expanded` - String - It specifies a css class (or classes) for an item which represents expanded state of a node. The item is clickable and it transitions the node to the collapsed state
+  * `collapsed` - String - It specifies a css class (or classes) for an item which represents collapsed state of a node. The item is clickable and it transitions the node to the expanded state
+  * `leaf` - String - It specifies a css class (or classes) for an item which represents a node without an option to expand or collapse - in other words: a leaf node.
+* `templates` - Object:
+  * `node` - String - It specifies a html template which will be included to the left of the node's value.
+  * `leaf` - String - It specifies a html template which will be included to the left of the leaf's value.
+  * `leftMenu` - String - It specifies a html template to the right of the node's value. This template becomes clickable and shows a menu on node's click.
+
+All options that's defined on a `parent` are automatically applied to children. If you want you can override them by `settings` of the child node.
 
 ### [settings]
 
@@ -294,7 +322,7 @@ By default `rootIsVisible` equals to `true`
 
 Also in the next section you'll be reading about events generated by the `ng2-tree`. And here [Tree](src/tree.ts) class comes in handy for us, because its instances propagated with event objects. Under the hood `ng2-tree` wraps a `TreeModel` provided by the user in `Tree`. And `Tree` in turn has lots of useful methods and properties (like `parent`, `hasChild()`, `isRoot()` etc.)
 
-### events (nodeMoved, nodeSelected, nodeRenamed, nodeRemoved, nodeCreated)
+### events (nodeMoved, nodeSelected, nodeRenamed, nodeRemoved, nodeCreated, nodeExpanded, nodeCollapsed)
 
 Here is the diagram that shows tree events' hierarchy
 
@@ -398,6 +426,40 @@ You can subscribe to `NodeRenamedEvent` by attaching listener to `(nodeRenamed)`
   oldValue: <string|RenamableNode>{...},
   newValue: <string|RenamableNode>{...}
 }
+```
+
+#### NodeExpandedEvent
+
+You can subscribe to `NodeExpandedEvent` by attaching listener to `(nodeExpanded)` attribute, this event wont fire on initial expansion
+
+```html
+    <tree
+      [tree]="tree"
+      (nodeExpanded)="handleExpanded($event)">
+    </tree>
+```
+
+`NodeExpandedEvent` has a `node` property of type `Tree`, which contains an expanded node.
+
+```typescript
+{node: <Tree>{...}}
+```
+
+#### NodeCollapsedEvent
+
+You can subscribe to `NodeCollapsedEvent` by attaching listener to `(nodeCollapsed)` attribute
+
+```html
+    <tree
+      [tree]="tree"
+      (nodeCollapsed)="handleCollapsed($event)">
+    </tree>
+```
+
+`NodeCollapsedEvent` has a `node` property of type `Tree`, which contains a collapsed node.
+
+```typescript
+{node: <Tree>{...}}
 ```
 
 ## Changes that should be taken into account in order to migrate from __ng2-tree V1__ to __ng2-tree V2__

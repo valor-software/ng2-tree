@@ -20,4 +20,8 @@ export class TreePage {
   public getAsyncChildrenNodeFolding(): ElementFinder {
     return element.all(by.css('.folding')).get(18);
   }
+
+  public getAntiquaNode(): ElementFinder {
+    return element(by.id('antiqua'));
+  }
 }
