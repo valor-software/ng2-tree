@@ -23,6 +23,7 @@
     - [NodeRenamedEvent](#noderenamedevent)
     - [NodeExpandedEvent](#nodeexpandedevent)
     - [NodeCollapsedEvent](#nodecollapsedevent)
+- [SystemJS](#systemjs)
 - [Changes that should be taken into account in order to migrate from __ng2-tree V1__ to __ng2-tree V2__](#changes-that-should-be-taken-into-account-in-order-to-migrate-from-__ng2-tree-v1__-to-__ng2-tree-v2__)
 - [:bulb: Want to help?](#bulb-want-to-help)
 
@@ -464,6 +465,21 @@ You can subscribe to `NodeCollapsedEvent` by attaching listener to `(nodeCollaps
 
 ```typescript
 {node: <Tree>{...}}
+```
+
+## SystemJS
+If you are using SystemJS, then you need
+
+```javascript
+System.config({
+    // ...
+    map: {
+      // ...
+      'ng2-tree': 'node_modules/ng2-tree/bundles/ng2-tree.umd.min.js',
+      // ...
+    },
+    // ...
+}
 ```
 
 ## Changes that should be taken into account in order to migrate from __ng2-tree V1__ to __ng2-tree V2__

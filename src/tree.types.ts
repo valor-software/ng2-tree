@@ -1,5 +1,5 @@
-import * as _defaultsDeep from 'lodash/defaultsDeep';
-import * as _get from 'lodash/get';
+import _defaultsDeep from 'lodash-es/defaultsDeep';
+import _get from 'lodash-es/get';
 
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
