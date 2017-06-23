@@ -1,3 +1,14 @@
+<a name="2.0.0-alpha.7"></a>
+# [2.0.0-alpha.7](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.6...v2.0.0-alpha.7) (2017-06-23)
+
+
+### Bug Fixes
+
+* fix demo build output dir, add missing dependency for gh-pages, add extrab badge - version ([cef0385](https://github.com/valor-software/ng2-tree/commit/cef0385))
+* **system.js:** add section for SystemJS configuration, use lodash-es instead of lodash (closes [#104](https://github.com/valor-software/ng2-tree/issues/104), [#103](https://github.com/valor-software/ng2-tree/issues/103), [#58](https://github.com/valor-software/ng2-tree/issues/58)) ([4b36690](https://github.com/valor-software/ng2-tree/commit/4b36690))
+
+
+
 <a name="2.0.0-alpha.6"></a>
 # [2.0.0-alpha.6](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.5...v2.0.0-alpha.6) (2017-06-10)
 
