@@ -1548,42 +1548,24 @@ var _a;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_map__ = __webpack_require__("../../../../lodash/map.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_isEmpty__ = __webpack_require__("../../../../lodash/isEmpty.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_isEmpty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash_isEmpty__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_trim__ = __webpack_require__("../../../../lodash/trim.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_trim___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_trim__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_has__ = __webpack_require__("../../../../lodash/has.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_has___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_has__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_isFunction__ = __webpack_require__("../../../../lodash/isFunction.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_isFunction___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_isFunction__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_clone__ = __webpack_require__("../../../../lodash/clone.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_clone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash_clone__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_merge__ = __webpack_require__("../../../../lodash/merge.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_merge___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash_merge__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash_extend__ = __webpack_require__("../../../../lodash/extend.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash_extend___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash_extend__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_get__ = __webpack_require__("../../../../lodash/get.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_get___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_lodash_get__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_omit__ = __webpack_require__("../../../../lodash/omit.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_omit___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_lodash_omit__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_lodash_forEach__ = __webpack_require__("../../../../lodash/forEach.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_lodash_forEach___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_lodash_forEach__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_lodash_toString__ = __webpack_require__("../../../../lodash/toString.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_lodash_toString___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_lodash_toString__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_lodash_isArray__ = __webpack_require__("../../../../lodash/isArray.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_lodash_isArray___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_lodash_isArray__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_lodash_size__ = __webpack_require__("../../../../lodash/size.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_lodash_size___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13_lodash_size__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_lodash_indexOf__ = __webpack_require__("../../../../lodash/indexOf.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_lodash_indexOf___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14_lodash_indexOf__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_lodash_includes__ = __webpack_require__("../../../../lodash/includes.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_lodash_includes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_lodash_includes__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_lodash_findIndex__ = __webpack_require__("../../../../lodash/findIndex.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_lodash_findIndex___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16_lodash_findIndex__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_lodash_once__ = __webpack_require__("../../../../lodash/once.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_lodash_once___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17_lodash_once__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_map__ = __webpack_require__("../../../../lodash-es/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isEmpty__ = __webpack_require__("../../../../lodash-es/isEmpty.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_es_trim__ = __webpack_require__("../../../../lodash-es/trim.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_es_has__ = __webpack_require__("../../../../lodash-es/has.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_es_isFunction__ = __webpack_require__("../../../../lodash-es/isFunction.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_es_clone__ = __webpack_require__("../../../../lodash-es/clone.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_es_merge__ = __webpack_require__("../../../../lodash-es/merge.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash_es_extend__ = __webpack_require__("../../../../lodash-es/extend.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_es_get__ = __webpack_require__("../../../../lodash-es/get.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_es_omit__ = __webpack_require__("../../../../lodash-es/omit.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_lodash_es_forEach__ = __webpack_require__("../../../../lodash-es/forEach.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_lodash_es_toString__ = __webpack_require__("../../../../lodash-es/toString.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_lodash_es_isArray__ = __webpack_require__("../../../../lodash-es/isArray.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_lodash_es_size__ = __webpack_require__("../../../../lodash-es/size.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_lodash_es_indexOf__ = __webpack_require__("../../../../lodash-es/indexOf.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_lodash_es_includes__ = __webpack_require__("../../../../lodash-es/includes.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_lodash_es_findIndex__ = __webpack_require__("../../../../lodash-es/findIndex.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_lodash_es_once__ = __webpack_require__("../../../../lodash-es/once.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18_rxjs_Rx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__tree_types__ = __webpack_require__("../../../../../src/tree.types.ts");
@@ -1626,12 +1608,12 @@ var Tree = (function () {
         if (isBranch === void 0) { isBranch = false; }
         var _this = this;
         this._childrenLoadingState = ChildrenLoadingState.NotStarted;
-        this._childrenAsyncOnce = __WEBPACK_IMPORTED_MODULE_17_lodash_once__(function () {
+        this._childrenAsyncOnce = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_17_lodash_es_once__["a" /* default */])(function () {
             return new __WEBPACK_IMPORTED_MODULE_18_rxjs_Rx__["Observable"](function (observer) {
                 setTimeout(function () {
                     _this._childrenLoadingState = ChildrenLoadingState.Loading;
                     _this._loadChildren(function (children) {
-                        _this._children = __WEBPACK_IMPORTED_MODULE_0_lodash_map__(children, function (child) { return new Tree(child, _this); });
+                        _this._children = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_lodash_es_map__["a" /* default */])(children, function (child) { return new Tree(child, _this); });
                         _this._childrenLoadingState = ChildrenLoadingState.Completed;
                         observer.next(_this.children);
                         observer.complete();
@@ -1649,7 +1631,7 @@ var Tree = (function () {
      * @static
      */
     Tree.isValueEmpty = function (value) {
-        return __WEBPACK_IMPORTED_MODULE_1_lodash_isEmpty__(__WEBPACK_IMPORTED_MODULE_2_lodash_trim__(value));
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash_es_isEmpty__["a" /* default */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_lodash_es_trim__["a" /* default */])(value));
     };
     /**
      * Check whether a given value can be considered RenamableNode.
@@ -1658,30 +1640,30 @@ var Tree = (function () {
      * @static
      */
     Tree.isRenamable = function (value) {
-        return (__WEBPACK_IMPORTED_MODULE_3_lodash_has__(value, 'setName') && __WEBPACK_IMPORTED_MODULE_4_lodash_isFunction__(value.setName))
-            && (__WEBPACK_IMPORTED_MODULE_3_lodash_has__(value, 'toString') && __WEBPACK_IMPORTED_MODULE_4_lodash_isFunction__(value.toString) && value.toString !== Object.toString);
+        return (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_lodash_es_has__["a" /* default */])(value, 'setName') && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_lodash_es_isFunction__["a" /* default */])(value.setName))
+            && (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_lodash_es_has__["a" /* default */])(value, 'toString') && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_lodash_es_isFunction__["a" /* default */])(value.toString) && value.toString !== Object.toString);
     };
     Tree.cloneTreeShallow = function (origin) {
-        var tree = new Tree(__WEBPACK_IMPORTED_MODULE_5_lodash_clone__(origin.node));
+        var tree = new Tree(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5_lodash_es_clone__["a" /* default */])(origin.node));
         tree._children = origin._children;
         return tree;
     };
     Tree.applyNewValueToRenamable = function (value, newValue) {
-        var renamableValue = __WEBPACK_IMPORTED_MODULE_6_lodash_merge__({}, value);
+        var renamableValue = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_lodash_es_merge__["a" /* default */])({}, value);
         renamableValue.setName(newValue);
         return renamableValue;
     };
     Tree.prototype.buildTreeFromModel = function (model, parent, isBranch) {
         var _this = this;
         this.parent = parent;
-        this.node = __WEBPACK_IMPORTED_MODULE_7_lodash_extend__(__WEBPACK_IMPORTED_MODULE_9_lodash_omit__(model, 'children'), {
-            settings: __WEBPACK_IMPORTED_MODULE_19__tree_types__["TreeModelSettings"].merge(model, __WEBPACK_IMPORTED_MODULE_8_lodash_get__(parent, 'node'))
+        this.node = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_7_lodash_es_extend__["a" /* default */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_9_lodash_es_omit__["a" /* default */])(model, 'children'), {
+            settings: __WEBPACK_IMPORTED_MODULE_19__tree_types__["TreeModelSettings"].merge(model, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(parent, 'node'))
         });
-        if (__WEBPACK_IMPORTED_MODULE_4_lodash_isFunction__(this.node.loadChildren)) {
+        if (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_lodash_es_isFunction__["a" /* default */])(this.node.loadChildren)) {
             this._loadChildren = this.node.loadChildren;
         }
         else {
-            __WEBPACK_IMPORTED_MODULE_10_lodash_forEach__(__WEBPACK_IMPORTED_MODULE_8_lodash_get__(model, 'children'), function (child, index) {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_10_lodash_es_forEach__["a" /* default */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(model, 'children'), function (child, index) {
                 _this._addChild(new Tree(child, _this), index);
             });
         }
@@ -1779,11 +1761,11 @@ var Tree = (function () {
                 return;
             }
             if (Tree.isRenamable(this.value)) {
-                var newValue = typeof value === 'string' ? value : __WEBPACK_IMPORTED_MODULE_11_lodash_toString__(value);
+                var newValue = typeof value === 'string' ? value : __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_11_lodash_es_toString__["a" /* default */])(value);
                 this.node.value = Tree.applyNewValueToRenamable(this.value, newValue);
             }
             else {
-                this.node.value = Tree.isValueEmpty(value) ? this.node.value : __WEBPACK_IMPORTED_MODULE_11_lodash_toString__(value);
+                this.node.value = Tree.isValueEmpty(value) ? this.node.value : __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_11_lodash_es_toString__["a" /* default */])(value);
             }
         },
         enumerable: true,
@@ -1796,7 +1778,7 @@ var Tree = (function () {
      * @returns {Tree} A newly inserted sibling, or null if you are trying to make a sibling for the root.
      */
     Tree.prototype.addSibling = function (sibling, position) {
-        if (__WEBPACK_IMPORTED_MODULE_12_lodash_isArray__(__WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.parent, 'children'))) {
+        if (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_12_lodash_es_isArray__["a" /* default */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.parent, 'children'))) {
             return this.parent.addChild(sibling, position);
         }
         return null;
@@ -1811,7 +1793,7 @@ var Tree = (function () {
         return this._addChild(Tree.cloneTreeShallow(child), position);
     };
     Tree.prototype._addChild = function (child, position) {
-        if (position === void 0) { position = __WEBPACK_IMPORTED_MODULE_13_lodash_size__(this._children) || 0; }
+        if (position === void 0) { position = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_13_lodash_es_size__["a" /* default */])(this._children) || 0; }
         child.parent = this;
         if (Array.isArray(this._children)) {
             this._children.splice(position, 0, child);
@@ -1844,7 +1826,7 @@ var Tree = (function () {
          * @returns {number} The position inside a parent.
          */
         get: function () {
-            return __WEBPACK_IMPORTED_MODULE_14_lodash_indexOf__(this.parent.children, this);
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_14_lodash_es_indexOf__["a" /* default */])(this.parent.children, this);
         },
         enumerable: true,
         configurable: true
@@ -1854,21 +1836,21 @@ var Tree = (function () {
      * @returns {boolean} A flag indicating whether or not this tree is static.
      */
     Tree.prototype.isStatic = function () {
-        return __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'static', false);
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'static', false);
     };
     /**
      * Check whether or not this tree has a left menu.
      * @returns {boolean} A flag indicating whether or not this tree has a left menu.
      */
     Tree.prototype.hasLeftMenu = function () {
-        return !__WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'static', false) && __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'leftMenu', false);
+        return !__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'static', false) && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'leftMenu', false);
     };
     /**
      * Check whether or not this tree has a right menu.
      * @returns {boolean} A flag indicating whether or not this tree has a right menu.
      */
     Tree.prototype.hasRightMenu = function () {
-        return !__WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'static', false) && __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'rightMenu', false);
+        return !__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'static', false) && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'rightMenu', false);
     };
     /**
      * Check whether this tree is "Leaf" or not.
@@ -1889,7 +1871,7 @@ var Tree = (function () {
      * @returns {boolean} A flag indicating whether or not this tree has children.
      */
     Tree.prototype.hasChildren = function () {
-        return !__WEBPACK_IMPORTED_MODULE_1_lodash_isEmpty__(this._children) || this.childrenShouldBeLoaded();
+        return !__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash_es_isEmpty__["a" /* default */])(this._children) || this.childrenShouldBeLoaded();
     };
     /**
      * Check whether this tree is a root or not. The root is the tree (node) that doesn't have parent (or technically its parent is null).
@@ -1904,7 +1886,7 @@ var Tree = (function () {
      * @returns {boolean} A flag indicating whether or not provided tree is the sibling of the current one.
      */
     Tree.prototype.hasSibling = function (tree) {
-        return !this.isRoot() && __WEBPACK_IMPORTED_MODULE_15_lodash_includes__(this.parent.children, tree);
+        return !this.isRoot() && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_15_lodash_es_includes__["a" /* default */])(this.parent.children, tree);
     };
     /**
      * Check whether provided tree is a child of the current tree.
@@ -1913,7 +1895,7 @@ var Tree = (function () {
      * @returns {boolean} A flag indicating whether provided tree is a child or not.
      */
     Tree.prototype.hasChild = function (tree) {
-        return __WEBPACK_IMPORTED_MODULE_15_lodash_includes__(this._children, tree);
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_15_lodash_es_includes__["a" /* default */])(this._children, tree);
     };
     /**
      * Remove given tree from the current tree.
@@ -1921,7 +1903,7 @@ var Tree = (function () {
      * @param {Tree} tree - A tree that should be removed.
      */
     Tree.prototype.removeChild = function (tree) {
-        var childIndex = __WEBPACK_IMPORTED_MODULE_16_lodash_findIndex__(this._children, function (child) { return child === tree; });
+        var childIndex = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_16_lodash_es_findIndex__["a" /* default */])(this._children, function (child) { return child === tree; });
         if (childIndex >= 0) {
             this._children.splice(childIndex, 1);
         }
@@ -1967,7 +1949,7 @@ var Tree = (function () {
         if (this.childrenShouldBeLoaded()) {
             this.node._foldingType = __WEBPACK_IMPORTED_MODULE_19__tree_types__["FoldingType"].Collapsed;
         }
-        else if (this._children && !__WEBPACK_IMPORTED_MODULE_1_lodash_isEmpty__(this._children)) {
+        else if (this._children && !__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash_es_isEmpty__["a" /* default */])(this._children)) {
             this.node._foldingType = __WEBPACK_IMPORTED_MODULE_19__tree_types__["FoldingType"].Expanded;
         }
         else if (Array.isArray(this._children)) {
@@ -2007,15 +1989,15 @@ var Tree = (function () {
             this._setFoldingType();
         }
         if (this.node._foldingType === __WEBPACK_IMPORTED_MODULE_19__tree_types__["FoldingType"].Collapsed) {
-            return __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'cssClasses.collapsed', null);
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'cssClasses.collapsed', null);
         }
         else if (this.node._foldingType === __WEBPACK_IMPORTED_MODULE_19__tree_types__["FoldingType"].Expanded) {
-            return __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'cssClasses.expanded', null);
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'cssClasses.expanded', null);
         }
         else if (this.node._foldingType === __WEBPACK_IMPORTED_MODULE_19__tree_types__["FoldingType"].Empty) {
-            return __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'cssClasses.empty', null);
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'cssClasses.empty', null);
         }
-        return __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'cssClasses.leaf', null);
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'cssClasses.leaf', null);
     };
     Object.defineProperty(Tree.prototype, "nodeTemplate", {
         /**
@@ -2030,10 +2012,10 @@ var Tree = (function () {
     });
     Tree.prototype.getTemplateFromSettings = function () {
         if (this.isLeaf()) {
-            return __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'templates.leaf', '');
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'templates.leaf', '');
         }
         else {
-            return __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'templates.node', '');
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'templates.node', '');
         }
     };
     Object.defineProperty(Tree.prototype, "leftMenuTemplate", {
@@ -2043,7 +2025,7 @@ var Tree = (function () {
          */
         get: function () {
             if (this.hasLeftMenu()) {
-                return __WEBPACK_IMPORTED_MODULE_8_lodash_get__(this.node.settings, 'templates.leftMenu', '<span></span>');
+                return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_lodash_es_get__["a" /* default */])(this.node.settings, 'templates.leftMenu', '<span></span>');
             }
             return '';
         },
@@ -2101,10 +2083,8 @@ var Tree = (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_defaultsDeep__ = __webpack_require__("../../../../lodash/defaultsDeep.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_defaultsDeep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_defaultsDeep__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_get__ = __webpack_require__("../../../../lodash/get.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_get___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash_get__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_defaultsDeep__ = __webpack_require__("../../../../lodash-es/defaultsDeep.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_get__ = __webpack_require__("../../../../lodash-es/get.js");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FoldingType", function() { return FoldingType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TreeModelSettings", function() { return TreeModelSettings; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TreeStatus", function() { return TreeStatus; });
@@ -2132,7 +2112,7 @@ var TreeModelSettings = (function () {
     function TreeModelSettings() {
     }
     TreeModelSettings.merge = function (sourceA, sourceB) {
-        return __WEBPACK_IMPORTED_MODULE_0_lodash_defaultsDeep__({}, __WEBPACK_IMPORTED_MODULE_1_lodash_get__(sourceA, 'settings'), __WEBPACK_IMPORTED_MODULE_1_lodash_get__(sourceB, 'settings'), { static: false, leftMenu: false, rightMenu: true });
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_lodash_es_defaultsDeep__["a" /* default */])({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash_es_get__["a" /* default */])(sourceA, 'settings'), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash_es_get__["a" /* default */])(sourceB, 'settings'), { static: false, leftMenu: false, rightMenu: true });
     };
     return TreeModelSettings;
 }());
