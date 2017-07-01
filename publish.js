@@ -13,9 +13,9 @@ shell.exec('npm run post:publish');
 
 function omit(obj, key) {
   return Object
-    .keys(pkg)
+    .keys(obj)
     .reduce((result, prop) => {
       if (prop === key) return result;
-      return Object.assign(result, {[prop]: pkg[prop]})
+      return Object.assign(result, {[prop]: obj[prop]})
     }, {});
 }

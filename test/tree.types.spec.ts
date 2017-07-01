@@ -5,7 +5,7 @@ const using = require('jasmine-data-provider');
 
 describe('TreeModelSettings', () => {
   describe('Merge TreeModelSettings', () => {
-    using (TreeDataProvider.treeModelSettings, (data: any, description: string) => {
+    using(TreeDataProvider.treeModelSettings, (data: any, description: string) => {
       it(description, () => {
         expect(TreeModelSettings.merge(data.treeModelA, data.treeModelB)).toEqual(data.result);
       });

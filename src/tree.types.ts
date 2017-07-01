@@ -1,5 +1,4 @@
-import _defaultsDeep from 'lodash-es/defaultsDeep';
-import _get from 'lodash-es/get';
+import { get, defaultsDeep } from './utils/fn.utils';
 
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
@@ -84,7 +83,7 @@ export class TreeModelSettings {
   public static?: boolean;
 
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
-    return _defaultsDeep({}, _get(sourceA, 'settings'), _get(sourceB, 'settings'), {static: false, leftMenu: false, rightMenu: true});
+    return defaultsDeep({}, get(sourceA, 'settings'), get(sourceB, 'settings'), {static: false, leftMenu: false, rightMenu: true});
   }
 }
 
