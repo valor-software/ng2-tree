@@ -11,7 +11,7 @@ export function isEmpty(value: any[] | string): boolean {
 }
 
 export function trim(value: string): string {
-  return typeof value === 'string' ? value.trim() : '';
+  return isNil(value) ? '' : value.trim();
 }
 
 export function has(value: any, prop: string): boolean {
@@ -22,7 +22,7 @@ export function isFunction(value: any) {
   return typeof value === 'function';
 }
 
-export function get(value: any, path: string = '', defaultValue?: any) {
+export function get(value: any, path: string, defaultValue?: any) {
   let result = value;
 
   for (const prop of path.split('.')) {
@@ -64,7 +64,7 @@ export function once(fn: Once): Once {
 }
 
 export function defaultsDeep(target: any, ... sources: any[]): any {
-  return [target].concat(sources || []).reduce((result: any, source: any) => {
+  return [target].concat(sources).reduce((result: any, source: any) => {
     if (!source) {
       return result;
     }
@@ -90,11 +90,8 @@ export function includes(target: string | any[], value: any): boolean {
     return false;
   }
 
-  if (typeof target === 'string') {
-    return target.indexOf(value as string) > -1;
-  }
-
-  return target.indexOf(value) > -1;
+  const index = typeof target === 'string' ? target.indexOf(value as string) : target.indexOf(value);
+  return index > -1;
 }
 
 export function isNil(value: any): boolean {
