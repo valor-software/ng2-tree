@@ -14,15 +14,14 @@ del(targetFolder)
     console.log('Deleted files and folders:\n', paths.join('\n'));
   })
   .then(() => {
-    const systemJsConfig = { minify: false, sourceMaps: true, mangle: false, noEmitHelpers: false, declaration: false };
     return Promise.all([
-      buildSystemJs(systemJsConfig),
-      buildSystemJs(Object.assign({}, systemJsConfig, {minify: true}))
+      buildSystemJs(),
+      buildSystemJs({minify: true})
     ]);
   })
   .catch(e => console.log(e));
 
-function buildSystemJs(options) {
+function buildSystemJs(options = {}) {
   const minPostFix = options && options.minify ? '.umd.min' : '.umd';
   const fileName = `${pkg.name}${minPostFix}.js`;
   const dest = path.resolve(__dirname, targetFolder, fileName);
@@ -32,7 +31,14 @@ function buildSystemJs(options) {
   builder.config(getSystemJsBundleConfig());
 
   return builder
-    .buildStatic('dist/index', dest, { format: 'umd' })
+    .buildStatic('dist/index', dest, Object.assign({
+      format: 'umd',
+      minify: false,
+      sourceMaps: true,
+      mangle: false,
+      noEmitHelpers: false,
+      declaration: false
+    }, options))
     .then((b) => {
       console.log(`Build complete: ${minPostFix}`);
     })
@@ -47,8 +53,7 @@ function getSystemJsBundleConfig() {
     map: {
       typescript: './node_modules/typescript/lib/typescript.js',
       '@angular': './node_modules/@angular',
-      rxjs: './node_modules/rxjs/bundles',
-      'lodash-es': './node_modules/lodash-es'
+      rxjs: './node_modules/rxjs/bundles'
     },
     paths: {
       '*': '*.js'
