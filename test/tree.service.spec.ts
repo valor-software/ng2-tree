@@ -43,18 +43,30 @@ describe('TreeService', () => {
   it('fires node removed events', () => {
     spyOn(treeService.nodeRemoved$, 'next');
 
-    const tree = new Tree({value: 'Master'});
+    const tree = new Tree({ value: 'Master' });
     treeService.fireNodeRemoved(tree);
 
     expect(treeService.nodeRemoved$.next).toHaveBeenCalledTimes(1);
-    expect(treeService.nodeRemoved$.next).toHaveBeenCalledWith(new NodeRemovedEvent(tree));
+    expect(treeService.nodeRemoved$.next).toHaveBeenCalledWith(new NodeRemovedEvent(tree, -1));
+  });
+
+  it('fires node removed events witch corretly identified postion removed node used to have in its parent', () => {
+    spyOn(treeService.nodeRemoved$, 'next');
+
+    const child1 = { value: 'Servant#1' };
+    const child2 = { value: 'Servant#2' };
+    const tree = new Tree({ value: 'Master', children: [child1, child2] });
+    treeService.fireNodeRemoved(tree.children[1]);
+
+    expect(treeService.nodeRemoved$.next).toHaveBeenCalledTimes(1);
+    expect(treeService.nodeRemoved$.next).toHaveBeenCalledWith(new NodeRemovedEvent(tree.children[1], 1));
   });
 
   it('fires node moved events', () => {
     spyOn(treeService.nodeMoved$, 'next');
 
-    const parent = new Tree({value: 'Master Pa'});
-    const tree = new Tree({value: 'Master'}, parent);
+    const parent = new Tree({ value: 'Master Pa' });
+    const tree = new Tree({ value: 'Master' }, parent);
 
     treeService.fireNodeMoved(tree, parent);
 
@@ -65,7 +77,7 @@ describe('TreeService', () => {
   it('fires node created events', () => {
     spyOn(treeService.nodeCreated$, 'next');
 
-    const tree = new Tree({value: 'Master'});
+    const tree = new Tree({ value: 'Master' });
 
     treeService.fireNodeCreated(tree, parent);
 
@@ -76,7 +88,7 @@ describe('TreeService', () => {
   it('fires node selected events', () => {
     spyOn(treeService.nodeSelected$, 'next');
 
-    const tree = new Tree({value: 'Master'});
+    const tree = new Tree({ value: 'Master' });
 
     treeService.fireNodeSelected(tree);
 
@@ -87,7 +99,7 @@ describe('TreeService', () => {
   it('fires node renamed events', () => {
     spyOn(treeService.nodeRenamed$, 'next');
 
-    const tree = new Tree({value: 'Master'});
+    const tree = new Tree({ value: 'Master' });
 
     treeService.fireNodeRenamed('Bla', tree);
 
@@ -98,7 +110,7 @@ describe('TreeService', () => {
   it('fires node expanded events', () => {
     spyOn(treeService.nodeExpanded$, 'next');
 
-    const tree = new Tree({value: 'Master'});
+    const tree = new Tree({ value: 'Master' });
 
     treeService.fireNodeExpanded(tree);
 
@@ -109,7 +121,7 @@ describe('TreeService', () => {
   it('fires node collapsed events', () => {
     spyOn(treeService.nodeCollapsed$, 'next');
 
-    const tree = new Tree({value: 'Master'});
+    const tree = new Tree({ value: 'Master' });
 
     treeService.fireNodeCollapsed(tree);
 
@@ -118,9 +130,9 @@ describe('TreeService', () => {
   });
 
   it('fires events on which other tree should remove selection', done => {
-    const selectedTree = new Tree({value: 'Master'});
+    const selectedTree = new Tree({ value: 'Master' });
 
-    const tree = new Tree({value: 'Master'});
+    const tree = new Tree({ value: 'Master' });
     treeService.unselectStream(tree)
       .subscribe((e: NodeSelectedEvent) => {
         expect(e.node).toBe(selectedTree);
@@ -134,8 +146,8 @@ describe('TreeService', () => {
     const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -156,12 +168,12 @@ describe('TreeService', () => {
     const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
-    const tree = new Tree({value: 'tree'});
+    const tree = new Tree({ value: 'tree' });
 
     const elementRef = new ElementRef(null);
 
@@ -208,8 +220,8 @@ describe('TreeService', () => {
     const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 
@@ -226,8 +238,8 @@ describe('TreeService', () => {
     const masterTree = new Tree({
       value: 'Master',
       children: [
-        {value: 'Servant#1'},
-        {value: 'Servant#2'}
+        { value: 'Servant#1' },
+        { value: 'Servant#2' }
       ]
     });
 

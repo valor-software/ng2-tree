@@ -81,8 +81,8 @@ describe('Tree', () => {
 
   it('should know how to detect Renamable node', () => {
     const renamableNode = {
-      setName: () => {},
-      toString: () => {}
+      setName: () => { },
+      toString: () => { }
     };
 
     const renamableNodeImposter = {
@@ -232,6 +232,59 @@ describe('Tree', () => {
     expect(child.value).toEqual('Master');
   });
 
+  it('has position which equals to -1 when does not have a parent', () => {
+    const fonts: TreeModel = {
+      value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
+      children: [
+        { value: 'Antiqua' },
+        { value: 'DejaVu Serif' },
+        { value: 'Garamond' },
+        { value: 'Georgia' },
+        { value: 'Times New Roman' },
+      ]
+    };
+
+    const tree = new Tree(fonts);
+    expect(tree.positionInParent).toEqual(-1);
+  });
+
+  it('has position which equals to -1 when still connected to parent but parent already does not have children', () => {
+    const fonts: TreeModel = {
+      value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
+      children: [
+        { value: 'Antiqua' },
+        { value: 'DejaVu Serif' },
+        { value: 'Garamond' },
+        { value: 'Georgia' },
+        { value: 'Times New Roman' },
+      ]
+    };
+
+    const tree = new Tree(fonts);
+    const child = tree.children[3];
+
+    (tree as any)._children = null;
+    expect(child.positionInParent).toEqual(-1);
+  });
+
+  it('has position which equals to actual position rendered', () => {
+    const fonts: TreeModel = {
+      value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
+      children: [
+        { value: 'Antiqua' },
+        { value: 'DejaVu Serif' },
+        { value: 'Garamond' },
+        { value: 'Georgia' },
+        { value: 'Times New Roman' },
+      ]
+    };
+
+    const tree = new Tree(fonts);
+    const child = tree.children[4];
+
+    expect(child.positionInParent).toEqual(4);
+  });
+
   it('adds child to a particular position in a tree', () => {
     const fonts: TreeModel = {
       value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
@@ -311,7 +364,7 @@ describe('Tree', () => {
       children: null
     });
 
-    const addedSibling = tree.addSibling(new Tree({value: 'bla'}));
+    const addedSibling = tree.addSibling(new Tree({ value: 'bla' }));
 
     expect(addedSibling).toBeNull();
     expect(tree.parent).toBeNull();
@@ -729,7 +782,7 @@ describe('Tree', () => {
   it('cannot switch "Empty" folding type', () => {
     const masterTree = new Tree({
       value: 'Master',
-       children: []
+      children: []
     });
 
     expect(masterTree.foldingType).toEqual(FoldingType.Empty);
