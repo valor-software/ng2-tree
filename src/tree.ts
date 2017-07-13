@@ -262,7 +262,7 @@ export class Tree {
    * @returns {number} The position inside a parent.
    */
   public get positionInParent(): number {
-    return this.parent.children ? this.parent.children.indexOf(this) : -1;
+    return this.parent ? (this.parent.children ? this.parent.children.indexOf(this) : -1) : -1;
   }
 
   /**

@@ -33,7 +33,7 @@ export class TreeService {
   }
 
   public fireNodeRemoved(tree: Tree): void {
-    this.nodeRemoved$.next(new NodeRemovedEvent(tree));
+    this.nodeRemoved$.next(new NodeRemovedEvent(tree, tree.positionInParent));
   }
 
   public fireNodeCreated(tree: Tree): void {

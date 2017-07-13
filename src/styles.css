@@ -13,6 +13,7 @@
   background-color: #eee;
   color: #212121;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  z-index: 999;
 }
 
 .node-menu .node-menu-content li.node-menu-item {
