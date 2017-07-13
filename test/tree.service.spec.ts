@@ -47,7 +47,19 @@ describe('TreeService', () => {
     treeService.fireNodeRemoved(tree);
 
     expect(treeService.nodeRemoved$.next).toHaveBeenCalledTimes(1);
-    expect(treeService.nodeRemoved$.next).toHaveBeenCalledWith(new NodeRemovedEvent(tree));
+    expect(treeService.nodeRemoved$.next).toHaveBeenCalledWith(new NodeRemovedEvent(tree, - 1));
+  });
+
+  // TODO: add test for lastIndex of removed node
+
+  it('fires node removed events', () => {
+    spyOn(treeService.nodeRemoved$, 'next');
+
+    const tree = new Tree({value: 'Master'});
+    treeService.fireNodeRemoved(tree);
+
+    expect(treeService.nodeRemoved$.next).toHaveBeenCalledTimes(1);
+    expect(treeService.nodeRemoved$.next).toHaveBeenCalledWith(new NodeRemovedEvent(tree, - 1));
   });
 
   it('fires node moved events', () => {
