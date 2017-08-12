@@ -2,9 +2,9 @@ language: node_js
 node_js:
   - "8"
 install:
-  - yarn global add codecov
+  - npm i -g codecov
 script:
-  - yarn
-  - yarn lint && yarn test:cov
+  - npm i
+  - npm run lint && npm run test:cov
 after_success:
   - codecov -f coverage/lcov.info
