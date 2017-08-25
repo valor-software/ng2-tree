@@ -7,7 +7,8 @@ import {
   omit,
   size,
   once,
-  includes
+  includes,
+  isNil
 } from './utils/fn.utils';
 
 import { Observable, Observer } from 'rxjs/Rx';
@@ -262,6 +263,10 @@ export class Tree {
    * @returns {number} The position inside a parent.
    */
   public get positionInParent(): number {
+    if (this.isRoot()) {
+      return -1;
+    }
+
     return this.parent.children ? this.parent.children.indexOf(this) : -1;
   }
 
@@ -318,7 +323,7 @@ export class Tree {
    * @returns {boolean} A flag indicating whether or not this tree is the root.
    */
   public isRoot(): boolean {
-    return this.parent === null;
+    return isNil(this.parent);
   }
 
   /**
@@ -440,7 +445,7 @@ export class Tree {
     } else if (this.node._foldingType === FoldingType.Expanded) {
       return get(this.node.settings, 'cssClasses.expanded', null);
     } else if (this.node._foldingType === FoldingType.Empty) {
-       return get(this.node.settings, 'cssClasses.empty', null);
+      return get(this.node.settings, 'cssClasses.empty', null);
     }
 
     return get(this.node.settings, 'cssClasses.leaf', null);
