@@ -1,4 +1,5 @@
 import { Tree } from './tree';
+import { TreeController } from './tree-controller';
 import { RenamableNode } from './tree.types';
 
 export class NodeEvent {
