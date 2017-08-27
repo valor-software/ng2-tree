@@ -1,3 +1,13 @@
+<a name="2.0.0-alpha.10"></a>
+# [2.0.0-alpha.10](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.9...v2.0.0-alpha.10) (2017-08-27)
+
+
+### Bug Fixes
+
+* remove lodash 'get' ([5bf144d](https://github.com/valor-software/ng2-tree/commit/5bf144d))
+
+
+
 <a name="2.0.0-alpha.9"></a>
 # [2.0.0-alpha.9](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.8...v2.0.0-alpha.9) (2017-08-27)
 
