@@ -1201,8 +1201,7 @@ var TreeController = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__editable_editable_events__ = __webpack_require__("../../../../../src/editable/editable.events.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__tree_service__ = __webpack_require__("../../../../../src/tree.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_event_utils__ = __webpack_require__("../../../../../src/utils/event.utils.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_get__ = __webpack_require__("../../../../lodash/get.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_get___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_lodash_get__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__utils_fn_utils__ = __webpack_require__("../../../../../src/utils/fn.utils.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1238,7 +1237,7 @@ var TreeInternalComponent = (function () {
     TreeInternalComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.controller = new __WEBPACK_IMPORTED_MODULE_3__tree_controller__["a" /* TreeController */](this);
-        if (__WEBPACK_IMPORTED_MODULE_9_lodash_get__(this.tree, 'node.id', '')) {
+        if (Object(__WEBPACK_IMPORTED_MODULE_9__utils_fn_utils__["b" /* get */])(this.tree, 'node.id', '')) {
             this.treeService.setController(this.tree.node.id, this.controller);
         }
         this.settings = this.settings || { rootIsVisible: true };
@@ -1263,7 +1262,7 @@ var TreeInternalComponent = (function () {
         }));
     };
     TreeInternalComponent.prototype.ngOnDestroy = function () {
-        if (__WEBPACK_IMPORTED_MODULE_9_lodash_get__(this.tree, 'node.id', '')) {
+        if (Object(__WEBPACK_IMPORTED_MODULE_9__utils_fn_utils__["b" /* get */])(this.tree, 'node.id', '')) {
             this.treeService.deleteController(this.tree.node.id);
         }
         this.subscriptions.forEach(function (sub) { return sub && sub.unsubscribe(); });
@@ -1339,7 +1338,7 @@ var TreeInternalComponent = (function () {
         this.isLeftMenuVisible = false;
     };
     TreeInternalComponent.prototype.onRemoveSelected = function () {
-        this.treeService.deleteController(__WEBPACK_IMPORTED_MODULE_9_lodash_get__(this.tree, 'node.id', ''));
+        this.treeService.deleteController(Object(__WEBPACK_IMPORTED_MODULE_9__utils_fn_utils__["b" /* get */])(this.tree, 'node.id', ''));
         this.treeService.fireNodeRemoved(this.tree);
     };
     TreeInternalComponent.prototype.onSwitchFoldingType = function () {
