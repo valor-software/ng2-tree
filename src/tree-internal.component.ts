@@ -8,8 +8,8 @@ import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.
 import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
-import * as _get from 'lodash/get';
 import { Subscription } from 'rxjs/Subscription';
+import { get } from './utils/fn.utils';
 
 @Component({
   selector: 'tree-internal',
@@ -75,7 +75,7 @@ export class TreeInternalComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.controller = new TreeController(this);
-    if (_get(this.tree, 'node.id', '')) {
+    if (get(this.tree, 'node.id', '')) {
       this.treeService.setController(this.tree.node.id, this.controller);
     }
 
@@ -103,7 +103,7 @@ export class TreeInternalComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (_get(this.tree, 'node.id', '')) {
+    if (get(this.tree, 'node.id', '')) {
       this.treeService.deleteController(this.tree.node.id);
     }
 
@@ -192,7 +192,7 @@ export class TreeInternalComponent implements OnInit, OnDestroy {
   }
 
   private onRemoveSelected(): void {
-    this.treeService.deleteController(_get(this.tree, 'node.id', ''));
+    this.treeService.deleteController(get(this.tree, 'node.id', ''));
     this.treeService.fireNodeRemoved(this.tree);
   }
 
