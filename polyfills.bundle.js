@@ -1,4 +1,4 @@
-webpackJsonp([0],{
+webpackJsonp(["polyfills"],{
 
 /***/ "../../../../../src/demo/polyfills.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -6694,7 +6694,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 2:
+/***/ 1:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("../../../../../src/demo/polyfills.ts");
@@ -6702,5 +6702,5 @@ module.exports = __webpack_require__("../../../../../src/demo/polyfills.ts");
 
 /***/ })
 
-},[2]);
+},[1]);
 //# sourceMappingURL=polyfills.bundle.js.map

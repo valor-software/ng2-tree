@@ -1,4 +1,4 @@
-webpackJsonp([2],{
+webpackJsonp(["styles"],{
 
 /***/ "../../../../../src/styles.css":
 /***/ (function(module, exports, __webpack_require__) {
@@ -15,8 +15,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--9-1!../node_modules/postcss-loader/index.js??postcss!./styles.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--9-1!../node_modules/postcss-loader/index.js??postcss!./styles.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js??ref--8-1!../node_modules/postcss-loader/index.js??postcss!./styles.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js??ref--8-1!../node_modules/postcss-loader/index.js??postcss!./styles.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -42,8 +42,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../css-loader/index.js??ref--9-1!../../../postcss-loader/index.js??postcss!./alertify.css", function() {
-			var newContent = require("!!../../../css-loader/index.js??ref--9-1!../../../postcss-loader/index.js??postcss!./alertify.css");
+		module.hot.accept("!!../../../css-loader/index.js??ref--8-1!../../../postcss-loader/index.js??postcss!./alertify.css", function() {
+			var newContent = require("!!../../../css-loader/index.js??ref--8-1!../../../postcss-loader/index.js??postcss!./alertify.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -69,8 +69,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../css-loader/index.js??ref--9-1!../../../../postcss-loader/index.js??postcss!./default.css", function() {
-			var newContent = require("!!../../../../css-loader/index.js??ref--9-1!../../../../postcss-loader/index.js??postcss!./default.css");
+		module.hot.accept("!!../../../../css-loader/index.js??ref--8-1!../../../../postcss-loader/index.js??postcss!./default.css", function() {
+			var newContent = require("!!../../../../css-loader/index.js??ref--8-1!../../../../postcss-loader/index.js??postcss!./default.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -89,7 +89,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".node-menu {\n  position: relative;\n  width: 150px;\n}\n\n.node-menu .node-menu-content {\n  width: 100%;\n  padding: 5px;\n  position: absolute;\n  border: 1px solid #bdbdbd;\n  border-radius: 5%;\n  box-shadow: 0 0 5px #bdbdbd;\n  background-color: #eee;\n  color: #212121;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n}\n\n.node-menu .node-menu-content li.node-menu-item {\n  list-style: none;\n  padding: 3px;\n}\n\n.node-menu .node-menu-content .node-menu-item:hover {\n  border-radius: 5%;\n  opacity: unset;\n  cursor: pointer;\n  background-color: #bdbdbd;\n  transition: background-color 0.2s ease-out;\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon {\n  display: inline-block;\n  width: 16px;\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-tag:before {\n  content: '\\25CF';\n}\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-folder:before {\n  content: '\\25B6';\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.rename:before {\n  content: '\\270E';\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.remove:before {\n  content: '\\2716';\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-value {\n  margin-left: 5px;\n}\n\ntree-internal ul {\n  padding: 3px 0 3px 25px;\n}\n\ntree-internal li {\n  padding: 0;\n  margin: 0;\n  list-style: none;\n}\n\ntree-internal .over-drop-target {\n  border: 4px solid #757575;\n  transition: padding 0.2s ease-out;\n  padding: 5px;\n  border-radius: 5%;\n}\n\ntree-internal .tree {\n  box-sizing: border-box;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n}\n\ntree-internal .tree li {\n  list-style: none;\n  cursor: default;\n}\n\ntree-internal .tree li div {\n  display: inline-block;\n  box-sizing: border-box;\n}\n\ntree-internal .tree .node-value {\n  display: inline-block;\n  color: #212121;\n}\n\ntree-internal .tree .node-value:after {\n  display: block;\n  padding-top: -3px;\n  width: 0;\n  height: 2px;\n  background-color: #212121;\n  content: '';\n  transition: width 0.3s;\n}\n\ntree-internal .tree .node-value:hover:after {\n  width: 100%;\n}\n\ntree-internal .tree .node-left-menu {\n  display: inline-block;\n  height: 100%;\n  width: auto;\n}\n\ntree-internal .tree .node-left-menu span:before {\n  content: '\\2026';\n  color: #757575;\n}\n\ntree-internal .tree .node-selected:after {\n  width: 100%;\n}\n\ntree-internal .tree .folding {\n  width: 25px;\n  display: inline-block;\n  line-height: 1px;\n  padding: 0 5px;\n  font-weight: bold;\n}\n\ntree-internal .tree .folding.node-collapsed {\n  cursor: pointer;\n}\n\ntree-internal .tree .folding.node-collapsed:before {\n  content: '\\25B6';\n  color: #757575;\n}\n\ntree-internal .tree .folding.node-expanded {\n  cursor: pointer;\n}\n\ntree-internal .tree .folding.node-expanded:before {\n  content: '\\25BC';\n  color: #757575;\n}\n\ntree-internal .tree .folding.node-empty {\n  color: #212121;\n  text-align: center;\n  font-size: 0.89em;\n}\n\ntree-internal .tree .folding.node-empty:before {\n  content: '\\25B6';\n  color: #757575;\n}\n\ntree-internal .tree .folding.node-leaf {\n  color: #212121;\n  text-align: center;\n  font-size: 0.89em;\n}\n\ntree-internal .tree .folding.node-leaf:before {\n  content: '\\25CF';\n  color: #757575;\n}\n\ntree-internal ul.rootless {\n  padding: 0;\n}\n\ntree-internal div.rootless {\n  display: none !important;\n}\n\ntree-internal .loading-children:after {\n  content: ' loading ...';\n  color: #6a1b9a;\n  font-style: italic;\n  font-size: 0.9em;\n  -webkit-animation-name: loading-children;\n          animation-name: loading-children;\n  -webkit-animation-duration: 2s;\n          animation-duration: 2s;\n  -webkit-animation-timing-function: ease-in-out;\n          animation-timing-function: ease-in-out;\n  -webkit-animation-iteration-count: infinite;\n          animation-iteration-count: infinite;\n}\n\n@-webkit-keyframes loading-children {\n  0%    { color: #f3e5f5; }\n  12.5% { color: #e1bee7; }\n  25%   { color: #ce93d8; }\n  37.5% { color: #ba68c8; }\n  50%   { color: #ab47bc; }\n  62.5% { color: #9c27b0; }\n  75%   { color: #8e24aa; }\n  87.5% { color: #7b1fa2; }\n  100%  { color: #6a1b9a; }\n}\n\n@keyframes loading-children {\n  0%    { color: #f3e5f5; }\n  12.5% { color: #e1bee7; }\n  25%   { color: #ce93d8; }\n  37.5% { color: #ba68c8; }\n  50%   { color: #ab47bc; }\n  62.5% { color: #9c27b0; }\n  75%   { color: #8e24aa; }\n  87.5% { color: #7b1fa2; }\n  100%  { color: #6a1b9a; }\n}\n\n\n\n", ""]);
+exports.push([module.i, ".node-menu {\n  position: relative;\n  width: 150px;\n}\n\n.node-menu .node-menu-content {\n  width: 100%;\n  padding: 5px;\n  position: absolute;\n  border: 1px solid #bdbdbd;\n  border-radius: 5%;\n  box-shadow: 0 0 5px #bdbdbd;\n  background-color: #eee;\n  color: #212121;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  z-index: 999;\n}\n\n.node-menu .node-menu-content li.node-menu-item {\n  list-style: none;\n  padding: 3px;\n}\n\n.node-menu .node-menu-content .node-menu-item:hover {\n  border-radius: 5%;\n  opacity: unset;\n  cursor: pointer;\n  background-color: #bdbdbd;\n  transition: background-color 0.2s ease-out;\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon {\n  display: inline-block;\n  width: 16px;\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-tag:before {\n  content: '\\25CF';\n}\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-folder:before {\n  content: '\\25B6';\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.rename:before {\n  content: '\\270E';\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-icon.remove:before {\n  content: '\\2716';\n}\n\n.node-menu .node-menu-content .node-menu-item .node-menu-item-value {\n  margin-left: 5px;\n}\n\ntree-internal ul {\n  padding: 3px 0 3px 25px;\n}\n\ntree-internal li {\n  padding: 0;\n  margin: 0;\n  list-style: none;\n}\n\ntree-internal .over-drop-target {\n  border: 4px solid #757575;\n  transition: padding 0.2s ease-out;\n  padding: 5px;\n  border-radius: 5%;\n}\n\ntree-internal .tree {\n  box-sizing: border-box;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n}\n\ntree-internal .tree li {\n  list-style: none;\n  cursor: default;\n}\n\ntree-internal .tree li div {\n  display: inline-block;\n  box-sizing: border-box;\n}\n\ntree-internal .tree .node-value {\n  display: inline-block;\n  color: #212121;\n}\n\ntree-internal .tree .node-value:after {\n  display: block;\n  padding-top: -3px;\n  width: 0;\n  height: 2px;\n  background-color: #212121;\n  content: '';\n  transition: width 0.3s;\n}\n\ntree-internal .tree .node-value:hover:after {\n  width: 100%;\n}\n\ntree-internal .tree .node-left-menu {\n  display: inline-block;\n  height: 100%;\n  width: auto;\n}\n\ntree-internal .tree .node-left-menu span:before {\n  content: '\\2026';\n  color: #757575;\n}\n\ntree-internal .tree .node-selected:after {\n  width: 100%;\n}\n\ntree-internal .tree .folding {\n  width: 25px;\n  display: inline-block;\n  line-height: 1px;\n  padding: 0 5px;\n  font-weight: bold;\n}\n\ntree-internal .tree .folding.node-collapsed {\n  cursor: pointer;\n}\n\ntree-internal .tree .folding.node-collapsed:before {\n  content: '\\25B6';\n  color: #757575;\n}\n\ntree-internal .tree .folding.node-expanded {\n  cursor: pointer;\n}\n\ntree-internal .tree .folding.node-expanded:before {\n  content: '\\25BC';\n  color: #757575;\n}\n\ntree-internal .tree .folding.node-empty {\n  color: #212121;\n  text-align: center;\n  font-size: 0.89em;\n}\n\ntree-internal .tree .folding.node-empty:before {\n  content: '\\25B6';\n  color: #757575;\n}\n\ntree-internal .tree .folding.node-leaf {\n  color: #212121;\n  text-align: center;\n  font-size: 0.89em;\n}\n\ntree-internal .tree .folding.node-leaf:before {\n  content: '\\25CF';\n  color: #757575;\n}\n\ntree-internal ul.rootless {\n  padding: 0;\n}\n\ntree-internal div.rootless {\n  display: none !important;\n}\n\ntree-internal .loading-children:after {\n  content: ' loading ...';\n  color: #6a1b9a;\n  font-style: italic;\n  font-size: 0.9em;\n  -webkit-animation-name: loading-children;\n          animation-name: loading-children;\n  -webkit-animation-duration: 2s;\n          animation-duration: 2s;\n  -webkit-animation-timing-function: ease-in-out;\n          animation-timing-function: ease-in-out;\n  -webkit-animation-iteration-count: infinite;\n          animation-iteration-count: infinite;\n}\n\n@-webkit-keyframes loading-children {\n  0%    { color: #f3e5f5; }\n  12.5% { color: #e1bee7; }\n  25%   { color: #ce93d8; }\n  37.5% { color: #ba68c8; }\n  50%   { color: #ab47bc; }\n  62.5% { color: #9c27b0; }\n  75%   { color: #8e24aa; }\n  87.5% { color: #7b1fa2; }\n  100%  { color: #6a1b9a; }\n}\n\n@keyframes loading-children {\n  0%    { color: #f3e5f5; }\n  12.5% { color: #e1bee7; }\n  25%   { color: #ce93d8; }\n  37.5% { color: #ba68c8; }\n  50%   { color: #ab47bc; }\n  62.5% { color: #9c27b0; }\n  75%   { color: #8e24aa; }\n  87.5% { color: #7b1fa2; }\n  100%  { color: #6a1b9a; }\n}\n\n\n\n", ""]);
 
 // exports
 
@@ -239,8 +239,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../css-loader/index.js??ref--9-1!../../postcss-loader/index.js??postcss!./font-awesome.min.css", function() {
-			var newContent = require("!!../../css-loader/index.js??ref--9-1!../../postcss-loader/index.js??postcss!./font-awesome.min.css");
+		module.hot.accept("!!../../css-loader/index.js??ref--8-1!../../postcss-loader/index.js??postcss!./font-awesome.min.css", function() {
+			var newContent = require("!!../../css-loader/index.js??ref--8-1!../../postcss-loader/index.js??postcss!./font-awesome.min.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -546,7 +546,7 @@ function updateLink(linkElement, obj) {
 
 /***/ }),
 
-/***/ 0:
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("../../../../alertifyjs/build/css/alertify.css");
@@ -557,5 +557,5 @@ module.exports = __webpack_require__("../../../../../src/styles.css");
 
 /***/ })
 
-},[0]);
+},[3]);
 //# sourceMappingURL=styles.bundle.js.map
