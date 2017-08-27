@@ -1,17 +1,17 @@
 import {
+  NodeCollapsedEvent,
+  NodeCreatedEvent,
+  NodeExpandedEvent,
+  NodeMovedEvent,
   NodeRemovedEvent,
   NodeRenamedEvent,
-  NodeCreatedEvent,
-  NodeSelectedEvent,
-  NodeMovedEvent,
-  NodeExpandedEvent,
-  NodeCollapsedEvent
+  NodeSelectedEvent
 } from './tree.events';
-import { RenamableNode, TreeModel } from './tree.types';
+import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
-import { Subject, Observable } from 'rxjs/Rx';
-import { Injectable, Inject, ElementRef } from '@angular/core';
+import { Observable, Subject } from 'rxjs/Rx';
+import { ElementRef, Inject, Injectable } from '@angular/core';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeDraggableEvent } from './draggable/draggable.events';
 
