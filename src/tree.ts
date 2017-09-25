@@ -41,7 +41,7 @@ private _wasExpanded : boolean = false; //Let the user to try and expand the bra
 
   public node: TreeModel;
   public parent: Tree;
-
+  public isChecked : boolean;
   // STATIC METHODS ----------------------------------------------------------------------------------------------------
 
   /**
@@ -89,6 +89,7 @@ private _wasExpanded : boolean = false; //Let the user to try and expand the bra
 
   private buildTreeFromModel(model: TreeModel, parent: Tree, isBranch: boolean): void {
     this.parent = parent;
+    this.isChecked = model.isChecked === true;
     this.node = Object.assign(omit(model, 'children') as TreeModel, {
       settings: TreeModelSettings.merge(model, get(parent, 'node') as TreeModel)
     }) as TreeModel;

@@ -5,7 +5,9 @@ import {
   NodeMovedEvent,
   NodeRemovedEvent,
   NodeRenamedEvent,
-  NodeSelectedEvent
+  NodeSelectedEvent,
+  NodeCheckedEvent,
+  NodeUncheckedEvent
 } from './tree.events';
 import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
@@ -24,6 +26,8 @@ export class TreeService {
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
   public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
   public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
+  public nodeChecked$ : Subject<NodeCheckedEvent> = new Subject<NodeCheckedEvent>();
+  public nodeUnchecked$ : Subject<NodeUncheckedEvent> = new Subject<NodeUncheckedEvent>();
 
   private controllers: Map<string | number, TreeController> = new Map();
 
@@ -53,6 +57,14 @@ export class TreeService {
 
   public fireNodeMoved(tree: Tree, parent: Tree): void {
     this.nodeMoved$.next(new NodeMovedEvent(tree, parent));
+  }
+
+  public fireNodeChecked(tree: Tree) : void {
+    this.nodeChecked$.next(new NodeCheckedEvent(tree));
+  }
+
+  public fireNodeUnchecked(tree: Tree) : void {
+    this.nodeChecked$.next(new NodeUncheckedEvent(tree));
   }
 
   public fireNodeSwitchFoldingType(tree: Tree): void {

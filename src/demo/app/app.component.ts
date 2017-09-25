@@ -169,7 +169,7 @@ export class AppComponent implements OnInit {
         },
         children: [
           {value: '<a href="#" id="antiqua" class="test">Antiqua</a> with HTML tags.', id: 2},
-          {value: 'DejaVu Serif', id: 3},
+          {value: 'DejaVu Serif', id: 3, isChecked: true},
           {value: 'Garamond', id: 4},
           {value: 'Georgia', id: 5},
           {value: 'Times New Roman', id: 6},

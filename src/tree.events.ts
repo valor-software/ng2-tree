@@ -54,3 +54,18 @@ export class NodeCollapsedEvent extends NodeEvent {
     super(node);
   }
 }
+
+export class NodeCheckedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
+export class NodeUncheckedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
+
+
