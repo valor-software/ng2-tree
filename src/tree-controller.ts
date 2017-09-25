@@ -90,4 +90,12 @@ export class TreeController {
     this.tree.markAsBeingRenamed();
 
   }
+
+  public check() : void {
+    this.component.onNodeChecked()
+  }
+
+  public uncheck() : void {
+    this.component.onNodeUnchecked()
+  }
 }

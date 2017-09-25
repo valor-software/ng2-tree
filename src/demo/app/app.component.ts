@@ -51,7 +51,8 @@ declare const alertify: any;
                 (nodeMoved)="onNodeMoved($event)"
                 (nodeCreated)="onNodeFFSCreated($event)"
                 (nodeExpanded)="onNodeExpanded($event)"
-                (nodeCollapsed)="onNodeCollapsed($event)">
+                (nodeCollapsed)="onNodeCollapsed($event)"
+                [settings]="settings">
           </tree>
         </div>
 
@@ -76,6 +77,10 @@ declare const alertify: any;
           <button button (click)="addChildFFS(78, { value: 'Voodo People'})">Add a child with name 'Voodo People' to
             '2Cellos'
           </button>
+          <button button (click)="checkFolder(52)">Check Music folder
+        </button>
+        <button button (click)="uncheckFolder(52)">Uncheck Music folder
+        </button>
         </div>
       </div>
     </div>
@@ -155,7 +160,8 @@ declare const alertify: any;
 })
 export class AppComponent implements OnInit {
   public settings: Ng2TreeSettings = {
-    rootIsVisible: false
+    rootIsVisible: false,
+    enableCheckboxes:true
   };
 
   public fonts: TreeModel = {
@@ -169,7 +175,7 @@ export class AppComponent implements OnInit {
         },
         children: [
           {value: '<a href="#" id="antiqua" class="test">Antiqua</a> with HTML tags.', id: 2},
-          {value: 'DejaVu Serif', id: 3, isChecked: true},
+          {value: 'DejaVu Serif', id: 3},
           {value: 'Garamond', id: 4},
           {value: 'Georgia', id: 5},
           {value: 'Times New Roman', id: 6},
@@ -563,5 +569,25 @@ export class AppComponent implements OnInit {
     } else {
       console.log(`Controller is absent for a node with id: ${id}`);
     }
+  }
+
+  public checkFolder(id: number) : void {
+    const treeController = this.treeFFS.getControllerByNodeId(id);
+    if (treeController) {
+      treeController.check();
+    } else {
+      console.log(`Controller is absent for a node with id: ${id}`);
+    }
+    
+  }
+
+  public uncheckFolder(id: number) : void {
+    const treeController = this.treeFFS.getControllerByNodeId(id);
+    if (treeController) {
+      treeController.uncheck();
+    } else {
+      console.log(`Controller is absent for a node with id: ${id}`);
+    }
+    
   }
 }

@@ -50,7 +50,7 @@ import { get } from './utils/fn.utils';
       <node-menu *ngIf="isRightMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
 
       <ng-template [ngIf]="tree.isNodeExpanded()">
-        <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child"></tree-internal>
+        <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child" [settings]="settings"></tree-internal>
       </ng-template>
     </li>
   </ul>
@@ -244,10 +244,12 @@ public NodeCheckSatusChanged() {
 }
 
   public onNodeChecked() : void{
+    this.isChecked = true;
     this.treeService.fireNodeChecked(this.tree);
   }
 
   public onNodeUnchecked() : void{
-this.treeService.fireNodeUnchecked(this.tree);
+    this.isChecked = false
+    this.treeService.fireNodeUnchecked(this.tree);
   }
 }
