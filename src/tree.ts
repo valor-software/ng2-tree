@@ -24,7 +24,6 @@ export class Tree {
   private _children: Tree[];
   private _loadChildren: ChildrenLoadingFunction;
   private _childrenLoadingState: ChildrenLoadingState = ChildrenLoadingState.NotStarted;
-private _wasExpanded : boolean = false; //Let the user to try and expand the branch once to load the next level
   private _childrenAsyncOnce: () => Observable<Tree[]> = once(() => {
     return new Observable((observer: Observer<Tree[]>) => {
       setTimeout(() => {
@@ -88,10 +87,10 @@ private _wasExpanded : boolean = false; //Let the user to try and expand the bra
   }
 
   private buildTreeFromModel(model: TreeModel, parent: Tree, isBranch: boolean): void {
-    this.parent = parent;
+     this.parent = parent;
     this.node = Object.assign(omit(model, 'children') as TreeModel, {
       settings: TreeModelSettings.merge(model, get(parent, 'node') as TreeModel)
-    }) as TreeModel;
+    }, {hasChildren : model.hasChildren === true}) as TreeModel;
 
     if (isFunction(this.node.loadChildren)) {
       this._loadChildren = this.node.loadChildren;
@@ -140,7 +139,8 @@ private _wasExpanded : boolean = false; //Let the user to try and expand the bra
    * @returns {boolean} A flag indicating that children should be loaded for the current node.
    */
   public childrenShouldBeLoaded(): boolean {
-    return !!this._loadChildren;
+    console.log(`hasChildren ${this.node.hasChildren}`)
+    return !!this._loadChildren || this.node.hasChildren === true;
   }
 
   /**
@@ -337,7 +337,7 @@ private _wasExpanded : boolean = false; //Let the user to try and expand the bra
    * @returns {boolean} A flag indicating whether or not this tree is a "Branch".
    */
   public isBranch(): boolean {
-    return Array.isArray(this._children);
+    return this.node.hasChildren || Array.isArray(this._children);
   }
 
   /**
@@ -408,24 +408,10 @@ private _wasExpanded : boolean = false; //Let the user to try and expand the bra
    * If node is a "Branch" and it is expanded, then by invoking current method state of the tree should be switched to "collapsed" and vice versa.
    */
   public switchFoldingType(): void {
-//If we tried to load the children and no children were loaded the folding type should be collapsed
-if(this._wasExpanded && !this._children) {
-  this.node._foldingType = FoldingType.Collapsed;
-  return;
-}
-
-//If this is the first time the node is expanded try to expand it anyway
-    if ((this.isLeaf() || !this.hasChildren()) && this._wasExpanded) {
+    if ((this.isLeaf() || !this.hasChildren())) {
       return;
     }
-
-
-if(this.isNodeExpanded()) {
-  this.node._foldingType = FoldingType.Collapsed;
-}
-else
-    this.node._foldingType =  FoldingType.Expanded;
-this._wasExpanded = true; //Mark the node as expanded
+    this.node._foldingType = this.isNodeExpanded() ? FoldingType.Collapsed : FoldingType.Expanded;
   }
 
   /**

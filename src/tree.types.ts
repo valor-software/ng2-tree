@@ -22,9 +22,10 @@ export interface TreeModel {
   children?: TreeModel[];
   loadChildren?: ChildrenLoadingFunction;
   settings?: TreeModelSettings;
+  hasChildren?: boolean;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
-}
+  }
 
 export interface CssClasses {
   /* The class or classes that should be added to the expanded node */
