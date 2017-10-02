@@ -104,9 +104,11 @@ class MyComponent {
 ```
 
 3. Apart from that, in order to have usable tree in the browser, you need to add **ng2-tree styles** which you can find in your `node_modules/ng2-tree/styles.css`
-In .angular-cli.json, it would be:
+
+In Angular 2/4 cli projects, modify **.angular-cli.json** as below:
 
 ```typescript
+
       "styles": [
         "styles.css",
         "../node_modules/ng2-tree/styles.css",
