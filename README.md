@@ -292,7 +292,7 @@ Here is an example of its usage:
     'cssClasses': {
       'expanded': 'fa fa-caret-down fa-lg',
       'collapsed': 'fa fa-caret-right fa-lg',
-      'leaf:': 'fa fa-lg',
+      'leaf': 'fa fa-lg',
       'empty': 'fa fa-caret-right disabled'
     },
     'templates': {
