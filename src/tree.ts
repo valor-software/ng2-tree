@@ -87,10 +87,10 @@ export class Tree {
   }
 
   private buildTreeFromModel(model: TreeModel, parent: Tree, isBranch: boolean): void {
-     this.parent = parent;
+    this.parent = parent;
     this.node = Object.assign(omit(model, 'children') as TreeModel, {
       settings: TreeModelSettings.merge(model, get(parent, 'node') as TreeModel)
-    }, {hasChildren : model.hasChildren === true}) as TreeModel;
+    }, { hasChildren: model.hasChildren === true }) as TreeModel;
 
     if (isFunction(this.node.loadChildren)) {
       this._loadChildren = this.node.loadChildren;
@@ -139,7 +139,6 @@ export class Tree {
    * @returns {boolean} A flag indicating that children should be loaded for the current node.
    */
   public childrenShouldBeLoaded(): boolean {
-    console.log(`hasChildren ${this.node.hasChildren}`)
     return !!this._loadChildren || this.node.hasChildren === true;
   }
 
