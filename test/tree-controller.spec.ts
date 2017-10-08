@@ -11,7 +11,7 @@ import { NodeMenuComponent } from '../src/menu/node-menu.component';
 import { NodeDraggableService } from '../src/draggable/node-draggable.service';
 import { NodeDraggableDirective } from '../src/draggable/node-draggable.directive';
 import { NodeEditableDirective } from '../src/editable/node-editable.directive';
-import { TreeStatus } from '../src/tree.types'
+import { TreeStatus } from '../src/tree.types';
 import * as EventUtils from '../src/utils/event.utils';
 import { SafeHtmlPipe } from '../src/utils/safe-html.pipe';
 
