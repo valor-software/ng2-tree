@@ -24,7 +24,7 @@ export class Tree {
   private _children: Tree[];
   private _loadChildren: ChildrenLoadingFunction;
   private _childrenLoadingState: ChildrenLoadingState = ChildrenLoadingState.NotStarted;
-private _wasExpanded : boolean = false; //Let the user to try and expand the branch once to load the next level
+
   private _childrenAsyncOnce: () => Observable<Tree[]> = once(() => {
     return new Observable((observer: Observer<Tree[]>) => {
       setTimeout(() => {
@@ -408,24 +408,11 @@ private _wasExpanded : boolean = false; //Let the user to try and expand the bra
    * If node is a "Branch" and it is expanded, then by invoking current method state of the tree should be switched to "collapsed" and vice versa.
    */
   public switchFoldingType(): void {
-//If we tried to load the children and no children were loaded the folding type should be collapsed
-if(this._wasExpanded && !this._children) {
-  this.node._foldingType = FoldingType.Collapsed;
-  return;
-}
-
-//If this is the first time the node is expanded try to expand it anyway
-    if ((this.isLeaf() || !this.hasChildren()) && this._wasExpanded) {
+    if (this.isLeaf() || !this.hasChildren()) {
       return;
     }
 
-
-if(this.isNodeExpanded()) {
-  this.node._foldingType = FoldingType.Collapsed;
-}
-else
-    this.node._foldingType =  FoldingType.Expanded;
-this._wasExpanded = true; //Mark the node as expanded
+    this.node._foldingType = this.isNodeExpanded() ? FoldingType.Collapsed : FoldingType.Expanded;
   }
 
   /**
