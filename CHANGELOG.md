@@ -1,3 +1,24 @@
+<a name="2.0.0-alpha.10"></a>
+# [2.0.0-alpha.10](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.9...v2.0.0-alpha.10) (2017-08-27)
+
+
+### Bug Fixes
+
+* remove lodash 'get' ([5bf144d](https://github.com/valor-software/ng2-tree/commit/5bf144d))
+
+
+
+<a name="2.0.0-alpha.9"></a>
+# [2.0.0-alpha.9](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.8...v2.0.0-alpha.9) (2017-08-27)
+
+
+### Bug Fixes
+
+* handle rxjs subscriptions ([5db73e0](https://github.com/valor-software/ng2-tree/commit/5db73e0))
+* **tree, menu:** return proper value for positionInParent call; change z-index of the menu ([0db681c](https://github.com/valor-software/ng2-tree/commit/0db681c))
+
+
+
 <a name="2.0.0-alpha.8"></a>
 # [2.0.0-alpha.8](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.6...v2.0.0-alpha.8) (2017-07-02)
 

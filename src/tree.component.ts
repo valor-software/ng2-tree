@@ -1,16 +1,20 @@
-import { Input, Component, OnInit, EventEmitter, Output, Inject, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Input, Component, OnInit, EventEmitter, Output, Inject, OnChanges, SimpleChanges, ViewChild,
+  OnDestroy
+} from '@angular/core';
 import { TreeService } from './tree.service';
 import * as TreeTypes from './tree.types';
 import { NodeEvent } from './tree.events';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'tree',
   template: `<tree-internal #rootComponent [tree]="tree" [settings]="settings"></tree-internal>`,
   providers: [TreeService]
 })
-export class TreeComponent implements OnInit, OnChanges {
+export class TreeComponent implements OnInit, OnChanges, OnDestroy {
   private static EMPTY_TREE: Tree = new Tree({value: ''});
 
   /* tslint:disable:no-input-rename */
@@ -45,6 +49,8 @@ export class TreeComponent implements OnInit, OnChanges {
   public tree: Tree;
   @ViewChild('rootComponent') public rootComponent;
 
+  private subscriptions: Subscription[] = [];
+
   public constructor(@Inject(TreeService) private treeService: TreeService) {
   }
 
@@ -57,33 +63,33 @@ export class TreeComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void {
-    this.treeService.nodeRemoved$.subscribe((e: NodeEvent) => {
+    this.subscriptions.push(this.treeService.nodeRemoved$.subscribe((e: NodeEvent) => {
       this.nodeRemoved.emit(e);
-    });
+    }));
 
-    this.treeService.nodeRenamed$.subscribe((e: NodeEvent) => {
+    this.subscriptions.push(this.treeService.nodeRenamed$.subscribe((e: NodeEvent) => {
       this.nodeRenamed.emit(e);
-    });
+    }));
 
-    this.treeService.nodeCreated$.subscribe((e: NodeEvent) => {
+    this.subscriptions.push(this.treeService.nodeCreated$.subscribe((e: NodeEvent) => {
       this.nodeCreated.emit(e);
-    });
+    }));
 
-    this.treeService.nodeSelected$.subscribe((e: NodeEvent) => {
+    this.subscriptions.push(this.treeService.nodeSelected$.subscribe((e: NodeEvent) => {
       this.nodeSelected.emit(e);
-    });
+    }));
 
-    this.treeService.nodeMoved$.subscribe((e: NodeEvent) => {
+    this.subscriptions.push(this.treeService.nodeMoved$.subscribe((e: NodeEvent) => {
       this.nodeMoved.emit(e);
-    });
+    }));
 
-    this.treeService.nodeExpanded$.subscribe((e: NodeEvent) => {
+    this.subscriptions.push(this.treeService.nodeExpanded$.subscribe((e: NodeEvent) => {
       this.nodeExpanded.emit(e);
-    });
+    }));
 
-    this.treeService.nodeCollapsed$.subscribe((e: NodeEvent) => {
+    this.subscriptions.push(this.treeService.nodeCollapsed$.subscribe((e: NodeEvent) => {
       this.nodeCollapsed.emit(e);
-    });
+    }));
   }
 
   public getController(): TreeController {
@@ -92,5 +98,9 @@ export class TreeComponent implements OnInit, OnChanges {
 
   public getControllerByNodeId(id: number | string): TreeController {
     return this.treeService.getController(id);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub && sub.unsubscribe());
   }
 }

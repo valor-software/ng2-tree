@@ -1,15 +1,15 @@
-import { Input, Component, OnInit, OnDestroy, ElementRef, Inject } from '@angular/core';
+import { Component, ElementRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import * as TreeTypes from './tree.types';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
 import { NodeMenuService } from './menu/node-menu.service';
-import { NodeMenuItemSelectedEvent, NodeMenuItemAction } from './menu/menu.events';
+import { NodeMenuItemAction, NodeMenuItemSelectedEvent } from './menu/menu.events';
 import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.events';
 import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
-import { Observable } from 'rxjs/Rx';
-import * as _get from 'lodash/get';
+import { Subscription } from 'rxjs/Subscription';
+import { get } from './utils/fn.utils';
 
 @Component({
   selector: 'tree-internal',
@@ -66,6 +66,8 @@ export class TreeInternalComponent implements OnInit, OnDestroy {
   public isLeftMenuVisible = false;
   public controller: TreeController;
 
+  private subscriptions: Subscription[] = [];
+
   public constructor(@Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
                      @Inject(TreeService) public treeService: TreeService,
                      @Inject(ElementRef) public element: ElementRef) {
@@ -73,22 +75,22 @@ export class TreeInternalComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.controller = new TreeController(this);
-    if (_get(this.tree, 'node.id', '')) {
+    if (get(this.tree, 'node.id', '')) {
       this.treeService.setController(this.tree.node.id, this.controller);
     }
 
     this.settings = this.settings || { rootIsVisible: true };
 
-    this.nodeMenuService.hideMenuStream(this.element)
+    this.subscriptions.push(this.nodeMenuService.hideMenuStream(this.element)
       .subscribe(() => {
         this.isRightMenuVisible = false;
         this.isLeftMenuVisible = false;
-      });
+      }));
 
-    this.treeService.unselectStream(this.tree)
-      .subscribe(() => this.isSelected = false);
+    this.subscriptions.push(this.treeService.unselectStream(this.tree)
+      .subscribe(() => this.isSelected = false));
 
-    this.treeService.draggedStream(this.tree, this.element)
+    this.subscriptions.push(this.treeService.draggedStream(this.tree, this.element)
       .subscribe((e: NodeDraggableEvent) => {
         if (this.tree.hasSibling(e.captured.tree)) {
           this.swapWithSibling(e.captured.tree, this.tree);
@@ -97,13 +99,15 @@ export class TreeInternalComponent implements OnInit, OnDestroy {
         } else {
           this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, this.tree);
         }
-      });
+      }));
   }
 
   public ngOnDestroy(): void {
-    if (_get(this.tree, 'node.id', '')) {
+    if (get(this.tree, 'node.id', '')) {
       this.treeService.deleteController(this.tree.node.id);
     }
+
+    this.subscriptions.forEach(sub => sub && sub.unsubscribe());
   }
 
   private swapWithSibling(sibling: Tree, tree: Tree): void {
@@ -188,7 +192,7 @@ export class TreeInternalComponent implements OnInit, OnDestroy {
   }
 
   private onRemoveSelected(): void {
-    this.treeService.deleteController(_get(this.tree, 'node.id', ''));
+    this.treeService.deleteController(get(this.tree, 'node.id', ''));
     this.treeService.fireNodeRemoved(this.tree);
   }
 
