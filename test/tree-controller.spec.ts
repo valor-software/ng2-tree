@@ -11,6 +11,7 @@ import { NodeMenuComponent } from '../src/menu/node-menu.component';
 import { NodeDraggableService } from '../src/draggable/node-draggable.service';
 import { NodeDraggableDirective } from '../src/draggable/node-draggable.directive';
 import { NodeEditableDirective } from '../src/editable/node-editable.directive';
+import { TreeStatus } from '../src/tree.types'
 import * as EventUtils from '../src/utils/event.utils';
 import { SafeHtmlPipe } from '../src/utils/safe-html.pipe';
 
@@ -59,7 +60,7 @@ class TestComponent {
 
   @ViewChild('lordTreeInstance') public lordTreeComponent;
 
-  public constructor(public treeHolder: ElementRef) {}
+  public constructor(public treeHolder: ElementRef) { }
 }
 
 describe('TreeController', () => {
@@ -229,8 +230,8 @@ describe('TreeController', () => {
     childController.addChild({
       value: 'N',
       children: [
-        {value: 'N1'},
-        {value: 'N2'},
+        { value: 'N1' },
+        { value: 'N2' },
       ]
     });
 
@@ -304,8 +305,8 @@ describe('TreeController', () => {
     const childController = treeService.getController(lordInternalTreeInstance.tree.id);
 
     childController.setChildren([
-      {value: 'N1'},
-      {value: 'N2'},
+      { value: 'N1' },
+      { value: 'N2' },
     ]);
 
     fixture.detectChanges();
@@ -327,13 +328,24 @@ describe('TreeController', () => {
     const childController = treeService.getController(child.componentInstance.tree.id);
 
     childController.setChildren([
-      {value: 'N1'},
-      {value: 'N2'},
+      { value: 'N1' },
+      { value: 'N2' },
     ]);
 
     fixture.detectChanges();
 
     expect(childrenOf(child).length).toEqual(0);
+  });
+
+  it('Knows to transit node into BeingRenameState', () => {
+    const lordController = treeService.getController(lordInternalTreeInstance.tree.id);
+    expect(lordInternalTreeInstance.tree.isBeingRenamed()).toEqual(false);
+
+    lordController.startRename();
+
+    fixture.detectChanges();
+
+    expect(lordInternalTreeInstance.tree.isBeingRenamed()).toEqual(true);
   });
 });
 
