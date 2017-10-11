@@ -113,10 +113,10 @@ export class TreeService {
     const result = tree.node.hasChildren &&
       !tree.node.loadChildren &&
       !tree.childrenAreBeingLoaded() &&
-      (!tree.children || tree.children === [])
+      (!tree.children || tree.children === []);
 
-      if(result) {
-        tree.loadingChildrenRequested
+      if (result) {
+        tree.loadingChildrenRequested();
       }
 
       return result;

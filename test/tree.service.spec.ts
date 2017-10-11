@@ -300,7 +300,7 @@ describe('TreeService', () => {
             { value: '3' }
           ]);
 
-        })
+        });
       }
     });
 

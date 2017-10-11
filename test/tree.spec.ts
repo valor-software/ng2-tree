@@ -1092,7 +1092,7 @@ describe('Tree', () => {
       value: 'root',
       hasChildren: true,
       id: 6,
-    }
+    };
 
     const tree: Tree = new Tree(model);
 
@@ -1107,7 +1107,7 @@ describe('Tree', () => {
       value: 'root',
       hasChildren: true,
       id: 6,
-    }
+    };
 
     const tree: Tree = new Tree(model);
 
