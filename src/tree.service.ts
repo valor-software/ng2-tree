@@ -5,7 +5,8 @@ import {
   NodeMovedEvent,
   NodeRemovedEvent,
   NodeRenamedEvent,
-  NodeSelectedEvent
+  NodeSelectedEvent,
+  LoadNextLevelEvent
 } from './tree.events';
 import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
@@ -24,6 +25,7 @@ export class TreeService {
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
   public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
   public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
+  public loadNextLevel$: Subject<LoadNextLevelEvent> = new Subject<LoadNextLevelEvent>();
 
   private controllers: Map<string | number, TreeController> = new Map();
 
@@ -58,6 +60,9 @@ export class TreeService {
   public fireNodeSwitchFoldingType(tree: Tree): void {
     if (tree.isNodeExpanded()) {
       this.fireNodeExpanded(tree);
+      if(tree.node.hasChildren && (!tree.children || tree.children === [])){
+        this.fireLoadNextLevel(tree);
+      }
     } else if (tree.isNodeCollapsed()) {
       this.fireNodeCollapsed(tree);
     }
@@ -69,6 +74,10 @@ export class TreeService {
 
   private fireNodeCollapsed(tree: Tree): void {
     this.nodeCollapsed$.next(new NodeCollapsedEvent(tree));
+  }
+
+  private fireLoadNextLevel(tree: Tree): void {
+    this.nodeCollapsed$.next(new LoadNextLevelEvent(tree));
   }
 
   public draggedStream(tree: Tree, element: ElementRef): Observable<NodeDraggableEvent> {

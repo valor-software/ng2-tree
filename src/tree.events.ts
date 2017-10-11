@@ -54,3 +54,9 @@ export class NodeCollapsedEvent extends NodeEvent {
     super(node);
   }
 }
+
+export class LoadNextLevelEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
