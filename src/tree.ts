@@ -108,6 +108,10 @@ export class Tree {
   public hasDeferredChildren(): boolean {
     return typeof this._loadChildren === 'function';
   }
+/* Setting the children loading state to Loading since a request was dispatched to the client */
+public loadingChildrenRequested(): void {
+this._childrenLoadingState = ChildrenLoadingState.Loading;
+}
 
   /**
    * Check whether children of the node are being loaded.

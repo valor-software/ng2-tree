@@ -29,7 +29,7 @@ export class TreeService {
 
   private controllers: Map<string | number, TreeController> = new Map();
 
-  public constructor(@Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
+  public constructor( @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
     this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
   }
 
@@ -60,7 +60,7 @@ export class TreeService {
   public fireNodeSwitchFoldingType(tree: Tree): void {
     if (tree.isNodeExpanded()) {
       this.fireNodeExpanded(tree);
-      if(tree.node.hasChildren && (!tree.children || tree.children === [])){
+      if (this.shouldFireLoadNextLevel(tree)) {
         this.fireLoadNextLevel(tree);
       }
     } else if (tree.isNodeCollapsed()) {
@@ -77,7 +77,7 @@ export class TreeService {
   }
 
   private fireLoadNextLevel(tree: Tree): void {
-    this.nodeCollapsed$.next(new LoadNextLevelEvent(tree));
+    this.loadNextLevel$.next(new LoadNextLevelEvent(tree));
   }
 
   public draggedStream(tree: Tree, element: ElementRef): Observable<NodeDraggableEvent> {
@@ -106,5 +106,19 @@ export class TreeService {
 
   public hasController(id: string | number): boolean {
     return this.controllers.has(id);
+  }
+
+  private shouldFireLoadNextLevel(tree: Tree): boolean {
+
+    const result = tree.node.hasChildren &&
+      !tree.node.loadChildren &&
+      !tree.childrenAreBeingLoaded() &&
+      (!tree.children || tree.children === [])
+
+      if(result) {
+        tree.loadingChildrenRequested
+      }
+
+      return result;
   }
 }
