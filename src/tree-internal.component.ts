@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, TemplateRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import * as TreeTypes from './tree.types';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
@@ -29,8 +29,9 @@ import { get } from './utils/fn.utils';
           [class.node-selected]="isSelected"
           (click)="onNodeSelected($event)">
             <div *ngIf="tree.nodeTemplate" class="node-template" [innerHTML]="tree.nodeTemplate | safeHtml"></div>
-            <span class="node-name" [innerHTML]="tree.value | safeHtml"></span>
+            <span *ngIf="!template" class="node-name" [innerHTML]="tree.value | safeHtml"></span>
             <span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
+            <ng-template [ngTemplateOutlet]="template" [ngOutletContext]="{ $implicit: tree }"></ng-template>
         </div>
 
         <input type="text" class="node-value"
@@ -48,7 +49,7 @@ import { get } from './utils/fn.utils';
       <node-menu *ngIf="isRightMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
 
       <ng-template [ngIf]="tree.isNodeExpanded()">
-        <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child"></tree-internal>
+        <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child" [template]="template"></tree-internal>
       </ng-template>
     </li>
   </ul>
@@ -60,6 +61,9 @@ export class TreeInternalComponent implements OnInit, OnDestroy {
 
   @Input()
   public settings: TreeTypes.Ng2TreeSettings;
+
+  @Input()
+  public template: TemplateRef<any>;
 
   public isSelected = false;
   public isRightMenuVisible = false;
