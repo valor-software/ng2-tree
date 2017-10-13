@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'tree',
-  template: `<tree-internal #rootComponent [tree]="tree" [settings]="settings" [template]="template"></tree-internal>Template!!: {{template}}`,
+  template: `<tree-internal #rootComponent [tree]="tree" [settings]="settings" [template]="template"></tree-internal>`,
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit, OnChanges, OnDestroy {
