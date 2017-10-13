@@ -78,6 +78,23 @@ declare const alertify: any;
           </button>
         </div>
       </div>
+      <div class="tree-container">
+        <div class="tree-info"><p class="tree-title">Programming languages tree</p>
+          <p class="notice">this tree is using a custom template</p></div>
+        <div class="tree-content">
+          <tree [tree]="icons"
+                [settings]="settings"
+                (nodeRemoved)="onNodeRemoved($event)"
+                (nodeRenamed)="onNodeRenamed($event)"
+                (nodeSelected)="onNodeSelected($event)"
+                (nodeMoved)="onNodeMoved($event)"
+                (nodeCreated)="onNodeCreated($event)">
+            <ng-template let-node>
+              <i class="fa {{node.icon}}"></i> <span class="node-name" [innerHTML]="node.value"></span>
+            </ng-template>
+          </tree>
+        </div>
+      </div>
     </div>
   `,
   styles: [`
@@ -438,6 +455,39 @@ export class AppComponent implements OnInit {
   private lastFFSNodeId = 86;
 
   @ViewChild('treeFFS') public treeFFS;
+
+  public icons: TreeModel = {
+    value: 'Icons',
+    children: [
+      {
+        value: 'Web Application Icons',
+        children: [
+          {value: 'calendar', icon: 'fa-calendar' },
+          {value: 'download', icon: 'fa-download' },
+          {value: 'group', icon: 'fa-group' },
+          {value: 'print', icon: 'fa-print' }
+        ]
+      },
+      {
+        value: 'Hand Icons',
+        children: [
+          {value: 'pointer', icon: 'fa-hand-pointer-o' },
+          {value: 'grab', icon: 'fa-hand-rock-o' },
+          {value: 'thumbs up', icon: 'fa-thumbs-o-up ' },
+          {value: 'thumbs down', icon: 'fa-thumbs-o-down' }
+        ]
+      },
+      {
+        value: 'File Type Icons',
+        children: [
+          {value: 'file', icon: 'fa-file-o' },
+          {value: 'audio', icon: 'fa-file-audio-o' },
+          {value: 'movie', icon: 'fa-file-movie-o ' },
+          {value: 'archive', icon: 'fa-file-zip-o' }
+        ]
+      },
+   ]
+  };
 
   private static logEvent(e: NodeEvent, message: string): void {
     console.log(e);

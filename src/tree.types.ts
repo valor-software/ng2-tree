@@ -24,6 +24,7 @@ export interface TreeModel {
   settings?: TreeModelSettings;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
+  [additionalData: string]: any;
 }
 
 export interface CssClasses {

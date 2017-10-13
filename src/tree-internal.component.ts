@@ -31,7 +31,7 @@ import { get } from './utils/fn.utils';
             <div *ngIf="tree.nodeTemplate" class="node-template" [innerHTML]="tree.nodeTemplate | safeHtml"></div>
             <span *ngIf="!template" class="node-name" [innerHTML]="tree.value | safeHtml"></span>
             <span class="loading-children" *ngIf="tree.childrenAreBeingLoaded()"></span>
-            <ng-template [ngTemplateOutlet]="template" [ngOutletContext]="{ $implicit: tree }"></ng-template>
+            <ng-template [ngTemplateOutlet]="template" [ngOutletContext]="{ $implicit: tree.node }"></ng-template>
         </div>
 
         <input type="text" class="node-value"
