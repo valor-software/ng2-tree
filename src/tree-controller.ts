@@ -86,7 +86,7 @@ export class TreeController {
     }
   }
 
-  public startRename(): void {
+  public startRenaming(): void {
     this.tree.markAsBeingRenamed();
 
   }

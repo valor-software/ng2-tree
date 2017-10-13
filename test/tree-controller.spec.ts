@@ -337,11 +337,11 @@ describe('TreeController', () => {
     expect(childrenOf(child).length).toEqual(0);
   });
 
-  it('Knows to transit node into BeingRenameState', () => {
+  it('knows how to transfer a node into a BeingRenamed state', () => {
     const lordController = treeService.getController(lordInternalTreeInstance.tree.id);
     expect(lordInternalTreeInstance.tree.isBeingRenamed()).toEqual(false);
 
-    lordController.startRename();
+    lordController.startRenaming();
 
     fixture.detectChanges();
 
