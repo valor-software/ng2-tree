@@ -1090,7 +1090,7 @@ describe('Tree', () => {
 
     const model: TreeModel = {
       value: 'root',
-      hasChildren: true,
+      emitLoadNextLevel: true,
       id: 6,
     };
 
@@ -1105,7 +1105,7 @@ describe('Tree', () => {
 
     const model: TreeModel = {
       value: 'root',
-      hasChildren: true,
+      emitLoadNextLevel: true,
       id: 6,
     };
 

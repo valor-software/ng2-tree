@@ -22,7 +22,7 @@ export interface TreeModel {
   children?: TreeModel[];
   loadChildren?: ChildrenLoadingFunction;
   settings?: TreeModelSettings;
-  hasChildren?: boolean;
+  emitLoadNextLevel?: boolean;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
   }

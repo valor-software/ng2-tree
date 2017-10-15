@@ -90,7 +90,7 @@ export class Tree {
     this.parent = parent;
     this.node = Object.assign(omit(model, 'children') as TreeModel, {
       settings: TreeModelSettings.merge(model, get(parent, 'node') as TreeModel)
-    }, { hasChildren: model.hasChildren === true }) as TreeModel;
+    }, { emitLoadNextLevel: model.emitLoadNextLevel === true }) as TreeModel;
 
     if (isFunction(this.node.loadChildren)) {
       this._loadChildren = this.node.loadChildren;
@@ -108,10 +108,10 @@ export class Tree {
   public hasDeferredChildren(): boolean {
     return typeof this._loadChildren === 'function';
   }
-/* Setting the children loading state to Loading since a request was dispatched to the client */
-public loadingChildrenRequested(): void {
-this._childrenLoadingState = ChildrenLoadingState.Loading;
-}
+  /* Setting the children loading state to Loading since a request was dispatched to the client */
+  public loadingChildrenRequested(): void {
+    this._childrenLoadingState = ChildrenLoadingState.Loading;
+  }
 
   /**
    * Check whether children of the node are being loaded.
@@ -143,7 +143,7 @@ this._childrenLoadingState = ChildrenLoadingState.Loading;
    * @returns {boolean} A flag indicating that children should be loaded for the current node.
    */
   public childrenShouldBeLoaded(): boolean {
-    return !!this._loadChildren || this.node.hasChildren === true;
+    return !!this._loadChildren || this.node.emitLoadNextLevel === true;
   }
 
   /**
@@ -340,7 +340,7 @@ this._childrenLoadingState = ChildrenLoadingState.Loading;
    * @returns {boolean} A flag indicating whether or not this tree is a "Branch".
    */
   public isBranch(): boolean {
-    return this.node.hasChildren || Array.isArray(this._children);
+    return this.node.emitLoadNextLevel === true || Array.isArray(this._children);
   }
 
   /**
@@ -411,7 +411,7 @@ this._childrenLoadingState = ChildrenLoadingState.Loading;
    * If node is a "Branch" and it is expanded, then by invoking current method state of the tree should be switched to "collapsed" and vice versa.
    */
   public switchFoldingType(): void {
-    if ((this.isLeaf() || !this.hasChildren())) {
+    if (this.isLeaf() || !this.hasChildren()) {
       return;
     }
     this.node._foldingType = this.isNodeExpanded() ? FoldingType.Collapsed : FoldingType.Expanded;

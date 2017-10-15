@@ -259,7 +259,7 @@ describe('TreeService', () => {
   it('fires "loadNextLevel" event when expanding node with hasChildren property set to true', () => {
     const masterTree = new Tree({
       value: 'Master',
-      hasChildren: true
+      emitLoadNextLevel: true
     });
 
     masterTree.switchFoldingType();
@@ -274,7 +274,7 @@ describe('TreeService', () => {
   it('fires "loadNextLevel" only once', () => {
     const masterTree = new Tree({
       value: 'Master',
-      hasChildren: true
+      emitLoadNextLevel: true
     });
 
     masterTree.switchFoldingType();
@@ -288,10 +288,26 @@ describe('TreeService', () => {
     expect(treeService.loadNextLevel$.next).toHaveBeenCalledTimes(1);
   });
 
+  it('fires "loadNextLevel" if children are provided as empty array', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      emitLoadNextLevel: true,
+      children: []
+    });
+
+    masterTree.switchFoldingType();
+
+    spyOn(treeService.loadNextLevel$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.loadNextLevel$.next).toHaveBeenCalled();
+  });
+
   it('not fires "loadNextLevel" if "loadChildren" function is provided', () => {
     const masterTree = new Tree({
       value: 'Master',
-      hasChildren: true,
+      emitLoadNextLevel: true,
       loadChildren: (callback) => {
         setTimeout(() => {
           callback([
@@ -317,7 +333,7 @@ describe('TreeService', () => {
   it('not fires "loadNextLevel" if children are provided', () => {
     const masterTree = new Tree({
       value: 'Master',
-      hasChildren: true,
+      emitLoadNextLevel: true,
       children: [
         { value: '1' },
         { value: '2' },
