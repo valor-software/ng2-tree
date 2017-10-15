@@ -15,7 +15,7 @@ import { Observable, Subject } from 'rxjs/Rx';
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeDraggableEvent } from './draggable/draggable.events';
-import {isEmpty} from './utils/fn.utils'
+import {isEmpty} from './utils/fn.utils';
 
 @Injectable()
 export class TreeService {
@@ -114,7 +114,7 @@ export class TreeService {
     const shouldLoadNextLevel = tree.node.emitLoadNextLevel &&
       !tree.node.loadChildren &&
       !tree.childrenAreBeingLoaded() &&
-      (!tree.children ||isEmpty(tree.children));
+      (!tree.children || isEmpty(tree.children));
 
       if (shouldLoadNextLevel) {
         tree.loadingChildrenRequested();
