@@ -25,7 +25,8 @@ export interface TreeModel {
   emitLoadNextLevel?: boolean;
   _status?: TreeStatus;
   _foldingType?: FoldingType;
-  }
+  [additionalData: string]: any;
+}
 
 export interface CssClasses {
   /* The class or classes that should be added to the expanded node */

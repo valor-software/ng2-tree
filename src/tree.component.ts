@@ -1,6 +1,6 @@
 import {
   Input, Component, OnInit, EventEmitter, Output, Inject, OnChanges, SimpleChanges, ViewChild,
-  OnDestroy
+  OnDestroy, TemplateRef, ContentChild
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import * as TreeTypes from './tree.types';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'tree',
-  template: `<tree-internal #rootComponent [tree]="tree" [settings]="settings"></tree-internal>`,
+  template: `<tree-internal #rootComponent [tree]="tree" [settings]="settings" [template]="template"></tree-internal>`,
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit, OnChanges, OnDestroy {
@@ -51,6 +51,8 @@ public loadNextLevel: EventEmitter<any> = new EventEmitter();
 
   public tree: Tree;
   @ViewChild('rootComponent') public rootComponent;
+
+  @ContentChild(TemplateRef) public template;
 
   private subscriptions: Subscription[] = [];
 
