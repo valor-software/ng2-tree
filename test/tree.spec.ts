@@ -1,5 +1,5 @@
 import { Tree } from '../src/tree';
-import { TreeModel, TreeModelSettings, FoldingType, CssClasses } from '../src/tree.types';
+import { TreeModel, TreeModelSettings, FoldingType, CssClasses, ChildrenLoadingFunction } from '../src/tree.types';
 
 describe('Tree', () => {
   it('should detect empty string', () => {
@@ -1085,6 +1085,17 @@ describe('Tree', () => {
     expect(masterTree.children[0].leftMenuTemplate).toEqual('');
     expect(masterTree.children[1].leftMenuTemplate).toEqual('<i class="navigation"></i>');
   });
+
+  it('should not load children when they are already loaded', () => {
+      const model: TreeModel = {
+        value: 'root',
+      };
+
+      const tree: Tree = new Tree(model);
+      spyOn(tree, 'childrenWereLoaded').and.returnValue(true);
+
+      expect(tree.childrenShouldBeLoaded()).toBe(false);
+   });
 
   it('should load children when hasChildren is true', () => {
 
