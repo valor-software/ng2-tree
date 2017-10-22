@@ -5,7 +5,8 @@ import {
   NodeMovedEvent,
   NodeRemovedEvent,
   NodeRenamedEvent,
-  NodeSelectedEvent
+  NodeSelectedEvent,
+  LoadNextLevelEvent
 } from './tree.events';
 import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
@@ -14,6 +15,7 @@ import { Observable, Subject } from 'rxjs/Rx';
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeDraggableEvent } from './draggable/draggable.events';
+import {isEmpty} from './utils/fn.utils';
 
 @Injectable()
 export class TreeService {
@@ -24,10 +26,11 @@ export class TreeService {
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
   public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
   public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
+  public loadNextLevel$: Subject<LoadNextLevelEvent> = new Subject<LoadNextLevelEvent>();
 
   private controllers: Map<string | number, TreeController> = new Map();
 
-  public constructor(@Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
+  public constructor( @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
     this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
   }
 
@@ -58,6 +61,9 @@ export class TreeService {
   public fireNodeSwitchFoldingType(tree: Tree): void {
     if (tree.isNodeExpanded()) {
       this.fireNodeExpanded(tree);
+      if (this.shouldFireLoadNextLevel(tree)) {
+        this.fireLoadNextLevel(tree);
+      }
     } else if (tree.isNodeCollapsed()) {
       this.fireNodeCollapsed(tree);
     }
@@ -69,6 +75,10 @@ export class TreeService {
 
   private fireNodeCollapsed(tree: Tree): void {
     this.nodeCollapsed$.next(new NodeCollapsedEvent(tree));
+  }
+
+  private fireLoadNextLevel(tree: Tree): void {
+    this.loadNextLevel$.next(new LoadNextLevelEvent(tree));
   }
 
   public draggedStream(tree: Tree, element: ElementRef): Observable<NodeDraggableEvent> {
@@ -97,5 +107,19 @@ export class TreeService {
 
   public hasController(id: string | number): boolean {
     return this.controllers.has(id);
+  }
+
+  private shouldFireLoadNextLevel(tree: Tree): boolean {
+
+    const shouldLoadNextLevel = tree.node.emitLoadNextLevel &&
+      !tree.node.loadChildren &&
+      !tree.childrenAreBeingLoaded() &&
+      (!tree.children || isEmpty(tree.children));
+
+      if (shouldLoadNextLevel) {
+        tree.loadingChildrenRequested();
+      }
+
+      return shouldLoadNextLevel;
   }
 }

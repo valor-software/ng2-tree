@@ -46,6 +46,9 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   public nodeCollapsed: EventEmitter<any> = new EventEmitter();
 
+@Output()
+public loadNextLevel: EventEmitter<any> = new EventEmitter();
+
   public tree: Tree;
   @ViewChild('rootComponent') public rootComponent;
 
@@ -89,6 +92,10 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
 
     this.subscriptions.push(this.treeService.nodeCollapsed$.subscribe((e: NodeEvent) => {
       this.nodeCollapsed.emit(e);
+    }));
+
+    this.subscriptions.push(this.treeService.loadNextLevel$.subscribe((e: NodeEvent) => {
+      this.loadNextLevel.emit(e);
     }));
   }
 
