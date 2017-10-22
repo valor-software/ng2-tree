@@ -85,4 +85,9 @@ export class TreeController {
       this.tree.setChildren(children);
     }
   }
+
+  public startRenaming(): void {
+    this.tree.markAsBeingRenamed();
+
+  }
 }

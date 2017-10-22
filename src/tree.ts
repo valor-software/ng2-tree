@@ -24,7 +24,6 @@ export class Tree {
   private _children: Tree[];
   private _loadChildren: ChildrenLoadingFunction;
   private _childrenLoadingState: ChildrenLoadingState = ChildrenLoadingState.NotStarted;
-
   private _childrenAsyncOnce: () => Observable<Tree[]> = once(() => {
     return new Observable((observer: Observer<Tree[]>) => {
       setTimeout(() => {
@@ -91,7 +90,7 @@ export class Tree {
     this.parent = parent;
     this.node = Object.assign(omit(model, 'children') as TreeModel, {
       settings: TreeModelSettings.merge(model, get(parent, 'node') as TreeModel)
-    }) as TreeModel;
+    }, { emitLoadNextLevel: model.emitLoadNextLevel === true }) as TreeModel;
 
     if (isFunction(this.node.loadChildren)) {
       this._loadChildren = this.node.loadChildren;
@@ -108,6 +107,10 @@ export class Tree {
 
   public hasDeferredChildren(): boolean {
     return typeof this._loadChildren === 'function';
+  }
+  /* Setting the children loading state to Loading since a request was dispatched to the client */
+  public loadingChildrenRequested(): void {
+    this._childrenLoadingState = ChildrenLoadingState.Loading;
   }
 
   /**
@@ -140,7 +143,7 @@ export class Tree {
    * @returns {boolean} A flag indicating that children should be loaded for the current node.
    */
   public childrenShouldBeLoaded(): boolean {
-    return !!this._loadChildren;
+    return !!this._loadChildren || this.node.emitLoadNextLevel === true;
   }
 
   /**
@@ -337,7 +340,7 @@ export class Tree {
    * @returns {boolean} A flag indicating whether or not this tree is a "Branch".
    */
   public isBranch(): boolean {
-    return Array.isArray(this._children);
+    return this.node.emitLoadNextLevel === true || Array.isArray(this._children);
   }
 
   /**
@@ -411,7 +414,6 @@ export class Tree {
     if (this.isLeaf() || !this.hasChildren()) {
       return;
     }
-
     this.node._foldingType = this.isNodeExpanded() ? FoldingType.Collapsed : FoldingType.Expanded;
   }
 
