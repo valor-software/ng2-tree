@@ -1,4 +1,4 @@
-import { Component, ElementRef, TemplateRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, TemplateRef, Inject, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import * as TreeTypes from './tree.types';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
@@ -104,6 +104,10 @@ export class TreeInternalComponent implements OnInit, OnDestroy {
           this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, this.tree);
         }
       }));
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    this.controller = new TreeController(this);
   }
 
   public ngOnDestroy(): void {

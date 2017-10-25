@@ -60,5 +60,6 @@ describe('TreeComponent (the one that wraps TreeInternalComponent)', () => {
 
     expect(componentInstance.tree.value).toEqual('42');
     expect(componentInstance.treeModel.value).toEqual('42');
+    expect(componentInstance.rootComponent.controller.tree.value).toEqual('42');
   });
 });
