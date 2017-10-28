@@ -1,4 +1,4 @@
-import { Component, ElementRef, TemplateRef, Inject, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, TemplateRef, Inject, Input, OnDestroy, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import * as TreeTypes from './tree.types';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
@@ -55,7 +55,7 @@ import { get } from './utils/fn.utils';
   </ul>
   `
 })
-export class TreeInternalComponent implements OnInit, OnDestroy {
+export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public tree: Tree;
 
