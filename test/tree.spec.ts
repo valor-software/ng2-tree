@@ -1086,4 +1086,32 @@ describe('Tree', () => {
     expect(masterTree.children[1].leftMenuTemplate).toEqual('<i class="navigation"></i>');
   });
 
+  it('should load children when hasChildren is true', () => {
+
+    const model: TreeModel = {
+      value: 'root',
+      emitLoadNextLevel: true,
+      id: 6,
+    };
+
+    const tree: Tree = new Tree(model);
+
+    expect(tree.hasChildren).toBeTruthy();
+    expect(tree.childrenShouldBeLoaded()).toBeTruthy();
+
+  });
+
+  it('should be considered as a branch if hasChildren is true', () => {
+
+    const model: TreeModel = {
+      value: 'root',
+      emitLoadNextLevel: true,
+      id: 6,
+    };
+
+    const tree: Tree = new Tree(model);
+
+    expect(tree.isBranch()).toBeTruthy();
+  });
+
 });

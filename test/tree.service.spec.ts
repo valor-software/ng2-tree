@@ -255,4 +255,114 @@ describe('TreeService', () => {
     expect(treeService.nodeCollapsed$.next).toHaveBeenCalled();
     expect(treeService.nodeExpanded$.next).not.toHaveBeenCalled();
   });
+
+  it('fires "loadNextLevel" event when expanding node with hasChildren property set to true', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      emitLoadNextLevel: true
+    });
+
+    masterTree.switchFoldingType();
+
+    spyOn(treeService.loadNextLevel$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.loadNextLevel$.next).toHaveBeenCalled();
+  });
+
+  it('fires "loadNextLevel" only once', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      emitLoadNextLevel: true
+    });
+
+    masterTree.switchFoldingType();
+    masterTree.switchFoldingType();
+    masterTree.switchFoldingType();
+
+    spyOn(treeService.loadNextLevel$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.loadNextLevel$.next).toHaveBeenCalledTimes(1);
+  });
+
+  it('fires "loadNextLevel" if children are provided as empty array', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      emitLoadNextLevel: true,
+      children: []
+    });
+
+    masterTree.switchFoldingType();
+
+    spyOn(treeService.loadNextLevel$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.loadNextLevel$.next).toHaveBeenCalled();
+  });
+
+  it('not fires "loadNextLevel" if "loadChildren" function is provided', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      emitLoadNextLevel: true,
+      loadChildren: (callback) => {
+        setTimeout(() => {
+          callback([
+            { value: '1' },
+            { value: '2' },
+            { value: '3' }
+          ]);
+
+        });
+      }
+    });
+
+    masterTree.switchFoldingType();
+
+
+    spyOn(treeService.loadNextLevel$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.loadNextLevel$.next).not.toHaveBeenCalled();
+  });
+
+  it('not fires "loadNextLevel" if children are provided', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+      emitLoadNextLevel: true,
+      children: [
+        { value: '1' },
+        { value: '2' },
+        { value: '3' }
+      ]
+    });
+
+    masterTree.switchFoldingType();
+
+    spyOn(treeService.loadNextLevel$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.loadNextLevel$.next).not.toHaveBeenCalled();
+  });
+
+  it('not fires "loadNextLevel" event if "hasChildren" is false or does not exists', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+    });
+
+    masterTree.switchFoldingType();
+
+    spyOn(treeService.loadNextLevel$, 'next');
+
+    treeService.fireNodeSwitchFoldingType(masterTree);
+
+    expect(treeService.loadNextLevel$.next).not.toHaveBeenCalled();
+  });
+
+
 });
