@@ -12,6 +12,7 @@
   - [tree](#tree)
   - [[tree]](#tree)
     - [Load children asynchronously](#load-children-asynchronously)
+    - [Load children using ngrx](#load-children-using-ngrx)
     - [Configure node via TreeModelSettings](#configure-node-via-treemodelsettings)
   - [[settings]](#settings)
   - [`Tree` class](#tree-class)
@@ -23,6 +24,7 @@
     - [NodeRenamedEvent](#noderenamedevent)
     - [NodeExpandedEvent](#nodeexpandedevent)
     - [NodeCollapsedEvent](#nodecollapsedevent)
+    - [LoadNextLevelEvent](#loadnextlevelevent)
 - [:gun: Controller](#gun-controller)
     - [select - selecting a node](#select---selecting-a-node)
     - [isSelected - checks whether a node is selected](#isselected---checks-whether-a-node-is-selected)
@@ -31,6 +33,7 @@
     - [expand - expands a node](#expand---expands-a-node)
     - [isExpanded - checks wheather a node is expanded](#isexpanded---checks-wheather-a-node-is-expanded)
     - [rename - renames a node (changes its value underneath)](#rename---renames-a-node-changes-its-value-underneath)
+    - [startRenaming - changes the node template to edit template (Let the user type the new name)](#startRenaming---changes-the-node-template-to-edit-template-Let-the-user-type-the-new-name)
     - [remove - removes a node from the tree](#remove---removes-a-node-from-the-tree)
     - [addChild - creates a new child node](#addchild---creates-a-new-child-node)
   - [changeNodeId - changes node's id](#changenodeid---changes-nodes-id)
@@ -144,7 +147,8 @@ Here is the fully stuffed *tree* tag that you can use in your templates:
       (nodeMoved)="handleMoved($event)"
       (nodeCreated)="handleCreated($event)"
       (nodeExpanded)="handleExpanded($event)"
-      (nodeCollapsed)="handleCollapsed($event)">
+      (nodeCollapsed)="handleCollapsed($event)"
+      (loadNextLevel)="handleNextLevel($event)">
     </tree>
 ```
 
@@ -275,6 +279,27 @@ Another worth noting thing is `loadChildren`. This function on `TreeModel` allow
 
 Node that defines this function is collapsed by default. At the moment of clicking 'Expand' arrow, it starts loading its children by calling given function.
 If `loadChildren` function is given to the node - `children` property is ignored. For more details - have a look at the [Demo](#eyes-demo).
+
+#### Load children using ngrx
+
+You can also load children by changing the tree state using ngrx.
+The tree can emit an appropriate event notify you to dispatch new action in order to load the branch's children.
+
+To enable this feature you should set the ```TreeModel.emitLoadNextLevel``` property to true:
+ 
+ ```typscript
+ const model: TreeModel = {
+ emitLoadNextLevel : true
+ }
+ ```
+
+Now on the first time the node is expanded a __LoadNextLevelEvent__ will be fired (via the __loadNextLevel__ EventEmitter in the tree) containing the node that requested the additional loading.
+
+In your BL make sure you change the tree state and add the children to the model.
+
+In addition the regular __NodeExpanded__ event will be fired.
+
+__NOTICE__: if both ```emitLoadNextLevel``` and ```loadChildren``` are provided, the tree will ignore the ```emitLoadNextLevel``` and the ```LoadNectLevelEvent``` won't be fired.
 
 #### Configure node via TreeModelSettings
 
@@ -480,6 +505,24 @@ You can subscribe to `NodeCollapsedEvent` by attaching listener to `(nodeCollaps
 {node: <Tree>{...}}
 ```
 
+#### LoadNextLevelEvent
+
+You can subscribe to `LoadNextLevelEvent` by attaching listener to `(loadNextLevel)` attribute.
+Relevant for loading children via ngrx.
+
+```html
+    <tree
+      [tree]="tree"
+      (loadNextLevel)="handleNextLevel($event)">
+    </tree>
+```
+
+`LoadNextLevelEvent` has a `node` property of type `Tree`, which contains a node requesting loading the next level.
+
+```typescript
+{node: <Tree>{...}}
+```
+
 ## :gun: Controller
 First of all you should know how to get a controller of a particular node. You can get a controller of a node only if you set an id property of a node. For example, your tree structure should look like:
 
@@ -614,6 +657,14 @@ oopNodeController.rename('new value');
 ```
 
 This method accepts a string and sets it as a node's new value, this action also fires rename event.
+
+#### startRenaming - changes the node template to edit template (Let the user type the new name)
+
+```typescript
+oopNodeController.startRenaming();
+```
+
+After the user entered the new name a rename event will be fired.
 
 #### remove - removes a node from the tree
 
