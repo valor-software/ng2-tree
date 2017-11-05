@@ -7,7 +7,7 @@ import {
   EventEmitter,
   HostListener,
   Inject,
-  Renderer
+  Renderer2
 } from '@angular/core';
 import { NodeEditableEvent, NodeEditableEventAction } from './editable.events';
 
@@ -23,14 +23,18 @@ export class NodeEditableDirective implements OnInit {
   @Output()
   public valueChanged: EventEmitter<NodeEditableEvent> = new EventEmitter<NodeEditableEvent>(false);
 
-  public constructor(@Inject(Renderer) private renderer: Renderer,
+  public constructor(@Inject(Renderer2) private renderer: Renderer2,
                      @Inject(ElementRef) private elementRef: ElementRef) {
   }
 
   public ngOnInit(): void {
     const nativeElement = this.elementRef.nativeElement;
-    this.renderer.invokeElementMethod(nativeElement, 'focus', []);
-    this.renderer.setElementProperty(nativeElement, 'value', this.nodeValue);
+
+    if (nativeElement) {
+      nativeElement.focus();
+    }
+
+    this.renderer.setProperty(nativeElement, 'value', this.nodeValue);
   }
 
   @HostListener('keyup.enter', ['$event.target.value'])

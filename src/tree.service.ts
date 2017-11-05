@@ -34,7 +34,7 @@ export class TreeService {
     this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
   }
 
-  public unselectStream(tree: Tree): Observable<any> {
+  public unselectStream(tree: Tree): Observable<NodeSelectedEvent> {
     return this.nodeSelected$.filter((e: NodeSelectedEvent) => tree !== e.node);
   }
 

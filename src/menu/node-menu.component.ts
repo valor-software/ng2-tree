@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Output, Renderer, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component, EventEmitter, Output, Inject, OnDestroy, OnInit, ViewChild, Renderer2
+} from '@angular/core';
 import { NodeMenuService } from './node-menu.service';
 import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuAction } from './menu.events';
 import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
@@ -48,13 +50,13 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
 
   private disposersForGlobalListeners: Function[] = [];
 
-  public constructor(@Inject(Renderer) private renderer: Renderer,
+  public constructor(@Inject(Renderer2) private renderer: Renderer2,
                      @Inject(NodeMenuService) private nodeMenuService: NodeMenuService) {
   }
 
   public ngOnInit(): void {
-    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'keyup', this.closeMenu.bind(this)));
-    this.disposersForGlobalListeners.push(this.renderer.listenGlobal('document', 'mousedown', this.closeMenu.bind(this)));
+    this.disposersForGlobalListeners.push(this.renderer.listen('document', 'keyup', this.closeMenu.bind(this)));
+    this.disposersForGlobalListeners.push(this.renderer.listen('document', 'mousedown', this.closeMenu.bind(this)));
   }
 
   public ngOnDestroy(): void {
