@@ -15,8 +15,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--8-1!../node_modules/postcss-loader/index.js??postcss!./styles.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--8-1!../node_modules/postcss-loader/index.js??postcss!./styles.css");
+		module.hot.accept("!!../node_modules/css-loader/index.js??ref--7-1!../node_modules/postcss-loader/index.js??postcss!./styles.css", function() {
+			var newContent = require("!!../node_modules/css-loader/index.js??ref--7-1!../node_modules/postcss-loader/index.js??postcss!./styles.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -42,8 +42,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../css-loader/index.js??ref--8-1!../../../postcss-loader/index.js??postcss!./alertify.css", function() {
-			var newContent = require("!!../../../css-loader/index.js??ref--8-1!../../../postcss-loader/index.js??postcss!./alertify.css");
+		module.hot.accept("!!../../../css-loader/index.js??ref--7-1!../../../postcss-loader/index.js??postcss!./alertify.css", function() {
+			var newContent = require("!!../../../css-loader/index.js??ref--7-1!../../../postcss-loader/index.js??postcss!./alertify.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -69,8 +69,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../css-loader/index.js??ref--8-1!../../../../postcss-loader/index.js??postcss!./default.css", function() {
-			var newContent = require("!!../../../../css-loader/index.js??ref--8-1!../../../../postcss-loader/index.js??postcss!./default.css");
+		module.hot.accept("!!../../../../css-loader/index.js??ref--7-1!../../../../postcss-loader/index.js??postcss!./default.css", function() {
+			var newContent = require("!!../../../../css-loader/index.js??ref--7-1!../../../../postcss-loader/index.js??postcss!./default.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -239,8 +239,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../css-loader/index.js??ref--8-1!../../postcss-loader/index.js??postcss!./font-awesome.min.css", function() {
-			var newContent = require("!!../../css-loader/index.js??ref--8-1!../../postcss-loader/index.js??postcss!./font-awesome.min.css");
+		module.hot.accept("!!../../css-loader/index.js??ref--7-1!../../postcss-loader/index.js??postcss!./font-awesome.min.css", function() {
+			var newContent = require("!!../../css-loader/index.js??ref--7-1!../../postcss-loader/index.js??postcss!./font-awesome.min.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -546,7 +546,7 @@ function updateLink(linkElement, obj) {
 
 /***/ }),
 
-/***/ 3:
+/***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("../../../../alertifyjs/build/css/alertify.css");
@@ -557,5 +557,5 @@ module.exports = __webpack_require__("../../../../../src/styles.css");
 
 /***/ })
 
-},[3]);
+},[2]);
 //# sourceMappingURL=styles.bundle.js.map

@@ -1,43 +1,3588 @@
-webpackJsonp(["scripts"],{
 
-/***/ "../../../../raw-loader/index.js!../../../../alertifyjs/build/alertify.js":
-/***/ (function(module, exports) {
+/**
+ * alertifyjs 1.10.0 http://alertifyjs.com
+ * AlertifyJS is a javascript framework for developing pretty browser dialogs and notifications.
+ * Copyright 2017 Mohammad Younes <Mohammad@alertifyjs.com> (http://alertifyjs.com) 
+ * Licensed under GPL 3 <https://opensource.org/licenses/gpl-3.0>*/
+( function ( window ) {
+    'use strict';
+    
+    /**
+     * Keys enum
+     * @type {Object}
+     */
+    var keys = {
+        ENTER: 13,
+        ESC: 27,
+        F1: 112,
+        F12: 123,
+        LEFT: 37,
+        RIGHT: 39
+    };
+    /**
+     * Default options 
+     * @type {Object}
+     */
+    var defaults = {
+        autoReset:true,
+        basic:false,
+        closable:true,
+        closableByDimmer:true,
+        frameless:false,
+        maintainFocus:true, //global default not per instance, applies to all dialogs
+        maximizable:true,
+        modal:true,
+        movable:true,
+        moveBounded:false,
+        overflow:true,
+        padding: true,
+        pinnable:true,
+        pinned:true,
+        preventBodyShift:false, //global default not per instance, applies to all dialogs
+        resizable:true,
+        startMaximized:false,
+        transition:'pulse',
+        notifier:{
+            delay:5,
+            position:'bottom-right',
+            closeButton:false
+        },
+        glossary:{
+            title:'AlertifyJS',
+            ok: 'OK',
+            cancel: 'Cancel',
+            acccpt: 'Accept',
+            deny: 'Deny',
+            confirm: 'Confirm',
+            decline: 'Decline',
+            close: 'Close',
+            maximize: 'Maximize',
+            restore: 'Restore',
+        },
+        theme:{
+            input:'ajs-input',
+            ok:'ajs-ok',
+            cancel:'ajs-cancel',
+        }
+    };
+    
+    //holds open dialogs instances
+    var openDialogs = [];
 
-module.exports = "/**\r\n * alertifyjs 1.10.0 http://alertifyjs.com\r\n * AlertifyJS is a javascript framework for developing pretty browser dialogs and notifications.\r\n * Copyright 2017 Mohammad Younes <Mohammad@alertifyjs.com> (http://alertifyjs.com) \r\n * Licensed under GPL 3 <https://opensource.org/licenses/gpl-3.0>*/\r\n( function ( window ) {\r\n    'use strict';\r\n    \r\n    /**\r\n     * Keys enum\r\n     * @type {Object}\r\n     */\r\n    var keys = {\r\n        ENTER: 13,\r\n        ESC: 27,\r\n        F1: 112,\r\n        F12: 123,\r\n        LEFT: 37,\r\n        RIGHT: 39\r\n    };\r\n    /**\r\n     * Default options \r\n     * @type {Object}\r\n     */\r\n    var defaults = {\r\n        autoReset:true,\r\n        basic:false,\r\n        closable:true,\r\n        closableByDimmer:true,\r\n        frameless:false,\r\n        maintainFocus:true, //global default not per instance, applies to all dialogs\r\n        maximizable:true,\r\n        modal:true,\r\n        movable:true,\r\n        moveBounded:false,\r\n        overflow:true,\r\n        padding: true,\r\n        pinnable:true,\r\n        pinned:true,\r\n        preventBodyShift:false, //global default not per instance, applies to all dialogs\r\n        resizable:true,\r\n        startMaximized:false,\r\n        transition:'pulse',\r\n        notifier:{\r\n            delay:5,\r\n            position:'bottom-right',\r\n            closeButton:false\r\n        },\r\n        glossary:{\r\n            title:'AlertifyJS',\r\n            ok: 'OK',\r\n            cancel: 'Cancel',\r\n            acccpt: 'Accept',\r\n            deny: 'Deny',\r\n            confirm: 'Confirm',\r\n            decline: 'Decline',\r\n            close: 'Close',\r\n            maximize: 'Maximize',\r\n            restore: 'Restore',\r\n        },\r\n        theme:{\r\n            input:'ajs-input',\r\n            ok:'ajs-ok',\r\n            cancel:'ajs-cancel',\r\n        }\r\n    };\r\n    \r\n    //holds open dialogs instances\r\n    var openDialogs = [];\r\n\r\n    /**\r\n     * [Helper]  Adds the specified class(es) to the element.\r\n     *\r\n     * @element {node}      The element\r\n     * @className {string}  One or more space-separated classes to be added to the class attribute of the element.\r\n     * \r\n     * @return {undefined}\r\n     */\r\n    function addClass(element,classNames){\r\n        element.className += ' ' + classNames;\r\n    }\r\n    \r\n    /**\r\n     * [Helper]  Removes the specified class(es) from the element.\r\n     *\r\n     * @element {node}      The element\r\n     * @className {string}  One or more space-separated classes to be removed from the class attribute of the element.\r\n     * \r\n     * @return {undefined}\r\n     */\r\n    function removeClass(element, classNames) {\r\n        var original = element.className.split(' ');\r\n        var toBeRemoved = classNames.split(' ');\r\n        for (var x = 0; x < toBeRemoved.length; x += 1) {\r\n            var index = original.indexOf(toBeRemoved[x]);\r\n            if (index > -1){\r\n                original.splice(index,1);\r\n            }\r\n        }\r\n        element.className = original.join(' ');\r\n    }\r\n\r\n    /**\r\n     * [Helper]  Checks if the document is RTL\r\n     *\r\n     * @return {Boolean} True if the document is RTL, false otherwise.\r\n     */\r\n    function isRightToLeft(){\r\n        return window.getComputedStyle(document.body).direction === 'rtl';\r\n    }\r\n    /**\r\n     * [Helper]  Get the document current scrollTop\r\n     *\r\n     * @return {Number} current document scrollTop value\r\n     */\r\n    function getScrollTop(){\r\n        return ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);\r\n    }\r\n\r\n    /**\r\n     * [Helper]  Get the document current scrollLeft\r\n     *\r\n     * @return {Number} current document scrollLeft value\r\n     */\r\n    function getScrollLeft(){\r\n        return ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);\r\n    }\r\n\r\n    /**\r\n    * Helper: clear contents\r\n    *\r\n    */\r\n    function clearContents(element){\r\n        while (element.lastChild) {\r\n            element.removeChild(element.lastChild);\r\n        }\r\n    }\r\n    /**\r\n     * Extends a given prototype by merging properties from base into sub.\r\n     *\r\n     * @sub {Object} sub The prototype being overwritten.\r\n     * @base {Object} base The prototype being written.\r\n     *\r\n     * @return {Object} The extended prototype.\r\n     */\r\n    function copy(src) {\r\n        if(null === src){\r\n            return src;\r\n        }\r\n        var cpy;\r\n        if(Array.isArray(src)){\r\n            cpy = [];\r\n            for(var x=0;x<src.length;x+=1){\r\n                cpy.push(copy(src[x]));\r\n            }\r\n            return cpy;\r\n        }\r\n      \r\n        if(src instanceof Date){\r\n            return new Date(src.getTime());\r\n        }\r\n      \r\n        if(src instanceof RegExp){\r\n            cpy = new RegExp(src.source);\r\n            cpy.global = src.global;\r\n            cpy.ignoreCase = src.ignoreCase;\r\n            cpy.multiline = src.multiline;\r\n            cpy.lastIndex = src.lastIndex;\r\n            return cpy;\r\n        }\r\n        \r\n        if(typeof src === 'object'){\r\n            cpy = {};\r\n            // copy dialog pototype over definition.\r\n            for (var prop in src) {\r\n                if (src.hasOwnProperty(prop)) {\r\n                    cpy[prop] = copy(src[prop]);\r\n                }\r\n            }\r\n            return cpy;\r\n        }\r\n        return src;\r\n    }\r\n    /**\r\n      * Helper: destruct the dialog\r\n      *\r\n      */\r\n    function destruct(instance, initialize){\r\n        //delete the dom and it's references.\r\n        var root = instance.elements.root;\r\n        root.parentNode.removeChild(root);\r\n        delete instance.elements;\r\n        //copy back initial settings.\r\n        instance.settings = copy(instance.__settings);\r\n        //re-reference init function.\r\n        instance.__init = initialize;\r\n        //delete __internal variable to allow re-initialization.\r\n        delete instance.__internal;\r\n    }\r\n\r\n    /**\r\n     * Use a closure to return proper event listener method. Try to use\r\n     * `addEventListener` by default but fallback to `attachEvent` for\r\n     * unsupported browser. The closure simply ensures that the test doesn't\r\n     * happen every time the method is called.\r\n     *\r\n     * @param    {Node}     el    Node element\r\n     * @param    {String}   event Event type\r\n     * @param    {Function} fn    Callback of event\r\n     * @return   {Function}\r\n     */\r\n    var on = (function () {\r\n        if (document.addEventListener) {\r\n            return function (el, event, fn, useCapture) {\r\n                el.addEventListener(event, fn, useCapture === true);\r\n            };\r\n        } else if (document.attachEvent) {\r\n            return function (el, event, fn) {\r\n                el.attachEvent('on' + event, fn);\r\n            };\r\n        }\r\n    }());\r\n\r\n    /**\r\n     * Use a closure to return proper event listener method. Try to use\r\n     * `removeEventListener` by default but fallback to `detachEvent` for\r\n     * unsupported browser. The closure simply ensures that the test doesn't\r\n     * happen every time the method is called.\r\n     *\r\n     * @param    {Node}     el    Node element\r\n     * @param    {String}   event Event type\r\n     * @param    {Function} fn    Callback of event\r\n     * @return   {Function}\r\n     */\r\n    var off = (function () {\r\n        if (document.removeEventListener) {\r\n            return function (el, event, fn, useCapture) {\r\n                el.removeEventListener(event, fn, useCapture === true);\r\n            };\r\n        } else if (document.detachEvent) {\r\n            return function (el, event, fn) {\r\n                el.detachEvent('on' + event, fn);\r\n            };\r\n        }\r\n    }());\r\n\r\n    /**\r\n     * Prevent default event from firing\r\n     *\r\n     * @param  {Event} event Event object\r\n     * @return {undefined}\r\n\r\n    function prevent ( event ) {\r\n        if ( event ) {\r\n            if ( event.preventDefault ) {\r\n                event.preventDefault();\r\n            } else {\r\n                event.returnValue = false;\r\n            }\r\n        }\r\n    }\r\n    */\r\n    var transition = (function () {\r\n        var t, type;\r\n        var supported = false;\r\n        var transitions = {\r\n            'animation'        : 'animationend',\r\n            'OAnimation'       : 'oAnimationEnd oanimationend',\r\n            'msAnimation'      : 'MSAnimationEnd',\r\n            'MozAnimation'     : 'animationend',\r\n            'WebkitAnimation'  : 'webkitAnimationEnd'\r\n        };\r\n\r\n        for (t in transitions) {\r\n            if (document.documentElement.style[t] !== undefined) {\r\n                type = transitions[t];\r\n                supported = true;\r\n                break;\r\n            }\r\n        }\r\n\r\n        return {\r\n            type: type,\r\n            supported: supported\r\n        };\r\n    }());\r\n\r\n    /**\r\n    * Creates event handler delegate that sends the instance as last argument.\r\n    * \r\n    * @return {Function}    a function wrapper which sends the instance as last argument.\r\n    */\r\n    function delegate(context, method) {\r\n        return function () {\r\n            if (arguments.length > 0) {\r\n                var args = [];\r\n                for (var x = 0; x < arguments.length; x += 1) {\r\n                    args.push(arguments[x]);\r\n                }\r\n                args.push(context);\r\n                return method.apply(context, args);\r\n            }\r\n            return method.apply(context, [null, context]);\r\n        };\r\n    }\r\n    /**\r\n    * Helper for creating a dialog close event.\r\n    * \r\n    * @return {object}\r\n    */\r\n    function createCloseEvent(index, button) {\r\n        return {\r\n            index: index,\r\n            button: button,\r\n            cancel: false\r\n        };\r\n    }\r\n    /**\r\n    * Helper for dispatching events.\r\n    *\r\n    * @param  {string} evenType The type of the event to disptach.\r\n    * @param  {object} instance The dialog instance disptaching the event.\r\n    *\r\n    * @return   {any}   The result of the invoked function.\r\n    */\r\n    function dispatchEvent(eventType, instance) {\r\n        if ( typeof instance.get(eventType) === 'function' ) {\r\n            return instance.get(eventType).call(instance);\r\n        }\r\n    }\r\n\r\n\r\n    /**\r\n     * Super class for all dialogs\r\n     *\r\n     * @return {Object}\t\tbase dialog prototype\r\n     */\r\n    var dialog = (function () {\r\n        var //holds the list of used keys.\r\n            usedKeys = [],\r\n            //dummy variable, used to trigger dom reflow.\r\n            reflow = null,\r\n            //condition for detecting safari\r\n            isSafari = window.navigator.userAgent.indexOf('Safari') > -1 && window.navigator.userAgent.indexOf('Chrome') < 0,\r\n            //dialog building blocks\r\n            templates = {\r\n                dimmer:'<div class=\"ajs-dimmer\"></div>',\r\n                /*tab index required to fire click event before body focus*/\r\n                modal: '<div class=\"ajs-modal\" tabindex=\"0\"></div>',\r\n                dialog: '<div class=\"ajs-dialog\" tabindex=\"0\"></div>',\r\n                reset: '<button class=\"ajs-reset\"></button>',\r\n                commands: '<div class=\"ajs-commands\"><button class=\"ajs-pin\"></button><button class=\"ajs-maximize\"></button><button class=\"ajs-close\"></button></div>',\r\n                header: '<div class=\"ajs-header\"></div>',\r\n                body: '<div class=\"ajs-body\"></div>',\r\n                content: '<div class=\"ajs-content\"></div>',\r\n                footer: '<div class=\"ajs-footer\"></div>',\r\n                buttons: { primary: '<div class=\"ajs-primary ajs-buttons\"></div>', auxiliary: '<div class=\"ajs-auxiliary ajs-buttons\"></div>' },\r\n                button: '<button class=\"ajs-button\"></button>',\r\n                resizeHandle: '<div class=\"ajs-handle\"></div>',\r\n            },\r\n            //common class names\r\n            classes = {\r\n                animationIn: 'ajs-in',\r\n                animationOut: 'ajs-out',\r\n                base: 'alertify',\r\n                basic:'ajs-basic',\r\n                capture: 'ajs-capture',\r\n                closable:'ajs-closable',\r\n                fixed: 'ajs-fixed',\r\n                frameless:'ajs-frameless',\r\n                hidden: 'ajs-hidden',\r\n                maximize: 'ajs-maximize',\r\n                maximized: 'ajs-maximized',\r\n                maximizable:'ajs-maximizable',\r\n                modeless: 'ajs-modeless',\r\n                movable: 'ajs-movable',\r\n                noSelection: 'ajs-no-selection',\r\n                noOverflow: 'ajs-no-overflow',\r\n                noPadding:'ajs-no-padding',\r\n                pin:'ajs-pin',\r\n                pinnable:'ajs-pinnable',\r\n                prefix: 'ajs-',\r\n                resizable: 'ajs-resizable',\r\n                restore: 'ajs-restore',\r\n                shake:'ajs-shake',\r\n                unpinned:'ajs-unpinned',\r\n            };\r\n\r\n        /**\r\n         * Helper: initializes the dialog instance\r\n         * \r\n         * @return\t{Number}\tThe total count of currently open modals.\r\n         */\r\n        function initialize(instance){\r\n            \r\n            if(!instance.__internal){\r\n\r\n                //no need to expose init after this.\r\n                delete instance.__init;\r\n              \r\n                //keep a copy of initial dialog settings\r\n                if(!instance.__settings){\r\n                    instance.__settings = copy(instance.settings);\r\n                }\r\n                //in case the script was included before body.\r\n                //after first dialog gets initialized, it won't be null anymore!\r\n                if(null === reflow){\r\n                    // set tabindex attribute on body element this allows script to give it\r\n                    // focus after the dialog is closed\r\n                    document.body.setAttribute( 'tabindex', '0' );\r\n                }\r\n\r\n                //get dialog buttons/focus setup\r\n                var setup;\r\n                if(typeof instance.setup === 'function'){\r\n                    setup = instance.setup();\r\n                    setup.options = setup.options  || {};\r\n                    setup.focus = setup.focus  || {};\r\n                }else{\r\n                    setup = {\r\n                        buttons:[],\r\n                        focus:{\r\n                            element:null,\r\n                            select:false\r\n                        },\r\n                        options:{\r\n                        }\r\n                    };\r\n                }\r\n                \r\n                //initialize hooks object.\r\n                if(typeof instance.hooks !== 'object'){\r\n                    instance.hooks = {};\r\n                }\r\n\r\n                //copy buttons defintion\r\n                var buttonsDefinition = [];\r\n                if(Array.isArray(setup.buttons)){\r\n                    for(var b=0;b<setup.buttons.length;b+=1){\r\n                        var ref  = setup.buttons[b],\r\n                            cpy = {};\r\n                        for (var i in ref) {\r\n                            if (ref.hasOwnProperty(i)) {\r\n                                cpy[i] = ref[i];\r\n                            }\r\n                        }\r\n                        buttonsDefinition.push(cpy);\r\n                    }\r\n                }\r\n\r\n                var internal = instance.__internal = {\r\n                    /**\r\n                     * Flag holding the open state of the dialog\r\n                     * \r\n                     * @type {Boolean}\r\n                     */\r\n                    isOpen:false,\r\n                    /**\r\n                     * Active element is the element that will receive focus after\r\n                     * closing the dialog. It defaults as the body tag, but gets updated\r\n                     * to the last focused element before the dialog was opened.\r\n                     *\r\n                     * @type {Node}\r\n                     */\r\n                    activeElement:document.body,\r\n                    timerIn:undefined,\r\n                    timerOut:undefined,\r\n                    buttons: buttonsDefinition,\r\n                    focus: setup.focus,\r\n                    options: {\r\n                        title: undefined,\r\n                        modal: undefined,\r\n                        basic:undefined,\r\n                        frameless:undefined,\r\n                        pinned: undefined,\r\n                        movable: undefined,\r\n                        moveBounded:undefined,\r\n                        resizable: undefined,\r\n                        autoReset: undefined,\r\n                        closable: undefined,\r\n                        closableByDimmer: undefined,\r\n                        maximizable: undefined,\r\n                        startMaximized: undefined,\r\n                        pinnable: undefined,\r\n                        transition: undefined,\r\n                        padding:undefined,\r\n                        overflow:undefined,\r\n                        onshow:undefined,\r\n                        onclosing:undefined,\r\n                        onclose:undefined,\r\n                        onfocus:undefined,\r\n                        onmove:undefined,\r\n                        onmoved:undefined,\r\n                        onresize:undefined,\r\n                        onresized:undefined,\r\n                        onmaximize:undefined,\r\n                        onmaximized:undefined,\r\n                        onrestore:undefined,\r\n                        onrestored:undefined\r\n                    },\r\n                    resetHandler:undefined,\r\n                    beginMoveHandler:undefined,\r\n                    beginResizeHandler:undefined,\r\n                    bringToFrontHandler:undefined,\r\n                    modalClickHandler:undefined,\r\n                    buttonsClickHandler:undefined,\r\n                    commandsClickHandler:undefined,\r\n                    transitionInHandler:undefined,\r\n                    transitionOutHandler:undefined,\r\n                    destroy:undefined\r\n                };\r\n\r\n                var elements = {};\r\n                //root node\r\n                elements.root = document.createElement('div');\r\n                \r\n                elements.root.className = classes.base + ' ' + classes.hidden + ' ';\r\n\r\n                elements.root.innerHTML = templates.dimmer + templates.modal;\r\n                \r\n                //dimmer\r\n                elements.dimmer = elements.root.firstChild;\r\n\r\n                //dialog\r\n                elements.modal = elements.root.lastChild;\r\n                elements.modal.innerHTML = templates.dialog;\r\n                elements.dialog = elements.modal.firstChild;\r\n                elements.dialog.innerHTML = templates.reset + templates.commands + templates.header + templates.body + templates.footer + templates.resizeHandle + templates.reset;\r\n\r\n                //reset links\r\n                elements.reset = [];\r\n                elements.reset.push(elements.dialog.firstChild);\r\n                elements.reset.push(elements.dialog.lastChild);\r\n                \r\n                //commands\r\n                elements.commands = {};\r\n                elements.commands.container = elements.reset[0].nextSibling;\r\n                elements.commands.pin = elements.commands.container.firstChild;\r\n                elements.commands.maximize = elements.commands.pin.nextSibling;\r\n                elements.commands.close = elements.commands.maximize.nextSibling;\r\n                \r\n                //header\r\n                elements.header = elements.commands.container.nextSibling;\r\n\r\n                //body\r\n                elements.body = elements.header.nextSibling;\r\n                elements.body.innerHTML = templates.content;\r\n                elements.content = elements.body.firstChild;\r\n\r\n                //footer\r\n                elements.footer = elements.body.nextSibling;\r\n                elements.footer.innerHTML = templates.buttons.auxiliary + templates.buttons.primary;\r\n                \r\n                //resize handle\r\n                elements.resizeHandle = elements.footer.nextSibling;\r\n\r\n                //buttons\r\n                elements.buttons = {};\r\n                elements.buttons.auxiliary = elements.footer.firstChild;\r\n                elements.buttons.primary = elements.buttons.auxiliary.nextSibling;\r\n                elements.buttons.primary.innerHTML = templates.button;\r\n                elements.buttonTemplate = elements.buttons.primary.firstChild;\r\n                //remove button template\r\n                elements.buttons.primary.removeChild(elements.buttonTemplate);\r\n                               \r\n                for(var x=0; x < instance.__internal.buttons.length; x+=1) {\r\n                    var button = instance.__internal.buttons[x];\r\n                    \r\n                    // add to the list of used keys.\r\n                    if(usedKeys.indexOf(button.key) < 0){\r\n                        usedKeys.push(button.key);\r\n                    }\r\n\r\n                    button.element = elements.buttonTemplate.cloneNode();\r\n                    button.element.innerHTML = button.text;\r\n                    if(typeof button.className === 'string' &&  button.className !== ''){\r\n                        addClass(button.element, button.className);\r\n                    }\r\n                    for(var key in button.attrs){\r\n                        if(key !== 'className' && button.attrs.hasOwnProperty(key)){\r\n                            button.element.setAttribute(key, button.attrs[key]);\r\n                        }\r\n                    }\r\n                    if(button.scope === 'auxiliary'){\r\n                        elements.buttons.auxiliary.appendChild(button.element);\r\n                    }else{\r\n                        elements.buttons.primary.appendChild(button.element);\r\n                    }\r\n                }\r\n                //make elements pubic\r\n                instance.elements = elements;\r\n                \r\n                //save event handlers delegates\r\n                internal.resetHandler = delegate(instance, onReset);\r\n                internal.beginMoveHandler = delegate(instance, beginMove);\r\n                internal.beginResizeHandler = delegate(instance, beginResize);\r\n                internal.bringToFrontHandler = delegate(instance, bringToFront);\r\n                internal.modalClickHandler = delegate(instance, modalClickHandler);\r\n                internal.buttonsClickHandler = delegate(instance, buttonsClickHandler);\r\n                internal.commandsClickHandler = delegate(instance, commandsClickHandler);\r\n                internal.transitionInHandler = delegate(instance, handleTransitionInEvent);\r\n                internal.transitionOutHandler = delegate(instance, handleTransitionOutEvent);\r\n\r\n                //settings\r\n                for(var opKey in internal.options){\r\n                    if(setup.options[opKey] !== undefined){\r\n                        // if found in user options\r\n                        instance.set(opKey, setup.options[opKey]);\r\n                    }else if(alertify.defaults.hasOwnProperty(opKey)) {\r\n                        // else if found in defaults options\r\n                        instance.set(opKey, alertify.defaults[opKey]);\r\n                    }else if(opKey === 'title' ) {\r\n                        // else if title key, use alertify.defaults.glossary\r\n                        instance.set(opKey, alertify.defaults.glossary[opKey]);\r\n                    }\r\n                }\r\n\r\n                // allow dom customization\r\n                if(typeof instance.build === 'function'){\r\n                    instance.build();\r\n                }\r\n            }\r\n            \r\n            //add to the end of the DOM tree.\r\n            document.body.appendChild(instance.elements.root);\r\n        }\r\n\r\n        /**\r\n         * Helper: maintains scroll position\r\n         *\r\n         */\r\n        var scrollX, scrollY;\r\n        function saveScrollPosition(){\r\n            scrollX = getScrollLeft();\r\n            scrollY = getScrollTop();\r\n        }\r\n        function restoreScrollPosition(){\r\n            window.scrollTo(scrollX, scrollY);\r\n        }\r\n\r\n        /**\r\n         * Helper: adds/removes no-overflow class from body\r\n         *\r\n         */\r\n        function ensureNoOverflow(){\r\n            var requiresNoOverflow = 0;\r\n            for(var x=0;x<openDialogs.length;x+=1){\r\n                var instance = openDialogs[x];\r\n                if(instance.isModal() || instance.isMaximized()){\r\n                    requiresNoOverflow+=1;\r\n                }\r\n            }\r\n            if(requiresNoOverflow === 0 && document.body.className.indexOf(classes.noOverflow) >= 0){\r\n                //last open modal or last maximized one\r\n                removeClass(document.body, classes.noOverflow);\r\n                preventBodyShift(false);\r\n            }else if(requiresNoOverflow > 0 && document.body.className.indexOf(classes.noOverflow) < 0){\r\n                //first open modal or first maximized one\r\n                preventBodyShift(true);\r\n                addClass(document.body, classes.noOverflow);\r\n            }\r\n        }\r\n        var top = '', topScroll = 0;\r\n        /**\r\n         * Helper: prevents body shift.\r\n         *\r\n         */\r\n        function preventBodyShift(add){\r\n            if(alertify.defaults.preventBodyShift && document.documentElement.scrollHeight > document.documentElement.clientHeight){\r\n                if(add ){//&& openDialogs[openDialogs.length-1].elements.dialog.clientHeight <= document.documentElement.clientHeight){\r\n                    topScroll = scrollY;\r\n                    top = window.getComputedStyle(document.body).top;\r\n                    addClass(document.body, classes.fixed);\r\n                    document.body.style.top = -scrollY + 'px';\r\n                } else {\r\n                    scrollY = topScroll;\r\n                    document.body.style.top = top;\r\n                    removeClass(document.body, classes.fixed);\r\n                    restoreScrollPosition();\r\n                }\r\n            }\r\n        }\r\n\t\t\r\n        /**\r\n         * Sets the name of the transition used to show/hide the dialog\r\n         * \r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         */\r\n        function updateTransition(instance, value, oldValue){\r\n            if(typeof oldValue === 'string'){\r\n                removeClass(instance.elements.root,classes.prefix +  oldValue);\r\n            }\r\n            addClass(instance.elements.root, classes.prefix + value);\r\n            reflow = instance.elements.root.offsetWidth;\r\n        }\r\n\t\t\r\n        /**\r\n         * Toggles the dialog display mode\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updateDisplayMode(instance){\r\n            if(instance.get('modal')){\r\n\r\n                //make modal\r\n                removeClass(instance.elements.root, classes.modeless);\r\n\r\n                //only if open\r\n                if(instance.isOpen()){\r\n                    unbindModelessEvents(instance);\r\n\r\n                    //in case a pinned modless dialog was made modal while open.\r\n                    updateAbsPositionFix(instance);\r\n\r\n                    ensureNoOverflow();\r\n                }\r\n            }else{\r\n                //make modelss\r\n                addClass(instance.elements.root, classes.modeless);\r\n\r\n                //only if open\r\n                if(instance.isOpen()){\r\n                    bindModelessEvents(instance);\r\n\r\n                    //in case pin/unpin was called while a modal is open\r\n                    updateAbsPositionFix(instance);\r\n\r\n                    ensureNoOverflow();\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Toggles the dialog basic view mode \r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updateBasicMode(instance){\r\n            if (instance.get('basic')) {\r\n                // add class\r\n                addClass(instance.elements.root, classes.basic);\r\n            } else {\r\n                // remove class\r\n                removeClass(instance.elements.root, classes.basic);\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Toggles the dialog frameless view mode \r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updateFramelessMode(instance){\r\n            if (instance.get('frameless')) {\r\n                // add class\r\n                addClass(instance.elements.root, classes.frameless);\r\n            } else {\r\n                // remove class\r\n                removeClass(instance.elements.root, classes.frameless);\r\n            }\r\n        }\r\n\t\t\r\n        /**\r\n         * Helper: Brings the modeless dialog to front, attached to modeless dialogs.\r\n         *\r\n         * @param {Event} event Focus event\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function bringToFront(event, instance){\r\n            \r\n            // Do not bring to front if preceeded by an open modal\r\n            var index = openDialogs.indexOf(instance);\r\n            for(var x=index+1;x<openDialogs.length;x+=1){\r\n                if(openDialogs[x].isModal()){\r\n                    return;\r\n                }\r\n            }\r\n\t\t\t\r\n            // Bring to front by making it the last child.\r\n            if(document.body.lastChild !== instance.elements.root){\r\n                document.body.appendChild(instance.elements.root);\r\n                //also make sure its at the end of the list\r\n                openDialogs.splice(openDialogs.indexOf(instance),1);\r\n                openDialogs.push(instance);\r\n                setFocus(instance);\r\n            }\r\n\t\t\t\r\n            return false;\r\n        }\r\n\t\t\r\n        /**\r\n         * Helper: reflects dialogs options updates\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         * @param {String} option The updated option name.\r\n         *\r\n         * @return\t{undefined}\t\r\n         */\r\n        function optionUpdated(instance, option, oldValue, newValue){\r\n            switch(option){\r\n            case 'title':\r\n                instance.setHeader(newValue);\r\n                break;\r\n            case 'modal':\r\n                updateDisplayMode(instance);\r\n                break;\r\n            case 'basic':\r\n                updateBasicMode(instance);\r\n                break;\r\n            case 'frameless':\r\n                updateFramelessMode(instance);\r\n                break;\r\n            case 'pinned':\r\n                updatePinned(instance);\r\n                break;\r\n            case 'closable':\r\n                updateClosable(instance);\r\n                break;\r\n            case 'maximizable':\r\n                updateMaximizable(instance);\r\n                break;\r\n            case 'pinnable':\r\n                updatePinnable(instance);\r\n                break;\r\n            case 'movable':\r\n                updateMovable(instance);\r\n                break;\r\n            case 'resizable':\r\n                updateResizable(instance);\r\n                break;\r\n            case 'transition':\r\n                updateTransition(instance,newValue, oldValue);\r\n                break;\r\n            case 'padding':\r\n                if(newValue){\r\n                    removeClass(instance.elements.root, classes.noPadding);\r\n                }else if(instance.elements.root.className.indexOf(classes.noPadding) < 0){\r\n                    addClass(instance.elements.root, classes.noPadding);\r\n                }\r\n                break;\r\n            case 'overflow':\r\n                if(newValue){\r\n                    removeClass(instance.elements.root, classes.noOverflow);\r\n                }else if(instance.elements.root.className.indexOf(classes.noOverflow) < 0){\r\n                    addClass(instance.elements.root, classes.noOverflow);\r\n                }\r\n                break;\r\n            case 'transition':\r\n                updateTransition(instance,newValue, oldValue);\r\n                break;\r\n            }\r\n\r\n            // internal on option updated event\r\n            if(typeof instance.hooks.onupdate === 'function'){\r\n                instance.hooks.onupdate.call(instance, option, oldValue, newValue);\r\n            }\r\n        }\r\n\t\t\r\n        /**\r\n         * Helper: reflects dialogs options updates\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         * @param {Object} obj The object to set/get a value on/from.\r\n         * @param {Function} callback The callback function to call if the key was found.\r\n         * @param {String|Object} key A string specifying a propery name or a collection of key value pairs.\r\n         * @param {Object} value Optional, the value associated with the key (in case it was a string).\r\n         * @param {String} option The updated option name.\r\n         *\r\n         * @return\t{Object} result object \r\n         *\tThe result objects has an 'op' property, indicating of this is a SET or GET operation.\r\n         *\t\tGET: \r\n         *\t\t- found: a flag indicating if the key was found or not.\r\n         *\t\t- value: the property value.\r\n         *\t\tSET:\r\n         *\t\t- items: a list of key value pairs of the properties being set.\r\n         *\t\t\t\teach contains:\r\n         *\t\t\t\t\t- found: a flag indicating if the key was found or not.\r\n         *\t\t\t\t\t- key: the property key.\r\n         *\t\t\t\t\t- value: the property value.\r\n         */\r\n        function update(instance, obj, callback, key, value){\r\n            var result = {op:undefined, items: [] };\r\n            if(typeof value === 'undefined' && typeof key === 'string') {\r\n                //get\r\n                result.op = 'get';\r\n                if(obj.hasOwnProperty(key)){\r\n                    result.found = true;\r\n                    result.value = obj[key];\r\n                }else{\r\n                    result.found = false;\r\n                    result.value = undefined;\r\n                }\r\n            }\r\n            else\r\n            {\r\n                var old;\r\n                //set\r\n                result.op = 'set';\r\n                if(typeof key === 'object'){\r\n                    //set multiple\r\n                    var args = key;\r\n                    for (var prop in args) {\r\n                        if (obj.hasOwnProperty(prop)) {\r\n                            if(obj[prop] !== args[prop]){\r\n                                old = obj[prop];\r\n                                obj[prop] = args[prop];\r\n                                callback.call(instance,prop, old, args[prop]);\r\n                            }\r\n                            result.items.push({ 'key': prop, 'value': args[prop], 'found':true});\r\n                        }else{\r\n                            result.items.push({ 'key': prop, 'value': args[prop], 'found':false});\r\n                        }\r\n                    }\r\n                } else if (typeof key === 'string'){\r\n                    //set single\r\n                    if (obj.hasOwnProperty(key)) {\r\n                        if(obj[key] !== value){\r\n                            old  = obj[key];\r\n                            obj[key] = value;\r\n                            callback.call(instance,key, old, value);\r\n                        }\r\n                        result.items.push({'key': key, 'value': value , 'found':true});\r\n\r\n                    }else{\r\n                        result.items.push({'key': key, 'value': value , 'found':false});\r\n                    }\r\n                } else {\r\n                    //invalid params\r\n                    throw new Error('args must be a string or object');\r\n                }\r\n            }\r\n            return result;\r\n        }\r\n\r\n\r\n        /**\r\n         * Triggers a close event.\r\n         *\r\n         * @param {Object} instance\tThe dilog instance.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function triggerClose(instance) {\r\n            var found;\r\n            triggerCallback(instance, function (button) {\r\n                return found = (button.invokeOnClose === true);\r\n            });\r\n            //none of the buttons registered as onclose callback\r\n            //close the dialog\r\n            if (!found && instance.isOpen()) {\r\n                instance.close();\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Dialogs commands event handler, attached to the dialog commands element.\r\n         *\r\n         * @param {Event} event\tDOM event object.\r\n         * @param {Object} instance\tThe dilog instance.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function commandsClickHandler(event, instance) {\r\n            var target = event.srcElement || event.target;\r\n            switch (target) {\r\n            case instance.elements.commands.pin:\r\n                if (!instance.isPinned()) {\r\n                    pin(instance);\r\n                } else {\r\n                    unpin(instance);\r\n                }\r\n                break;\r\n            case instance.elements.commands.maximize:\r\n                if (!instance.isMaximized()) {\r\n                    maximize(instance);\r\n                } else {\r\n                    restore(instance);\r\n                }\r\n                break;\r\n            case instance.elements.commands.close:\r\n                triggerClose(instance);\r\n                break;\r\n            }\r\n            return false;\r\n        }\r\n\r\n        /**\r\n         * Helper: pins the modeless dialog.\r\n         *\r\n         * @param {Object} instance\tThe dialog instance.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function pin(instance) {\r\n            //pin the dialog\r\n            instance.set('pinned', true);\r\n        }\r\n\r\n        /**\r\n         * Helper: unpins the modeless dialog.\r\n         *\r\n         * @param {Object} instance\tThe dilog instance.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function unpin(instance) {\r\n            //unpin the dialog \r\n            instance.set('pinned', false);\r\n        }\r\n\r\n\r\n        /**\r\n         * Helper: enlarges the dialog to fill the entire screen.\r\n         *\r\n         * @param {Object} instance\tThe dilog instance.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function maximize(instance) {\r\n            // allow custom `onmaximize` method\r\n            dispatchEvent('onmaximize', instance);\r\n            //maximize the dialog \r\n            addClass(instance.elements.root, classes.maximized);\r\n            if (instance.isOpen()) {\r\n                ensureNoOverflow();\r\n            }\r\n            // allow custom `onmaximized` method\r\n            dispatchEvent('onmaximized', instance);\r\n        }\r\n\r\n        /**\r\n         * Helper: returns the dialog to its former size.\r\n         *\r\n         * @param {Object} instance\tThe dilog instance.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function restore(instance) {\r\n            // allow custom `onrestore` method\r\n            dispatchEvent('onrestore', instance);\r\n            //maximize the dialog \r\n            removeClass(instance.elements.root, classes.maximized);\r\n            if (instance.isOpen()) {\r\n                ensureNoOverflow();\r\n            }\r\n            // allow custom `onrestored` method\r\n            dispatchEvent('onrestored', instance);\r\n        }\r\n\r\n        /**\r\n         * Show or hide the maximize box.\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         * @param {Boolean} on True to add the behavior, removes it otherwise.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updatePinnable(instance) {\r\n            if (instance.get('pinnable')) {\r\n                // add class\r\n                addClass(instance.elements.root, classes.pinnable);\r\n            } else {\r\n                // remove class\r\n                removeClass(instance.elements.root, classes.pinnable);\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Helper: Fixes the absolutly positioned modal div position.\r\n         *\r\n         * @param {Object} instance The dialog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function addAbsPositionFix(instance) {\r\n            var scrollLeft = getScrollLeft();\r\n            instance.elements.modal.style.marginTop = getScrollTop() + 'px';\r\n            instance.elements.modal.style.marginLeft = scrollLeft + 'px';\r\n            instance.elements.modal.style.marginRight = (-scrollLeft) + 'px';\r\n        }\r\n\r\n        /**\r\n         * Helper: Removes the absolutly positioned modal div position fix.\r\n         *\r\n         * @param {Object} instance The dialog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function removeAbsPositionFix(instance) {\r\n            var marginTop = parseInt(instance.elements.modal.style.marginTop, 10);\r\n            var marginLeft = parseInt(instance.elements.modal.style.marginLeft, 10);\r\n            instance.elements.modal.style.marginTop = '';\r\n            instance.elements.modal.style.marginLeft = '';\r\n            instance.elements.modal.style.marginRight = '';\r\n\r\n            if (instance.isOpen()) {\r\n                var top = 0,\r\n                    left = 0\r\n                ;\r\n                if (instance.elements.dialog.style.top !== '') {\r\n                    top = parseInt(instance.elements.dialog.style.top, 10);\r\n                }\r\n                instance.elements.dialog.style.top = (top + (marginTop - getScrollTop())) + 'px';\r\n\r\n                if (instance.elements.dialog.style.left !== '') {\r\n                    left = parseInt(instance.elements.dialog.style.left, 10);\r\n                }\r\n                instance.elements.dialog.style.left = (left + (marginLeft - getScrollLeft())) + 'px';\r\n            }\r\n        }\r\n        /**\r\n         * Helper: Adds/Removes the absolutly positioned modal div position fix based on its pinned setting.\r\n         *\r\n         * @param {Object} instance The dialog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updateAbsPositionFix(instance) {\r\n            // if modeless and unpinned add fix\r\n            if (!instance.get('modal') && !instance.get('pinned')) {\r\n                addAbsPositionFix(instance);\r\n            } else {\r\n                removeAbsPositionFix(instance);\r\n            }\r\n        }\r\n        /**\r\n         * Toggles the dialog position lock | modeless only.\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         * @param {Boolean} on True to make it modal, false otherwise.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updatePinned(instance) {\r\n            if (instance.get('pinned')) {\r\n                removeClass(instance.elements.root, classes.unpinned);\r\n                if (instance.isOpen()) {\r\n                    removeAbsPositionFix(instance);\r\n                }\r\n            } else {\r\n                addClass(instance.elements.root, classes.unpinned);\r\n                if (instance.isOpen() && !instance.isModal()) {\r\n                    addAbsPositionFix(instance);\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Show or hide the maximize box.\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         * @param {Boolean} on True to add the behavior, removes it otherwise.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updateMaximizable(instance) {\r\n            if (instance.get('maximizable')) {\r\n                // add class\r\n                addClass(instance.elements.root, classes.maximizable);\r\n            } else {\r\n                // remove class\r\n                removeClass(instance.elements.root, classes.maximizable);\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Show or hide the close box.\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         * @param {Boolean} on True to add the behavior, removes it otherwise.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updateClosable(instance) {\r\n            if (instance.get('closable')) {\r\n                // add class\r\n                addClass(instance.elements.root, classes.closable);\r\n                bindClosableEvents(instance);\r\n            } else {\r\n                // remove class\r\n                removeClass(instance.elements.root, classes.closable);\r\n                unbindClosableEvents(instance);\r\n            }\r\n        }\r\n\r\n        // flag to cancel click event if already handled by end resize event (the mousedown, mousemove, mouseup sequence fires a click event.).\r\n        var cancelClick = false;\r\n\r\n        /**\r\n         * Helper: closes the modal dialog when clicking the modal\r\n         *\r\n         * @param {Event} event\tDOM event object.\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function modalClickHandler(event, instance) {\r\n            var target = event.srcElement || event.target;\r\n            if (!cancelClick && target === instance.elements.modal && instance.get('closableByDimmer') === true) {\r\n                triggerClose(instance);\r\n            }\r\n            cancelClick = false;\r\n            return false;\r\n        }\r\n\r\n        // flag to cancel keyup event if already handled by click event (pressing Enter on a focusted button).\r\n        var cancelKeyup = false;\r\n        /** \r\n         * Helper: triggers a button callback\r\n         *\r\n         * @param {Object}\t\tThe dilog instance.\r\n         * @param {Function}\tCallback to check which button triggered the event.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function triggerCallback(instance, check) {\r\n            for (var idx = 0; idx < instance.__internal.buttons.length; idx += 1) {\r\n                var button = instance.__internal.buttons[idx];\r\n                if (!button.element.disabled && check(button)) {\r\n                    var closeEvent = createCloseEvent(idx, button);\r\n                    if (typeof instance.callback === 'function') {\r\n                        instance.callback.apply(instance, [closeEvent]);\r\n                    }\r\n                    //close the dialog only if not canceled.\r\n                    if (closeEvent.cancel === false) {\r\n                        instance.close();\r\n                    }\r\n                    break;\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Clicks event handler, attached to the dialog footer.\r\n         *\r\n         * @param {Event}\t\tDOM event object.\r\n         * @param {Object}\t\tThe dilog instance.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function buttonsClickHandler(event, instance) {\r\n            var target = event.srcElement || event.target;\r\n            triggerCallback(instance, function (button) {\r\n                // if this button caused the click, cancel keyup event\r\n                return button.element === target && (cancelKeyup = true);\r\n            });\r\n        }\r\n\r\n        /**\r\n         * Keyup event handler, attached to the document.body\r\n         *\r\n         * @param {Event}\t\tDOM event object.\r\n         * @param {Object}\t\tThe dilog instance.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function keyupHandler(event) {\r\n            //hitting enter while button has focus will trigger keyup too.\r\n            //ignore if handled by clickHandler\r\n            if (cancelKeyup) {\r\n                cancelKeyup = false;\r\n                return;\r\n            }\r\n            var instance = openDialogs[openDialogs.length - 1];\r\n            var keyCode = event.keyCode;\r\n            if (instance.__internal.buttons.length === 0 && keyCode === keys.ESC && instance.get('closable') === true) {\r\n                triggerClose(instance);\r\n                return false;\r\n            }else if (usedKeys.indexOf(keyCode) > -1) {\r\n                triggerCallback(instance, function (button) {\r\n                    return button.key === keyCode;\r\n                });\r\n                return false;\r\n            }\r\n        }\r\n        /**\r\n        * Keydown event handler, attached to the document.body\r\n        *\r\n        * @param {Event}\t\tDOM event object.\r\n        * @param {Object}\t\tThe dilog instance.\r\n        * \r\n        * @return {undefined}\r\n        */\r\n        function keydownHandler(event) {\r\n            var instance = openDialogs[openDialogs.length - 1];\r\n            var keyCode = event.keyCode;\r\n            if (keyCode === keys.LEFT || keyCode === keys.RIGHT) {\r\n                var buttons = instance.__internal.buttons;\r\n                for (var x = 0; x < buttons.length; x += 1) {\r\n                    if (document.activeElement === buttons[x].element) {\r\n                        switch (keyCode) {\r\n                        case keys.LEFT:\r\n                            buttons[(x || buttons.length) - 1].element.focus();\r\n                            return;\r\n                        case keys.RIGHT:\r\n                            buttons[(x + 1) % buttons.length].element.focus();\r\n                            return;\r\n                        }\r\n                    }\r\n                }\r\n            }else if (keyCode < keys.F12 + 1 && keyCode > keys.F1 - 1 && usedKeys.indexOf(keyCode) > -1) {\r\n                event.preventDefault();\r\n                event.stopPropagation();\r\n                triggerCallback(instance, function (button) {\r\n                    return button.key === keyCode;\r\n                });\r\n                return false;\r\n            }\r\n        }\r\n\r\n\r\n        /**\r\n         * Sets focus to proper dialog element\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         * @param {Node} [resetTarget=undefined] DOM element to reset focus to.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function setFocus(instance, resetTarget) {\r\n            // reset target has already been determined.\r\n            if (resetTarget) {\r\n                resetTarget.focus();\r\n            } else {\r\n                // current instance focus settings\r\n                var focus = instance.__internal.focus;\r\n                // the focus element.\r\n                var element = focus.element;\r\n\r\n                switch (typeof focus.element) {\r\n                // a number means a button index\r\n                case 'number':\r\n                    if (instance.__internal.buttons.length > focus.element) {\r\n                        //in basic view, skip focusing the buttons.\r\n                        if (instance.get('basic') === true) {\r\n                            element = instance.elements.reset[0];\r\n                        } else {\r\n                            element = instance.__internal.buttons[focus.element].element;\r\n                        }\r\n                    }\r\n                    break;\r\n                // a string means querySelector to select from dialog body contents.\r\n                case 'string':\r\n                    element = instance.elements.body.querySelector(focus.element);\r\n                    break;\r\n                // a function should return the focus element.\r\n                case 'function':\r\n                    element = focus.element.call(instance);\r\n                    break;\r\n                }\r\n                \r\n                // if no focus element, default to first reset element.\r\n                if ((typeof element === 'undefined' || element === null) && instance.__internal.buttons.length === 0) {\r\n                    element = instance.elements.reset[0];\r\n                }\r\n                // focus\r\n                if (element && element.focus) {\r\n                    element.focus();\r\n                    // if selectable\r\n                    if (focus.select && element.select) {\r\n                        element.select();\r\n                    }\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Focus event handler, attached to document.body and dialogs own reset links.\r\n         * handles the focus for modal dialogs only.\r\n         *\r\n         * @param {Event} event DOM focus event object.\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function onReset(event, instance) {\r\n\r\n            // should work on last modal if triggered from document.body \r\n            if (!instance) {\r\n                for (var x = openDialogs.length - 1; x > -1; x -= 1) {\r\n                    if (openDialogs[x].isModal()) {\r\n                        instance = openDialogs[x];\r\n                        break;\r\n                    }\r\n                }\r\n            }\r\n            // if modal\r\n            if (instance && instance.isModal()) {\r\n                // determine reset target to enable forward/backward tab cycle.\r\n                var resetTarget, target = event.srcElement || event.target;\r\n                var lastResetElement = target === instance.elements.reset[1] || (instance.__internal.buttons.length === 0 && target === document.body);\r\n\r\n                // if last reset link, then go to maximize or close\r\n                if (lastResetElement) {\r\n                    if (instance.get('maximizable')) {\r\n                        resetTarget = instance.elements.commands.maximize;\r\n                    } else if (instance.get('closable')) {\r\n                        resetTarget = instance.elements.commands.close;\r\n                    }\r\n                }\r\n                // if no reset target found, try finding the best button\r\n                if (resetTarget === undefined) {\r\n                    if (typeof instance.__internal.focus.element === 'number') {\r\n                        // button focus element, go to first available button\r\n                        if (target === instance.elements.reset[0]) {\r\n                            resetTarget = instance.elements.buttons.auxiliary.firstChild || instance.elements.buttons.primary.firstChild;\r\n                        } else if (lastResetElement) {\r\n                            //restart the cycle by going to first reset link\r\n                            resetTarget = instance.elements.reset[0];\r\n                        }\r\n                    } else {\r\n                        // will reach here when tapping backwards, so go to last child\r\n                        // The focus element SHOULD NOT be a button (logically!).\r\n                        if (target === instance.elements.reset[0]) {\r\n                            resetTarget = instance.elements.buttons.primary.lastChild || instance.elements.buttons.auxiliary.lastChild;\r\n                        }\r\n                    }\r\n                }\r\n                // focus\r\n                setFocus(instance, resetTarget);\r\n            }\r\n        }\r\n        /**\r\n         * Transition in transitionend event handler. \r\n         *\r\n         * @param {Event}\t\tTransitionEnd event object.\r\n         * @param {Object}\t\tThe dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function handleTransitionInEvent(event, instance) {\r\n            // clear the timer\r\n            clearTimeout(instance.__internal.timerIn);\r\n\r\n            // once transition is complete, set focus\r\n            setFocus(instance);\r\n\r\n            //restore scroll to prevent document jump\r\n            restoreScrollPosition();\r\n\r\n            // allow handling key up after transition ended.\r\n            cancelKeyup = false;\r\n\r\n            // allow custom `onfocus` method\r\n            dispatchEvent('onfocus', instance);\r\n\r\n            // unbind the event\r\n            off(instance.elements.dialog, transition.type, instance.__internal.transitionInHandler);\r\n\r\n            removeClass(instance.elements.root, classes.animationIn);\r\n        }\r\n\r\n        /**\r\n         * Transition out transitionend event handler. \r\n         *\r\n         * @param {Event}\t\tTransitionEnd event object.\r\n         * @param {Object}\t\tThe dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function handleTransitionOutEvent(event, instance) {\r\n            // clear the timer\r\n            clearTimeout(instance.__internal.timerOut);\r\n            // unbind the event\r\n            off(instance.elements.dialog, transition.type, instance.__internal.transitionOutHandler);\r\n\r\n            // reset move updates\r\n            resetMove(instance);\r\n            // reset resize updates\r\n            resetResize(instance);\r\n\r\n            // restore if maximized\r\n            if (instance.isMaximized() && !instance.get('startMaximized')) {\r\n                restore(instance);\r\n            }\r\n\r\n            // return focus to the last active element\r\n            if (alertify.defaults.maintainFocus && instance.__internal.activeElement) {\r\n                instance.__internal.activeElement.focus();\r\n                instance.__internal.activeElement = null;\r\n            }\r\n            \r\n            //destory the instance\r\n            if (typeof instance.__internal.destroy === 'function') {\r\n                instance.__internal.destroy.apply(instance);\r\n            }\r\n        }\r\n        /* Controls moving a dialog around */\r\n        //holde the current moving instance\r\n        var movable = null,\r\n            //holds the current X offset when move starts\r\n            offsetX = 0,\r\n            //holds the current Y offset when move starts\r\n            offsetY = 0,\r\n            xProp = 'pageX',\r\n            yProp = 'pageY',\r\n            bounds = null,\r\n            refreshTop = false,\r\n            moveDelegate = null\r\n        ;\r\n\r\n        /**\r\n         * Helper: sets the element top/left coordinates\r\n         *\r\n         * @param {Event} event\tDOM event object.\r\n         * @param {Node} element The element being moved.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function moveElement(event, element) {\r\n            var left = (event[xProp] - offsetX),\r\n                top  = (event[yProp] - offsetY);\r\n\r\n            if(refreshTop){\r\n                top -= document.body.scrollTop;\r\n            }\r\n           \r\n            element.style.left = left + 'px';\r\n            element.style.top = top + 'px';\r\n           \r\n        }\r\n        /**\r\n         * Helper: sets the element top/left coordinates within screen bounds\r\n         *\r\n         * @param {Event} event\tDOM event object.\r\n         * @param {Node} element The element being moved.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function moveElementBounded(event, element) {\r\n            var left = (event[xProp] - offsetX),\r\n                top  = (event[yProp] - offsetY);\r\n\r\n            if(refreshTop){\r\n                top -= document.body.scrollTop;\r\n            }\r\n            \r\n            element.style.left = Math.min(bounds.maxLeft, Math.max(bounds.minLeft, left)) + 'px';\r\n            if(refreshTop){\r\n                element.style.top = Math.min(bounds.maxTop, Math.max(bounds.minTop, top)) + 'px';\r\n            }else{\r\n                element.style.top = Math.max(bounds.minTop, top) + 'px';\r\n            }\r\n        }\r\n            \r\n\r\n        /**\r\n         * Triggers the start of a move event, attached to the header element mouse down event.\r\n         * Adds no-selection class to the body, disabling selection while moving.\r\n         *\r\n         * @param {Event} event\tDOM event object.\r\n         * @param {Object} instance The dilog instance.\r\n         * \r\n         * @return {Boolean} false\r\n         */\r\n        function beginMove(event, instance) {\r\n            if (resizable === null && !instance.isMaximized() && instance.get('movable')) {\r\n                var eventSrc, left=0, top=0;\r\n                if (event.type === 'touchstart') {\r\n                    event.preventDefault();\r\n                    eventSrc = event.targetTouches[0];\r\n                    xProp = 'clientX';\r\n                    yProp = 'clientY';\r\n                } else if (event.button === 0) {\r\n                    eventSrc = event;\r\n                }\r\n\r\n                if (eventSrc) {\r\n\r\n                    var element = instance.elements.dialog;\r\n                    addClass(element, classes.capture);\r\n\r\n                    if (element.style.left) {\r\n                        left = parseInt(element.style.left, 10);\r\n                    }\r\n\r\n                    if (element.style.top) {\r\n                        top = parseInt(element.style.top, 10);\r\n                    }\r\n                    \r\n                    offsetX = eventSrc[xProp] - left;\r\n                    offsetY = eventSrc[yProp] - top;\r\n\r\n                    if(instance.isModal()){\r\n                        offsetY += instance.elements.modal.scrollTop;\r\n                    }else if(instance.isPinned()){\r\n                        offsetY -= document.body.scrollTop;\r\n                    }\r\n                    \r\n                    if(instance.get('moveBounded')){\r\n                        var current = element,\r\n                            offsetLeft = -left,\r\n                            offsetTop = -top;\r\n                        \r\n                        //calc offset\r\n                        do {\r\n                            offsetLeft += current.offsetLeft;\r\n                            offsetTop += current.offsetTop;\r\n                        } while (current = current.offsetParent);\r\n                        \r\n                        bounds = {\r\n                            maxLeft : offsetLeft,\r\n                            minLeft : -offsetLeft,\r\n                            maxTop  : document.documentElement.clientHeight - element.clientHeight - offsetTop,\r\n                            minTop  : -offsetTop\r\n                        };\r\n                        moveDelegate = moveElementBounded;\r\n                    }else{\r\n                        bounds = null;\r\n                        moveDelegate = moveElement;\r\n                    }\r\n                    \r\n                    // allow custom `onmove` method\r\n                    dispatchEvent('onmove', instance);\r\n\r\n                    refreshTop = !instance.isModal() && instance.isPinned();\r\n                    movable = instance;\r\n                    moveDelegate(eventSrc, element);\r\n                    addClass(document.body, classes.noSelection);\r\n                    return false;\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * The actual move handler,  attached to document.body mousemove event.\r\n         *\r\n         * @param {Event} event\tDOM event object.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function move(event) {\r\n            if (movable) {\r\n                var eventSrc;\r\n                if (event.type === 'touchmove') {\r\n                    event.preventDefault();\r\n                    eventSrc = event.targetTouches[0];\r\n                } else if (event.button === 0) {\r\n                    eventSrc = event;\r\n                }\r\n                if (eventSrc) {\r\n                    moveDelegate(eventSrc, movable.elements.dialog);\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Triggers the end of a move event,  attached to document.body mouseup event.\r\n         * Removes no-selection class from document.body, allowing selection.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function endMove() {\r\n            if (movable) {\r\n                var instance = movable;\r\n                movable = bounds = null;\r\n                removeClass(document.body, classes.noSelection);\r\n                removeClass(instance.elements.dialog, classes.capture);\r\n                // allow custom `onmoved` method\r\n                dispatchEvent('onmoved', instance);\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Resets any changes made by moving the element to its original state,\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function resetMove(instance) {\r\n            movable = null;\r\n            var element = instance.elements.dialog;\r\n            element.style.left = element.style.top = '';\r\n        }\r\n\r\n        /**\r\n         * Updates the dialog move behavior.\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         * @param {Boolean} on True to add the behavior, removes it otherwise.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updateMovable(instance) {\r\n            if (instance.get('movable')) {\r\n                // add class\r\n                addClass(instance.elements.root, classes.movable);\r\n                if (instance.isOpen()) {\r\n                    bindMovableEvents(instance);\r\n                }\r\n            } else {\r\n\r\n                //reset\r\n                resetMove(instance);\r\n                // remove class\r\n                removeClass(instance.elements.root, classes.movable);\r\n                if (instance.isOpen()) {\r\n                    unbindMovableEvents(instance);\r\n                }\r\n            }\r\n        }\r\n\r\n        /* Controls moving a dialog around */\r\n        //holde the current instance being resized\t\t\r\n        var resizable = null,\r\n            //holds the staring left offset when resize starts.\r\n            startingLeft = Number.Nan,\r\n            //holds the staring width when resize starts.\r\n            startingWidth = 0,\r\n            //holds the initial width when resized for the first time.\r\n            minWidth = 0,\r\n            //holds the offset of the resize handle.\r\n            handleOffset = 0\r\n        ;\r\n\r\n        /**\r\n         * Helper: sets the element width/height and updates left coordinate if neccessary.\r\n         *\r\n         * @param {Event} event\tDOM mousemove event object.\r\n         * @param {Node} element The element being moved.\r\n         * @param {Boolean} pinned A flag indicating if the element being resized is pinned to the screen.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function resizeElement(event, element, pageRelative) {\r\n\r\n            //calculate offsets from 0,0\r\n            var current = element;\r\n            var offsetLeft = 0;\r\n            var offsetTop = 0;\r\n            do {\r\n                offsetLeft += current.offsetLeft;\r\n                offsetTop += current.offsetTop;\r\n            } while (current = current.offsetParent);\r\n\r\n            // determine X,Y coordinates.\r\n            var X, Y;\r\n            if (pageRelative === true) {\r\n                X = event.pageX;\r\n                Y = event.pageY;\r\n            } else {\r\n                X = event.clientX;\r\n                Y = event.clientY;\r\n            }\r\n            // rtl handling\r\n            var isRTL = isRightToLeft();\r\n            if (isRTL) {\r\n                // reverse X \r\n                X = document.body.offsetWidth - X;\r\n                // if has a starting left, calculate offsetRight\r\n                if (!isNaN(startingLeft)) {\r\n                    offsetLeft = document.body.offsetWidth - offsetLeft - element.offsetWidth;\r\n                }\r\n            }\r\n\r\n            // set width/height\r\n            element.style.height = (Y - offsetTop + handleOffset) + 'px';\r\n            element.style.width = (X - offsetLeft + handleOffset) + 'px';\r\n\r\n            // if the element being resized has a starting left, maintain it.\r\n            // the dialog is centered, divide by half the offset to maintain the margins.\r\n            if (!isNaN(startingLeft)) {\r\n                var diff = Math.abs(element.offsetWidth - startingWidth) * 0.5;\r\n                if (isRTL) {\r\n                    //negate the diff, why?\r\n                    //when growing it should decrease left\r\n                    //when shrinking it should increase left\r\n                    diff *= -1;\r\n                }\r\n                if (element.offsetWidth > startingWidth) {\r\n                    //growing\r\n                    element.style.left = (startingLeft + diff) + 'px';\r\n                } else if (element.offsetWidth >= minWidth) {\r\n                    //shrinking\r\n                    element.style.left = (startingLeft - diff) + 'px';\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Triggers the start of a resize event, attached to the resize handle element mouse down event.\r\n         * Adds no-selection class to the body, disabling selection while moving.\r\n         *\r\n         * @param {Event} event\tDOM event object.\r\n         * @param {Object} instance The dilog instance.\r\n         * \r\n         * @return {Boolean} false\r\n         */\r\n        function beginResize(event, instance) {\r\n            if (!instance.isMaximized()) {\r\n                var eventSrc;\r\n                if (event.type === 'touchstart') {\r\n                    event.preventDefault();\r\n                    eventSrc = event.targetTouches[0];\r\n                } else if (event.button === 0) {\r\n                    eventSrc = event;\r\n                }\r\n                if (eventSrc) {\r\n                    // allow custom `onresize` method\r\n                    dispatchEvent('onresize', instance);\r\n                    \r\n                    resizable = instance;\r\n                    handleOffset = instance.elements.resizeHandle.offsetHeight / 2;\r\n                    var element = instance.elements.dialog;\r\n                    addClass(element, classes.capture);\r\n                    startingLeft = parseInt(element.style.left, 10);\r\n                    element.style.height = element.offsetHeight + 'px';\r\n                    element.style.minHeight = instance.elements.header.offsetHeight + instance.elements.footer.offsetHeight + 'px';\r\n                    element.style.width = (startingWidth = element.offsetWidth) + 'px';\r\n\r\n                    if (element.style.maxWidth !== 'none') {\r\n                        element.style.minWidth = (minWidth = element.offsetWidth) + 'px';\r\n                    }\r\n                    element.style.maxWidth = 'none';\r\n                    addClass(document.body, classes.noSelection);\r\n                    return false;\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * The actual resize handler,  attached to document.body mousemove event.\r\n         *\r\n         * @param {Event} event\tDOM event object.\r\n         * \r\n         * @return {undefined}\r\n         */\r\n        function resize(event) {\r\n            if (resizable) {\r\n                var eventSrc;\r\n                if (event.type === 'touchmove') {\r\n                    event.preventDefault();\r\n                    eventSrc = event.targetTouches[0];\r\n                } else if (event.button === 0) {\r\n                    eventSrc = event;\r\n                }\r\n                if (eventSrc) {\r\n                    resizeElement(eventSrc, resizable.elements.dialog, !resizable.get('modal') && !resizable.get('pinned'));\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Triggers the end of a resize event,  attached to document.body mouseup event.\r\n         * Removes no-selection class from document.body, allowing selection.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function endResize() {\r\n            if (resizable) {\r\n                var instance = resizable;\r\n                resizable = null;\r\n                removeClass(document.body, classes.noSelection);\r\n                removeClass(instance.elements.dialog, classes.capture);\r\n                cancelClick = true;\r\n                // allow custom `onresized` method\r\n                dispatchEvent('onresized', instance);\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Resets any changes made by resizing the element to its original state.\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function resetResize(instance) {\r\n            resizable = null;\r\n            var element = instance.elements.dialog;\r\n            if (element.style.maxWidth === 'none') {\r\n                //clear inline styles.\r\n                element.style.maxWidth = element.style.minWidth = element.style.width = element.style.height = element.style.minHeight = element.style.left = '';\r\n                //reset variables.\r\n                startingLeft = Number.Nan;\r\n                startingWidth = minWidth = handleOffset = 0;\r\n            }\r\n        }\r\n\r\n\r\n        /**\r\n         * Updates the dialog move behavior.\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         * @param {Boolean} on True to add the behavior, removes it otherwise.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function updateResizable(instance) {\r\n            if (instance.get('resizable')) {\r\n                // add class\r\n                addClass(instance.elements.root, classes.resizable);\r\n                if (instance.isOpen()) {\r\n                    bindResizableEvents(instance);\r\n                }\r\n            } else {\r\n                //reset\r\n                resetResize(instance);\r\n                // remove class\r\n                removeClass(instance.elements.root, classes.resizable);\r\n                if (instance.isOpen()) {\r\n                    unbindResizableEvents(instance);\r\n                }\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Reset move/resize on window resize.\r\n         *\r\n         * @param {Event} event\twindow resize event object.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function windowResize(/*event*/) {\r\n            for (var x = 0; x < openDialogs.length; x += 1) {\r\n                var instance = openDialogs[x];\r\n                if (instance.get('autoReset')) {\r\n                    resetMove(instance);\r\n                    resetResize(instance);\r\n                }\r\n            }\r\n        }\r\n        /**\r\n         * Bind dialogs events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function bindEvents(instance) {\r\n            // if first dialog, hook global handlers\r\n            if (openDialogs.length === 1) {\r\n                //global\r\n                on(window, 'resize', windowResize);\r\n                on(document.body, 'keyup', keyupHandler);\r\n                on(document.body, 'keydown', keydownHandler);\r\n                on(document.body, 'focus', onReset);\r\n\r\n                //move\r\n                on(document.documentElement, 'mousemove', move);\r\n                on(document.documentElement, 'touchmove', move);\r\n                on(document.documentElement, 'mouseup', endMove);\r\n                on(document.documentElement, 'touchend', endMove);\r\n                //resize\r\n                on(document.documentElement, 'mousemove', resize);\r\n                on(document.documentElement, 'touchmove', resize);\r\n                on(document.documentElement, 'mouseup', endResize);\r\n                on(document.documentElement, 'touchend', endResize);\r\n            }\r\n\r\n            // common events\r\n            on(instance.elements.commands.container, 'click', instance.__internal.commandsClickHandler);\r\n            on(instance.elements.footer, 'click', instance.__internal.buttonsClickHandler);\r\n            on(instance.elements.reset[0], 'focus', instance.__internal.resetHandler);\r\n            on(instance.elements.reset[1], 'focus', instance.__internal.resetHandler);\r\n\r\n            //prevent handling key up when dialog is being opened by a key stroke.\r\n            cancelKeyup = true;\r\n            // hook in transition handler\r\n            on(instance.elements.dialog, transition.type, instance.__internal.transitionInHandler);\r\n\r\n            // modelss only events\r\n            if (!instance.get('modal')) {\r\n                bindModelessEvents(instance);\r\n            }\r\n\r\n            // resizable\r\n            if (instance.get('resizable')) {\r\n                bindResizableEvents(instance);\r\n            }\r\n\r\n            // movable\r\n            if (instance.get('movable')) {\r\n                bindMovableEvents(instance);\r\n            }\r\n        }\r\n\r\n        /**\r\n         * Unbind dialogs events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function unbindEvents(instance) {\r\n            // if last dialog, remove global handlers\r\n            if (openDialogs.length === 1) {\r\n                //global\r\n                off(window, 'resize', windowResize);\r\n                off(document.body, 'keyup', keyupHandler);\r\n                off(document.body, 'keydown', keydownHandler);\r\n                off(document.body, 'focus', onReset);\r\n                //move\r\n                off(document.documentElement, 'mousemove', move);\r\n                off(document.documentElement, 'mouseup', endMove);\r\n                //resize\r\n                off(document.documentElement, 'mousemove', resize);\r\n                off(document.documentElement, 'mouseup', endResize);\r\n            }\r\n\r\n            // common events\r\n            off(instance.elements.commands.container, 'click', instance.__internal.commandsClickHandler);\r\n            off(instance.elements.footer, 'click', instance.__internal.buttonsClickHandler);\r\n            off(instance.elements.reset[0], 'focus', instance.__internal.resetHandler);\r\n            off(instance.elements.reset[1], 'focus', instance.__internal.resetHandler);\r\n\r\n            // hook out transition handler\r\n            on(instance.elements.dialog, transition.type, instance.__internal.transitionOutHandler);\r\n\r\n            // modelss only events\r\n            if (!instance.get('modal')) {\r\n                unbindModelessEvents(instance);\r\n            }\r\n\r\n            // movable\r\n            if (instance.get('movable')) {\r\n                unbindMovableEvents(instance);\r\n            }\r\n\r\n            // resizable\r\n            if (instance.get('resizable')) {\r\n                unbindResizableEvents(instance);\r\n            }\r\n\r\n        }\r\n\r\n        /**\r\n         * Bind modeless specific events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function bindModelessEvents(instance) {\r\n            on(instance.elements.dialog, 'focus', instance.__internal.bringToFrontHandler, true);\r\n        }\r\n\r\n        /**\r\n         * Unbind modeless specific events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function unbindModelessEvents(instance) {\r\n            off(instance.elements.dialog, 'focus', instance.__internal.bringToFrontHandler, true);\r\n        }\r\n\r\n\r\n\r\n        /**\r\n         * Bind movable specific events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function bindMovableEvents(instance) {\r\n            on(instance.elements.header, 'mousedown', instance.__internal.beginMoveHandler);\r\n            on(instance.elements.header, 'touchstart', instance.__internal.beginMoveHandler);\r\n        }\r\n\r\n        /**\r\n         * Unbind movable specific events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function unbindMovableEvents(instance) {\r\n            off(instance.elements.header, 'mousedown', instance.__internal.beginMoveHandler);\r\n            off(instance.elements.header, 'touchstart', instance.__internal.beginMoveHandler);\r\n        }\r\n\r\n\r\n\r\n        /**\r\n         * Bind resizable specific events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function bindResizableEvents(instance) {\r\n            on(instance.elements.resizeHandle, 'mousedown', instance.__internal.beginResizeHandler);\r\n            on(instance.elements.resizeHandle, 'touchstart', instance.__internal.beginResizeHandler);\r\n        }\r\n\r\n        /**\r\n         * Unbind resizable specific events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function unbindResizableEvents(instance) {\r\n            off(instance.elements.resizeHandle, 'mousedown', instance.__internal.beginResizeHandler);\r\n            off(instance.elements.resizeHandle, 'touchstart', instance.__internal.beginResizeHandler);\r\n        }\r\n\r\n        /**\r\n         * Bind closable events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function bindClosableEvents(instance) {\r\n            on(instance.elements.modal, 'click', instance.__internal.modalClickHandler);\r\n        }\r\n\r\n        /**\r\n         * Unbind closable specific events\r\n         *\r\n         * @param {Object} instance The dilog instance.\r\n         *\r\n         * @return {undefined}\r\n         */\r\n        function unbindClosableEvents(instance) {\r\n            off(instance.elements.modal, 'click', instance.__internal.modalClickHandler);\r\n        }\r\n        // dialog API\r\n        return {\r\n            __init:initialize,\r\n            /**\r\n             * Check if dialog is currently open\r\n             *\r\n             * @return {Boolean}\r\n             */\r\n            isOpen: function () {\r\n                return this.__internal.isOpen;\r\n            },\r\n            isModal: function (){\r\n                return this.elements.root.className.indexOf(classes.modeless) < 0;\r\n            },\r\n            isMaximized:function(){\r\n                return this.elements.root.className.indexOf(classes.maximized) > -1;\r\n            },\r\n            isPinned:function(){\r\n                return this.elements.root.className.indexOf(classes.unpinned) < 0;\r\n            },\r\n            maximize:function(){\r\n                if(!this.isMaximized()){\r\n                    maximize(this);\r\n                }\r\n                return this;\r\n            },\r\n            restore:function(){\r\n                if(this.isMaximized()){\r\n                    restore(this);\r\n                }\r\n                return this;\r\n            },\r\n            pin:function(){\r\n                if(!this.isPinned()){\r\n                    pin(this);\r\n                }\r\n                return this;\r\n            },\r\n            unpin:function(){\r\n                if(this.isPinned()){\r\n                    unpin(this);\r\n                }\r\n                return this;\r\n            },\r\n            bringToFront:function(){\r\n                bringToFront(null, this);\r\n                return this;\r\n            },\r\n            /**\r\n             * Move the dialog to a specific x/y coordinates\r\n             *\r\n             * @param {Number} x    The new dialog x coordinate in pixels.\r\n             * @param {Number} y    The new dialog y coordinate in pixels.\r\n             *\r\n             * @return {Object} The dialog instance.\r\n             */\r\n            moveTo:function(x,y){\r\n                if(!isNaN(x) && !isNaN(y)){\r\n                    // allow custom `onmove` method\r\n                    dispatchEvent('onmove', this);\r\n                    \r\n                    var element = this.elements.dialog,\r\n                        current = element,\r\n                        offsetLeft = 0,\r\n                        offsetTop = 0;\r\n                    \r\n                    //subtract existing left,top\r\n                    if (element.style.left) {\r\n                        offsetLeft -= parseInt(element.style.left, 10);\r\n                    }\r\n                    if (element.style.top) {\r\n                        offsetTop -= parseInt(element.style.top, 10);\r\n                    }\r\n                    //calc offset\r\n                    do {\r\n                        offsetLeft += current.offsetLeft;\r\n                        offsetTop += current.offsetTop;\r\n                    } while (current = current.offsetParent);\r\n\r\n                    //calc left, top\r\n                    var left = (x - offsetLeft);\r\n                    var top  = (y - offsetTop);\r\n\r\n                    //// rtl handling\r\n                    if (isRightToLeft()) {\r\n                        left *= -1;\r\n                    }\r\n\r\n                    element.style.left = left + 'px';\r\n                    element.style.top = top + 'px';\r\n                    \r\n                    // allow custom `onmoved` method\r\n                    dispatchEvent('onmoved', this);\r\n                }\r\n                return this;\r\n            },\r\n            /**\r\n             * Resize the dialog to a specific width/height (the dialog must be 'resizable').\r\n             * The dialog can be resized to:\r\n             *  A minimum width equal to the initial display width\r\n             *  A minimum height equal to the sum of header/footer heights.\r\n             *\r\n             *\r\n             * @param {Number or String} width    The new dialog width in pixels or in percent.\r\n             * @param {Number or String} height   The new dialog height in pixels or in percent.\r\n             *\r\n             * @return {Object} The dialog instance.\r\n             */\r\n            resizeTo:function(width,height){\r\n                var w = parseFloat(width),\r\n                    h = parseFloat(height),\r\n                    regex = /(\\d*\\.\\d+|\\d+)%/\r\n                ;\r\n\r\n                if(!isNaN(w) && !isNaN(h) && this.get('resizable') === true){\r\n                    \r\n                    // allow custom `onresize` method\r\n                    dispatchEvent('onresize', this);\r\n                    \r\n                    if(('' + width).match(regex)){\r\n                        w = w / 100 * document.documentElement.clientWidth ;\r\n                    }\r\n\r\n                    if(('' + height).match(regex)){\r\n                        h = h / 100 * document.documentElement.clientHeight;\r\n                    }\r\n\r\n                    var element = this.elements.dialog;\r\n                    if (element.style.maxWidth !== 'none') {\r\n                        element.style.minWidth = (minWidth = element.offsetWidth) + 'px';\r\n                    }\r\n                    element.style.maxWidth = 'none';\r\n                    element.style.minHeight = this.elements.header.offsetHeight + this.elements.footer.offsetHeight + 'px';\r\n                    element.style.width = w + 'px';\r\n                    element.style.height = h + 'px';\r\n                    \r\n                    // allow custom `onresized` method\r\n                    dispatchEvent('onresized', this);\r\n                }\r\n                return this;\r\n            },\r\n            /**\r\n             * Gets or Sets dialog settings/options \r\n             *\r\n             * @param {String|Object} key A string specifying a propery name or a collection of key/value pairs.\r\n             * @param {Object} value Optional, the value associated with the key (in case it was a string).\r\n             *\r\n             * @return {undefined}\r\n             */\r\n            setting : function (key, value) {\r\n                var self = this;\r\n                var result = update(this, this.__internal.options, function(k,o,n){ optionUpdated(self,k,o,n); }, key, value);\r\n                if(result.op === 'get'){\r\n                    if(result.found){\r\n                        return result.value;\r\n                    }else if(typeof this.settings !== 'undefined'){\r\n                        return update(this, this.settings, this.settingUpdated || function(){}, key, value).value;\r\n                    }else{\r\n                        return undefined;\r\n                    }\r\n                }else if(result.op === 'set'){\r\n                    if(result.items.length > 0){\r\n                        var callback = this.settingUpdated || function(){};\r\n                        for(var x=0;x<result.items.length;x+=1){\r\n                            var item = result.items[x];\r\n                            if(!item.found && typeof this.settings !== 'undefined'){\r\n                                update(this, this.settings, callback, item.key, item.value);\r\n                            }\r\n                        }\r\n                    }\r\n                    return this;\r\n                }\r\n            },\r\n            /**\r\n             * [Alias] Sets dialog settings/options \r\n             */\r\n            set:function(key, value){\r\n                this.setting(key,value);\r\n                return this;\r\n            },\r\n            /**\r\n             * [Alias] Gets dialog settings/options \r\n             */\r\n            get:function(key){\r\n                return this.setting(key);\r\n            },\r\n            /**\r\n            * Sets dialog header\r\n            * @content {string or element}\r\n            *\r\n            * @return {undefined}\r\n            */\r\n            setHeader:function(content){\r\n                if(typeof content === 'string'){\r\n                    clearContents(this.elements.header);\r\n                    this.elements.header.innerHTML = content;\r\n                }else if (content instanceof window.HTMLElement && this.elements.header.firstChild !== content){\r\n                    clearContents(this.elements.header);\r\n                    this.elements.header.appendChild(content);\r\n                }\r\n                return this;\r\n            },\r\n            /**\r\n            * Sets dialog contents\r\n            * @content {string or element}\r\n            *\r\n            * @return {undefined}\r\n            */\r\n            setContent:function(content){\r\n                if(typeof content === 'string'){\r\n                    clearContents(this.elements.content);\r\n                    this.elements.content.innerHTML = content;\r\n                }else if (content instanceof window.HTMLElement && this.elements.content.firstChild !== content){\r\n                    clearContents(this.elements.content);\r\n                    this.elements.content.appendChild(content);\r\n                }\r\n                return this;\r\n            },\r\n            /**\r\n             * Show the dialog as modal\r\n             *\r\n             * @return {Object} the dialog instance.\r\n             */\r\n            showModal: function(className){\r\n                return this.show(true, className);\r\n            },\r\n            /**\r\n             * Show the dialog\r\n             *\r\n             * @return {Object} the dialog instance.\r\n             */\r\n            show: function (modal, className) {\r\n                \r\n                // ensure initialization\r\n                initialize(this);\r\n\r\n                if ( !this.__internal.isOpen ) {\r\n\r\n                    // add to open dialogs\r\n                    this.__internal.isOpen = true;\r\n                    openDialogs.push(this);\r\n\r\n                    // save last focused element\r\n                    if(alertify.defaults.maintainFocus){\r\n                        this.__internal.activeElement = document.activeElement;\r\n                    }\r\n\r\n                    //allow custom dom manipulation updates before showing the dialog.\r\n                    if(typeof this.prepare === 'function'){\r\n                        this.prepare();\r\n                    }\r\n\r\n                    bindEvents(this);\r\n\r\n                    if(modal !== undefined){\r\n                        this.set('modal', modal);\r\n                    }\r\n\r\n                    //save scroll to prevent document jump\r\n                    saveScrollPosition();\r\n\r\n                    ensureNoOverflow();\r\n\r\n                    // allow custom dialog class on show\r\n                    if(typeof className === 'string' && className !== ''){\r\n                        this.__internal.className = className;\r\n                        addClass(this.elements.root, className);\r\n                    }\r\n\r\n                    // maximize if start maximized\r\n                    if ( this.get('startMaximized')) {\r\n                        this.maximize();\r\n                    }else if(this.isMaximized()){\r\n                        restore(this);\r\n                    }\r\n\r\n                    updateAbsPositionFix(this);\r\n\r\n                    removeClass(this.elements.root, classes.animationOut);\r\n                    addClass(this.elements.root, classes.animationIn);\r\n\r\n                    // set 1s fallback in case transition event doesn't fire\r\n                    clearTimeout( this.__internal.timerIn);\r\n                    this.__internal.timerIn = setTimeout( this.__internal.transitionInHandler, transition.supported ? 1000 : 100 );\r\n\r\n                    if(isSafari){\r\n                        // force desktop safari reflow\r\n                        var root = this.elements.root;\r\n                        root.style.display  = 'none';\r\n                        setTimeout(function(){root.style.display  = 'block';}, 0);\r\n                    }\r\n\r\n                    //reflow\r\n                    reflow = this.elements.root.offsetWidth;\r\n                  \r\n                    // show dialog\r\n                    removeClass(this.elements.root, classes.hidden);\r\n\r\n                    // internal on show event\r\n                    if(typeof this.hooks.onshow === 'function'){\r\n                        this.hooks.onshow.call(this);\r\n                    }\r\n\r\n                    // allow custom `onshow` method\r\n                    dispatchEvent('onshow', this);\r\n\r\n                }else{\r\n                    // reset move updates\r\n                    resetMove(this);\r\n                    // reset resize updates\r\n                    resetResize(this);\r\n                    // shake the dialog to indicate its already open\r\n                    addClass(this.elements.dialog, classes.shake);\r\n                    var self = this;\r\n                    setTimeout(function(){\r\n                        removeClass(self.elements.dialog, classes.shake);\r\n                    },200);\r\n                }\r\n                return this;\r\n            },\r\n            /**\r\n             * Close the dialog\r\n             *\r\n             * @return {Object} The dialog instance\r\n             */\r\n            close: function () {\r\n                if (this.__internal.isOpen ) {\r\n                    // custom `onclosing` event\r\n                    if(dispatchEvent('onclosing', this) !== false){\r\n\r\n                        unbindEvents(this);\r\n\r\n                        removeClass(this.elements.root, classes.animationIn);\r\n                        addClass(this.elements.root, classes.animationOut);\r\n\r\n                        // set 1s fallback in case transition event doesn't fire\r\n                        clearTimeout( this.__internal.timerOut );\r\n                        this.__internal.timerOut = setTimeout( this.__internal.transitionOutHandler, transition.supported ? 1000 : 100 );\r\n                        // hide dialog\r\n                        addClass(this.elements.root, classes.hidden);\r\n                        //reflow\r\n                        reflow = this.elements.modal.offsetWidth;\r\n\r\n                        // remove custom dialog class on hide\r\n                        if (typeof this.__internal.className !== 'undefined' && this.__internal.className !== '') {\r\n                            removeClass(this.elements.root, this.__internal.className);\r\n                        }\r\n\r\n                        // internal on close event\r\n                        if(typeof this.hooks.onclose === 'function'){\r\n                            this.hooks.onclose.call(this);\r\n                        }\r\n\r\n                        // allow custom `onclose` method\r\n                        dispatchEvent('onclose', this);\r\n\r\n                        //remove from open dialogs\r\n                        openDialogs.splice(openDialogs.indexOf(this),1);\r\n                        this.__internal.isOpen = false;\r\n\r\n                        ensureNoOverflow();\r\n                    }\r\n\r\n                }\r\n                return this;\r\n            },\r\n            /**\r\n             * Close all open dialogs except this.\r\n             *\r\n             * @return {undefined}\r\n             */\r\n            closeOthers:function(){\r\n                alertify.closeAll(this);\r\n                return this;\r\n            },\r\n            /**\r\n             * Destroys this dialog instance\r\n             *\r\n             * @return {undefined}\r\n             */\r\n            destroy:function(){\r\n                if (this.__internal.isOpen ) {\r\n                    //mark dialog for destruction, this will be called on tranistionOut event.\r\n                    this.__internal.destroy = function(){\r\n                        destruct(this, initialize);\r\n                    };\r\n                    //close the dialog to unbind all events.\r\n                    this.close();\r\n                }else{\r\n                    destruct(this, initialize);\r\n                }\r\n                return this;\r\n            },\r\n        };\r\n\t} () );\r\n    var notifier = (function () {\r\n        var reflow,\r\n            element,\r\n            openInstances = [],\r\n            classes = {\r\n                base: 'alertify-notifier',\r\n                message: 'ajs-message',\r\n                top: 'ajs-top',\r\n                right: 'ajs-right',\r\n                bottom: 'ajs-bottom',\r\n                left: 'ajs-left',\r\n                visible: 'ajs-visible',\r\n                hidden: 'ajs-hidden',\r\n                close: 'ajs-close'\r\n            };\r\n        /**\r\n         * Helper: initializes the notifier instance\r\n         * \r\n         */\r\n        function initialize(instance) {\r\n\r\n            if (!instance.__internal) {\r\n                instance.__internal = {\r\n                    position: alertify.defaults.notifier.position,\r\n                    delay: alertify.defaults.notifier.delay,\r\n                };\r\n\r\n                element = document.createElement('DIV');\r\n\r\n                updatePosition(instance);\r\n            }\r\n\r\n            //add to DOM tree.\r\n            if (element.parentNode !== document.body) {\r\n                document.body.appendChild(element);\r\n            }\r\n        }\r\n        \r\n        function pushInstance(instance) {\r\n            instance.__internal.pushed = true;\r\n            openInstances.push(instance);\r\n        }\r\n        function popInstance(instance) {\r\n            openInstances.splice(openInstances.indexOf(instance), 1);\r\n            instance.__internal.pushed = false;\r\n        }\r\n        /**\r\n         * Helper: update the notifier instance position\r\n         * \r\n         */\r\n        function updatePosition(instance) {\r\n            element.className = classes.base;\r\n            switch (instance.__internal.position) {\r\n            case 'top-right':\r\n                addClass(element, classes.top + ' ' + classes.right);\r\n                break;\r\n            case 'top-left':\r\n                addClass(element, classes.top + ' ' + classes.left);\r\n                break;\r\n            case 'bottom-left':\r\n                addClass(element, classes.bottom + ' ' + classes.left);\r\n                break;\r\n\r\n            default:\r\n            case 'bottom-right':\r\n                addClass(element, classes.bottom + ' ' + classes.right);\r\n                break;\r\n            }\r\n        }\r\n\r\n        /**\r\n        * creates a new notification message\r\n        *\r\n        * @param  {DOMElement} message\tThe notifier message element\r\n        * @param  {Number} wait   Time (in ms) to wait before the message is dismissed, a value of 0 means keep open till clicked.\r\n        * @param  {Function} callback A callback function to be invoked when the message is dismissed.\r\n        *\r\n        * @return {undefined}\r\n        */\r\n        function create(div, callback) {\r\n\r\n            function clickDelegate(event, instance) {\r\n                if(!instance.__internal.closeButton || event.target.getAttribute('data-close') === 'true'){\r\n                    instance.dismiss(true);\r\n                }\r\n            }\r\n\r\n            function transitionDone(event, instance) {\r\n                // unbind event\r\n                off(instance.element, transition.type, transitionDone);\r\n                // remove the message\r\n                element.removeChild(instance.element);\r\n            }\r\n\r\n            function initialize(instance) {\r\n                if (!instance.__internal) {\r\n                    instance.__internal = {\r\n                        pushed: false,\r\n                        delay : undefined,\r\n                        timer: undefined,\r\n                        clickHandler: undefined,\r\n                        transitionEndHandler: undefined,\r\n                        transitionTimeout: undefined\r\n                    };\r\n                    instance.__internal.clickHandler = delegate(instance, clickDelegate);\r\n                    instance.__internal.transitionEndHandler = delegate(instance, transitionDone);\r\n                }\r\n                return instance;\r\n            }\r\n            function clearTimers(instance) {\r\n                clearTimeout(instance.__internal.timer);\r\n                clearTimeout(instance.__internal.transitionTimeout);\r\n            }\r\n            return initialize({\r\n                /* notification DOM element*/\r\n                element: div,\r\n                /*\r\n                 * Pushes a notification message \r\n                 * @param {string or DOMElement} content The notification message content\r\n                 * @param {Number} wait The time (in seconds) to wait before the message is dismissed, a value of 0 means keep open till clicked.\r\n                 * \r\n                 */\r\n                push: function (_content, _wait) {\r\n                    if (!this.__internal.pushed) {\r\n\r\n                        pushInstance(this);\r\n                        clearTimers(this);\r\n\r\n                        var content, wait;\r\n                        switch (arguments.length) {\r\n                        case 0:\r\n                            wait = this.__internal.delay;\r\n                            break;\r\n                        case 1:\r\n                            if (typeof (_content) === 'number') {\r\n                                wait = _content;\r\n                            } else {\r\n                                content = _content;\r\n                                wait = this.__internal.delay;\r\n                            }\r\n                            break;\r\n                        case 2:\r\n                            content = _content;\r\n                            wait = _wait;\r\n                            break;\r\n                        }\r\n                        this.__internal.closeButton = alertify.defaults.notifier.closeButton;\r\n                        // set contents\r\n                        if (typeof content !== 'undefined') {\r\n                            this.setContent(content);\r\n                        }\r\n                        // append or insert\r\n                        if (notifier.__internal.position.indexOf('top') < 0) {\r\n                            element.appendChild(this.element);\r\n                        } else {\r\n                            element.insertBefore(this.element, element.firstChild);\r\n                        }\r\n                        reflow = this.element.offsetWidth;\r\n                        addClass(this.element, classes.visible);\r\n                        // attach click event\r\n                        on(this.element, 'click', this.__internal.clickHandler);\r\n                        return this.delay(wait);\r\n                    }\r\n                    return this;\r\n                },\r\n                /*\r\n                 * {Function} callback function to be invoked before dismissing the notification message.\r\n                 * Remarks: A return value === 'false' will cancel the dismissal\r\n                 * \r\n                 */\r\n                ondismiss: function () { },\r\n                /*\r\n                 * {Function} callback function to be invoked when the message is dismissed.\r\n                 * \r\n                 */\r\n                callback: callback,\r\n                /*\r\n                 * Dismisses the notification message \r\n                 * @param {Boolean} clicked A flag indicating if the dismissal was caused by a click.\r\n                 * \r\n                 */\r\n                dismiss: function (clicked) {\r\n                    if (this.__internal.pushed) {\r\n                        clearTimers(this);\r\n                        if (!(typeof this.ondismiss === 'function' && this.ondismiss.call(this) === false)) {\r\n                            //detach click event\r\n                            off(this.element, 'click', this.__internal.clickHandler);\r\n                            // ensure element exists\r\n                            if (typeof this.element !== 'undefined' && this.element.parentNode === element) {\r\n                                //transition end or fallback\r\n                                this.__internal.transitionTimeout = setTimeout(this.__internal.transitionEndHandler, transition.supported ? 1000 : 100);\r\n                                removeClass(this.element, classes.visible);\r\n\r\n                                // custom callback on dismiss\r\n                                if (typeof this.callback === 'function') {\r\n                                    this.callback.call(this, clicked);\r\n                                }\r\n                            }\r\n                            popInstance(this);\r\n                        }\r\n                    }\r\n                    return this;\r\n                },\r\n                /*\r\n                 * Delays the notification message dismissal\r\n                 * @param {Number} wait The time (in seconds) to wait before the message is dismissed, a value of 0 means keep open till clicked.\r\n                 * \r\n                 */\r\n                delay: function (wait) {\r\n                    clearTimers(this);\r\n                    this.__internal.delay = typeof wait !== 'undefined' && !isNaN(+wait) ? +wait : notifier.__internal.delay;\r\n                    if (this.__internal.delay > 0) {\r\n                        var  self = this;\r\n                        this.__internal.timer = setTimeout(function () { self.dismiss(); }, this.__internal.delay * 1000);\r\n                    }\r\n                    return this;\r\n                },\r\n                /*\r\n                 * Sets the notification message contents\r\n                 * @param {string or DOMElement} content The notification message content\r\n                 * \r\n                 */\r\n                setContent: function (content) {\r\n                    if (typeof content === 'string') {\r\n                        clearContents(this.element);\r\n                        this.element.innerHTML = content;\r\n                    } else if (content instanceof window.HTMLElement && this.element.firstChild !== content) {\r\n                        clearContents(this.element);\r\n                        this.element.appendChild(content);\r\n                    }\r\n                    if(this.__internal.closeButton){\r\n                        var close = document.createElement('span');\r\n                        addClass(close, classes.close);\r\n                        close.setAttribute('data-close', true);\r\n                        this.element.appendChild(close);\r\n                    }\r\n                    return this;\r\n                },\r\n                /*\r\n                 * Dismisses all open notifications except this.\r\n                 * \r\n                 */\r\n                dismissOthers: function () {\r\n                    notifier.dismissAll(this);\r\n                    return this;\r\n                }\r\n            });\r\n        }\r\n\r\n        //notifier api\r\n        return {\r\n            /**\r\n             * Gets or Sets notifier settings. \r\n             *\r\n             * @param {string} key The setting name\r\n             * @param {Variant} value The setting value.\r\n             *\r\n             * @return {Object}\tif the called as a setter, return the notifier instance.\r\n             */\r\n            setting: function (key, value) {\r\n                //ensure init\r\n                initialize(this);\r\n\r\n                if (typeof value === 'undefined') {\r\n                    //get\r\n                    return this.__internal[key];\r\n                } else {\r\n                    //set\r\n                    switch (key) {\r\n                    case 'position':\r\n                        this.__internal.position = value;\r\n                        updatePosition(this);\r\n                        break;\r\n                    case 'delay':\r\n                        this.__internal.delay = value;\r\n                        break;\r\n                    }\r\n                }\r\n                return this;\r\n            },\r\n            /**\r\n             * [Alias] Sets dialog settings/options \r\n             */\r\n            set:function(key,value){\r\n                this.setting(key,value);\r\n                return this;\r\n            },\r\n            /**\r\n             * [Alias] Gets dialog settings/options \r\n             */\r\n            get:function(key){\r\n                return this.setting(key);\r\n            },\r\n            /**\r\n             * Creates a new notification message\r\n             *\r\n             * @param {string} type The type of notification message (simply a CSS class name 'ajs-{type}' to be added).\r\n             * @param {Function} callback  A callback function to be invoked when the message is dismissed.\r\n             *\r\n             * @return {undefined}\r\n             */\r\n            create: function (type, callback) {\r\n                //ensure notifier init\r\n                initialize(this);\r\n                //create new notification message\r\n                var div = document.createElement('div');\r\n                div.className = classes.message + ((typeof type === 'string' && type !== '') ? ' ajs-' + type : '');\r\n                return create(div, callback);\r\n            },\r\n            /**\r\n             * Dismisses all open notifications.\r\n             *\r\n             * @param {Object} excpet [optional] The notification object to exclude from dismissal.\r\n             *\r\n             */\r\n            dismissAll: function (except) {\r\n                var clone = openInstances.slice(0);\r\n                for (var x = 0; x < clone.length; x += 1) {\r\n                    var  instance = clone[x];\r\n                    if (except === undefined || except !== instance) {\r\n                        instance.dismiss();\r\n                    }\r\n                }\r\n            }\r\n        };\r\n    })();\r\n    /**\r\n     * Alertify public API\r\n     * This contains everything that is exposed through the alertify object.\r\n     *\r\n     * @return {Object}\r\n     */\r\n    function Alertify() {\r\n\r\n        // holds a references of created dialogs\r\n        var dialogs = {};\r\n\r\n        /**\r\n         * Extends a given prototype by merging properties from base into sub.\r\n         *\r\n         * @sub {Object} sub The prototype being overwritten.\r\n         * @base {Object} base The prototype being written.\r\n         *\r\n         * @return {Object} The extended prototype.\r\n         */\r\n        function extend(sub, base) {\r\n            // copy dialog pototype over definition.\r\n            for (var prop in base) {\r\n                if (base.hasOwnProperty(prop)) {\r\n                    sub[prop] = base[prop];\r\n                }\r\n            }\r\n            return sub;\r\n        }\r\n\r\n\r\n        /**\r\n        * Helper: returns a dialog instance from saved dialogs.\r\n        * and initializes the dialog if its not already initialized.\r\n        *\r\n        * @name {String} name The dialog name.\r\n        *\r\n        * @return {Object} The dialog instance.\r\n        */\r\n        function get_dialog(name) {\r\n            var dialog = dialogs[name].dialog;\r\n            //initialize the dialog if its not already initialized.\r\n            if (dialog && typeof dialog.__init === 'function') {\r\n                dialog.__init(dialog);\r\n            }\r\n            return dialog;\r\n        }\r\n\r\n        /**\r\n         * Helper:  registers a new dialog definition.\r\n         *\r\n         * @name {String} name The dialog name.\r\n         * @Factory {Function} Factory a function resposible for creating dialog prototype.\r\n         * @transient {Boolean} transient True to create a new dialog instance each time the dialog is invoked, false otherwise.\r\n         * @base {String} base the name of another dialog to inherit from.\r\n         *\r\n         * @return {Object} The dialog definition.\r\n         */\r\n        function register(name, Factory, transient, base) {\r\n            var definition = {\r\n                dialog: null,\r\n                factory: Factory\r\n            };\r\n\r\n            //if this is based on an existing dialog, create a new definition\r\n            //by applying the new protoype over the existing one.\r\n            if (base !== undefined) {\r\n                definition.factory = function () {\r\n                    return extend(new dialogs[base].factory(), new Factory());\r\n                };\r\n            }\r\n\r\n            if (!transient) {\r\n                //create a new definition based on dialog\r\n                definition.dialog = extend(new definition.factory(), dialog);\r\n            }\r\n            return dialogs[name] = definition;\r\n        }\r\n\r\n        return {\r\n            /**\r\n             * Alertify defaults\r\n             * \r\n             * @type {Object}\r\n             */\r\n            defaults: defaults,\r\n            /**\r\n             * Dialogs factory \r\n             *\r\n             * @param {string}      Dialog name.\r\n             * @param {Function}    A Dialog factory function.\r\n             * @param {Boolean}     Indicates whether to create a singleton or transient dialog.\r\n             * @param {String}      The name of the base type to inherit from.\r\n             */\r\n            dialog: function (name, Factory, transient, base) {\r\n\r\n                // get request, create a new instance and return it.\r\n                if (typeof Factory !== 'function') {\r\n                    return get_dialog(name);\r\n                }\r\n\r\n                if (this.hasOwnProperty(name)) {\r\n                    throw new Error('alertify.dialog: name already exists');\r\n                }\r\n\r\n                // register the dialog\r\n                var definition = register(name, Factory, transient, base);\r\n\r\n                if (transient) {\r\n\r\n                    // make it public\r\n                    this[name] = function () {\r\n                        //if passed with no params, consider it a get request\r\n                        if (arguments.length === 0) {\r\n                            return definition.dialog;\r\n                        } else {\r\n                            var instance = extend(new definition.factory(), dialog);\r\n                            //ensure init\r\n                            if (instance && typeof instance.__init === 'function') {\r\n                                instance.__init(instance);\r\n                            }\r\n                            instance['main'].apply(instance, arguments);\r\n                            return instance['show'].apply(instance);\r\n                        }\r\n                    };\r\n                } else {\r\n                    // make it public\r\n                    this[name] = function () {\r\n                        //ensure init\r\n                        if (definition.dialog && typeof definition.dialog.__init === 'function') {\r\n                            definition.dialog.__init(definition.dialog);\r\n                        }\r\n                        //if passed with no params, consider it a get request\r\n                        if (arguments.length === 0) {\r\n                            return definition.dialog;\r\n                        } else {\r\n                            var dialog = definition.dialog;\r\n                            dialog['main'].apply(definition.dialog, arguments);\r\n                            return dialog['show'].apply(definition.dialog);\r\n                        }\r\n                    };\r\n                }\r\n            },\r\n            /**\r\n             * Close all open dialogs.\r\n             *\r\n             * @param {Object} excpet [optional] The dialog object to exclude from closing.\r\n             *\r\n             * @return {undefined}\r\n             */\r\n            closeAll: function (except) {\r\n                var clone = openDialogs.slice(0);\r\n                for (var x = 0; x < clone.length; x += 1) {\r\n                    var instance = clone[x];\r\n                    if (except === undefined || except !== instance) {\r\n                        instance.close();\r\n                    }\r\n                }\r\n            },\r\n            /**\r\n             * Gets or Sets dialog settings/options. if the dialog is transient, this call does nothing.\r\n             *\r\n             * @param {string} name The dialog name.\r\n             * @param {String|Object} key A string specifying a propery name or a collection of key/value pairs.\r\n             * @param {Variant} value Optional, the value associated with the key (in case it was a string).\r\n             *\r\n             * @return {undefined}\r\n             */\r\n            setting: function (name, key, value) {\r\n\r\n                if (name === 'notifier') {\r\n                    return notifier.setting(key, value);\r\n                }\r\n\r\n                var dialog = get_dialog(name);\r\n                if (dialog) {\r\n                    return dialog.setting(key, value);\r\n                }\r\n            },\r\n            /**\r\n             * [Alias] Sets dialog settings/options \r\n             */\r\n            set: function(name,key,value){\r\n                return this.setting(name, key,value);\r\n            },\r\n            /**\r\n             * [Alias] Gets dialog settings/options \r\n             */\r\n            get: function(name, key){\r\n                return this.setting(name, key);\r\n            },\r\n            /**\r\n             * Creates a new notification message.\r\n             * If a type is passed, a class name \"ajs-{type}\" will be added.\r\n             * This allows for custom look and feel for various types of notifications.\r\n             *\r\n             * @param  {String | DOMElement}    [message=undefined]\t\tMessage text\r\n             * @param  {String}                 [type='']\t\t\t\tType of log message\r\n             * @param  {String}                 [wait='']\t\t\t\tTime (in seconds) to wait before auto-close\r\n             * @param  {Function}               [callback=undefined]\tA callback function to be invoked when the log is closed.\r\n             *\r\n             * @return {Object} Notification object.\r\n             */\r\n            notify: function (message, type, wait, callback) {\r\n                return notifier.create(type, callback).push(message, wait);\r\n            },\r\n            /**\r\n             * Creates a new notification message.\r\n             *\r\n             * @param  {String}\t\t[message=undefined]\t\tMessage text\r\n             * @param  {String}     [wait='']\t\t\t\tTime (in seconds) to wait before auto-close\r\n             * @param  {Function}\t[callback=undefined]\tA callback function to be invoked when the log is closed.\r\n             *\r\n             * @return {Object} Notification object.\r\n             */\r\n            message: function (message, wait, callback) {\r\n                return notifier.create(null, callback).push(message, wait);\r\n            },\r\n            /**\r\n             * Creates a new notification message of type 'success'.\r\n             *\r\n             * @param  {String}\t\t[message=undefined]\t\tMessage text\r\n             * @param  {String}     [wait='']\t\t\t\tTime (in seconds) to wait before auto-close\r\n             * @param  {Function}\t[callback=undefined]\tA callback function to be invoked when the log is closed.\r\n             *\r\n             * @return {Object} Notification object.\r\n             */\r\n            success: function (message, wait, callback) {\r\n                return notifier.create('success', callback).push(message, wait);\r\n            },\r\n            /**\r\n             * Creates a new notification message of type 'error'.\r\n             *\r\n             * @param  {String}\t\t[message=undefined]\t\tMessage text\r\n             * @param  {String}     [wait='']\t\t\t\tTime (in seconds) to wait before auto-close\r\n             * @param  {Function}\t[callback=undefined]\tA callback function to be invoked when the log is closed.\r\n             *\r\n             * @return {Object} Notification object.\r\n             */\r\n            error: function (message, wait, callback) {\r\n                return notifier.create('error', callback).push(message, wait);\r\n            },\r\n            /**\r\n             * Creates a new notification message of type 'warning'.\r\n             *\r\n             * @param  {String}\t\t[message=undefined]\t\tMessage text\r\n             * @param  {String}     [wait='']\t\t\t\tTime (in seconds) to wait before auto-close\r\n             * @param  {Function}\t[callback=undefined]\tA callback function to be invoked when the log is closed.\r\n             *\r\n             * @return {Object} Notification object.\r\n             */\r\n            warning: function (message, wait, callback) {\r\n                return notifier.create('warning', callback).push(message, wait);\r\n            },\r\n            /**\r\n             * Dismisses all open notifications\r\n             *\r\n             * @return {undefined}\r\n             */\r\n            dismissAll: function () {\r\n                notifier.dismissAll();\r\n            }\r\n        };\r\n    }\r\n    var alertify = new Alertify();\r\n\r\n    /**\r\n    * Alert dialog definition\r\n    *\r\n    * invoked by:\r\n    *\talertify.alert(message);\r\n    *\talertify.alert(title, message);\r\n    *\talertify.alert(message, onok);\r\n    *\talertify.alert(title, message, onok);\r\n     */\r\n    alertify.dialog('alert', function () {\r\n        return {\r\n            main: function (_title, _message, _onok) {\r\n                var title, message, onok;\r\n                switch (arguments.length) {\r\n                case 1:\r\n                    message = _title;\r\n                    break;\r\n                case 2:\r\n                    if (typeof _message === 'function') {\r\n                        message = _title;\r\n                        onok = _message;\r\n                    } else {\r\n                        title = _title;\r\n                        message = _message;\r\n                    }\r\n                    break;\r\n                case 3:\r\n                    title = _title;\r\n                    message = _message;\r\n                    onok = _onok;\r\n                    break;\r\n                }\r\n                this.set('title', title);\r\n                this.set('message', message);\r\n                this.set('onok', onok);\r\n                return this;\r\n            },\r\n            setup: function () {\r\n                return {\r\n                    buttons: [\r\n                        {\r\n                            text: alertify.defaults.glossary.ok,\r\n                            key: keys.ESC,\r\n                            invokeOnClose: true,\r\n                            className: alertify.defaults.theme.ok,\r\n                        }\r\n                    ],\r\n                    focus: {\r\n                        element: 0,\r\n                        select: false\r\n                    },\r\n                    options: {\r\n                        maximizable: false,\r\n                        resizable: false\r\n                    }\r\n                };\r\n            },\r\n            build: function () {\r\n                // nothing\r\n            },\r\n            prepare: function () {\r\n                //nothing\r\n            },\r\n            setMessage: function (message) {\r\n                this.setContent(message);\r\n            },\r\n            settings: {\r\n                message: undefined,\r\n                onok: undefined,\r\n                label: undefined,\r\n            },\r\n            settingUpdated: function (key, oldValue, newValue) {\r\n                switch (key) {\r\n                case 'message':\r\n                    this.setMessage(newValue);\r\n                    break;\r\n                case 'label':\r\n                    if (this.__internal.buttons[0].element) {\r\n                        this.__internal.buttons[0].element.innerHTML = newValue;\r\n                    }\r\n                    break;\r\n                }\r\n            },\r\n            callback: function (closeEvent) {\r\n                if (typeof this.get('onok') === 'function') {\r\n                    var returnValue = this.get('onok').call(this, closeEvent);\r\n                    if (typeof returnValue !== 'undefined') {\r\n                        closeEvent.cancel = !returnValue;\r\n                    }\r\n                }\r\n            }\r\n        };\r\n    });\r\n    /**\r\n     * Confirm dialog object\r\n     *\r\n     *\talertify.confirm(message);\r\n     *\talertify.confirm(message, onok);\r\n     *\talertify.confirm(message, onok, oncancel);\r\n     *\talertify.confirm(title, message, onok, oncancel);\r\n     */\r\n    alertify.dialog('confirm', function () {\r\n\r\n        var autoConfirm = {\r\n            timer: null,\r\n            index: null,\r\n            text: null,\r\n            duration: null,\r\n            task: function (event, self) {\r\n                if (self.isOpen()) {\r\n                    self.__internal.buttons[autoConfirm.index].element.innerHTML = autoConfirm.text + ' (&#8207;' + autoConfirm.duration + '&#8207;) ';\r\n                    autoConfirm.duration -= 1;\r\n                    if (autoConfirm.duration === -1) {\r\n                        clearAutoConfirm(self);\r\n                        var button = self.__internal.buttons[autoConfirm.index];\r\n                        var closeEvent = createCloseEvent(autoConfirm.index, button);\r\n\r\n                        if (typeof self.callback === 'function') {\r\n                            self.callback.apply(self, [closeEvent]);\r\n                        }\r\n                        //close the dialog.\r\n                        if (closeEvent.close !== false) {\r\n                            self.close();\r\n                        }\r\n                    }\r\n                } else {\r\n                    clearAutoConfirm(self);\r\n                }\r\n            }\r\n        };\r\n\r\n        function clearAutoConfirm(self) {\r\n            if (autoConfirm.timer !== null) {\r\n                clearInterval(autoConfirm.timer);\r\n                autoConfirm.timer = null;\r\n                self.__internal.buttons[autoConfirm.index].element.innerHTML = autoConfirm.text;\r\n            }\r\n        }\r\n\r\n        function startAutoConfirm(self, index, duration) {\r\n            clearAutoConfirm(self);\r\n            autoConfirm.duration = duration;\r\n            autoConfirm.index = index;\r\n            autoConfirm.text = self.__internal.buttons[index].element.innerHTML;\r\n            autoConfirm.timer = setInterval(delegate(self, autoConfirm.task), 1000);\r\n            autoConfirm.task(null, self);\r\n        }\r\n\r\n\r\n        return {\r\n            main: function (_title, _message, _onok, _oncancel) {\r\n                var title, message, onok, oncancel;\r\n                switch (arguments.length) {\r\n                case 1:\r\n                    message = _title;\r\n                    break;\r\n                case 2:\r\n                    message = _title;\r\n                    onok = _message;\r\n                    break;\r\n                case 3:\r\n                    message = _title;\r\n                    onok = _message;\r\n                    oncancel = _onok;\r\n                    break;\r\n                case 4:\r\n                    title = _title;\r\n                    message = _message;\r\n                    onok = _onok;\r\n                    oncancel = _oncancel;\r\n                    break;\r\n                }\r\n                this.set('title', title);\r\n                this.set('message', message);\r\n                this.set('onok', onok);\r\n                this.set('oncancel', oncancel);\r\n                return this;\r\n            },\r\n            setup: function () {\r\n                return {\r\n                    buttons: [\r\n                        {\r\n                            text: alertify.defaults.glossary.ok,\r\n                            key: keys.ENTER,\r\n                            className: alertify.defaults.theme.ok,\r\n                        },\r\n                        {\r\n                            text: alertify.defaults.glossary.cancel,\r\n                            key: keys.ESC,\r\n                            invokeOnClose: true,\r\n                            className: alertify.defaults.theme.cancel,\r\n                        }\r\n                    ],\r\n                    focus: {\r\n                        element: 0,\r\n                        select: false\r\n                    },\r\n                    options: {\r\n                        maximizable: false,\r\n                        resizable: false\r\n                    }\r\n                };\r\n            },\r\n            build: function () {\r\n                //nothing\r\n            },\r\n            prepare: function () {\r\n                //nothing\r\n            },\r\n            setMessage: function (message) {\r\n                this.setContent(message);\r\n            },\r\n            settings: {\r\n                message: null,\r\n                labels: null,\r\n                onok: null,\r\n                oncancel: null,\r\n                defaultFocus: null,\r\n                reverseButtons: null,\r\n            },\r\n            settingUpdated: function (key, oldValue, newValue) {\r\n                switch (key) {\r\n                case 'message':\r\n                    this.setMessage(newValue);\r\n                    break;\r\n                case 'labels':\r\n                    if ('ok' in newValue && this.__internal.buttons[0].element) {\r\n                        this.__internal.buttons[0].text = newValue.ok;\r\n                        this.__internal.buttons[0].element.innerHTML = newValue.ok;\r\n                    }\r\n                    if ('cancel' in newValue && this.__internal.buttons[1].element) {\r\n                        this.__internal.buttons[1].text = newValue.cancel;\r\n                        this.__internal.buttons[1].element.innerHTML = newValue.cancel;\r\n                    }\r\n                    break;\r\n                case 'reverseButtons':\r\n                    if (newValue === true) {\r\n                        this.elements.buttons.primary.appendChild(this.__internal.buttons[0].element);\r\n                    } else {\r\n                        this.elements.buttons.primary.appendChild(this.__internal.buttons[1].element);\r\n                    }\r\n                    break;\r\n                case 'defaultFocus':\r\n                    this.__internal.focus.element = newValue === 'ok' ? 0 : 1;\r\n                    break;\r\n                }\r\n            },\r\n            callback: function (closeEvent) {\r\n                clearAutoConfirm(this);\r\n                var returnValue;\r\n                switch (closeEvent.index) {\r\n                case 0:\r\n                    if (typeof this.get('onok') === 'function') {\r\n                        returnValue = this.get('onok').call(this, closeEvent);\r\n                        if (typeof returnValue !== 'undefined') {\r\n                            closeEvent.cancel = !returnValue;\r\n                        }\r\n                    }\r\n                    break;\r\n                case 1:\r\n                    if (typeof this.get('oncancel') === 'function') {\r\n                        returnValue = this.get('oncancel').call(this, closeEvent);\r\n                        if (typeof returnValue !== 'undefined') {\r\n                            closeEvent.cancel = !returnValue;\r\n                        }\r\n                    }\r\n                    break;\r\n                }\r\n            },\r\n            autoOk: function (duration) {\r\n                startAutoConfirm(this, 0, duration);\r\n                return this;\r\n            },\r\n            autoCancel: function (duration) {\r\n                startAutoConfirm(this, 1, duration);\r\n                return this;\r\n            }\r\n        };\r\n    });\r\n    /**\r\n     * Prompt dialog object\r\n     *\r\n     * invoked by:\r\n     *\talertify.prompt(message);\r\n     *\talertify.prompt(message, value);\r\n     *\talertify.prompt(message, value, onok);\r\n     *\talertify.prompt(message, value, onok, oncancel);\r\n     *\talertify.prompt(title, message, value, onok, oncancel);\r\n     */\r\n    alertify.dialog('prompt', function () {\r\n        var input = document.createElement('INPUT');\r\n        var p = document.createElement('P');\r\n        return {\r\n            main: function (_title, _message, _value, _onok, _oncancel) {\r\n                var title, message, value, onok, oncancel;\r\n                switch (arguments.length) {\r\n                case 1:\r\n                    message = _title;\r\n                    break;\r\n                case 2:\r\n                    message = _title;\r\n                    value = _message;\r\n                    break;\r\n                case 3:\r\n                    message = _title;\r\n                    value = _message;\r\n                    onok = _value;\r\n                    break;\r\n                case 4:\r\n                    message = _title;\r\n                    value = _message;\r\n                    onok = _value;\r\n                    oncancel = _onok;\r\n                    break;\r\n                case 5:\r\n                    title = _title;\r\n                    message = _message;\r\n                    value = _value;\r\n                    onok = _onok;\r\n                    oncancel = _oncancel;\r\n                    break;\r\n                }\r\n                this.set('title', title);\r\n                this.set('message', message);\r\n                this.set('value', value);\r\n                this.set('onok', onok);\r\n                this.set('oncancel', oncancel);\r\n                return this;\r\n            },\r\n            setup: function () {\r\n                return {\r\n                    buttons: [\r\n                        {\r\n                            text: alertify.defaults.glossary.ok,\r\n                            key: keys.ENTER,\r\n                            className: alertify.defaults.theme.ok,\r\n                        },\r\n                        {\r\n                            text: alertify.defaults.glossary.cancel,\r\n                            key: keys.ESC,\r\n                            invokeOnClose: true,\r\n                            className: alertify.defaults.theme.cancel,\r\n                        }\r\n                    ],\r\n                    focus: {\r\n                        element: input,\r\n                        select: true\r\n                    },\r\n                    options: {\r\n                        maximizable: false,\r\n                        resizable: false\r\n                    }\r\n                };\r\n            },\r\n            build: function () {\r\n                input.className = alertify.defaults.theme.input;\r\n                input.setAttribute('type', 'text');\r\n                input.value = this.get('value');\r\n                this.elements.content.appendChild(p);\r\n                this.elements.content.appendChild(input);\r\n            },\r\n            prepare: function () {\r\n                //nothing\r\n            },\r\n            setMessage: function (message) {\r\n                if (typeof message === 'string') {\r\n                    clearContents(p);\r\n                    p.innerHTML = message;\r\n                } else if (message instanceof window.HTMLElement && p.firstChild !== message) {\r\n                    clearContents(p);\r\n                    p.appendChild(message);\r\n                }\r\n            },\r\n            settings: {\r\n                message: undefined,\r\n                labels: undefined,\r\n                onok: undefined,\r\n                oncancel: undefined,\r\n                value: '',\r\n                type:'text',\r\n                reverseButtons: undefined,\r\n            },\r\n            settingUpdated: function (key, oldValue, newValue) {\r\n                switch (key) {\r\n                case 'message':\r\n                    this.setMessage(newValue);\r\n                    break;\r\n                case 'value':\r\n                    input.value = newValue;\r\n                    break;\r\n                case 'type':\r\n                    switch (newValue) {\r\n                    case 'text':\r\n                    case 'color':\r\n                    case 'date':\r\n                    case 'datetime-local':\r\n                    case 'email':\r\n                    case 'month':\r\n                    case 'number':\r\n                    case 'password':\r\n                    case 'search':\r\n                    case 'tel':\r\n                    case 'time':\r\n                    case 'week':\r\n                        input.type = newValue;\r\n                        break;\r\n                    default:\r\n                        input.type = 'text';\r\n                        break;\r\n                    }\r\n                    break;\r\n                case 'labels':\r\n                    if (newValue.ok && this.__internal.buttons[0].element) {\r\n                        this.__internal.buttons[0].element.innerHTML = newValue.ok;\r\n                    }\r\n                    if (newValue.cancel && this.__internal.buttons[1].element) {\r\n                        this.__internal.buttons[1].element.innerHTML = newValue.cancel;\r\n                    }\r\n                    break;\r\n                case 'reverseButtons':\r\n                    if (newValue === true) {\r\n                        this.elements.buttons.primary.appendChild(this.__internal.buttons[0].element);\r\n                    } else {\r\n                        this.elements.buttons.primary.appendChild(this.__internal.buttons[1].element);\r\n                    }\r\n                    break;\r\n                }\r\n            },\r\n            callback: function (closeEvent) {\r\n                var returnValue;\r\n                switch (closeEvent.index) {\r\n                case 0:\r\n                    this.settings.value = input.value;\r\n                    if (typeof this.get('onok') === 'function') {\r\n                        returnValue = this.get('onok').call(this, closeEvent, this.settings.value);\r\n                        if (typeof returnValue !== 'undefined') {\r\n                            closeEvent.cancel = !returnValue;\r\n                        }\r\n                    }\r\n                    break;\r\n                case 1:\r\n                    if (typeof this.get('oncancel') === 'function') {\r\n                        returnValue = this.get('oncancel').call(this, closeEvent);\r\n                        if (typeof returnValue !== 'undefined') {\r\n                            closeEvent.cancel = !returnValue;\r\n                        }\r\n                    }\r\n                    if(!closeEvent.cancel){\r\n                        input.value = this.settings.value;\r\n                    }\r\n                    break;\r\n                }\r\n            }\r\n        };\r\n    });\r\n\r\n    // CommonJS\r\n    if ( typeof module === 'object' && typeof module.exports === 'object' ) {\r\n        module.exports = alertify;\r\n    // AMD\r\n    } else if ( typeof define === 'function' && define.amd) {\r\n        define( [], function () {\r\n            return alertify;\r\n        } );\r\n    // window\r\n    } else if ( !window.alertify ) {\r\n        window.alertify = alertify;\r\n    }\r\n\r\n} ( typeof window !== 'undefined' ? window : this ) );\r\n"
+    /**
+     * [Helper]  Adds the specified class(es) to the element.
+     *
+     * @element {node}      The element
+     * @className {string}  One or more space-separated classes to be added to the class attribute of the element.
+     * 
+     * @return {undefined}
+     */
+    function addClass(element,classNames){
+        element.className += ' ' + classNames;
+    }
+    
+    /**
+     * [Helper]  Removes the specified class(es) from the element.
+     *
+     * @element {node}      The element
+     * @className {string}  One or more space-separated classes to be removed from the class attribute of the element.
+     * 
+     * @return {undefined}
+     */
+    function removeClass(element, classNames) {
+        var original = element.className.split(' ');
+        var toBeRemoved = classNames.split(' ');
+        for (var x = 0; x < toBeRemoved.length; x += 1) {
+            var index = original.indexOf(toBeRemoved[x]);
+            if (index > -1){
+                original.splice(index,1);
+            }
+        }
+        element.className = original.join(' ');
+    }
 
-/***/ }),
+    /**
+     * [Helper]  Checks if the document is RTL
+     *
+     * @return {Boolean} True if the document is RTL, false otherwise.
+     */
+    function isRightToLeft(){
+        return window.getComputedStyle(document.body).direction === 'rtl';
+    }
+    /**
+     * [Helper]  Get the document current scrollTop
+     *
+     * @return {Number} current document scrollTop value
+     */
+    function getScrollTop(){
+        return ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
+    }
 
-/***/ "../../../../script-loader/addScript.js":
-/***/ (function(module, exports) {
+    /**
+     * [Helper]  Get the document current scrollLeft
+     *
+     * @return {Number} current document scrollLeft value
+     */
+    function getScrollLeft(){
+        return ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
+    }
 
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-module.exports = function(src) {
-	if (typeof execScript !== "undefined")
-		execScript(src);
-	else
-		eval.call(null, src);
-}
+    /**
+    * Helper: clear contents
+    *
+    */
+    function clearContents(element){
+        while (element.lastChild) {
+            element.removeChild(element.lastChild);
+        }
+    }
+    /**
+     * Extends a given prototype by merging properties from base into sub.
+     *
+     * @sub {Object} sub The prototype being overwritten.
+     * @base {Object} base The prototype being written.
+     *
+     * @return {Object} The extended prototype.
+     */
+    function copy(src) {
+        if(null === src){
+            return src;
+        }
+        var cpy;
+        if(Array.isArray(src)){
+            cpy = [];
+            for(var x=0;x<src.length;x+=1){
+                cpy.push(copy(src[x]));
+            }
+            return cpy;
+        }
+      
+        if(src instanceof Date){
+            return new Date(src.getTime());
+        }
+      
+        if(src instanceof RegExp){
+            cpy = new RegExp(src.source);
+            cpy.global = src.global;
+            cpy.ignoreCase = src.ignoreCase;
+            cpy.multiline = src.multiline;
+            cpy.lastIndex = src.lastIndex;
+            return cpy;
+        }
+        
+        if(typeof src === 'object'){
+            cpy = {};
+            // copy dialog pototype over definition.
+            for (var prop in src) {
+                if (src.hasOwnProperty(prop)) {
+                    cpy[prop] = copy(src[prop]);
+                }
+            }
+            return cpy;
+        }
+        return src;
+    }
+    /**
+      * Helper: destruct the dialog
+      *
+      */
+    function destruct(instance, initialize){
+        //delete the dom and it's references.
+        var root = instance.elements.root;
+        root.parentNode.removeChild(root);
+        delete instance.elements;
+        //copy back initial settings.
+        instance.settings = copy(instance.__settings);
+        //re-reference init function.
+        instance.__init = initialize;
+        //delete __internal variable to allow re-initialization.
+        delete instance.__internal;
+    }
+
+    /**
+     * Use a closure to return proper event listener method. Try to use
+     * `addEventListener` by default but fallback to `attachEvent` for
+     * unsupported browser. The closure simply ensures that the test doesn't
+     * happen every time the method is called.
+     *
+     * @param    {Node}     el    Node element
+     * @param    {String}   event Event type
+     * @param    {Function} fn    Callback of event
+     * @return   {Function}
+     */
+    var on = (function () {
+        if (document.addEventListener) {
+            return function (el, event, fn, useCapture) {
+                el.addEventListener(event, fn, useCapture === true);
+            };
+        } else if (document.attachEvent) {
+            return function (el, event, fn) {
+                el.attachEvent('on' + event, fn);
+            };
+        }
+    }());
+
+    /**
+     * Use a closure to return proper event listener method. Try to use
+     * `removeEventListener` by default but fallback to `detachEvent` for
+     * unsupported browser. The closure simply ensures that the test doesn't
+     * happen every time the method is called.
+     *
+     * @param    {Node}     el    Node element
+     * @param    {String}   event Event type
+     * @param    {Function} fn    Callback of event
+     * @return   {Function}
+     */
+    var off = (function () {
+        if (document.removeEventListener) {
+            return function (el, event, fn, useCapture) {
+                el.removeEventListener(event, fn, useCapture === true);
+            };
+        } else if (document.detachEvent) {
+            return function (el, event, fn) {
+                el.detachEvent('on' + event, fn);
+            };
+        }
+    }());
+
+    /**
+     * Prevent default event from firing
+     *
+     * @param  {Event} event Event object
+     * @return {undefined}
+
+    function prevent ( event ) {
+        if ( event ) {
+            if ( event.preventDefault ) {
+                event.preventDefault();
+            } else {
+                event.returnValue = false;
+            }
+        }
+    }
+    */
+    var transition = (function () {
+        var t, type;
+        var supported = false;
+        var transitions = {
+            'animation'        : 'animationend',
+            'OAnimation'       : 'oAnimationEnd oanimationend',
+            'msAnimation'      : 'MSAnimationEnd',
+            'MozAnimation'     : 'animationend',
+            'WebkitAnimation'  : 'webkitAnimationEnd'
+        };
+
+        for (t in transitions) {
+            if (document.documentElement.style[t] !== undefined) {
+                type = transitions[t];
+                supported = true;
+                break;
+            }
+        }
+
+        return {
+            type: type,
+            supported: supported
+        };
+    }());
+
+    /**
+    * Creates event handler delegate that sends the instance as last argument.
+    * 
+    * @return {Function}    a function wrapper which sends the instance as last argument.
+    */
+    function delegate(context, method) {
+        return function () {
+            if (arguments.length > 0) {
+                var args = [];
+                for (var x = 0; x < arguments.length; x += 1) {
+                    args.push(arguments[x]);
+                }
+                args.push(context);
+                return method.apply(context, args);
+            }
+            return method.apply(context, [null, context]);
+        };
+    }
+    /**
+    * Helper for creating a dialog close event.
+    * 
+    * @return {object}
+    */
+    function createCloseEvent(index, button) {
+        return {
+            index: index,
+            button: button,
+            cancel: false
+        };
+    }
+    /**
+    * Helper for dispatching events.
+    *
+    * @param  {string} evenType The type of the event to disptach.
+    * @param  {object} instance The dialog instance disptaching the event.
+    *
+    * @return   {any}   The result of the invoked function.
+    */
+    function dispatchEvent(eventType, instance) {
+        if ( typeof instance.get(eventType) === 'function' ) {
+            return instance.get(eventType).call(instance);
+        }
+    }
 
 
-/***/ }),
+    /**
+     * Super class for all dialogs
+     *
+     * @return {Object}		base dialog prototype
+     */
+    var dialog = (function () {
+        var //holds the list of used keys.
+            usedKeys = [],
+            //dummy variable, used to trigger dom reflow.
+            reflow = null,
+            //condition for detecting safari
+            isSafari = window.navigator.userAgent.indexOf('Safari') > -1 && window.navigator.userAgent.indexOf('Chrome') < 0,
+            //dialog building blocks
+            templates = {
+                dimmer:'<div class="ajs-dimmer"></div>',
+                /*tab index required to fire click event before body focus*/
+                modal: '<div class="ajs-modal" tabindex="0"></div>',
+                dialog: '<div class="ajs-dialog" tabindex="0"></div>',
+                reset: '<button class="ajs-reset"></button>',
+                commands: '<div class="ajs-commands"><button class="ajs-pin"></button><button class="ajs-maximize"></button><button class="ajs-close"></button></div>',
+                header: '<div class="ajs-header"></div>',
+                body: '<div class="ajs-body"></div>',
+                content: '<div class="ajs-content"></div>',
+                footer: '<div class="ajs-footer"></div>',
+                buttons: { primary: '<div class="ajs-primary ajs-buttons"></div>', auxiliary: '<div class="ajs-auxiliary ajs-buttons"></div>' },
+                button: '<button class="ajs-button"></button>',
+                resizeHandle: '<div class="ajs-handle"></div>',
+            },
+            //common class names
+            classes = {
+                animationIn: 'ajs-in',
+                animationOut: 'ajs-out',
+                base: 'alertify',
+                basic:'ajs-basic',
+                capture: 'ajs-capture',
+                closable:'ajs-closable',
+                fixed: 'ajs-fixed',
+                frameless:'ajs-frameless',
+                hidden: 'ajs-hidden',
+                maximize: 'ajs-maximize',
+                maximized: 'ajs-maximized',
+                maximizable:'ajs-maximizable',
+                modeless: 'ajs-modeless',
+                movable: 'ajs-movable',
+                noSelection: 'ajs-no-selection',
+                noOverflow: 'ajs-no-overflow',
+                noPadding:'ajs-no-padding',
+                pin:'ajs-pin',
+                pinnable:'ajs-pinnable',
+                prefix: 'ajs-',
+                resizable: 'ajs-resizable',
+                restore: 'ajs-restore',
+                shake:'ajs-shake',
+                unpinned:'ajs-unpinned',
+            };
 
-/***/ "../../../../script-loader/index.js!../../../../alertifyjs/build/alertify.js":
-/***/ (function(module, exports, __webpack_require__) {
+        /**
+         * Helper: initializes the dialog instance
+         * 
+         * @return	{Number}	The total count of currently open modals.
+         */
+        function initialize(instance){
+            
+            if(!instance.__internal){
 
-__webpack_require__("../../../../script-loader/addScript.js")(__webpack_require__("../../../../raw-loader/index.js!../../../../alertifyjs/build/alertify.js"))
+                //no need to expose init after this.
+                delete instance.__init;
+              
+                //keep a copy of initial dialog settings
+                if(!instance.__settings){
+                    instance.__settings = copy(instance.settings);
+                }
+                //in case the script was included before body.
+                //after first dialog gets initialized, it won't be null anymore!
+                if(null === reflow){
+                    // set tabindex attribute on body element this allows script to give it
+                    // focus after the dialog is closed
+                    document.body.setAttribute( 'tabindex', '0' );
+                }
 
-/***/ }),
+                //get dialog buttons/focus setup
+                var setup;
+                if(typeof instance.setup === 'function'){
+                    setup = instance.setup();
+                    setup.options = setup.options  || {};
+                    setup.focus = setup.focus  || {};
+                }else{
+                    setup = {
+                        buttons:[],
+                        focus:{
+                            element:null,
+                            select:false
+                        },
+                        options:{
+                        }
+                    };
+                }
+                
+                //initialize hooks object.
+                if(typeof instance.hooks !== 'object'){
+                    instance.hooks = {};
+                }
 
-/***/ 2:
-/***/ (function(module, exports, __webpack_require__) {
+                //copy buttons defintion
+                var buttonsDefinition = [];
+                if(Array.isArray(setup.buttons)){
+                    for(var b=0;b<setup.buttons.length;b+=1){
+                        var ref  = setup.buttons[b],
+                            cpy = {};
+                        for (var i in ref) {
+                            if (ref.hasOwnProperty(i)) {
+                                cpy[i] = ref[i];
+                            }
+                        }
+                        buttonsDefinition.push(cpy);
+                    }
+                }
 
-module.exports = __webpack_require__("../../../../script-loader/index.js!../../../../alertifyjs/build/alertify.js");
+                var internal = instance.__internal = {
+                    /**
+                     * Flag holding the open state of the dialog
+                     * 
+                     * @type {Boolean}
+                     */
+                    isOpen:false,
+                    /**
+                     * Active element is the element that will receive focus after
+                     * closing the dialog. It defaults as the body tag, but gets updated
+                     * to the last focused element before the dialog was opened.
+                     *
+                     * @type {Node}
+                     */
+                    activeElement:document.body,
+                    timerIn:undefined,
+                    timerOut:undefined,
+                    buttons: buttonsDefinition,
+                    focus: setup.focus,
+                    options: {
+                        title: undefined,
+                        modal: undefined,
+                        basic:undefined,
+                        frameless:undefined,
+                        pinned: undefined,
+                        movable: undefined,
+                        moveBounded:undefined,
+                        resizable: undefined,
+                        autoReset: undefined,
+                        closable: undefined,
+                        closableByDimmer: undefined,
+                        maximizable: undefined,
+                        startMaximized: undefined,
+                        pinnable: undefined,
+                        transition: undefined,
+                        padding:undefined,
+                        overflow:undefined,
+                        onshow:undefined,
+                        onclosing:undefined,
+                        onclose:undefined,
+                        onfocus:undefined,
+                        onmove:undefined,
+                        onmoved:undefined,
+                        onresize:undefined,
+                        onresized:undefined,
+                        onmaximize:undefined,
+                        onmaximized:undefined,
+                        onrestore:undefined,
+                        onrestored:undefined
+                    },
+                    resetHandler:undefined,
+                    beginMoveHandler:undefined,
+                    beginResizeHandler:undefined,
+                    bringToFrontHandler:undefined,
+                    modalClickHandler:undefined,
+                    buttonsClickHandler:undefined,
+                    commandsClickHandler:undefined,
+                    transitionInHandler:undefined,
+                    transitionOutHandler:undefined,
+                    destroy:undefined
+                };
+
+                var elements = {};
+                //root node
+                elements.root = document.createElement('div');
+                
+                elements.root.className = classes.base + ' ' + classes.hidden + ' ';
+
+                elements.root.innerHTML = templates.dimmer + templates.modal;
+                
+                //dimmer
+                elements.dimmer = elements.root.firstChild;
+
+                //dialog
+                elements.modal = elements.root.lastChild;
+                elements.modal.innerHTML = templates.dialog;
+                elements.dialog = elements.modal.firstChild;
+                elements.dialog.innerHTML = templates.reset + templates.commands + templates.header + templates.body + templates.footer + templates.resizeHandle + templates.reset;
+
+                //reset links
+                elements.reset = [];
+                elements.reset.push(elements.dialog.firstChild);
+                elements.reset.push(elements.dialog.lastChild);
+                
+                //commands
+                elements.commands = {};
+                elements.commands.container = elements.reset[0].nextSibling;
+                elements.commands.pin = elements.commands.container.firstChild;
+                elements.commands.maximize = elements.commands.pin.nextSibling;
+                elements.commands.close = elements.commands.maximize.nextSibling;
+                
+                //header
+                elements.header = elements.commands.container.nextSibling;
+
+                //body
+                elements.body = elements.header.nextSibling;
+                elements.body.innerHTML = templates.content;
+                elements.content = elements.body.firstChild;
+
+                //footer
+                elements.footer = elements.body.nextSibling;
+                elements.footer.innerHTML = templates.buttons.auxiliary + templates.buttons.primary;
+                
+                //resize handle
+                elements.resizeHandle = elements.footer.nextSibling;
+
+                //buttons
+                elements.buttons = {};
+                elements.buttons.auxiliary = elements.footer.firstChild;
+                elements.buttons.primary = elements.buttons.auxiliary.nextSibling;
+                elements.buttons.primary.innerHTML = templates.button;
+                elements.buttonTemplate = elements.buttons.primary.firstChild;
+                //remove button template
+                elements.buttons.primary.removeChild(elements.buttonTemplate);
+                               
+                for(var x=0; x < instance.__internal.buttons.length; x+=1) {
+                    var button = instance.__internal.buttons[x];
+                    
+                    // add to the list of used keys.
+                    if(usedKeys.indexOf(button.key) < 0){
+                        usedKeys.push(button.key);
+                    }
+
+                    button.element = elements.buttonTemplate.cloneNode();
+                    button.element.innerHTML = button.text;
+                    if(typeof button.className === 'string' &&  button.className !== ''){
+                        addClass(button.element, button.className);
+                    }
+                    for(var key in button.attrs){
+                        if(key !== 'className' && button.attrs.hasOwnProperty(key)){
+                            button.element.setAttribute(key, button.attrs[key]);
+                        }
+                    }
+                    if(button.scope === 'auxiliary'){
+                        elements.buttons.auxiliary.appendChild(button.element);
+                    }else{
+                        elements.buttons.primary.appendChild(button.element);
+                    }
+                }
+                //make elements pubic
+                instance.elements = elements;
+                
+                //save event handlers delegates
+                internal.resetHandler = delegate(instance, onReset);
+                internal.beginMoveHandler = delegate(instance, beginMove);
+                internal.beginResizeHandler = delegate(instance, beginResize);
+                internal.bringToFrontHandler = delegate(instance, bringToFront);
+                internal.modalClickHandler = delegate(instance, modalClickHandler);
+                internal.buttonsClickHandler = delegate(instance, buttonsClickHandler);
+                internal.commandsClickHandler = delegate(instance, commandsClickHandler);
+                internal.transitionInHandler = delegate(instance, handleTransitionInEvent);
+                internal.transitionOutHandler = delegate(instance, handleTransitionOutEvent);
+
+                //settings
+                for(var opKey in internal.options){
+                    if(setup.options[opKey] !== undefined){
+                        // if found in user options
+                        instance.set(opKey, setup.options[opKey]);
+                    }else if(alertify.defaults.hasOwnProperty(opKey)) {
+                        // else if found in defaults options
+                        instance.set(opKey, alertify.defaults[opKey]);
+                    }else if(opKey === 'title' ) {
+                        // else if title key, use alertify.defaults.glossary
+                        instance.set(opKey, alertify.defaults.glossary[opKey]);
+                    }
+                }
+
+                // allow dom customization
+                if(typeof instance.build === 'function'){
+                    instance.build();
+                }
+            }
+            
+            //add to the end of the DOM tree.
+            document.body.appendChild(instance.elements.root);
+        }
+
+        /**
+         * Helper: maintains scroll position
+         *
+         */
+        var scrollX, scrollY;
+        function saveScrollPosition(){
+            scrollX = getScrollLeft();
+            scrollY = getScrollTop();
+        }
+        function restoreScrollPosition(){
+            window.scrollTo(scrollX, scrollY);
+        }
+
+        /**
+         * Helper: adds/removes no-overflow class from body
+         *
+         */
+        function ensureNoOverflow(){
+            var requiresNoOverflow = 0;
+            for(var x=0;x<openDialogs.length;x+=1){
+                var instance = openDialogs[x];
+                if(instance.isModal() || instance.isMaximized()){
+                    requiresNoOverflow+=1;
+                }
+            }
+            if(requiresNoOverflow === 0 && document.body.className.indexOf(classes.noOverflow) >= 0){
+                //last open modal or last maximized one
+                removeClass(document.body, classes.noOverflow);
+                preventBodyShift(false);
+            }else if(requiresNoOverflow > 0 && document.body.className.indexOf(classes.noOverflow) < 0){
+                //first open modal or first maximized one
+                preventBodyShift(true);
+                addClass(document.body, classes.noOverflow);
+            }
+        }
+        var top = '', topScroll = 0;
+        /**
+         * Helper: prevents body shift.
+         *
+         */
+        function preventBodyShift(add){
+            if(alertify.defaults.preventBodyShift && document.documentElement.scrollHeight > document.documentElement.clientHeight){
+                if(add ){//&& openDialogs[openDialogs.length-1].elements.dialog.clientHeight <= document.documentElement.clientHeight){
+                    topScroll = scrollY;
+                    top = window.getComputedStyle(document.body).top;
+                    addClass(document.body, classes.fixed);
+                    document.body.style.top = -scrollY + 'px';
+                } else {
+                    scrollY = topScroll;
+                    document.body.style.top = top;
+                    removeClass(document.body, classes.fixed);
+                    restoreScrollPosition();
+                }
+            }
+        }
+		
+        /**
+         * Sets the name of the transition used to show/hide the dialog
+         * 
+         * @param {Object} instance The dilog instance.
+         *
+         */
+        function updateTransition(instance, value, oldValue){
+            if(typeof oldValue === 'string'){
+                removeClass(instance.elements.root,classes.prefix +  oldValue);
+            }
+            addClass(instance.elements.root, classes.prefix + value);
+            reflow = instance.elements.root.offsetWidth;
+        }
+		
+        /**
+         * Toggles the dialog display mode
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function updateDisplayMode(instance){
+            if(instance.get('modal')){
+
+                //make modal
+                removeClass(instance.elements.root, classes.modeless);
+
+                //only if open
+                if(instance.isOpen()){
+                    unbindModelessEvents(instance);
+
+                    //in case a pinned modless dialog was made modal while open.
+                    updateAbsPositionFix(instance);
+
+                    ensureNoOverflow();
+                }
+            }else{
+                //make modelss
+                addClass(instance.elements.root, classes.modeless);
+
+                //only if open
+                if(instance.isOpen()){
+                    bindModelessEvents(instance);
+
+                    //in case pin/unpin was called while a modal is open
+                    updateAbsPositionFix(instance);
+
+                    ensureNoOverflow();
+                }
+            }
+        }
+
+        /**
+         * Toggles the dialog basic view mode 
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function updateBasicMode(instance){
+            if (instance.get('basic')) {
+                // add class
+                addClass(instance.elements.root, classes.basic);
+            } else {
+                // remove class
+                removeClass(instance.elements.root, classes.basic);
+            }
+        }
+
+        /**
+         * Toggles the dialog frameless view mode 
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function updateFramelessMode(instance){
+            if (instance.get('frameless')) {
+                // add class
+                addClass(instance.elements.root, classes.frameless);
+            } else {
+                // remove class
+                removeClass(instance.elements.root, classes.frameless);
+            }
+        }
+		
+        /**
+         * Helper: Brings the modeless dialog to front, attached to modeless dialogs.
+         *
+         * @param {Event} event Focus event
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function bringToFront(event, instance){
+            
+            // Do not bring to front if preceeded by an open modal
+            var index = openDialogs.indexOf(instance);
+            for(var x=index+1;x<openDialogs.length;x+=1){
+                if(openDialogs[x].isModal()){
+                    return;
+                }
+            }
+			
+            // Bring to front by making it the last child.
+            if(document.body.lastChild !== instance.elements.root){
+                document.body.appendChild(instance.elements.root);
+                //also make sure its at the end of the list
+                openDialogs.splice(openDialogs.indexOf(instance),1);
+                openDialogs.push(instance);
+                setFocus(instance);
+            }
+			
+            return false;
+        }
+		
+        /**
+         * Helper: reflects dialogs options updates
+         *
+         * @param {Object} instance The dilog instance.
+         * @param {String} option The updated option name.
+         *
+         * @return	{undefined}	
+         */
+        function optionUpdated(instance, option, oldValue, newValue){
+            switch(option){
+            case 'title':
+                instance.setHeader(newValue);
+                break;
+            case 'modal':
+                updateDisplayMode(instance);
+                break;
+            case 'basic':
+                updateBasicMode(instance);
+                break;
+            case 'frameless':
+                updateFramelessMode(instance);
+                break;
+            case 'pinned':
+                updatePinned(instance);
+                break;
+            case 'closable':
+                updateClosable(instance);
+                break;
+            case 'maximizable':
+                updateMaximizable(instance);
+                break;
+            case 'pinnable':
+                updatePinnable(instance);
+                break;
+            case 'movable':
+                updateMovable(instance);
+                break;
+            case 'resizable':
+                updateResizable(instance);
+                break;
+            case 'transition':
+                updateTransition(instance,newValue, oldValue);
+                break;
+            case 'padding':
+                if(newValue){
+                    removeClass(instance.elements.root, classes.noPadding);
+                }else if(instance.elements.root.className.indexOf(classes.noPadding) < 0){
+                    addClass(instance.elements.root, classes.noPadding);
+                }
+                break;
+            case 'overflow':
+                if(newValue){
+                    removeClass(instance.elements.root, classes.noOverflow);
+                }else if(instance.elements.root.className.indexOf(classes.noOverflow) < 0){
+                    addClass(instance.elements.root, classes.noOverflow);
+                }
+                break;
+            case 'transition':
+                updateTransition(instance,newValue, oldValue);
+                break;
+            }
+
+            // internal on option updated event
+            if(typeof instance.hooks.onupdate === 'function'){
+                instance.hooks.onupdate.call(instance, option, oldValue, newValue);
+            }
+        }
+		
+        /**
+         * Helper: reflects dialogs options updates
+         *
+         * @param {Object} instance The dilog instance.
+         * @param {Object} obj The object to set/get a value on/from.
+         * @param {Function} callback The callback function to call if the key was found.
+         * @param {String|Object} key A string specifying a propery name or a collection of key value pairs.
+         * @param {Object} value Optional, the value associated with the key (in case it was a string).
+         * @param {String} option The updated option name.
+         *
+         * @return	{Object} result object 
+         *	The result objects has an 'op' property, indicating of this is a SET or GET operation.
+         *		GET: 
+         *		- found: a flag indicating if the key was found or not.
+         *		- value: the property value.
+         *		SET:
+         *		- items: a list of key value pairs of the properties being set.
+         *				each contains:
+         *					- found: a flag indicating if the key was found or not.
+         *					- key: the property key.
+         *					- value: the property value.
+         */
+        function update(instance, obj, callback, key, value){
+            var result = {op:undefined, items: [] };
+            if(typeof value === 'undefined' && typeof key === 'string') {
+                //get
+                result.op = 'get';
+                if(obj.hasOwnProperty(key)){
+                    result.found = true;
+                    result.value = obj[key];
+                }else{
+                    result.found = false;
+                    result.value = undefined;
+                }
+            }
+            else
+            {
+                var old;
+                //set
+                result.op = 'set';
+                if(typeof key === 'object'){
+                    //set multiple
+                    var args = key;
+                    for (var prop in args) {
+                        if (obj.hasOwnProperty(prop)) {
+                            if(obj[prop] !== args[prop]){
+                                old = obj[prop];
+                                obj[prop] = args[prop];
+                                callback.call(instance,prop, old, args[prop]);
+                            }
+                            result.items.push({ 'key': prop, 'value': args[prop], 'found':true});
+                        }else{
+                            result.items.push({ 'key': prop, 'value': args[prop], 'found':false});
+                        }
+                    }
+                } else if (typeof key === 'string'){
+                    //set single
+                    if (obj.hasOwnProperty(key)) {
+                        if(obj[key] !== value){
+                            old  = obj[key];
+                            obj[key] = value;
+                            callback.call(instance,key, old, value);
+                        }
+                        result.items.push({'key': key, 'value': value , 'found':true});
+
+                    }else{
+                        result.items.push({'key': key, 'value': value , 'found':false});
+                    }
+                } else {
+                    //invalid params
+                    throw new Error('args must be a string or object');
+                }
+            }
+            return result;
+        }
 
 
-/***/ })
+        /**
+         * Triggers a close event.
+         *
+         * @param {Object} instance	The dilog instance.
+         * 
+         * @return {undefined}
+         */
+        function triggerClose(instance) {
+            var found;
+            triggerCallback(instance, function (button) {
+                return found = (button.invokeOnClose === true);
+            });
+            //none of the buttons registered as onclose callback
+            //close the dialog
+            if (!found && instance.isOpen()) {
+                instance.close();
+            }
+        }
 
-},[2]);
-//# sourceMappingURL=scripts.bundle.js.map
+        /**
+         * Dialogs commands event handler, attached to the dialog commands element.
+         *
+         * @param {Event} event	DOM event object.
+         * @param {Object} instance	The dilog instance.
+         * 
+         * @return {undefined}
+         */
+        function commandsClickHandler(event, instance) {
+            var target = event.srcElement || event.target;
+            switch (target) {
+            case instance.elements.commands.pin:
+                if (!instance.isPinned()) {
+                    pin(instance);
+                } else {
+                    unpin(instance);
+                }
+                break;
+            case instance.elements.commands.maximize:
+                if (!instance.isMaximized()) {
+                    maximize(instance);
+                } else {
+                    restore(instance);
+                }
+                break;
+            case instance.elements.commands.close:
+                triggerClose(instance);
+                break;
+            }
+            return false;
+        }
+
+        /**
+         * Helper: pins the modeless dialog.
+         *
+         * @param {Object} instance	The dialog instance.
+         * 
+         * @return {undefined}
+         */
+        function pin(instance) {
+            //pin the dialog
+            instance.set('pinned', true);
+        }
+
+        /**
+         * Helper: unpins the modeless dialog.
+         *
+         * @param {Object} instance	The dilog instance.
+         * 
+         * @return {undefined}
+         */
+        function unpin(instance) {
+            //unpin the dialog 
+            instance.set('pinned', false);
+        }
+
+
+        /**
+         * Helper: enlarges the dialog to fill the entire screen.
+         *
+         * @param {Object} instance	The dilog instance.
+         * 
+         * @return {undefined}
+         */
+        function maximize(instance) {
+            // allow custom `onmaximize` method
+            dispatchEvent('onmaximize', instance);
+            //maximize the dialog 
+            addClass(instance.elements.root, classes.maximized);
+            if (instance.isOpen()) {
+                ensureNoOverflow();
+            }
+            // allow custom `onmaximized` method
+            dispatchEvent('onmaximized', instance);
+        }
+
+        /**
+         * Helper: returns the dialog to its former size.
+         *
+         * @param {Object} instance	The dilog instance.
+         * 
+         * @return {undefined}
+         */
+        function restore(instance) {
+            // allow custom `onrestore` method
+            dispatchEvent('onrestore', instance);
+            //maximize the dialog 
+            removeClass(instance.elements.root, classes.maximized);
+            if (instance.isOpen()) {
+                ensureNoOverflow();
+            }
+            // allow custom `onrestored` method
+            dispatchEvent('onrestored', instance);
+        }
+
+        /**
+         * Show or hide the maximize box.
+         *
+         * @param {Object} instance The dilog instance.
+         * @param {Boolean} on True to add the behavior, removes it otherwise.
+         *
+         * @return {undefined}
+         */
+        function updatePinnable(instance) {
+            if (instance.get('pinnable')) {
+                // add class
+                addClass(instance.elements.root, classes.pinnable);
+            } else {
+                // remove class
+                removeClass(instance.elements.root, classes.pinnable);
+            }
+        }
+
+        /**
+         * Helper: Fixes the absolutly positioned modal div position.
+         *
+         * @param {Object} instance The dialog instance.
+         *
+         * @return {undefined}
+         */
+        function addAbsPositionFix(instance) {
+            var scrollLeft = getScrollLeft();
+            instance.elements.modal.style.marginTop = getScrollTop() + 'px';
+            instance.elements.modal.style.marginLeft = scrollLeft + 'px';
+            instance.elements.modal.style.marginRight = (-scrollLeft) + 'px';
+        }
+
+        /**
+         * Helper: Removes the absolutly positioned modal div position fix.
+         *
+         * @param {Object} instance The dialog instance.
+         *
+         * @return {undefined}
+         */
+        function removeAbsPositionFix(instance) {
+            var marginTop = parseInt(instance.elements.modal.style.marginTop, 10);
+            var marginLeft = parseInt(instance.elements.modal.style.marginLeft, 10);
+            instance.elements.modal.style.marginTop = '';
+            instance.elements.modal.style.marginLeft = '';
+            instance.elements.modal.style.marginRight = '';
+
+            if (instance.isOpen()) {
+                var top = 0,
+                    left = 0
+                ;
+                if (instance.elements.dialog.style.top !== '') {
+                    top = parseInt(instance.elements.dialog.style.top, 10);
+                }
+                instance.elements.dialog.style.top = (top + (marginTop - getScrollTop())) + 'px';
+
+                if (instance.elements.dialog.style.left !== '') {
+                    left = parseInt(instance.elements.dialog.style.left, 10);
+                }
+                instance.elements.dialog.style.left = (left + (marginLeft - getScrollLeft())) + 'px';
+            }
+        }
+        /**
+         * Helper: Adds/Removes the absolutly positioned modal div position fix based on its pinned setting.
+         *
+         * @param {Object} instance The dialog instance.
+         *
+         * @return {undefined}
+         */
+        function updateAbsPositionFix(instance) {
+            // if modeless and unpinned add fix
+            if (!instance.get('modal') && !instance.get('pinned')) {
+                addAbsPositionFix(instance);
+            } else {
+                removeAbsPositionFix(instance);
+            }
+        }
+        /**
+         * Toggles the dialog position lock | modeless only.
+         *
+         * @param {Object} instance The dilog instance.
+         * @param {Boolean} on True to make it modal, false otherwise.
+         *
+         * @return {undefined}
+         */
+        function updatePinned(instance) {
+            if (instance.get('pinned')) {
+                removeClass(instance.elements.root, classes.unpinned);
+                if (instance.isOpen()) {
+                    removeAbsPositionFix(instance);
+                }
+            } else {
+                addClass(instance.elements.root, classes.unpinned);
+                if (instance.isOpen() && !instance.isModal()) {
+                    addAbsPositionFix(instance);
+                }
+            }
+        }
+
+        /**
+         * Show or hide the maximize box.
+         *
+         * @param {Object} instance The dilog instance.
+         * @param {Boolean} on True to add the behavior, removes it otherwise.
+         *
+         * @return {undefined}
+         */
+        function updateMaximizable(instance) {
+            if (instance.get('maximizable')) {
+                // add class
+                addClass(instance.elements.root, classes.maximizable);
+            } else {
+                // remove class
+                removeClass(instance.elements.root, classes.maximizable);
+            }
+        }
+
+        /**
+         * Show or hide the close box.
+         *
+         * @param {Object} instance The dilog instance.
+         * @param {Boolean} on True to add the behavior, removes it otherwise.
+         *
+         * @return {undefined}
+         */
+        function updateClosable(instance) {
+            if (instance.get('closable')) {
+                // add class
+                addClass(instance.elements.root, classes.closable);
+                bindClosableEvents(instance);
+            } else {
+                // remove class
+                removeClass(instance.elements.root, classes.closable);
+                unbindClosableEvents(instance);
+            }
+        }
+
+        // flag to cancel click event if already handled by end resize event (the mousedown, mousemove, mouseup sequence fires a click event.).
+        var cancelClick = false;
+
+        /**
+         * Helper: closes the modal dialog when clicking the modal
+         *
+         * @param {Event} event	DOM event object.
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function modalClickHandler(event, instance) {
+            var target = event.srcElement || event.target;
+            if (!cancelClick && target === instance.elements.modal && instance.get('closableByDimmer') === true) {
+                triggerClose(instance);
+            }
+            cancelClick = false;
+            return false;
+        }
+
+        // flag to cancel keyup event if already handled by click event (pressing Enter on a focusted button).
+        var cancelKeyup = false;
+        /** 
+         * Helper: triggers a button callback
+         *
+         * @param {Object}		The dilog instance.
+         * @param {Function}	Callback to check which button triggered the event.
+         *
+         * @return {undefined}
+         */
+        function triggerCallback(instance, check) {
+            for (var idx = 0; idx < instance.__internal.buttons.length; idx += 1) {
+                var button = instance.__internal.buttons[idx];
+                if (!button.element.disabled && check(button)) {
+                    var closeEvent = createCloseEvent(idx, button);
+                    if (typeof instance.callback === 'function') {
+                        instance.callback.apply(instance, [closeEvent]);
+                    }
+                    //close the dialog only if not canceled.
+                    if (closeEvent.cancel === false) {
+                        instance.close();
+                    }
+                    break;
+                }
+            }
+        }
+
+        /**
+         * Clicks event handler, attached to the dialog footer.
+         *
+         * @param {Event}		DOM event object.
+         * @param {Object}		The dilog instance.
+         * 
+         * @return {undefined}
+         */
+        function buttonsClickHandler(event, instance) {
+            var target = event.srcElement || event.target;
+            triggerCallback(instance, function (button) {
+                // if this button caused the click, cancel keyup event
+                return button.element === target && (cancelKeyup = true);
+            });
+        }
+
+        /**
+         * Keyup event handler, attached to the document.body
+         *
+         * @param {Event}		DOM event object.
+         * @param {Object}		The dilog instance.
+         * 
+         * @return {undefined}
+         */
+        function keyupHandler(event) {
+            //hitting enter while button has focus will trigger keyup too.
+            //ignore if handled by clickHandler
+            if (cancelKeyup) {
+                cancelKeyup = false;
+                return;
+            }
+            var instance = openDialogs[openDialogs.length - 1];
+            var keyCode = event.keyCode;
+            if (instance.__internal.buttons.length === 0 && keyCode === keys.ESC && instance.get('closable') === true) {
+                triggerClose(instance);
+                return false;
+            }else if (usedKeys.indexOf(keyCode) > -1) {
+                triggerCallback(instance, function (button) {
+                    return button.key === keyCode;
+                });
+                return false;
+            }
+        }
+        /**
+        * Keydown event handler, attached to the document.body
+        *
+        * @param {Event}		DOM event object.
+        * @param {Object}		The dilog instance.
+        * 
+        * @return {undefined}
+        */
+        function keydownHandler(event) {
+            var instance = openDialogs[openDialogs.length - 1];
+            var keyCode = event.keyCode;
+            if (keyCode === keys.LEFT || keyCode === keys.RIGHT) {
+                var buttons = instance.__internal.buttons;
+                for (var x = 0; x < buttons.length; x += 1) {
+                    if (document.activeElement === buttons[x].element) {
+                        switch (keyCode) {
+                        case keys.LEFT:
+                            buttons[(x || buttons.length) - 1].element.focus();
+                            return;
+                        case keys.RIGHT:
+                            buttons[(x + 1) % buttons.length].element.focus();
+                            return;
+                        }
+                    }
+                }
+            }else if (keyCode < keys.F12 + 1 && keyCode > keys.F1 - 1 && usedKeys.indexOf(keyCode) > -1) {
+                event.preventDefault();
+                event.stopPropagation();
+                triggerCallback(instance, function (button) {
+                    return button.key === keyCode;
+                });
+                return false;
+            }
+        }
+
+
+        /**
+         * Sets focus to proper dialog element
+         *
+         * @param {Object} instance The dilog instance.
+         * @param {Node} [resetTarget=undefined] DOM element to reset focus to.
+         *
+         * @return {undefined}
+         */
+        function setFocus(instance, resetTarget) {
+            // reset target has already been determined.
+            if (resetTarget) {
+                resetTarget.focus();
+            } else {
+                // current instance focus settings
+                var focus = instance.__internal.focus;
+                // the focus element.
+                var element = focus.element;
+
+                switch (typeof focus.element) {
+                // a number means a button index
+                case 'number':
+                    if (instance.__internal.buttons.length > focus.element) {
+                        //in basic view, skip focusing the buttons.
+                        if (instance.get('basic') === true) {
+                            element = instance.elements.reset[0];
+                        } else {
+                            element = instance.__internal.buttons[focus.element].element;
+                        }
+                    }
+                    break;
+                // a string means querySelector to select from dialog body contents.
+                case 'string':
+                    element = instance.elements.body.querySelector(focus.element);
+                    break;
+                // a function should return the focus element.
+                case 'function':
+                    element = focus.element.call(instance);
+                    break;
+                }
+                
+                // if no focus element, default to first reset element.
+                if ((typeof element === 'undefined' || element === null) && instance.__internal.buttons.length === 0) {
+                    element = instance.elements.reset[0];
+                }
+                // focus
+                if (element && element.focus) {
+                    element.focus();
+                    // if selectable
+                    if (focus.select && element.select) {
+                        element.select();
+                    }
+                }
+            }
+        }
+
+        /**
+         * Focus event handler, attached to document.body and dialogs own reset links.
+         * handles the focus for modal dialogs only.
+         *
+         * @param {Event} event DOM focus event object.
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function onReset(event, instance) {
+
+            // should work on last modal if triggered from document.body 
+            if (!instance) {
+                for (var x = openDialogs.length - 1; x > -1; x -= 1) {
+                    if (openDialogs[x].isModal()) {
+                        instance = openDialogs[x];
+                        break;
+                    }
+                }
+            }
+            // if modal
+            if (instance && instance.isModal()) {
+                // determine reset target to enable forward/backward tab cycle.
+                var resetTarget, target = event.srcElement || event.target;
+                var lastResetElement = target === instance.elements.reset[1] || (instance.__internal.buttons.length === 0 && target === document.body);
+
+                // if last reset link, then go to maximize or close
+                if (lastResetElement) {
+                    if (instance.get('maximizable')) {
+                        resetTarget = instance.elements.commands.maximize;
+                    } else if (instance.get('closable')) {
+                        resetTarget = instance.elements.commands.close;
+                    }
+                }
+                // if no reset target found, try finding the best button
+                if (resetTarget === undefined) {
+                    if (typeof instance.__internal.focus.element === 'number') {
+                        // button focus element, go to first available button
+                        if (target === instance.elements.reset[0]) {
+                            resetTarget = instance.elements.buttons.auxiliary.firstChild || instance.elements.buttons.primary.firstChild;
+                        } else if (lastResetElement) {
+                            //restart the cycle by going to first reset link
+                            resetTarget = instance.elements.reset[0];
+                        }
+                    } else {
+                        // will reach here when tapping backwards, so go to last child
+                        // The focus element SHOULD NOT be a button (logically!).
+                        if (target === instance.elements.reset[0]) {
+                            resetTarget = instance.elements.buttons.primary.lastChild || instance.elements.buttons.auxiliary.lastChild;
+                        }
+                    }
+                }
+                // focus
+                setFocus(instance, resetTarget);
+            }
+        }
+        /**
+         * Transition in transitionend event handler. 
+         *
+         * @param {Event}		TransitionEnd event object.
+         * @param {Object}		The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function handleTransitionInEvent(event, instance) {
+            // clear the timer
+            clearTimeout(instance.__internal.timerIn);
+
+            // once transition is complete, set focus
+            setFocus(instance);
+
+            //restore scroll to prevent document jump
+            restoreScrollPosition();
+
+            // allow handling key up after transition ended.
+            cancelKeyup = false;
+
+            // allow custom `onfocus` method
+            dispatchEvent('onfocus', instance);
+
+            // unbind the event
+            off(instance.elements.dialog, transition.type, instance.__internal.transitionInHandler);
+
+            removeClass(instance.elements.root, classes.animationIn);
+        }
+
+        /**
+         * Transition out transitionend event handler. 
+         *
+         * @param {Event}		TransitionEnd event object.
+         * @param {Object}		The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function handleTransitionOutEvent(event, instance) {
+            // clear the timer
+            clearTimeout(instance.__internal.timerOut);
+            // unbind the event
+            off(instance.elements.dialog, transition.type, instance.__internal.transitionOutHandler);
+
+            // reset move updates
+            resetMove(instance);
+            // reset resize updates
+            resetResize(instance);
+
+            // restore if maximized
+            if (instance.isMaximized() && !instance.get('startMaximized')) {
+                restore(instance);
+            }
+
+            // return focus to the last active element
+            if (alertify.defaults.maintainFocus && instance.__internal.activeElement) {
+                instance.__internal.activeElement.focus();
+                instance.__internal.activeElement = null;
+            }
+            
+            //destory the instance
+            if (typeof instance.__internal.destroy === 'function') {
+                instance.__internal.destroy.apply(instance);
+            }
+        }
+        /* Controls moving a dialog around */
+        //holde the current moving instance
+        var movable = null,
+            //holds the current X offset when move starts
+            offsetX = 0,
+            //holds the current Y offset when move starts
+            offsetY = 0,
+            xProp = 'pageX',
+            yProp = 'pageY',
+            bounds = null,
+            refreshTop = false,
+            moveDelegate = null
+        ;
+
+        /**
+         * Helper: sets the element top/left coordinates
+         *
+         * @param {Event} event	DOM event object.
+         * @param {Node} element The element being moved.
+         * 
+         * @return {undefined}
+         */
+        function moveElement(event, element) {
+            var left = (event[xProp] - offsetX),
+                top  = (event[yProp] - offsetY);
+
+            if(refreshTop){
+                top -= document.body.scrollTop;
+            }
+           
+            element.style.left = left + 'px';
+            element.style.top = top + 'px';
+           
+        }
+        /**
+         * Helper: sets the element top/left coordinates within screen bounds
+         *
+         * @param {Event} event	DOM event object.
+         * @param {Node} element The element being moved.
+         * 
+         * @return {undefined}
+         */
+        function moveElementBounded(event, element) {
+            var left = (event[xProp] - offsetX),
+                top  = (event[yProp] - offsetY);
+
+            if(refreshTop){
+                top -= document.body.scrollTop;
+            }
+            
+            element.style.left = Math.min(bounds.maxLeft, Math.max(bounds.minLeft, left)) + 'px';
+            if(refreshTop){
+                element.style.top = Math.min(bounds.maxTop, Math.max(bounds.minTop, top)) + 'px';
+            }else{
+                element.style.top = Math.max(bounds.minTop, top) + 'px';
+            }
+        }
+            
+
+        /**
+         * Triggers the start of a move event, attached to the header element mouse down event.
+         * Adds no-selection class to the body, disabling selection while moving.
+         *
+         * @param {Event} event	DOM event object.
+         * @param {Object} instance The dilog instance.
+         * 
+         * @return {Boolean} false
+         */
+        function beginMove(event, instance) {
+            if (resizable === null && !instance.isMaximized() && instance.get('movable')) {
+                var eventSrc, left=0, top=0;
+                if (event.type === 'touchstart') {
+                    event.preventDefault();
+                    eventSrc = event.targetTouches[0];
+                    xProp = 'clientX';
+                    yProp = 'clientY';
+                } else if (event.button === 0) {
+                    eventSrc = event;
+                }
+
+                if (eventSrc) {
+
+                    var element = instance.elements.dialog;
+                    addClass(element, classes.capture);
+
+                    if (element.style.left) {
+                        left = parseInt(element.style.left, 10);
+                    }
+
+                    if (element.style.top) {
+                        top = parseInt(element.style.top, 10);
+                    }
+                    
+                    offsetX = eventSrc[xProp] - left;
+                    offsetY = eventSrc[yProp] - top;
+
+                    if(instance.isModal()){
+                        offsetY += instance.elements.modal.scrollTop;
+                    }else if(instance.isPinned()){
+                        offsetY -= document.body.scrollTop;
+                    }
+                    
+                    if(instance.get('moveBounded')){
+                        var current = element,
+                            offsetLeft = -left,
+                            offsetTop = -top;
+                        
+                        //calc offset
+                        do {
+                            offsetLeft += current.offsetLeft;
+                            offsetTop += current.offsetTop;
+                        } while (current = current.offsetParent);
+                        
+                        bounds = {
+                            maxLeft : offsetLeft,
+                            minLeft : -offsetLeft,
+                            maxTop  : document.documentElement.clientHeight - element.clientHeight - offsetTop,
+                            minTop  : -offsetTop
+                        };
+                        moveDelegate = moveElementBounded;
+                    }else{
+                        bounds = null;
+                        moveDelegate = moveElement;
+                    }
+                    
+                    // allow custom `onmove` method
+                    dispatchEvent('onmove', instance);
+
+                    refreshTop = !instance.isModal() && instance.isPinned();
+                    movable = instance;
+                    moveDelegate(eventSrc, element);
+                    addClass(document.body, classes.noSelection);
+                    return false;
+                }
+            }
+        }
+
+        /**
+         * The actual move handler,  attached to document.body mousemove event.
+         *
+         * @param {Event} event	DOM event object.
+         * 
+         * @return {undefined}
+         */
+        function move(event) {
+            if (movable) {
+                var eventSrc;
+                if (event.type === 'touchmove') {
+                    event.preventDefault();
+                    eventSrc = event.targetTouches[0];
+                } else if (event.button === 0) {
+                    eventSrc = event;
+                }
+                if (eventSrc) {
+                    moveDelegate(eventSrc, movable.elements.dialog);
+                }
+            }
+        }
+
+        /**
+         * Triggers the end of a move event,  attached to document.body mouseup event.
+         * Removes no-selection class from document.body, allowing selection.
+         *
+         * @return {undefined}
+         */
+        function endMove() {
+            if (movable) {
+                var instance = movable;
+                movable = bounds = null;
+                removeClass(document.body, classes.noSelection);
+                removeClass(instance.elements.dialog, classes.capture);
+                // allow custom `onmoved` method
+                dispatchEvent('onmoved', instance);
+            }
+        }
+
+        /**
+         * Resets any changes made by moving the element to its original state,
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function resetMove(instance) {
+            movable = null;
+            var element = instance.elements.dialog;
+            element.style.left = element.style.top = '';
+        }
+
+        /**
+         * Updates the dialog move behavior.
+         *
+         * @param {Object} instance The dilog instance.
+         * @param {Boolean} on True to add the behavior, removes it otherwise.
+         *
+         * @return {undefined}
+         */
+        function updateMovable(instance) {
+            if (instance.get('movable')) {
+                // add class
+                addClass(instance.elements.root, classes.movable);
+                if (instance.isOpen()) {
+                    bindMovableEvents(instance);
+                }
+            } else {
+
+                //reset
+                resetMove(instance);
+                // remove class
+                removeClass(instance.elements.root, classes.movable);
+                if (instance.isOpen()) {
+                    unbindMovableEvents(instance);
+                }
+            }
+        }
+
+        /* Controls moving a dialog around */
+        //holde the current instance being resized		
+        var resizable = null,
+            //holds the staring left offset when resize starts.
+            startingLeft = Number.Nan,
+            //holds the staring width when resize starts.
+            startingWidth = 0,
+            //holds the initial width when resized for the first time.
+            minWidth = 0,
+            //holds the offset of the resize handle.
+            handleOffset = 0
+        ;
+
+        /**
+         * Helper: sets the element width/height and updates left coordinate if neccessary.
+         *
+         * @param {Event} event	DOM mousemove event object.
+         * @param {Node} element The element being moved.
+         * @param {Boolean} pinned A flag indicating if the element being resized is pinned to the screen.
+         * 
+         * @return {undefined}
+         */
+        function resizeElement(event, element, pageRelative) {
+
+            //calculate offsets from 0,0
+            var current = element;
+            var offsetLeft = 0;
+            var offsetTop = 0;
+            do {
+                offsetLeft += current.offsetLeft;
+                offsetTop += current.offsetTop;
+            } while (current = current.offsetParent);
+
+            // determine X,Y coordinates.
+            var X, Y;
+            if (pageRelative === true) {
+                X = event.pageX;
+                Y = event.pageY;
+            } else {
+                X = event.clientX;
+                Y = event.clientY;
+            }
+            // rtl handling
+            var isRTL = isRightToLeft();
+            if (isRTL) {
+                // reverse X 
+                X = document.body.offsetWidth - X;
+                // if has a starting left, calculate offsetRight
+                if (!isNaN(startingLeft)) {
+                    offsetLeft = document.body.offsetWidth - offsetLeft - element.offsetWidth;
+                }
+            }
+
+            // set width/height
+            element.style.height = (Y - offsetTop + handleOffset) + 'px';
+            element.style.width = (X - offsetLeft + handleOffset) + 'px';
+
+            // if the element being resized has a starting left, maintain it.
+            // the dialog is centered, divide by half the offset to maintain the margins.
+            if (!isNaN(startingLeft)) {
+                var diff = Math.abs(element.offsetWidth - startingWidth) * 0.5;
+                if (isRTL) {
+                    //negate the diff, why?
+                    //when growing it should decrease left
+                    //when shrinking it should increase left
+                    diff *= -1;
+                }
+                if (element.offsetWidth > startingWidth) {
+                    //growing
+                    element.style.left = (startingLeft + diff) + 'px';
+                } else if (element.offsetWidth >= minWidth) {
+                    //shrinking
+                    element.style.left = (startingLeft - diff) + 'px';
+                }
+            }
+        }
+
+        /**
+         * Triggers the start of a resize event, attached to the resize handle element mouse down event.
+         * Adds no-selection class to the body, disabling selection while moving.
+         *
+         * @param {Event} event	DOM event object.
+         * @param {Object} instance The dilog instance.
+         * 
+         * @return {Boolean} false
+         */
+        function beginResize(event, instance) {
+            if (!instance.isMaximized()) {
+                var eventSrc;
+                if (event.type === 'touchstart') {
+                    event.preventDefault();
+                    eventSrc = event.targetTouches[0];
+                } else if (event.button === 0) {
+                    eventSrc = event;
+                }
+                if (eventSrc) {
+                    // allow custom `onresize` method
+                    dispatchEvent('onresize', instance);
+                    
+                    resizable = instance;
+                    handleOffset = instance.elements.resizeHandle.offsetHeight / 2;
+                    var element = instance.elements.dialog;
+                    addClass(element, classes.capture);
+                    startingLeft = parseInt(element.style.left, 10);
+                    element.style.height = element.offsetHeight + 'px';
+                    element.style.minHeight = instance.elements.header.offsetHeight + instance.elements.footer.offsetHeight + 'px';
+                    element.style.width = (startingWidth = element.offsetWidth) + 'px';
+
+                    if (element.style.maxWidth !== 'none') {
+                        element.style.minWidth = (minWidth = element.offsetWidth) + 'px';
+                    }
+                    element.style.maxWidth = 'none';
+                    addClass(document.body, classes.noSelection);
+                    return false;
+                }
+            }
+        }
+
+        /**
+         * The actual resize handler,  attached to document.body mousemove event.
+         *
+         * @param {Event} event	DOM event object.
+         * 
+         * @return {undefined}
+         */
+        function resize(event) {
+            if (resizable) {
+                var eventSrc;
+                if (event.type === 'touchmove') {
+                    event.preventDefault();
+                    eventSrc = event.targetTouches[0];
+                } else if (event.button === 0) {
+                    eventSrc = event;
+                }
+                if (eventSrc) {
+                    resizeElement(eventSrc, resizable.elements.dialog, !resizable.get('modal') && !resizable.get('pinned'));
+                }
+            }
+        }
+
+        /**
+         * Triggers the end of a resize event,  attached to document.body mouseup event.
+         * Removes no-selection class from document.body, allowing selection.
+         *
+         * @return {undefined}
+         */
+        function endResize() {
+            if (resizable) {
+                var instance = resizable;
+                resizable = null;
+                removeClass(document.body, classes.noSelection);
+                removeClass(instance.elements.dialog, classes.capture);
+                cancelClick = true;
+                // allow custom `onresized` method
+                dispatchEvent('onresized', instance);
+            }
+        }
+
+        /**
+         * Resets any changes made by resizing the element to its original state.
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function resetResize(instance) {
+            resizable = null;
+            var element = instance.elements.dialog;
+            if (element.style.maxWidth === 'none') {
+                //clear inline styles.
+                element.style.maxWidth = element.style.minWidth = element.style.width = element.style.height = element.style.minHeight = element.style.left = '';
+                //reset variables.
+                startingLeft = Number.Nan;
+                startingWidth = minWidth = handleOffset = 0;
+            }
+        }
+
+
+        /**
+         * Updates the dialog move behavior.
+         *
+         * @param {Object} instance The dilog instance.
+         * @param {Boolean} on True to add the behavior, removes it otherwise.
+         *
+         * @return {undefined}
+         */
+        function updateResizable(instance) {
+            if (instance.get('resizable')) {
+                // add class
+                addClass(instance.elements.root, classes.resizable);
+                if (instance.isOpen()) {
+                    bindResizableEvents(instance);
+                }
+            } else {
+                //reset
+                resetResize(instance);
+                // remove class
+                removeClass(instance.elements.root, classes.resizable);
+                if (instance.isOpen()) {
+                    unbindResizableEvents(instance);
+                }
+            }
+        }
+
+        /**
+         * Reset move/resize on window resize.
+         *
+         * @param {Event} event	window resize event object.
+         *
+         * @return {undefined}
+         */
+        function windowResize(/*event*/) {
+            for (var x = 0; x < openDialogs.length; x += 1) {
+                var instance = openDialogs[x];
+                if (instance.get('autoReset')) {
+                    resetMove(instance);
+                    resetResize(instance);
+                }
+            }
+        }
+        /**
+         * Bind dialogs events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function bindEvents(instance) {
+            // if first dialog, hook global handlers
+            if (openDialogs.length === 1) {
+                //global
+                on(window, 'resize', windowResize);
+                on(document.body, 'keyup', keyupHandler);
+                on(document.body, 'keydown', keydownHandler);
+                on(document.body, 'focus', onReset);
+
+                //move
+                on(document.documentElement, 'mousemove', move);
+                on(document.documentElement, 'touchmove', move);
+                on(document.documentElement, 'mouseup', endMove);
+                on(document.documentElement, 'touchend', endMove);
+                //resize
+                on(document.documentElement, 'mousemove', resize);
+                on(document.documentElement, 'touchmove', resize);
+                on(document.documentElement, 'mouseup', endResize);
+                on(document.documentElement, 'touchend', endResize);
+            }
+
+            // common events
+            on(instance.elements.commands.container, 'click', instance.__internal.commandsClickHandler);
+            on(instance.elements.footer, 'click', instance.__internal.buttonsClickHandler);
+            on(instance.elements.reset[0], 'focus', instance.__internal.resetHandler);
+            on(instance.elements.reset[1], 'focus', instance.__internal.resetHandler);
+
+            //prevent handling key up when dialog is being opened by a key stroke.
+            cancelKeyup = true;
+            // hook in transition handler
+            on(instance.elements.dialog, transition.type, instance.__internal.transitionInHandler);
+
+            // modelss only events
+            if (!instance.get('modal')) {
+                bindModelessEvents(instance);
+            }
+
+            // resizable
+            if (instance.get('resizable')) {
+                bindResizableEvents(instance);
+            }
+
+            // movable
+            if (instance.get('movable')) {
+                bindMovableEvents(instance);
+            }
+        }
+
+        /**
+         * Unbind dialogs events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function unbindEvents(instance) {
+            // if last dialog, remove global handlers
+            if (openDialogs.length === 1) {
+                //global
+                off(window, 'resize', windowResize);
+                off(document.body, 'keyup', keyupHandler);
+                off(document.body, 'keydown', keydownHandler);
+                off(document.body, 'focus', onReset);
+                //move
+                off(document.documentElement, 'mousemove', move);
+                off(document.documentElement, 'mouseup', endMove);
+                //resize
+                off(document.documentElement, 'mousemove', resize);
+                off(document.documentElement, 'mouseup', endResize);
+            }
+
+            // common events
+            off(instance.elements.commands.container, 'click', instance.__internal.commandsClickHandler);
+            off(instance.elements.footer, 'click', instance.__internal.buttonsClickHandler);
+            off(instance.elements.reset[0], 'focus', instance.__internal.resetHandler);
+            off(instance.elements.reset[1], 'focus', instance.__internal.resetHandler);
+
+            // hook out transition handler
+            on(instance.elements.dialog, transition.type, instance.__internal.transitionOutHandler);
+
+            // modelss only events
+            if (!instance.get('modal')) {
+                unbindModelessEvents(instance);
+            }
+
+            // movable
+            if (instance.get('movable')) {
+                unbindMovableEvents(instance);
+            }
+
+            // resizable
+            if (instance.get('resizable')) {
+                unbindResizableEvents(instance);
+            }
+
+        }
+
+        /**
+         * Bind modeless specific events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function bindModelessEvents(instance) {
+            on(instance.elements.dialog, 'focus', instance.__internal.bringToFrontHandler, true);
+        }
+
+        /**
+         * Unbind modeless specific events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function unbindModelessEvents(instance) {
+            off(instance.elements.dialog, 'focus', instance.__internal.bringToFrontHandler, true);
+        }
+
+
+
+        /**
+         * Bind movable specific events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function bindMovableEvents(instance) {
+            on(instance.elements.header, 'mousedown', instance.__internal.beginMoveHandler);
+            on(instance.elements.header, 'touchstart', instance.__internal.beginMoveHandler);
+        }
+
+        /**
+         * Unbind movable specific events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function unbindMovableEvents(instance) {
+            off(instance.elements.header, 'mousedown', instance.__internal.beginMoveHandler);
+            off(instance.elements.header, 'touchstart', instance.__internal.beginMoveHandler);
+        }
+
+
+
+        /**
+         * Bind resizable specific events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function bindResizableEvents(instance) {
+            on(instance.elements.resizeHandle, 'mousedown', instance.__internal.beginResizeHandler);
+            on(instance.elements.resizeHandle, 'touchstart', instance.__internal.beginResizeHandler);
+        }
+
+        /**
+         * Unbind resizable specific events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function unbindResizableEvents(instance) {
+            off(instance.elements.resizeHandle, 'mousedown', instance.__internal.beginResizeHandler);
+            off(instance.elements.resizeHandle, 'touchstart', instance.__internal.beginResizeHandler);
+        }
+
+        /**
+         * Bind closable events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function bindClosableEvents(instance) {
+            on(instance.elements.modal, 'click', instance.__internal.modalClickHandler);
+        }
+
+        /**
+         * Unbind closable specific events
+         *
+         * @param {Object} instance The dilog instance.
+         *
+         * @return {undefined}
+         */
+        function unbindClosableEvents(instance) {
+            off(instance.elements.modal, 'click', instance.__internal.modalClickHandler);
+        }
+        // dialog API
+        return {
+            __init:initialize,
+            /**
+             * Check if dialog is currently open
+             *
+             * @return {Boolean}
+             */
+            isOpen: function () {
+                return this.__internal.isOpen;
+            },
+            isModal: function (){
+                return this.elements.root.className.indexOf(classes.modeless) < 0;
+            },
+            isMaximized:function(){
+                return this.elements.root.className.indexOf(classes.maximized) > -1;
+            },
+            isPinned:function(){
+                return this.elements.root.className.indexOf(classes.unpinned) < 0;
+            },
+            maximize:function(){
+                if(!this.isMaximized()){
+                    maximize(this);
+                }
+                return this;
+            },
+            restore:function(){
+                if(this.isMaximized()){
+                    restore(this);
+                }
+                return this;
+            },
+            pin:function(){
+                if(!this.isPinned()){
+                    pin(this);
+                }
+                return this;
+            },
+            unpin:function(){
+                if(this.isPinned()){
+                    unpin(this);
+                }
+                return this;
+            },
+            bringToFront:function(){
+                bringToFront(null, this);
+                return this;
+            },
+            /**
+             * Move the dialog to a specific x/y coordinates
+             *
+             * @param {Number} x    The new dialog x coordinate in pixels.
+             * @param {Number} y    The new dialog y coordinate in pixels.
+             *
+             * @return {Object} The dialog instance.
+             */
+            moveTo:function(x,y){
+                if(!isNaN(x) && !isNaN(y)){
+                    // allow custom `onmove` method
+                    dispatchEvent('onmove', this);
+                    
+                    var element = this.elements.dialog,
+                        current = element,
+                        offsetLeft = 0,
+                        offsetTop = 0;
+                    
+                    //subtract existing left,top
+                    if (element.style.left) {
+                        offsetLeft -= parseInt(element.style.left, 10);
+                    }
+                    if (element.style.top) {
+                        offsetTop -= parseInt(element.style.top, 10);
+                    }
+                    //calc offset
+                    do {
+                        offsetLeft += current.offsetLeft;
+                        offsetTop += current.offsetTop;
+                    } while (current = current.offsetParent);
+
+                    //calc left, top
+                    var left = (x - offsetLeft);
+                    var top  = (y - offsetTop);
+
+                    //// rtl handling
+                    if (isRightToLeft()) {
+                        left *= -1;
+                    }
+
+                    element.style.left = left + 'px';
+                    element.style.top = top + 'px';
+                    
+                    // allow custom `onmoved` method
+                    dispatchEvent('onmoved', this);
+                }
+                return this;
+            },
+            /**
+             * Resize the dialog to a specific width/height (the dialog must be 'resizable').
+             * The dialog can be resized to:
+             *  A minimum width equal to the initial display width
+             *  A minimum height equal to the sum of header/footer heights.
+             *
+             *
+             * @param {Number or String} width    The new dialog width in pixels or in percent.
+             * @param {Number or String} height   The new dialog height in pixels or in percent.
+             *
+             * @return {Object} The dialog instance.
+             */
+            resizeTo:function(width,height){
+                var w = parseFloat(width),
+                    h = parseFloat(height),
+                    regex = /(\d*\.\d+|\d+)%/
+                ;
+
+                if(!isNaN(w) && !isNaN(h) && this.get('resizable') === true){
+                    
+                    // allow custom `onresize` method
+                    dispatchEvent('onresize', this);
+                    
+                    if(('' + width).match(regex)){
+                        w = w / 100 * document.documentElement.clientWidth ;
+                    }
+
+                    if(('' + height).match(regex)){
+                        h = h / 100 * document.documentElement.clientHeight;
+                    }
+
+                    var element = this.elements.dialog;
+                    if (element.style.maxWidth !== 'none') {
+                        element.style.minWidth = (minWidth = element.offsetWidth) + 'px';
+                    }
+                    element.style.maxWidth = 'none';
+                    element.style.minHeight = this.elements.header.offsetHeight + this.elements.footer.offsetHeight + 'px';
+                    element.style.width = w + 'px';
+                    element.style.height = h + 'px';
+                    
+                    // allow custom `onresized` method
+                    dispatchEvent('onresized', this);
+                }
+                return this;
+            },
+            /**
+             * Gets or Sets dialog settings/options 
+             *
+             * @param {String|Object} key A string specifying a propery name or a collection of key/value pairs.
+             * @param {Object} value Optional, the value associated with the key (in case it was a string).
+             *
+             * @return {undefined}
+             */
+            setting : function (key, value) {
+                var self = this;
+                var result = update(this, this.__internal.options, function(k,o,n){ optionUpdated(self,k,o,n); }, key, value);
+                if(result.op === 'get'){
+                    if(result.found){
+                        return result.value;
+                    }else if(typeof this.settings !== 'undefined'){
+                        return update(this, this.settings, this.settingUpdated || function(){}, key, value).value;
+                    }else{
+                        return undefined;
+                    }
+                }else if(result.op === 'set'){
+                    if(result.items.length > 0){
+                        var callback = this.settingUpdated || function(){};
+                        for(var x=0;x<result.items.length;x+=1){
+                            var item = result.items[x];
+                            if(!item.found && typeof this.settings !== 'undefined'){
+                                update(this, this.settings, callback, item.key, item.value);
+                            }
+                        }
+                    }
+                    return this;
+                }
+            },
+            /**
+             * [Alias] Sets dialog settings/options 
+             */
+            set:function(key, value){
+                this.setting(key,value);
+                return this;
+            },
+            /**
+             * [Alias] Gets dialog settings/options 
+             */
+            get:function(key){
+                return this.setting(key);
+            },
+            /**
+            * Sets dialog header
+            * @content {string or element}
+            *
+            * @return {undefined}
+            */
+            setHeader:function(content){
+                if(typeof content === 'string'){
+                    clearContents(this.elements.header);
+                    this.elements.header.innerHTML = content;
+                }else if (content instanceof window.HTMLElement && this.elements.header.firstChild !== content){
+                    clearContents(this.elements.header);
+                    this.elements.header.appendChild(content);
+                }
+                return this;
+            },
+            /**
+            * Sets dialog contents
+            * @content {string or element}
+            *
+            * @return {undefined}
+            */
+            setContent:function(content){
+                if(typeof content === 'string'){
+                    clearContents(this.elements.content);
+                    this.elements.content.innerHTML = content;
+                }else if (content instanceof window.HTMLElement && this.elements.content.firstChild !== content){
+                    clearContents(this.elements.content);
+                    this.elements.content.appendChild(content);
+                }
+                return this;
+            },
+            /**
+             * Show the dialog as modal
+             *
+             * @return {Object} the dialog instance.
+             */
+            showModal: function(className){
+                return this.show(true, className);
+            },
+            /**
+             * Show the dialog
+             *
+             * @return {Object} the dialog instance.
+             */
+            show: function (modal, className) {
+                
+                // ensure initialization
+                initialize(this);
+
+                if ( !this.__internal.isOpen ) {
+
+                    // add to open dialogs
+                    this.__internal.isOpen = true;
+                    openDialogs.push(this);
+
+                    // save last focused element
+                    if(alertify.defaults.maintainFocus){
+                        this.__internal.activeElement = document.activeElement;
+                    }
+
+                    //allow custom dom manipulation updates before showing the dialog.
+                    if(typeof this.prepare === 'function'){
+                        this.prepare();
+                    }
+
+                    bindEvents(this);
+
+                    if(modal !== undefined){
+                        this.set('modal', modal);
+                    }
+
+                    //save scroll to prevent document jump
+                    saveScrollPosition();
+
+                    ensureNoOverflow();
+
+                    // allow custom dialog class on show
+                    if(typeof className === 'string' && className !== ''){
+                        this.__internal.className = className;
+                        addClass(this.elements.root, className);
+                    }
+
+                    // maximize if start maximized
+                    if ( this.get('startMaximized')) {
+                        this.maximize();
+                    }else if(this.isMaximized()){
+                        restore(this);
+                    }
+
+                    updateAbsPositionFix(this);
+
+                    removeClass(this.elements.root, classes.animationOut);
+                    addClass(this.elements.root, classes.animationIn);
+
+                    // set 1s fallback in case transition event doesn't fire
+                    clearTimeout( this.__internal.timerIn);
+                    this.__internal.timerIn = setTimeout( this.__internal.transitionInHandler, transition.supported ? 1000 : 100 );
+
+                    if(isSafari){
+                        // force desktop safari reflow
+                        var root = this.elements.root;
+                        root.style.display  = 'none';
+                        setTimeout(function(){root.style.display  = 'block';}, 0);
+                    }
+
+                    //reflow
+                    reflow = this.elements.root.offsetWidth;
+                  
+                    // show dialog
+                    removeClass(this.elements.root, classes.hidden);
+
+                    // internal on show event
+                    if(typeof this.hooks.onshow === 'function'){
+                        this.hooks.onshow.call(this);
+                    }
+
+                    // allow custom `onshow` method
+                    dispatchEvent('onshow', this);
+
+                }else{
+                    // reset move updates
+                    resetMove(this);
+                    // reset resize updates
+                    resetResize(this);
+                    // shake the dialog to indicate its already open
+                    addClass(this.elements.dialog, classes.shake);
+                    var self = this;
+                    setTimeout(function(){
+                        removeClass(self.elements.dialog, classes.shake);
+                    },200);
+                }
+                return this;
+            },
+            /**
+             * Close the dialog
+             *
+             * @return {Object} The dialog instance
+             */
+            close: function () {
+                if (this.__internal.isOpen ) {
+                    // custom `onclosing` event
+                    if(dispatchEvent('onclosing', this) !== false){
+
+                        unbindEvents(this);
+
+                        removeClass(this.elements.root, classes.animationIn);
+                        addClass(this.elements.root, classes.animationOut);
+
+                        // set 1s fallback in case transition event doesn't fire
+                        clearTimeout( this.__internal.timerOut );
+                        this.__internal.timerOut = setTimeout( this.__internal.transitionOutHandler, transition.supported ? 1000 : 100 );
+                        // hide dialog
+                        addClass(this.elements.root, classes.hidden);
+                        //reflow
+                        reflow = this.elements.modal.offsetWidth;
+
+                        // remove custom dialog class on hide
+                        if (typeof this.__internal.className !== 'undefined' && this.__internal.className !== '') {
+                            removeClass(this.elements.root, this.__internal.className);
+                        }
+
+                        // internal on close event
+                        if(typeof this.hooks.onclose === 'function'){
+                            this.hooks.onclose.call(this);
+                        }
+
+                        // allow custom `onclose` method
+                        dispatchEvent('onclose', this);
+
+                        //remove from open dialogs
+                        openDialogs.splice(openDialogs.indexOf(this),1);
+                        this.__internal.isOpen = false;
+
+                        ensureNoOverflow();
+                    }
+
+                }
+                return this;
+            },
+            /**
+             * Close all open dialogs except this.
+             *
+             * @return {undefined}
+             */
+            closeOthers:function(){
+                alertify.closeAll(this);
+                return this;
+            },
+            /**
+             * Destroys this dialog instance
+             *
+             * @return {undefined}
+             */
+            destroy:function(){
+                if (this.__internal.isOpen ) {
+                    //mark dialog for destruction, this will be called on tranistionOut event.
+                    this.__internal.destroy = function(){
+                        destruct(this, initialize);
+                    };
+                    //close the dialog to unbind all events.
+                    this.close();
+                }else{
+                    destruct(this, initialize);
+                }
+                return this;
+            },
+        };
+	} () );
+    var notifier = (function () {
+        var reflow,
+            element,
+            openInstances = [],
+            classes = {
+                base: 'alertify-notifier',
+                message: 'ajs-message',
+                top: 'ajs-top',
+                right: 'ajs-right',
+                bottom: 'ajs-bottom',
+                left: 'ajs-left',
+                visible: 'ajs-visible',
+                hidden: 'ajs-hidden',
+                close: 'ajs-close'
+            };
+        /**
+         * Helper: initializes the notifier instance
+         * 
+         */
+        function initialize(instance) {
+
+            if (!instance.__internal) {
+                instance.__internal = {
+                    position: alertify.defaults.notifier.position,
+                    delay: alertify.defaults.notifier.delay,
+                };
+
+                element = document.createElement('DIV');
+
+                updatePosition(instance);
+            }
+
+            //add to DOM tree.
+            if (element.parentNode !== document.body) {
+                document.body.appendChild(element);
+            }
+        }
+        
+        function pushInstance(instance) {
+            instance.__internal.pushed = true;
+            openInstances.push(instance);
+        }
+        function popInstance(instance) {
+            openInstances.splice(openInstances.indexOf(instance), 1);
+            instance.__internal.pushed = false;
+        }
+        /**
+         * Helper: update the notifier instance position
+         * 
+         */
+        function updatePosition(instance) {
+            element.className = classes.base;
+            switch (instance.__internal.position) {
+            case 'top-right':
+                addClass(element, classes.top + ' ' + classes.right);
+                break;
+            case 'top-left':
+                addClass(element, classes.top + ' ' + classes.left);
+                break;
+            case 'bottom-left':
+                addClass(element, classes.bottom + ' ' + classes.left);
+                break;
+
+            default:
+            case 'bottom-right':
+                addClass(element, classes.bottom + ' ' + classes.right);
+                break;
+            }
+        }
+
+        /**
+        * creates a new notification message
+        *
+        * @param  {DOMElement} message	The notifier message element
+        * @param  {Number} wait   Time (in ms) to wait before the message is dismissed, a value of 0 means keep open till clicked.
+        * @param  {Function} callback A callback function to be invoked when the message is dismissed.
+        *
+        * @return {undefined}
+        */
+        function create(div, callback) {
+
+            function clickDelegate(event, instance) {
+                if(!instance.__internal.closeButton || event.target.getAttribute('data-close') === 'true'){
+                    instance.dismiss(true);
+                }
+            }
+
+            function transitionDone(event, instance) {
+                // unbind event
+                off(instance.element, transition.type, transitionDone);
+                // remove the message
+                element.removeChild(instance.element);
+            }
+
+            function initialize(instance) {
+                if (!instance.__internal) {
+                    instance.__internal = {
+                        pushed: false,
+                        delay : undefined,
+                        timer: undefined,
+                        clickHandler: undefined,
+                        transitionEndHandler: undefined,
+                        transitionTimeout: undefined
+                    };
+                    instance.__internal.clickHandler = delegate(instance, clickDelegate);
+                    instance.__internal.transitionEndHandler = delegate(instance, transitionDone);
+                }
+                return instance;
+            }
+            function clearTimers(instance) {
+                clearTimeout(instance.__internal.timer);
+                clearTimeout(instance.__internal.transitionTimeout);
+            }
+            return initialize({
+                /* notification DOM element*/
+                element: div,
+                /*
+                 * Pushes a notification message 
+                 * @param {string or DOMElement} content The notification message content
+                 * @param {Number} wait The time (in seconds) to wait before the message is dismissed, a value of 0 means keep open till clicked.
+                 * 
+                 */
+                push: function (_content, _wait) {
+                    if (!this.__internal.pushed) {
+
+                        pushInstance(this);
+                        clearTimers(this);
+
+                        var content, wait;
+                        switch (arguments.length) {
+                        case 0:
+                            wait = this.__internal.delay;
+                            break;
+                        case 1:
+                            if (typeof (_content) === 'number') {
+                                wait = _content;
+                            } else {
+                                content = _content;
+                                wait = this.__internal.delay;
+                            }
+                            break;
+                        case 2:
+                            content = _content;
+                            wait = _wait;
+                            break;
+                        }
+                        this.__internal.closeButton = alertify.defaults.notifier.closeButton;
+                        // set contents
+                        if (typeof content !== 'undefined') {
+                            this.setContent(content);
+                        }
+                        // append or insert
+                        if (notifier.__internal.position.indexOf('top') < 0) {
+                            element.appendChild(this.element);
+                        } else {
+                            element.insertBefore(this.element, element.firstChild);
+                        }
+                        reflow = this.element.offsetWidth;
+                        addClass(this.element, classes.visible);
+                        // attach click event
+                        on(this.element, 'click', this.__internal.clickHandler);
+                        return this.delay(wait);
+                    }
+                    return this;
+                },
+                /*
+                 * {Function} callback function to be invoked before dismissing the notification message.
+                 * Remarks: A return value === 'false' will cancel the dismissal
+                 * 
+                 */
+                ondismiss: function () { },
+                /*
+                 * {Function} callback function to be invoked when the message is dismissed.
+                 * 
+                 */
+                callback: callback,
+                /*
+                 * Dismisses the notification message 
+                 * @param {Boolean} clicked A flag indicating if the dismissal was caused by a click.
+                 * 
+                 */
+                dismiss: function (clicked) {
+                    if (this.__internal.pushed) {
+                        clearTimers(this);
+                        if (!(typeof this.ondismiss === 'function' && this.ondismiss.call(this) === false)) {
+                            //detach click event
+                            off(this.element, 'click', this.__internal.clickHandler);
+                            // ensure element exists
+                            if (typeof this.element !== 'undefined' && this.element.parentNode === element) {
+                                //transition end or fallback
+                                this.__internal.transitionTimeout = setTimeout(this.__internal.transitionEndHandler, transition.supported ? 1000 : 100);
+                                removeClass(this.element, classes.visible);
+
+                                // custom callback on dismiss
+                                if (typeof this.callback === 'function') {
+                                    this.callback.call(this, clicked);
+                                }
+                            }
+                            popInstance(this);
+                        }
+                    }
+                    return this;
+                },
+                /*
+                 * Delays the notification message dismissal
+                 * @param {Number} wait The time (in seconds) to wait before the message is dismissed, a value of 0 means keep open till clicked.
+                 * 
+                 */
+                delay: function (wait) {
+                    clearTimers(this);
+                    this.__internal.delay = typeof wait !== 'undefined' && !isNaN(+wait) ? +wait : notifier.__internal.delay;
+                    if (this.__internal.delay > 0) {
+                        var  self = this;
+                        this.__internal.timer = setTimeout(function () { self.dismiss(); }, this.__internal.delay * 1000);
+                    }
+                    return this;
+                },
+                /*
+                 * Sets the notification message contents
+                 * @param {string or DOMElement} content The notification message content
+                 * 
+                 */
+                setContent: function (content) {
+                    if (typeof content === 'string') {
+                        clearContents(this.element);
+                        this.element.innerHTML = content;
+                    } else if (content instanceof window.HTMLElement && this.element.firstChild !== content) {
+                        clearContents(this.element);
+                        this.element.appendChild(content);
+                    }
+                    if(this.__internal.closeButton){
+                        var close = document.createElement('span');
+                        addClass(close, classes.close);
+                        close.setAttribute('data-close', true);
+                        this.element.appendChild(close);
+                    }
+                    return this;
+                },
+                /*
+                 * Dismisses all open notifications except this.
+                 * 
+                 */
+                dismissOthers: function () {
+                    notifier.dismissAll(this);
+                    return this;
+                }
+            });
+        }
+
+        //notifier api
+        return {
+            /**
+             * Gets or Sets notifier settings. 
+             *
+             * @param {string} key The setting name
+             * @param {Variant} value The setting value.
+             *
+             * @return {Object}	if the called as a setter, return the notifier instance.
+             */
+            setting: function (key, value) {
+                //ensure init
+                initialize(this);
+
+                if (typeof value === 'undefined') {
+                    //get
+                    return this.__internal[key];
+                } else {
+                    //set
+                    switch (key) {
+                    case 'position':
+                        this.__internal.position = value;
+                        updatePosition(this);
+                        break;
+                    case 'delay':
+                        this.__internal.delay = value;
+                        break;
+                    }
+                }
+                return this;
+            },
+            /**
+             * [Alias] Sets dialog settings/options 
+             */
+            set:function(key,value){
+                this.setting(key,value);
+                return this;
+            },
+            /**
+             * [Alias] Gets dialog settings/options 
+             */
+            get:function(key){
+                return this.setting(key);
+            },
+            /**
+             * Creates a new notification message
+             *
+             * @param {string} type The type of notification message (simply a CSS class name 'ajs-{type}' to be added).
+             * @param {Function} callback  A callback function to be invoked when the message is dismissed.
+             *
+             * @return {undefined}
+             */
+            create: function (type, callback) {
+                //ensure notifier init
+                initialize(this);
+                //create new notification message
+                var div = document.createElement('div');
+                div.className = classes.message + ((typeof type === 'string' && type !== '') ? ' ajs-' + type : '');
+                return create(div, callback);
+            },
+            /**
+             * Dismisses all open notifications.
+             *
+             * @param {Object} excpet [optional] The notification object to exclude from dismissal.
+             *
+             */
+            dismissAll: function (except) {
+                var clone = openInstances.slice(0);
+                for (var x = 0; x < clone.length; x += 1) {
+                    var  instance = clone[x];
+                    if (except === undefined || except !== instance) {
+                        instance.dismiss();
+                    }
+                }
+            }
+        };
+    })();
+    /**
+     * Alertify public API
+     * This contains everything that is exposed through the alertify object.
+     *
+     * @return {Object}
+     */
+    function Alertify() {
+
+        // holds a references of created dialogs
+        var dialogs = {};
+
+        /**
+         * Extends a given prototype by merging properties from base into sub.
+         *
+         * @sub {Object} sub The prototype being overwritten.
+         * @base {Object} base The prototype being written.
+         *
+         * @return {Object} The extended prototype.
+         */
+        function extend(sub, base) {
+            // copy dialog pototype over definition.
+            for (var prop in base) {
+                if (base.hasOwnProperty(prop)) {
+                    sub[prop] = base[prop];
+                }
+            }
+            return sub;
+        }
+
+
+        /**
+        * Helper: returns a dialog instance from saved dialogs.
+        * and initializes the dialog if its not already initialized.
+        *
+        * @name {String} name The dialog name.
+        *
+        * @return {Object} The dialog instance.
+        */
+        function get_dialog(name) {
+            var dialog = dialogs[name].dialog;
+            //initialize the dialog if its not already initialized.
+            if (dialog && typeof dialog.__init === 'function') {
+                dialog.__init(dialog);
+            }
+            return dialog;
+        }
+
+        /**
+         * Helper:  registers a new dialog definition.
+         *
+         * @name {String} name The dialog name.
+         * @Factory {Function} Factory a function resposible for creating dialog prototype.
+         * @transient {Boolean} transient True to create a new dialog instance each time the dialog is invoked, false otherwise.
+         * @base {String} base the name of another dialog to inherit from.
+         *
+         * @return {Object} The dialog definition.
+         */
+        function register(name, Factory, transient, base) {
+            var definition = {
+                dialog: null,
+                factory: Factory
+            };
+
+            //if this is based on an existing dialog, create a new definition
+            //by applying the new protoype over the existing one.
+            if (base !== undefined) {
+                definition.factory = function () {
+                    return extend(new dialogs[base].factory(), new Factory());
+                };
+            }
+
+            if (!transient) {
+                //create a new definition based on dialog
+                definition.dialog = extend(new definition.factory(), dialog);
+            }
+            return dialogs[name] = definition;
+        }
+
+        return {
+            /**
+             * Alertify defaults
+             * 
+             * @type {Object}
+             */
+            defaults: defaults,
+            /**
+             * Dialogs factory 
+             *
+             * @param {string}      Dialog name.
+             * @param {Function}    A Dialog factory function.
+             * @param {Boolean}     Indicates whether to create a singleton or transient dialog.
+             * @param {String}      The name of the base type to inherit from.
+             */
+            dialog: function (name, Factory, transient, base) {
+
+                // get request, create a new instance and return it.
+                if (typeof Factory !== 'function') {
+                    return get_dialog(name);
+                }
+
+                if (this.hasOwnProperty(name)) {
+                    throw new Error('alertify.dialog: name already exists');
+                }
+
+                // register the dialog
+                var definition = register(name, Factory, transient, base);
+
+                if (transient) {
+
+                    // make it public
+                    this[name] = function () {
+                        //if passed with no params, consider it a get request
+                        if (arguments.length === 0) {
+                            return definition.dialog;
+                        } else {
+                            var instance = extend(new definition.factory(), dialog);
+                            //ensure init
+                            if (instance && typeof instance.__init === 'function') {
+                                instance.__init(instance);
+                            }
+                            instance['main'].apply(instance, arguments);
+                            return instance['show'].apply(instance);
+                        }
+                    };
+                } else {
+                    // make it public
+                    this[name] = function () {
+                        //ensure init
+                        if (definition.dialog && typeof definition.dialog.__init === 'function') {
+                            definition.dialog.__init(definition.dialog);
+                        }
+                        //if passed with no params, consider it a get request
+                        if (arguments.length === 0) {
+                            return definition.dialog;
+                        } else {
+                            var dialog = definition.dialog;
+                            dialog['main'].apply(definition.dialog, arguments);
+                            return dialog['show'].apply(definition.dialog);
+                        }
+                    };
+                }
+            },
+            /**
+             * Close all open dialogs.
+             *
+             * @param {Object} excpet [optional] The dialog object to exclude from closing.
+             *
+             * @return {undefined}
+             */
+            closeAll: function (except) {
+                var clone = openDialogs.slice(0);
+                for (var x = 0; x < clone.length; x += 1) {
+                    var instance = clone[x];
+                    if (except === undefined || except !== instance) {
+                        instance.close();
+                    }
+                }
+            },
+            /**
+             * Gets or Sets dialog settings/options. if the dialog is transient, this call does nothing.
+             *
+             * @param {string} name The dialog name.
+             * @param {String|Object} key A string specifying a propery name or a collection of key/value pairs.
+             * @param {Variant} value Optional, the value associated with the key (in case it was a string).
+             *
+             * @return {undefined}
+             */
+            setting: function (name, key, value) {
+
+                if (name === 'notifier') {
+                    return notifier.setting(key, value);
+                }
+
+                var dialog = get_dialog(name);
+                if (dialog) {
+                    return dialog.setting(key, value);
+                }
+            },
+            /**
+             * [Alias] Sets dialog settings/options 
+             */
+            set: function(name,key,value){
+                return this.setting(name, key,value);
+            },
+            /**
+             * [Alias] Gets dialog settings/options 
+             */
+            get: function(name, key){
+                return this.setting(name, key);
+            },
+            /**
+             * Creates a new notification message.
+             * If a type is passed, a class name "ajs-{type}" will be added.
+             * This allows for custom look and feel for various types of notifications.
+             *
+             * @param  {String | DOMElement}    [message=undefined]		Message text
+             * @param  {String}                 [type='']				Type of log message
+             * @param  {String}                 [wait='']				Time (in seconds) to wait before auto-close
+             * @param  {Function}               [callback=undefined]	A callback function to be invoked when the log is closed.
+             *
+             * @return {Object} Notification object.
+             */
+            notify: function (message, type, wait, callback) {
+                return notifier.create(type, callback).push(message, wait);
+            },
+            /**
+             * Creates a new notification message.
+             *
+             * @param  {String}		[message=undefined]		Message text
+             * @param  {String}     [wait='']				Time (in seconds) to wait before auto-close
+             * @param  {Function}	[callback=undefined]	A callback function to be invoked when the log is closed.
+             *
+             * @return {Object} Notification object.
+             */
+            message: function (message, wait, callback) {
+                return notifier.create(null, callback).push(message, wait);
+            },
+            /**
+             * Creates a new notification message of type 'success'.
+             *
+             * @param  {String}		[message=undefined]		Message text
+             * @param  {String}     [wait='']				Time (in seconds) to wait before auto-close
+             * @param  {Function}	[callback=undefined]	A callback function to be invoked when the log is closed.
+             *
+             * @return {Object} Notification object.
+             */
+            success: function (message, wait, callback) {
+                return notifier.create('success', callback).push(message, wait);
+            },
+            /**
+             * Creates a new notification message of type 'error'.
+             *
+             * @param  {String}		[message=undefined]		Message text
+             * @param  {String}     [wait='']				Time (in seconds) to wait before auto-close
+             * @param  {Function}	[callback=undefined]	A callback function to be invoked when the log is closed.
+             *
+             * @return {Object} Notification object.
+             */
+            error: function (message, wait, callback) {
+                return notifier.create('error', callback).push(message, wait);
+            },
+            /**
+             * Creates a new notification message of type 'warning'.
+             *
+             * @param  {String}		[message=undefined]		Message text
+             * @param  {String}     [wait='']				Time (in seconds) to wait before auto-close
+             * @param  {Function}	[callback=undefined]	A callback function to be invoked when the log is closed.
+             *
+             * @return {Object} Notification object.
+             */
+            warning: function (message, wait, callback) {
+                return notifier.create('warning', callback).push(message, wait);
+            },
+            /**
+             * Dismisses all open notifications
+             *
+             * @return {undefined}
+             */
+            dismissAll: function () {
+                notifier.dismissAll();
+            }
+        };
+    }
+    var alertify = new Alertify();
+
+    /**
+    * Alert dialog definition
+    *
+    * invoked by:
+    *	alertify.alert(message);
+    *	alertify.alert(title, message);
+    *	alertify.alert(message, onok);
+    *	alertify.alert(title, message, onok);
+     */
+    alertify.dialog('alert', function () {
+        return {
+            main: function (_title, _message, _onok) {
+                var title, message, onok;
+                switch (arguments.length) {
+                case 1:
+                    message = _title;
+                    break;
+                case 2:
+                    if (typeof _message === 'function') {
+                        message = _title;
+                        onok = _message;
+                    } else {
+                        title = _title;
+                        message = _message;
+                    }
+                    break;
+                case 3:
+                    title = _title;
+                    message = _message;
+                    onok = _onok;
+                    break;
+                }
+                this.set('title', title);
+                this.set('message', message);
+                this.set('onok', onok);
+                return this;
+            },
+            setup: function () {
+                return {
+                    buttons: [
+                        {
+                            text: alertify.defaults.glossary.ok,
+                            key: keys.ESC,
+                            invokeOnClose: true,
+                            className: alertify.defaults.theme.ok,
+                        }
+                    ],
+                    focus: {
+                        element: 0,
+                        select: false
+                    },
+                    options: {
+                        maximizable: false,
+                        resizable: false
+                    }
+                };
+            },
+            build: function () {
+                // nothing
+            },
+            prepare: function () {
+                //nothing
+            },
+            setMessage: function (message) {
+                this.setContent(message);
+            },
+            settings: {
+                message: undefined,
+                onok: undefined,
+                label: undefined,
+            },
+            settingUpdated: function (key, oldValue, newValue) {
+                switch (key) {
+                case 'message':
+                    this.setMessage(newValue);
+                    break;
+                case 'label':
+                    if (this.__internal.buttons[0].element) {
+                        this.__internal.buttons[0].element.innerHTML = newValue;
+                    }
+                    break;
+                }
+            },
+            callback: function (closeEvent) {
+                if (typeof this.get('onok') === 'function') {
+                    var returnValue = this.get('onok').call(this, closeEvent);
+                    if (typeof returnValue !== 'undefined') {
+                        closeEvent.cancel = !returnValue;
+                    }
+                }
+            }
+        };
+    });
+    /**
+     * Confirm dialog object
+     *
+     *	alertify.confirm(message);
+     *	alertify.confirm(message, onok);
+     *	alertify.confirm(message, onok, oncancel);
+     *	alertify.confirm(title, message, onok, oncancel);
+     */
+    alertify.dialog('confirm', function () {
+
+        var autoConfirm = {
+            timer: null,
+            index: null,
+            text: null,
+            duration: null,
+            task: function (event, self) {
+                if (self.isOpen()) {
+                    self.__internal.buttons[autoConfirm.index].element.innerHTML = autoConfirm.text + ' (&#8207;' + autoConfirm.duration + '&#8207;) ';
+                    autoConfirm.duration -= 1;
+                    if (autoConfirm.duration === -1) {
+                        clearAutoConfirm(self);
+                        var button = self.__internal.buttons[autoConfirm.index];
+                        var closeEvent = createCloseEvent(autoConfirm.index, button);
+
+                        if (typeof self.callback === 'function') {
+                            self.callback.apply(self, [closeEvent]);
+                        }
+                        //close the dialog.
+                        if (closeEvent.close !== false) {
+                            self.close();
+                        }
+                    }
+                } else {
+                    clearAutoConfirm(self);
+                }
+            }
+        };
+
+        function clearAutoConfirm(self) {
+            if (autoConfirm.timer !== null) {
+                clearInterval(autoConfirm.timer);
+                autoConfirm.timer = null;
+                self.__internal.buttons[autoConfirm.index].element.innerHTML = autoConfirm.text;
+            }
+        }
+
+        function startAutoConfirm(self, index, duration) {
+            clearAutoConfirm(self);
+            autoConfirm.duration = duration;
+            autoConfirm.index = index;
+            autoConfirm.text = self.__internal.buttons[index].element.innerHTML;
+            autoConfirm.timer = setInterval(delegate(self, autoConfirm.task), 1000);
+            autoConfirm.task(null, self);
+        }
+
+
+        return {
+            main: function (_title, _message, _onok, _oncancel) {
+                var title, message, onok, oncancel;
+                switch (arguments.length) {
+                case 1:
+                    message = _title;
+                    break;
+                case 2:
+                    message = _title;
+                    onok = _message;
+                    break;
+                case 3:
+                    message = _title;
+                    onok = _message;
+                    oncancel = _onok;
+                    break;
+                case 4:
+                    title = _title;
+                    message = _message;
+                    onok = _onok;
+                    oncancel = _oncancel;
+                    break;
+                }
+                this.set('title', title);
+                this.set('message', message);
+                this.set('onok', onok);
+                this.set('oncancel', oncancel);
+                return this;
+            },
+            setup: function () {
+                return {
+                    buttons: [
+                        {
+                            text: alertify.defaults.glossary.ok,
+                            key: keys.ENTER,
+                            className: alertify.defaults.theme.ok,
+                        },
+                        {
+                            text: alertify.defaults.glossary.cancel,
+                            key: keys.ESC,
+                            invokeOnClose: true,
+                            className: alertify.defaults.theme.cancel,
+                        }
+                    ],
+                    focus: {
+                        element: 0,
+                        select: false
+                    },
+                    options: {
+                        maximizable: false,
+                        resizable: false
+                    }
+                };
+            },
+            build: function () {
+                //nothing
+            },
+            prepare: function () {
+                //nothing
+            },
+            setMessage: function (message) {
+                this.setContent(message);
+            },
+            settings: {
+                message: null,
+                labels: null,
+                onok: null,
+                oncancel: null,
+                defaultFocus: null,
+                reverseButtons: null,
+            },
+            settingUpdated: function (key, oldValue, newValue) {
+                switch (key) {
+                case 'message':
+                    this.setMessage(newValue);
+                    break;
+                case 'labels':
+                    if ('ok' in newValue && this.__internal.buttons[0].element) {
+                        this.__internal.buttons[0].text = newValue.ok;
+                        this.__internal.buttons[0].element.innerHTML = newValue.ok;
+                    }
+                    if ('cancel' in newValue && this.__internal.buttons[1].element) {
+                        this.__internal.buttons[1].text = newValue.cancel;
+                        this.__internal.buttons[1].element.innerHTML = newValue.cancel;
+                    }
+                    break;
+                case 'reverseButtons':
+                    if (newValue === true) {
+                        this.elements.buttons.primary.appendChild(this.__internal.buttons[0].element);
+                    } else {
+                        this.elements.buttons.primary.appendChild(this.__internal.buttons[1].element);
+                    }
+                    break;
+                case 'defaultFocus':
+                    this.__internal.focus.element = newValue === 'ok' ? 0 : 1;
+                    break;
+                }
+            },
+            callback: function (closeEvent) {
+                clearAutoConfirm(this);
+                var returnValue;
+                switch (closeEvent.index) {
+                case 0:
+                    if (typeof this.get('onok') === 'function') {
+                        returnValue = this.get('onok').call(this, closeEvent);
+                        if (typeof returnValue !== 'undefined') {
+                            closeEvent.cancel = !returnValue;
+                        }
+                    }
+                    break;
+                case 1:
+                    if (typeof this.get('oncancel') === 'function') {
+                        returnValue = this.get('oncancel').call(this, closeEvent);
+                        if (typeof returnValue !== 'undefined') {
+                            closeEvent.cancel = !returnValue;
+                        }
+                    }
+                    break;
+                }
+            },
+            autoOk: function (duration) {
+                startAutoConfirm(this, 0, duration);
+                return this;
+            },
+            autoCancel: function (duration) {
+                startAutoConfirm(this, 1, duration);
+                return this;
+            }
+        };
+    });
+    /**
+     * Prompt dialog object
+     *
+     * invoked by:
+     *	alertify.prompt(message);
+     *	alertify.prompt(message, value);
+     *	alertify.prompt(message, value, onok);
+     *	alertify.prompt(message, value, onok, oncancel);
+     *	alertify.prompt(title, message, value, onok, oncancel);
+     */
+    alertify.dialog('prompt', function () {
+        var input = document.createElement('INPUT');
+        var p = document.createElement('P');
+        return {
+            main: function (_title, _message, _value, _onok, _oncancel) {
+                var title, message, value, onok, oncancel;
+                switch (arguments.length) {
+                case 1:
+                    message = _title;
+                    break;
+                case 2:
+                    message = _title;
+                    value = _message;
+                    break;
+                case 3:
+                    message = _title;
+                    value = _message;
+                    onok = _value;
+                    break;
+                case 4:
+                    message = _title;
+                    value = _message;
+                    onok = _value;
+                    oncancel = _onok;
+                    break;
+                case 5:
+                    title = _title;
+                    message = _message;
+                    value = _value;
+                    onok = _onok;
+                    oncancel = _oncancel;
+                    break;
+                }
+                this.set('title', title);
+                this.set('message', message);
+                this.set('value', value);
+                this.set('onok', onok);
+                this.set('oncancel', oncancel);
+                return this;
+            },
+            setup: function () {
+                return {
+                    buttons: [
+                        {
+                            text: alertify.defaults.glossary.ok,
+                            key: keys.ENTER,
+                            className: alertify.defaults.theme.ok,
+                        },
+                        {
+                            text: alertify.defaults.glossary.cancel,
+                            key: keys.ESC,
+                            invokeOnClose: true,
+                            className: alertify.defaults.theme.cancel,
+                        }
+                    ],
+                    focus: {
+                        element: input,
+                        select: true
+                    },
+                    options: {
+                        maximizable: false,
+                        resizable: false
+                    }
+                };
+            },
+            build: function () {
+                input.className = alertify.defaults.theme.input;
+                input.setAttribute('type', 'text');
+                input.value = this.get('value');
+                this.elements.content.appendChild(p);
+                this.elements.content.appendChild(input);
+            },
+            prepare: function () {
+                //nothing
+            },
+            setMessage: function (message) {
+                if (typeof message === 'string') {
+                    clearContents(p);
+                    p.innerHTML = message;
+                } else if (message instanceof window.HTMLElement && p.firstChild !== message) {
+                    clearContents(p);
+                    p.appendChild(message);
+                }
+            },
+            settings: {
+                message: undefined,
+                labels: undefined,
+                onok: undefined,
+                oncancel: undefined,
+                value: '',
+                type:'text',
+                reverseButtons: undefined,
+            },
+            settingUpdated: function (key, oldValue, newValue) {
+                switch (key) {
+                case 'message':
+                    this.setMessage(newValue);
+                    break;
+                case 'value':
+                    input.value = newValue;
+                    break;
+                case 'type':
+                    switch (newValue) {
+                    case 'text':
+                    case 'color':
+                    case 'date':
+                    case 'datetime-local':
+                    case 'email':
+                    case 'month':
+                    case 'number':
+                    case 'password':
+                    case 'search':
+                    case 'tel':
+                    case 'time':
+                    case 'week':
+                        input.type = newValue;
+                        break;
+                    default:
+                        input.type = 'text';
+                        break;
+                    }
+                    break;
+                case 'labels':
+                    if (newValue.ok && this.__internal.buttons[0].element) {
+                        this.__internal.buttons[0].element.innerHTML = newValue.ok;
+                    }
+                    if (newValue.cancel && this.__internal.buttons[1].element) {
+                        this.__internal.buttons[1].element.innerHTML = newValue.cancel;
+                    }
+                    break;
+                case 'reverseButtons':
+                    if (newValue === true) {
+                        this.elements.buttons.primary.appendChild(this.__internal.buttons[0].element);
+                    } else {
+                        this.elements.buttons.primary.appendChild(this.__internal.buttons[1].element);
+                    }
+                    break;
+                }
+            },
+            callback: function (closeEvent) {
+                var returnValue;
+                switch (closeEvent.index) {
+                case 0:
+                    this.settings.value = input.value;
+                    if (typeof this.get('onok') === 'function') {
+                        returnValue = this.get('onok').call(this, closeEvent, this.settings.value);
+                        if (typeof returnValue !== 'undefined') {
+                            closeEvent.cancel = !returnValue;
+                        }
+                    }
+                    break;
+                case 1:
+                    if (typeof this.get('oncancel') === 'function') {
+                        returnValue = this.get('oncancel').call(this, closeEvent);
+                        if (typeof returnValue !== 'undefined') {
+                            closeEvent.cancel = !returnValue;
+                        }
+                    }
+                    if(!closeEvent.cancel){
+                        input.value = this.settings.value;
+                    }
+                    break;
+                }
+            }
+        };
+    });
+
+    // CommonJS
+    if ( typeof module === 'object' && typeof module.exports === 'object' ) {
+        module.exports = alertify;
+    // AMD
+    } else if ( typeof define === 'function' && define.amd) {
+        define( [], function () {
+            return alertify;
+        } );
+    // window
+    } else if ( !window.alertify ) {
+        window.alertify = alertify;
+    }
+
+} ( typeof window !== 'undefined' ? window : this ) );
