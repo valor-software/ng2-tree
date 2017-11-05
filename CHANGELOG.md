@@ -1,3 +1,20 @@
+<a name="2.0.0-rc.1"></a>
+# [2.0.0-rc.1](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.10...v2.0.0-rc.1) (2017-11-05)
+
+
+### Bug Fixes
+
+* **tree:** should not load children when they were already loaded (closes [#149](https://github.com/valor-software/ng2-tree/issues/149)) ([aa44992](https://github.com/valor-software/ng2-tree/commit/aa44992))
+* **TreeController:** fix inconsistent root node ([9626db7](https://github.com/valor-software/ng2-tree/commit/9626db7))
+
+
+### Features
+
+* add ability to pass a template to the tree for nodes rendering ([a83c1e4](https://github.com/valor-software/ng2-tree/commit/a83c1e4))
+* support ngrx (or loading children using any other redux-like library via special LoadNextLevel event) ([1e4095d](https://github.com/valor-software/ng2-tree/commit/1e4095d))
+
+
+
 <a name="2.0.0-alpha.10"></a>
 # [2.0.0-alpha.10](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.9...v2.0.0-alpha.10) (2017-08-27)
 
