@@ -13,6 +13,7 @@ import {
 
 import { Observable, Observer } from 'rxjs/Rx';
 import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings, ChildrenLoadingFunction } from './tree.types';
+import {NodeMenuItem} from "./menu/node-menu.component";
 
 enum ChildrenLoadingState {
   NotStarted,
@@ -335,6 +336,21 @@ export class Tree {
     return !this.isBranch();
   }
 
+  /**
+   * Get menu items of the current tree.
+   * @returns {NodeMenuItem[]} The menu items of the current tree.
+   */
+  public get menuItems(): NodeMenuItem[] {
+    return this.node.settings.menuItems;
+  }
+
+  /**
+   * Check whether or not this tree has a custom menu.
+   * @returns {boolean} A flag indicating whether or not this tree has a custom menu.
+   */
+  public hasCustomMenu(): boolean {
+    return !get(this.node.settings, 'static', false) &&  get(this.node.settings, 'menuItems', false);
+  }
   /**
    * Check whether this tree is "Branch" or not. "Branch" is a node that has children.
    * @returns {boolean} A flag indicating whether or not this tree is a "Branch".
