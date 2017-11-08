@@ -60,8 +60,8 @@ export class TreeService {
     this.nodeMoved$.next(new NodeMovedEvent(tree, parent));
   }
 
-  public fireMenuItemSelected(tree: Tree): void {
-    this.menuItemSelected$.next(new MenuItemSelectedEvent(tree));
+  public fireMenuItemSelected(tree: Tree, selectedItem: string): void {
+    this.menuItemSelected$.next(new MenuItemSelectedEvent(tree, selectedItem));
   }
 
   public fireNodeSwitchFoldingType(tree: Tree): void {

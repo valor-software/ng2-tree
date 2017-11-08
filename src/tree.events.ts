@@ -56,7 +56,7 @@ export class NodeCollapsedEvent extends NodeEvent {
 }
 
 export class MenuItemSelectedEvent extends NodeEvent {
-  public constructor(node: Tree) {
+  public constructor(node: Tree, public selectedItem: string) {
     super(node);
   }
 }

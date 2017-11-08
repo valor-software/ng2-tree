@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import * as TreeTypes from './tree.types';
-import { NodeEvent } from './tree.events';
+import { NodeEvent, MenuItemSelectedEvent } from './tree.events';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
 import { Subscription } from 'rxjs/Subscription';
@@ -107,7 +107,7 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
       this.nodeCollapsed.emit(e);
     }));
 
-    this.subscriptions.push(this.treeService.menuItemSelected$.subscribe((e: NodeEvent) => {
+    this.subscriptions.push(this.treeService.menuItemSelected$.subscribe((e: MenuItemSelectedEvent) => {
       this.menuItemSelected.emit(e);
     }));
 

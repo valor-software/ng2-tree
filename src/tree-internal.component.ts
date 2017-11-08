@@ -183,7 +183,7 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
         this.onRemoveSelected();
         break;
       case NodeMenuItemAction.Custom:
-        this.treeService.fireMenuItemSelected(this.tree);
+        this.treeService.fireMenuItemSelected(this.tree, e.nodeMenuItemSelected);
         break;
       default:
         throw new Error(`Chosen menu item doesn't exist`);
