@@ -55,6 +55,12 @@ export class NodeCollapsedEvent extends NodeEvent {
   }
 }
 
+export class MenuItemSelectedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
 export class LoadNextLevelEvent extends NodeEvent {
   public constructor(node: Tree) {
     super(node);

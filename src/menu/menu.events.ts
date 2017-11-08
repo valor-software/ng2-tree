@@ -17,5 +17,4 @@ export interface NodeMenuEvent {
 
 export interface NodeMenuItemSelectedEvent {
   nodeMenuItemAction: NodeMenuItemAction;
-  nodeMenuItemExecute?: any;
 }

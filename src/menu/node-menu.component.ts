@@ -69,7 +69,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
 
   public onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {
     if (isLeftButtonClicked(e)) {
-      this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action, nodeMenuItemExecute: selectedMenuItem.execute});
+      this.menuItemSelected.emit({nodeMenuItemAction: selectedMenuItem.action});
       this.nodeMenuService.fireMenuEvent(e.target as HTMLElement, NodeMenuAction.Close);
     }
   }
@@ -89,5 +89,4 @@ export interface NodeMenuItem {
   name: string;
   action: NodeMenuItemAction;
   cssClass: string;
-  execute?: any;
 }

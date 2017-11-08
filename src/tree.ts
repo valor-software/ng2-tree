@@ -13,7 +13,7 @@ import {
 
 import { Observable, Observer } from 'rxjs/Rx';
 import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings, ChildrenLoadingFunction } from './tree.types';
-import {NodeMenuItem} from "./menu/node-menu.component";
+import {NodeMenuItem} from './menu/node-menu.component';
 
 enum ChildrenLoadingState {
   NotStarted,

@@ -6,6 +6,7 @@ import {
   NodeRemovedEvent,
   NodeRenamedEvent,
   NodeSelectedEvent,
+  MenuItemSelectedEvent,
   LoadNextLevelEvent
 } from './tree.events';
 import { RenamableNode } from './tree.types';
@@ -26,6 +27,7 @@ export class TreeService {
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
   public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
   public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
+  public menuItemSelected$: Subject<MenuItemSelectedEvent> = new Subject<MenuItemSelectedEvent>();
   public loadNextLevel$: Subject<LoadNextLevelEvent> = new Subject<LoadNextLevelEvent>();
 
   private controllers: Map<string | number, TreeController> = new Map();
@@ -56,6 +58,10 @@ export class TreeService {
 
   public fireNodeMoved(tree: Tree, parent: Tree): void {
     this.nodeMoved$.next(new NodeMovedEvent(tree, parent));
+  }
+
+  public fireMenuItemSelected(tree: Tree): void {
+    this.menuItemSelected$.next(new MenuItemSelectedEvent(tree));
   }
 
   public fireNodeSwitchFoldingType(tree: Tree): void {
