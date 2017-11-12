@@ -84,8 +84,15 @@ export class TreeModelSettings {
    */
   public static?: boolean;
 
+  public isCollapsedOnInit?: boolean;
+
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
-    return defaultsDeep({}, get(sourceA, 'settings'), get(sourceB, 'settings'), {static: false, leftMenu: false, rightMenu: true});
+    return defaultsDeep(
+      {},
+      get(sourceA, 'settings'),
+      get(sourceB, 'settings'),
+      {static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false}
+    );
   }
 }
 

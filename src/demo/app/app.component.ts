@@ -269,7 +269,10 @@ export class AppComponent implements OnInit {
           {value: 'chmod', id: 10},
           {value: 'chown', id: 11},
           {value: 'nano', id: 12}
-        ]
+        ],
+        settings: {
+          isCollapsedOnInit: true
+        }
       },
       {
         value: 'boot',
