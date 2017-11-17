@@ -6,7 +6,9 @@ import {
   NodeRemovedEvent,
   NodeRenamedEvent,
   NodeSelectedEvent,
-  LoadNextLevelEvent
+  LoadNextLevelEvent,
+  NodeCheckedEvent,
+  NodeUncheckedEvent
 } from './tree.events';
 import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
@@ -27,6 +29,8 @@ export class TreeService {
   public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
   public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
   public loadNextLevel$: Subject<LoadNextLevelEvent> = new Subject<LoadNextLevelEvent>();
+  public nodeChecked$ : Subject<NodeCheckedEvent> = new Subject<NodeCheckedEvent>();
+  public nodeUnchecked$ : Subject<NodeUncheckedEvent> = new Subject<NodeUncheckedEvent>();
 
   private controllers: Map<string | number, TreeController> = new Map();
 
@@ -79,6 +83,14 @@ export class TreeService {
 
   private fireLoadNextLevel(tree: Tree): void {
     this.loadNextLevel$.next(new LoadNextLevelEvent(tree));
+  }
+
+  public fireNodeChecked(tree: Tree) : void {
+    this.nodeChecked$.next(new NodeCheckedEvent(tree));
+  }
+
+  public fireNodeUnchecked(tree: Tree) : void {
+    this.nodeUnchecked$.next(new NodeUncheckedEvent(tree));
   }
 
   public draggedStream(tree: Tree, element: ElementRef): Observable<NodeDraggableEvent> {

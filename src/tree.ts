@@ -40,6 +40,7 @@ export class Tree {
 
   public node: TreeModel;
   public parent: Tree;
+  public isChecked: boolean;
 
   // STATIC METHODS ----------------------------------------------------------------------------------------------------
 

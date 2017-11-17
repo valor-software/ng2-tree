@@ -26,6 +26,7 @@ export interface TreeModel {
   _status?: TreeStatus;
   _foldingType?: FoldingType;
   [additionalData: string]: any;
+  checked?: boolean;
 }
 
 export interface CssClasses {
@@ -85,7 +86,7 @@ export class TreeModelSettings {
   public static?: boolean;
 
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
-    return defaultsDeep({}, get(sourceA, 'settings'), get(sourceB, 'settings'), {static: false, leftMenu: false, rightMenu: true});
+    return defaultsDeep({}, get(sourceA, 'settings'), get(sourceB, 'settings'), { static: false, leftMenu: false, rightMenu: true });
   }
 }
 
@@ -96,6 +97,7 @@ export interface Ng2TreeSettings {
    * @type boolean
    */
   rootIsVisible?: boolean;
+  enableCheckboxes?: boolean;
 }
 
 export enum TreeStatus {
