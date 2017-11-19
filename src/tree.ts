@@ -14,6 +14,8 @@ import {
 import { Observable, Observer } from 'rxjs/Rx';
 import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings, ChildrenLoadingFunction } from './tree.types';
 
+import * as uuidv4 from 'uuid/v4';
+
 enum ChildrenLoadingState {
   NotStarted,
   Loading,
@@ -200,6 +202,8 @@ export class Tree {
     if (!model.id) {
       tree.markAsNew();
     }
+
+    tree.id = tree.id || uuidv4();
 
     if (this.childrenShouldBeLoaded() && !(this.childrenAreBeingLoaded() || this.childrenWereLoaded())) {
       return null;

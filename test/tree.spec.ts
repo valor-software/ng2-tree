@@ -383,6 +383,10 @@ describe('Tree', () => {
 
     expect(servantTree.hasChild(child)).toEqual(true);
     expect(child.value).toEqual('');
+
+    expect(child.id).toBeDefined();
+    expect(child.id).toEqual(jasmine.any(String));
+
     expect(child.children).toEqual(null);
     expect(child.isLeaf()).toEqual(true);
     expect(child.isNew()).toEqual(true);

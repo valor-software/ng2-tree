@@ -450,7 +450,7 @@ You can subscribe to `NodeCreatedEvent` by attaching listener to `(nodeCreated)`
 `NodeCreatedEvent` has a `node` property of type `Tree`, which contains a created node and a `controller` property, which will give you access to node's controller.
 
 ```typescript
-{node: <Tree>{...}, controller: <TreeController>{...}}
+{node: <Tree>{...}}
 ```
 
 #### NodeRenamedEvent
@@ -531,7 +531,11 @@ Relevant for loading children via ngrx (or any redux-inspired library).
 ```
 
 ## :gun: Controller
-First of all you should know how to get a controller of a particular node. You can get a controller of a node only if you set an id property of a node. For example, your tree structure should look like:
+First of all you should know how to get a controller of a particular node. You can get a controller of a node only if you set an id property of a node.
+
+> TIP: Ids for nodes created via the context menu or using a TreeController instance get populated automatically unless nodes had ids before there were added to the tree
+
+For example, your tree structure should look like:
 
 ```typescript
 public tree: TreeModel = {
