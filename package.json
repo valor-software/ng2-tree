@@ -93,5 +93,8 @@
     "typescript": "2.4.2",
     "webpack": "3.8.1",
     "zone.js": "0.8.18"
+  },
+  "dependencies": {
+    "uuid": "3.1.0"
   }
 }
