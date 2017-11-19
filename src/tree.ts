@@ -256,7 +256,14 @@ export class Tree {
    * @returns {Tree} A newly inserted child.
    */
   public addChild(child: Tree, position?: number): Tree {
-    return this._addChild(Tree.cloneTreeShallow(child), position);
+    const newborn = this._addChild(Tree.cloneTreeShallow(child), position);
+
+    this._setFoldingType();
+    if (this.isNodeCollapsed()) {
+      this.switchFoldingType();
+    }
+
+    return newborn;
   }
 
   private _addChild(child: Tree, position: number = size(this._children) || 0): Tree {
@@ -268,10 +275,6 @@ export class Tree {
       this._children = [child];
     }
 
-    this._setFoldingType();
-    if (this.isNodeCollapsed()) {
-      this.switchFoldingType();
-    }
     return child;
   }
 
@@ -414,6 +417,9 @@ export class Tree {
     if (this.isLeaf() || !this.hasChildren()) {
       return;
     }
+
+    this.disableCollapseOnInit();
+
     this.node._foldingType = this.isNodeExpanded() ? FoldingType.Collapsed : FoldingType.Expanded;
   }
 
@@ -440,7 +446,7 @@ export class Tree {
     if (this.childrenShouldBeLoaded()) {
       this.node._foldingType = FoldingType.Collapsed;
     } else if (this._children && !isEmpty(this._children)) {
-      this.node._foldingType = FoldingType.Expanded;
+      this.node._foldingType = this.isCollapsedOnInit() ? FoldingType.Collapsed : FoldingType.Expanded;
     } else if (Array.isArray(this._children)) {
       this.node._foldingType = FoldingType.Empty;
     } else {
@@ -508,6 +514,16 @@ export class Tree {
       return get(this.node.settings, 'templates.leftMenu', '<span></span>');
     }
     return '';
+  }
+
+  private disableCollapseOnInit() {
+    if (this.node.settings) {
+      this.node.settings.isCollapsedOnInit = false;
+    }
+  }
+
+  public isCollapsedOnInit() {
+    return !!get(this.node.settings, 'isCollapsedOnInit');
   }
 
   /**
