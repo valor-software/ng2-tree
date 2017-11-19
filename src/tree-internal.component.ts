@@ -9,7 +9,7 @@ import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
 import { Subscription } from 'rxjs/Subscription';
-import { get } from './utils/fn.utils';
+import {get, has, isFunction} from './utils/fn.utils';
 
 @Component({
   selector: 'tree-internal',
@@ -41,13 +41,14 @@ import { get } from './utils/fn.utils';
 
         <div class="node-left-menu" *ngIf="tree.hasLeftMenu()" (click)="showLeftMenu($event)" [innerHTML]="tree.leftMenuTemplate">
         </div>
-        <node-menu *ngIf="tree.hasLeftMenu() && isLeftMenuVisible"
+        <node-menu *ngIf="tree.hasLeftMenu() && isLeftMenuVisible && !hasCustomMenu()"
           (menuItemSelected)="onMenuItemSelected($event)">
         </node-menu>
       </div>
-
-      <node-menu *ngIf="isRightMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
-
+      <node-menu *ngIf="isRightMenuVisible && !hasCustomMenu()"
+          (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
+      <node-menu *ngIf="hasCustomMenu() && (isRightMenuVisible || isLeftMenuVisible)"
+           [menuItems]="tree.menuItems" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
       <ng-template [ngIf]="tree.isNodeExpanded()">
         <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child" [template]="template"></tree-internal>
       </ng-template>
@@ -83,8 +84,7 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
       this.treeService.setController(this.tree.node.id, this.controller);
     }
 
-    this.settings = this.settings || { rootIsVisible: true };
-
+    this.settings = this.settings || { rootIsVisible: true};
     this.subscriptions.push(this.nodeMenuService.hideMenuStream(this.element)
       .subscribe(() => {
         this.isRightMenuVisible = false;
@@ -182,6 +182,9 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
       case NodeMenuItemAction.Remove:
         this.onRemoveSelected();
         break;
+      case NodeMenuItemAction.Custom:
+        this.treeService.fireMenuItemSelected(this.tree, e.nodeMenuItemSelected);
+        break;
       default:
         throw new Error(`Chosen menu item doesn't exist`);
     }
@@ -235,4 +238,9 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
   public isRootHidden(): boolean {
     return this.tree.isRoot() && !this.settings.rootIsVisible;
   }
+
+  public hasCustomMenu(): boolean {
+    return this.tree.hasCustomMenu();
+  }
+
 }
