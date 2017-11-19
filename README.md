@@ -345,6 +345,7 @@ Here is an example of its usage:
 ```
 
 * `static` - Boolean - This option makes it impossible to drag a tree or modify it in a some way, though you still can select nodes in the static tree and appropriate events will be generated.
+* `isCollapsedOnInit` - Boolean - This option makes a tree to be collapsed on first load (this option cascades to its children).
 * `rightMenu` - Boolean - This option allows you to activate (true, by default) or deactivate (false) right menu when clicking with right button of a mouse.
 * `leftMenu` - Boolean - This option allows you to activate (true) or deactivate (false, by default) left menu.
 * `cssClasses` - Object:
