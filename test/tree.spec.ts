@@ -1129,4 +1129,28 @@ describe('Tree', () => {
     expect(tree.isBranch()).toBeTruthy();
   });
 
+  it('can be converted to TreeModel', () => {
+
+    const model: TreeModel = {
+      id: 6,
+      value: 'root',
+      emitLoadNextLevel: false,
+      settings: {
+        isCollapsedOnInit: true,
+        static: false,
+        leftMenu: false,
+        rightMenu: true
+      },
+      children: [
+        {
+          value: 'child#1',
+          emitLoadNextLevel: false,
+          settings: { isCollapsedOnInit: true, static: false, leftMenu: false, rightMenu: true } }
+      ]
+    };
+
+    const tree: Tree = new Tree(model);
+
+    expect(tree.toTreeModel()).toEqual(model);
+  });
 });

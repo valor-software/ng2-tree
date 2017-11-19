@@ -8,7 +8,8 @@ import {
   size,
   once,
   includes,
-  isNil
+  isNil,
+  defaultsDeep
 } from './utils/fn.utils';
 
 import { Observable, Observer } from 'rxjs/Rx';
@@ -581,5 +582,21 @@ export class Tree {
    */
   public markAsModified(): void {
     this.node._status = TreeStatus.Modified;
+  }
+
+  /**
+   * Makes a clone of an underlying TreeModel instance
+   * @returns {TreeModel} a clone of an underlying TreeModel instance
+   */
+  public toTreeModel(): TreeModel {
+    const model = defaultsDeep(this.isLeaf() ? {} : {children: []}, this.node);
+
+    if (this.children) {
+      this.children.forEach(child => {
+        model.children.push(child.toTreeModel());
+      });
+    }
+
+    return model;
   }
 }
