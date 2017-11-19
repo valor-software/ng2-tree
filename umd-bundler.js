@@ -53,7 +53,9 @@ function getSystemJsBundleConfig() {
     map: {
       typescript: './node_modules/typescript/lib/typescript.js',
       '@angular': './node_modules/@angular',
-      rxjs: './node_modules/rxjs/bundles'
+      rxjs: './node_modules/rxjs/bundles',
+      uuid: './node_modules/uuid',
+      crypto: '@empty'
     },
     paths: {
       '*': '*.js'

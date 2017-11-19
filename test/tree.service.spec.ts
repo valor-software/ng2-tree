@@ -3,16 +3,15 @@ import { TreeService } from '../src/tree.service';
 import { Subject } from 'rxjs/Rx';
 import { NodeDraggableService } from '../src/draggable/node-draggable.service';
 import { Tree } from '../src/tree';
-import { TreeController } from '../src/tree-controller';
-import { TreeInternalComponent } from '../src/tree-internal.component';
 import {
-  NodeRemovedEvent,
-  NodeMovedEvent,
+  MenuItemSelectedEvent,
+  NodeCollapsedEvent,
   NodeCreatedEvent,
-  NodeSelectedEvent,
-  NodeRenamedEvent,
   NodeExpandedEvent,
-  NodeCollapsedEvent
+  NodeMovedEvent,
+  NodeRemovedEvent,
+  NodeRenamedEvent,
+  NodeSelectedEvent
 } from '../src/tree.events';
 import { ElementRef } from '@angular/core';
 import { NodeDraggableEvent } from '../src/draggable/draggable.events';
@@ -377,5 +376,23 @@ describe('TreeService', () => {
     treeService.fireNodeSwitchFoldingType(masterTree);
 
     expect(treeService.loadNextLevel$.next).not.toHaveBeenCalled();
+  });
+
+  it('not fires "loadNextLevel" event if "emitLoadNextLevel" is false', () => {
+    const masterTree = new Tree({
+      value: 'Master',
+    });
+
+    spyOn(treeService.menuItemSelected$, 'next');
+
+    treeService.fireMenuItemSelected(masterTree, 'CustomMenu');
+
+    expect(treeService.menuItemSelected$.next).toHaveBeenCalledWith(new MenuItemSelectedEvent(masterTree, 'CustomMenu'));
+  });
+
+  it('return null if there is not controller for the given id', () => {
+    const controller = treeService.getController('#2');
+
+    expect(controller).toBeNull();
   });
 });

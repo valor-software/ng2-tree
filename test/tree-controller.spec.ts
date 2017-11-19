@@ -347,6 +347,21 @@ describe('TreeController', () => {
 
     expect(lordInternalTreeInstance.tree.isBeingRenamed()).toEqual(true);
   });
+
+  it('knows how to convert a tree to tree model', () => {
+
+    const model = { value: 'bla' };
+
+    const tree: any = {
+      toTreeModel: jasmine.createSpy('tree.toTreeModel').and.returnValue(model)
+    };
+
+    const controller = new TreeController({tree, treeService: null} as any);
+
+    const actualModel = controller.toTreeModel();
+
+    expect(actualModel).toBe(model);
+  });
 });
 
 function nodeNameOf(internalTreeDebugElement: DebugElement): string {

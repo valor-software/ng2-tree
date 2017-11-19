@@ -1,4 +1,5 @@
 import { get, defaultsDeep } from './utils/fn.utils';
+import { NodeMenuItem } from './menu/node-menu.component';
 
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
@@ -75,6 +76,13 @@ export class TreeModelSettings {
    * @default true
    */
   public rightMenu?: boolean;
+
+  /**
+   * "menu" property when set will be available as custom context menu.
+   * @name TreeModelSettings#MenuItems
+   * @type NodeMenuItem
+   */
+  public menuItems?: NodeMenuItem[];
 
   /**
    * "static" property when set to true makes it impossible to drag'n'drop tree or call a menu on it.
