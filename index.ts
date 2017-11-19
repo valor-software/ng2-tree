@@ -9,6 +9,9 @@ import {
 
 import { Tree } from './src/tree';
 
+import { NodeMenuItemAction } from './src/menu/menu.events';
+import { NodeMenuItem } from './src/menu/node-menu.component';
+
 import {
   NodeEvent,
   NodeCreatedEvent,
@@ -18,6 +21,7 @@ import {
   NodeSelectedEvent,
   NodeExpandedEvent,
   NodeCollapsedEvent,
+  MenuItemSelectedEvent,
   NodeDestructiveEvent
 } from './src/tree.events';
 
@@ -41,5 +45,9 @@ export {
   NodeCollapsedEvent,
   NodeDestructiveEvent,
   TreeComponent,
-  TreeModule
+  TreeModule,
+  NodeMenuItemAction,
+  NodeMenuItem,
+  ChildrenLoadingFunction,
+  MenuItemSelectedEvent
 };

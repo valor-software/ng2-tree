@@ -106,7 +106,7 @@ describe('NodeMenuComponent', () => {
 
     menuItem.triggerEventHandler('click', event);
 
-    expect(componentInstance.menuItemSelected.emit).toHaveBeenCalledWith({nodeMenuItemAction: NodeMenuItemAction.NewTag});
+    expect(componentInstance.menuItemSelected.emit).toHaveBeenCalledWith({nodeMenuItemAction: NodeMenuItemAction.NewTag, nodeMenuItemSelected: 'New tag'});
   });
 
   it('should close menu on any click outside of it', () => {

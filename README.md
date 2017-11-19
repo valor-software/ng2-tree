@@ -335,6 +335,12 @@ Here is an example of its usage:
       'node': '<i class="fa fa-folder-o fa-lg"></i>',
       'leaf': '<i class="fa fa-file-o fa-lg"></i>',
       'leftMenu': '<i class="fa fa-navicon fa-lg"></i>'
+    },
+    'menuItems': [
+        { action: NodeMenuItemAction.Custom, name: 'Foo', cssClass: 'fa fa-arrow-right' },
+        { action: NodeMenuItemAction.Custom, name: 'Bar', cssClass: 'fa fa-arrow-right' },
+        { action: NodeMenuItemAction.Custom, name: 'Baz', cssClass: 'fa fa-arrow-right'}
+      ]
     }
   },
   children: [
@@ -358,6 +364,7 @@ Here is an example of its usage:
   * `node` - String - It specifies a html template which will be included to the left of the node's value.
   * `leaf` - String - It specifies a html template which will be included to the left of the leaf's value.
   * `leftMenu` - String - It specifies a html template to the right of the node's value. This template becomes clickable and shows a menu on node's click.
+* `menuItems` - here you can specify your custom menu items. You should feed an array of NodeMenuItem instances to this setting. Once done - setup a subscription to `MenuItemSelectedEvent`s by listening to `(menuItemSelected)="onMenuItemSelected($event)"` on the tree.
 
 All options that are defined on a `parent` are automatically applied to children. If you want you can override them by `settings` of the child node.
 

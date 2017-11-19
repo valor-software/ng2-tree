@@ -14,6 +14,7 @@ import {
 
 import { Observable, Observer } from 'rxjs/Rx';
 import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings, ChildrenLoadingFunction } from './tree.types';
+import { NodeMenuItem } from './menu/node-menu.component';
 
 import * as uuidv4 from 'uuid/v4';
 
@@ -343,6 +344,21 @@ export class Tree {
     return !this.isBranch();
   }
 
+  /**
+   * Get menu items of the current tree.
+   * @returns {NodeMenuItem[]} The menu items of the current tree.
+   */
+  public get menuItems(): NodeMenuItem[] {
+    return get(this.node.settings, 'menuItems');
+  }
+
+  /**
+   * Check whether or not this tree has a custom menu.
+   * @returns {boolean} A flag indicating whether or not this tree has a custom menu.
+   */
+  public hasCustomMenu(): boolean {
+    return !this.isStatic() && !!get(this.node.settings, 'menuItems', false);
+  }
   /**
    * Check whether this tree is "Branch" or not. "Branch" is a node that has children.
    * @returns {boolean} A flag indicating whether or not this tree is a "Branch".

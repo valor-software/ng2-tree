@@ -2,7 +2,8 @@ export enum NodeMenuItemAction {
   NewFolder,
   NewTag,
   Rename,
-  Remove
+  Remove,
+  Custom
 }
 
 export enum NodeMenuAction {
@@ -16,4 +17,5 @@ export interface NodeMenuEvent {
 
 export interface NodeMenuItemSelectedEvent {
   nodeMenuItemAction: NodeMenuItemAction;
+  nodeMenuItemSelected?: string;
 }
