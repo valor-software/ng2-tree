@@ -6,9 +6,10 @@ webpackJsonp(["main"],{
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_tree_types__ = __webpack_require__("../../../../../src/tree.types.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_tree__ = __webpack_require__("../../../../../src/tree.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_tree_events__ = __webpack_require__("../../../../../src/tree.events.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_tree_component__ = __webpack_require__("../../../../../src/tree.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_tree_module__ = __webpack_require__("../../../../../src/tree.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_menu_menu_events__ = __webpack_require__("../../../../../src/menu/menu.events.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_tree_events__ = __webpack_require__("../../../../../src/tree.events.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_tree_component__ = __webpack_require__("../../../../../src/tree.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_tree_module__ = __webpack_require__("../../../../../src/tree.module.ts");
 /* unused harmony reexport Tree */
 /* unused harmony reexport TreeModelSettings */
 /* unused harmony reexport FoldingType */
@@ -22,7 +23,10 @@ webpackJsonp(["main"],{
 /* unused harmony reexport NodeCollapsedEvent */
 /* unused harmony reexport NodeDestructiveEvent */
 /* unused harmony reexport TreeComponent */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_4__src_tree_module__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_5__src_tree_module__["a"]; });
+/* unused harmony reexport NodeMenuItemAction */
+/* unused harmony reexport MenuItemSelectedEvent */
+
 
 
 
@@ -56,6 +60,7 @@ webpackEmptyAsyncContext.id = "../../../../../src/demo/$$_lazy_route_resource la
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__menu_menu_events__ = __webpack_require__("../../../../../src/menu/menu.events.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -65,6 +70,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 var AppComponent = (function () {
     function AppComponent() {
@@ -98,8 +104,15 @@ var AppComponent = (function () {
                     ]
                 },
                 {
-                    value: 'Sans-serif',
+                    value: 'Sans-serif (Right click me - I have a custom menu)',
                     id: 11,
+                    settings: {
+                        menuItems: [
+                            { action: __WEBPACK_IMPORTED_MODULE_1__menu_menu_events__["b" /* NodeMenuItemAction */].Custom, name: 'Foo', cssClass: 'fa fa-arrow-right' },
+                            { action: __WEBPACK_IMPORTED_MODULE_1__menu_menu_events__["b" /* NodeMenuItemAction */].Custom, name: 'Bar', cssClass: 'fa fa-arrow-right' },
+                            { action: __WEBPACK_IMPORTED_MODULE_1__menu_menu_events__["b" /* NodeMenuItemAction */].Custom, name: 'Baz', cssClass: 'fa fa-arrow-right' }
+                        ]
+                    },
                     children: [
                         { value: 'Arial', id: 12 },
                         { value: 'Century Gothic', id: 13 },
@@ -160,7 +173,10 @@ var AppComponent = (function () {
                         { value: 'chmod', id: 10 },
                         { value: 'chown', id: 11 },
                         { value: 'nano', id: 12 }
-                    ]
+                    ],
+                    settings: {
+                        isCollapsedOnInit: true
+                    }
                 },
                 {
                     value: 'boot',
@@ -446,6 +462,9 @@ var AppComponent = (function () {
     AppComponent.prototype.onNodeSelected = function (e) {
         AppComponent_1.logEvent(e, 'Selected');
     };
+    AppComponent.prototype.onMenuItemSelected = function (e) {
+        AppComponent_1.logEvent(e, "You selected " + e.selectedItem + " menu item");
+    };
     AppComponent.prototype.onNodeExpanded = function (e) {
         AppComponent_1.logEvent(e, 'Expanded');
     };
@@ -506,7 +525,7 @@ var AppComponent = (function () {
     AppComponent = AppComponent_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app',
-            template: "\n    <div class=\"tree-demo-app\">\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Fonts tree</p></div>\n        <div class=\"tree-content\">\n          <tree #treeFonts\n                [tree]=\"fonts\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is loaded asynchronously</p></div>\n        <div class=\"tree-content\">\n          <tree\n            [tree]=\"pls\"\n            [settings]=\"settings\"\n            (nodeRemoved)=\"onNodeRemoved($event)\"\n            (nodeRenamed)=\"onNodeRenamed($event)\"\n            (nodeSelected)=\"onNodeSelected($event)\"\n            (nodeMoved)=\"onNodeMoved($event)\"\n            (nodeCreated)=\"onNodeCreated($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container tree-container--with-controls\">\n        <div class=\"tree-info\">\n          <p class=\"tree-title\">Directory/File structure</p>\n          <p class=\"notice\">this tree has advanced configurations</p>\n        </div>\n        <div class=\"tree-content\">\n          <tree #treeFFS\n                [tree]=\"ffs\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeFFSCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\">\n          </tree>\n        </div>\n\n        <div class=\"tree-controlls\">\n          <p class=\"notice\">Tree API exposed via TreeController</p>\n          <button button (click)=\"handleActionOnFFS(13, 'select')\">Select 'boot' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'collapse')\">Collapse 'bin' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'expand')\">Expand 'bin' node</button>\n          <button button (click)=\"renameFFS(21)\">Rename 'unicode.pf2' to 'unicode.pf'</button>\n          <button button (click)=\"handleActionOnFFS(12, 'remove')\">Remove 'nano'</button>\n          <button button (click)=\"handleActionOnFFS(52, 'reloadChildren')\">Reload Music's children</button>\n          <button button (click)=\"setChildrenFFS(36)\">Set 'etc' children</button>\n          <button button (click)=\"addChildFFS(2, { value: 'ping'})\">Add a child with name 'ping' to 'bin'</button>\n          <button button (click)=\"addChildFFS(22, { value: 'lost'})\">Add a child with name 'lost' to 'lost+found'\n          </button>\n          <button button (click)=\"addChildFFS(22, { value: 'found', children: []})\">Add a child with name 'found' to\n            'lost+found'\n          </button>\n          <button button (click)=\"addChildFFS(36, { value: 'found', children: []})\">Add a child with name 'found' to\n            'etc'\n          </button>\n          <button button (click)=\"addChildFFS(78, { value: 'Voodo People'})\">Add a child with name 'Voodo People' to\n            '2Cellos'\n          </button>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is using a custom template</p></div>\n        <div class=\"tree-content\">\n          <tree [tree]=\"icons\"\n                [settings]=\"settings\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\">\n            <ng-template let-node>\n              <i class=\"fa {{node.icon}}\"></i> <span class=\"node-name\" [innerHTML]=\"node.value\"></span>\n            </ng-template>\n          </tree>\n        </div>\n      </div>\n    </div>\n  ",
+            template: "\n    <div class=\"tree-demo-app\">\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Fonts tree</p></div>\n        <div class=\"tree-content\">\n          <tree #treeFonts\n                [tree]=\"fonts\"\n                (menuItemSelected)=\"onMenuItemSelected($event)\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is loaded asynchronously</p></div>\n        <div class=\"tree-content\">\n          <tree\n            [tree]=\"pls\"\n            [settings]=\"settings\"\n            (nodeRemoved)=\"onNodeRemoved($event)\"\n            (nodeRenamed)=\"onNodeRenamed($event)\"\n            (nodeSelected)=\"onNodeSelected($event)\"\n            (nodeMoved)=\"onNodeMoved($event)\"\n            (nodeCreated)=\"onNodeCreated($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container tree-container--with-controls\">\n        <div class=\"tree-info\">\n          <p class=\"tree-title\">Directory/File structure</p>\n          <p class=\"notice\">this tree has advanced configurations</p>\n        </div>\n        <div class=\"tree-content\">\n          <tree #treeFFS\n                [tree]=\"ffs\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeFFSCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\">\n          </tree>\n        </div>\n\n        <div class=\"tree-controlls\">\n          <p class=\"notice\">Tree API exposed via TreeController</p>\n          <button button (click)=\"handleActionOnFFS(13, 'select')\">Select 'boot' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'collapse')\">Collapse 'bin' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'expand')\">Expand 'bin' node</button>\n          <button button (click)=\"renameFFS(21)\">Rename 'unicode.pf2' to 'unicode.pf'</button>\n          <button button (click)=\"handleActionOnFFS(12, 'remove')\">Remove 'nano'</button>\n          <button button (click)=\"handleActionOnFFS(52, 'reloadChildren')\">Reload Music's children</button>\n          <button button (click)=\"setChildrenFFS(36)\">Set 'etc' children</button>\n          <button button (click)=\"addChildFFS(2, { value: 'ping'})\">Add a child with name 'ping' to 'bin'</button>\n          <button button (click)=\"addChildFFS(22, { value: 'lost'})\">Add a child with name 'lost' to 'lost+found'\n          </button>\n          <button button (click)=\"addChildFFS(22, { value: 'found', children: []})\">Add a child with name 'found' to\n            'lost+found'\n          </button>\n          <button button (click)=\"addChildFFS(36, { value: 'found', children: []})\">Add a child with name 'found' to\n            'etc'\n          </button>\n          <button button (click)=\"addChildFFS(78, { value: 'Voodo People'})\">Add a child with name 'Voodo People' to\n            '2Cellos'\n          </button>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is using a custom template</p></div>\n        <div class=\"tree-content\">\n          <tree [tree]=\"icons\"\n                [settings]=\"settings\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\">\n            <ng-template let-node>\n              <i class=\"fa {{node.icon}}\"></i> <span class=\"node-name\" [innerHTML]=\"node.value\"></span>\n            </ng-template>\n          </tree>\n        </div>\n      </div>\n    </div>\n  ",
             styles: ["\n    .tree-info {\n      flex: 1 0 100%;\n      display: flex;\n      flex-direction: column;\n      align-items: flex-start;\n    }\n\n    .tree-controlls {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .tree-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .tree-container {\n      margin-bottom: 20px;\n\n    }\n\n    .tree-container--with-controls {\n      display: flex;\n      flex-wrap: wrap;\n    }\n\n    .tree-demo-app {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .tree-title {\n      margin: 0;\n      color: #40a070;\n      font-size: 2em;\n    }\n\n    .notice {\n      color: #e91e63;\n      font-size: 1.2em;\n      font-style: italic;\n    }\n\n    :host /deep/ .fa {\n      cursor: pointer;\n    }\n\n    :host /deep/ .fa.disabled {\n      cursor: inherit;\n      color: #757575;\n    }\n\n    .button {\n      border-radius: 4px;\n      box-shadow: 0 2px 4px 0 #888;\n      background-color: #fff;\n      -webkit-appearance: none;\n      border: 1px solid #000;\n      height: 35px;\n      outline: none;\n    }\n\n    .button-pressed {\n      box-shadow: 0 0 1px 0 #888;\n    }\n\n    .tree-controlls button {\n      margin: 5px;\n    }\n  "]
         })
     ], AppComponent);
@@ -988,6 +1007,7 @@ var NodeMenuItemAction;
     NodeMenuItemAction[NodeMenuItemAction["NewTag"] = 1] = "NewTag";
     NodeMenuItemAction[NodeMenuItemAction["Rename"] = 2] = "Rename";
     NodeMenuItemAction[NodeMenuItemAction["Remove"] = 3] = "Remove";
+    NodeMenuItemAction[NodeMenuItemAction["Custom"] = 4] = "Custom";
 })(NodeMenuItemAction || (NodeMenuItemAction = {}));
 var NodeMenuAction;
 (function (NodeMenuAction) {
@@ -1052,6 +1072,7 @@ var NodeMenuComponent = (function () {
         this.disposersForGlobalListeners = [];
     }
     NodeMenuComponent.prototype.ngOnInit = function () {
+        this.availableMenuItems = this.menuItems || this.availableMenuItems;
         this.disposersForGlobalListeners.push(this.renderer.listen('document', 'keyup', this.closeMenu.bind(this)));
         this.disposersForGlobalListeners.push(this.renderer.listen('document', 'mousedown', this.closeMenu.bind(this)));
     };
@@ -1060,7 +1081,10 @@ var NodeMenuComponent = (function () {
     };
     NodeMenuComponent.prototype.onMenuItemSelected = function (e, selectedMenuItem) {
         if (Object(__WEBPACK_IMPORTED_MODULE_3__utils_event_utils__["c" /* isLeftButtonClicked */])(e)) {
-            this.menuItemSelected.emit({ nodeMenuItemAction: selectedMenuItem.action });
+            this.menuItemSelected.emit({
+                nodeMenuItemAction: selectedMenuItem.action,
+                nodeMenuItemSelected: selectedMenuItem.name
+            });
             this.nodeMenuService.fireMenuEvent(e.target, __WEBPACK_IMPORTED_MODULE_2__menu_events__["a" /* NodeMenuAction */].Close);
         }
     };
@@ -1076,6 +1100,10 @@ var NodeMenuComponent = (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */])
     ], NodeMenuComponent.prototype, "menuItemSelected", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
+        __metadata("design:type", Array)
+    ], NodeMenuComponent.prototype, "menuItems", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* ViewChild */])('menuContainer'),
         __metadata("design:type", Object)
@@ -1182,6 +1210,9 @@ var TreeController = (function () {
     TreeController.prototype.isCollapsed = function () {
         return this.tree.isNodeCollapsed();
     };
+    TreeController.prototype.toTreeModel = function () {
+        return this.tree.toTreeModel();
+    };
     TreeController.prototype.rename = function (newValue) {
         this.tree.markAsBeingRenamed();
         this.component.applyNewValue({ type: 'keyup', value: newValue });
@@ -1248,9 +1279,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
 };
 
 
@@ -1364,6 +1392,9 @@ var TreeInternalComponent = (function () {
             case __WEBPACK_IMPORTED_MODULE_5__menu_menu_events__["b" /* NodeMenuItemAction */].Remove:
                 this.onRemoveSelected();
                 break;
+            case __WEBPACK_IMPORTED_MODULE_5__menu_menu_events__["b" /* NodeMenuItemAction */].Custom:
+                this.treeService.fireMenuItemSelected(this.tree, e.nodeMenuItemSelected);
+                break;
             default:
                 throw new Error("Chosen menu item doesn't exist");
         }
@@ -1407,6 +1438,9 @@ var TreeInternalComponent = (function () {
     TreeInternalComponent.prototype.isRootHidden = function () {
         return this.tree.isRoot() && !this.settings.rootIsVisible;
     };
+    TreeInternalComponent.prototype.hasCustomMenu = function () {
+        return this.tree.hasCustomMenu();
+    };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__tree__["a" /* Tree */])
@@ -1422,11 +1456,8 @@ var TreeInternalComponent = (function () {
     TreeInternalComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'tree-internal',
-            template: "\n  <ul class=\"tree\" *ngIf=\"tree\" [ngClass]=\"{rootless: isRootHidden()}\">\n    <li>\n      <div class=\"value-container\"\n        [ngClass]=\"{rootless: isRootHidden()}\"\n        [class.selected]=\"isSelected\"\n        (contextmenu)=\"showRightMenu($event)\"\n        [nodeDraggable]=\"element\"\n        [tree]=\"tree\">\n\n        <div class=\"folding\" (click)=\"onSwitchFoldingType()\" [ngClass]=\"tree.foldingCssClass\"></div>\n        <div class=\"node-value\"\n          *ngIf=\"!shouldShowInputForTreeValue()\"\n          [class.node-selected]=\"isSelected\"\n          (click)=\"onNodeSelected($event)\">\n            <div *ngIf=\"tree.nodeTemplate\" class=\"node-template\" [innerHTML]=\"tree.nodeTemplate | safeHtml\"></div>\n            <span *ngIf=\"!template\" class=\"node-name\" [innerHTML]=\"tree.value | safeHtml\"></span>\n            <span class=\"loading-children\" *ngIf=\"tree.childrenAreBeingLoaded()\"></span>\n            <ng-template [ngTemplateOutlet]=\"template\" [ngTemplateOutletContext]=\"{ $implicit: tree.node }\"></ng-template>\n        </div>\n\n        <input type=\"text\" class=\"node-value\"\n           *ngIf=\"shouldShowInputForTreeValue()\"\n           [nodeEditable]=\"tree.value\"\n           (valueChanged)=\"applyNewValue($event)\"/>\n\n        <div class=\"node-left-menu\" *ngIf=\"tree.hasLeftMenu()\" (click)=\"showLeftMenu($event)\" [innerHTML]=\"tree.leftMenuTemplate\">\n        </div>\n        <node-menu *ngIf=\"tree.hasLeftMenu() && isLeftMenuVisible\"\n          (menuItemSelected)=\"onMenuItemSelected($event)\">\n        </node-menu>\n      </div>\n\n      <node-menu *ngIf=\"isRightMenuVisible\" (menuItemSelected)=\"onMenuItemSelected($event)\"></node-menu>\n\n      <ng-template [ngIf]=\"tree.isNodeExpanded()\">\n        <tree-internal *ngFor=\"let child of tree.childrenAsync | async\" [tree]=\"child\" [template]=\"template\"></tree-internal>\n      </ng-template>\n    </li>\n  </ul>\n  "
+            template: "\n  <ul class=\"tree\" *ngIf=\"tree\" [ngClass]=\"{rootless: isRootHidden()}\">\n    <li>\n      <div class=\"value-container\"\n        [ngClass]=\"{rootless: isRootHidden()}\"\n        [class.selected]=\"isSelected\"\n        (contextmenu)=\"showRightMenu($event)\"\n        [nodeDraggable]=\"element\"\n        [tree]=\"tree\">\n\n        <div class=\"folding\" (click)=\"onSwitchFoldingType()\" [ngClass]=\"tree.foldingCssClass\"></div>\n        <div class=\"node-value\"\n          *ngIf=\"!shouldShowInputForTreeValue()\"\n          [class.node-selected]=\"isSelected\"\n          (click)=\"onNodeSelected($event)\">\n            <div *ngIf=\"tree.nodeTemplate\" class=\"node-template\" [innerHTML]=\"tree.nodeTemplate | safeHtml\"></div>\n            <span *ngIf=\"!template\" class=\"node-name\" [innerHTML]=\"tree.value | safeHtml\"></span>\n            <span class=\"loading-children\" *ngIf=\"tree.childrenAreBeingLoaded()\"></span>\n            <ng-template [ngTemplateOutlet]=\"template\" [ngTemplateOutletContext]=\"{ $implicit: tree.node }\"></ng-template>\n        </div>\n\n        <input type=\"text\" class=\"node-value\"\n           *ngIf=\"shouldShowInputForTreeValue()\"\n           [nodeEditable]=\"tree.value\"\n           (valueChanged)=\"applyNewValue($event)\"/>\n\n        <div class=\"node-left-menu\" *ngIf=\"tree.hasLeftMenu()\" (click)=\"showLeftMenu($event)\" [innerHTML]=\"tree.leftMenuTemplate\">\n        </div>\n        <node-menu *ngIf=\"tree.hasLeftMenu() && isLeftMenuVisible && !hasCustomMenu()\"\n          (menuItemSelected)=\"onMenuItemSelected($event)\">\n        </node-menu>\n      </div>\n\n      <node-menu *ngIf=\"isRightMenuVisible && !hasCustomMenu()\"\n           (menuItemSelected)=\"onMenuItemSelected($event)\">\n      </node-menu>\n\n      <node-menu *ngIf=\"hasCustomMenu() && (isRightMenuVisible || isLeftMenuVisible)\"\n           [menuItems]=\"tree.menuItems\"\n           (menuItemSelected)=\"onMenuItemSelected($event)\">\n      </node-menu>\n      <ng-template [ngIf]=\"tree.isNodeExpanded()\">\n        <tree-internal *ngFor=\"let child of tree.childrenAsync | async\" [tree]=\"child\" [template]=\"template\"></tree-internal>\n      </ng-template>\n    </li>\n  </ul>\n  "
         }),
-        __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["x" /* Inject */])(__WEBPACK_IMPORTED_MODULE_4__menu_node_menu_service__["a" /* NodeMenuService */])),
-        __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["x" /* Inject */])(__WEBPACK_IMPORTED_MODULE_7__tree_service__["a" /* TreeService */])),
-        __param(2, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["x" /* Inject */])(__WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* ElementRef */])),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__menu_node_menu_service__["a" /* NodeMenuService */],
             __WEBPACK_IMPORTED_MODULE_7__tree_service__["a" /* TreeService */],
             __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* ElementRef */]])
@@ -1473,6 +1504,7 @@ var TreeComponent = (function () {
         this.nodeMoved = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.nodeExpanded = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.nodeCollapsed = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
+        this.menuItemSelected = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.loadNextLevel = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.subscriptions = [];
     }
@@ -1507,6 +1539,9 @@ var TreeComponent = (function () {
         }));
         this.subscriptions.push(this.treeService.nodeCollapsed$.subscribe(function (e) {
             _this.nodeCollapsed.emit(e);
+        }));
+        this.subscriptions.push(this.treeService.menuItemSelected$.subscribe(function (e) {
+            _this.menuItemSelected.emit(e);
         }));
         this.subscriptions.push(this.treeService.loadNextLevel$.subscribe(function (e) {
             _this.loadNextLevel.emit(e);
@@ -1561,6 +1596,10 @@ var TreeComponent = (function () {
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */])
+    ], TreeComponent.prototype, "menuItemSelected", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */])
     ], TreeComponent.prototype, "loadNextLevel", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* ViewChild */])('rootComponent'),
@@ -1592,14 +1631,15 @@ var TreeComponent = (function () {
 
 "use strict";
 /* unused harmony export NodeEvent */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return NodeSelectedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return NodeSelectedEvent; });
 /* unused harmony export NodeDestructiveEvent */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return NodeMovedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return NodeRemovedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return NodeCreatedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return NodeRenamedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return NodeExpandedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return NodeCollapsedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return NodeMovedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return NodeRemovedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return NodeCreatedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return NodeRenamedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return NodeExpandedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return NodeCollapsedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MenuItemSelectedEvent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoadNextLevelEvent; });
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -1687,6 +1727,16 @@ var NodeCollapsedEvent = (function (_super) {
         return _super.call(this, node) || this;
     }
     return NodeCollapsedEvent;
+}(NodeEvent));
+
+var MenuItemSelectedEvent = (function (_super) {
+    __extends(MenuItemSelectedEvent, _super);
+    function MenuItemSelectedEvent(node, selectedItem) {
+        var _this = _super.call(this, node) || this;
+        _this.selectedItem = selectedItem;
+        return _this;
+    }
+    return MenuItemSelectedEvent;
 }(NodeEvent));
 
 var LoadNextLevelEvent = (function (_super) {
@@ -1796,6 +1846,7 @@ var TreeService = (function () {
         this.nodeSelected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
         this.nodeExpanded$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
         this.nodeCollapsed$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
+        this.menuItemSelected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
         this.loadNextLevel$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
         this.controllers = new Map();
         this.nodeRemoved$.subscribe(function (e) { return e.node.removeItselfFromParent(); });
@@ -1804,19 +1855,22 @@ var TreeService = (function () {
         return this.nodeSelected$.filter(function (e) { return tree !== e.node; });
     };
     TreeService.prototype.fireNodeRemoved = function (tree) {
-        this.nodeRemoved$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["f" /* NodeRemovedEvent */](tree, tree.positionInParent));
+        this.nodeRemoved$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["g" /* NodeRemovedEvent */](tree, tree.positionInParent));
     };
     TreeService.prototype.fireNodeCreated = function (tree) {
-        this.nodeCreated$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["c" /* NodeCreatedEvent */](tree));
+        this.nodeCreated$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["d" /* NodeCreatedEvent */](tree));
     };
     TreeService.prototype.fireNodeSelected = function (tree) {
-        this.nodeSelected$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["h" /* NodeSelectedEvent */](tree));
+        this.nodeSelected$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["i" /* NodeSelectedEvent */](tree));
     };
     TreeService.prototype.fireNodeRenamed = function (oldValue, tree) {
-        this.nodeRenamed$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["g" /* NodeRenamedEvent */](tree, oldValue, tree.value));
+        this.nodeRenamed$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["h" /* NodeRenamedEvent */](tree, oldValue, tree.value));
     };
     TreeService.prototype.fireNodeMoved = function (tree, parent) {
-        this.nodeMoved$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["e" /* NodeMovedEvent */](tree, parent));
+        this.nodeMoved$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["f" /* NodeMovedEvent */](tree, parent));
+    };
+    TreeService.prototype.fireMenuItemSelected = function (tree, selectedItem) {
+        this.menuItemSelected$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["b" /* MenuItemSelectedEvent */](tree, selectedItem));
     };
     TreeService.prototype.fireNodeSwitchFoldingType = function (tree) {
         if (tree.isNodeExpanded()) {
@@ -1830,10 +1884,10 @@ var TreeService = (function () {
         }
     };
     TreeService.prototype.fireNodeExpanded = function (tree) {
-        this.nodeExpanded$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["d" /* NodeExpandedEvent */](tree));
+        this.nodeExpanded$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["e" /* NodeExpandedEvent */](tree));
     };
     TreeService.prototype.fireNodeCollapsed = function (tree) {
-        this.nodeCollapsed$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["b" /* NodeCollapsedEvent */](tree));
+        this.nodeCollapsed$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["c" /* NodeCollapsedEvent */](tree));
     };
     TreeService.prototype.fireLoadNextLevel = function (tree) {
         this.loadNextLevel$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["a" /* LoadNextLevelEvent */](tree));
@@ -1890,6 +1944,9 @@ var TreeService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__ = __webpack_require__("../../../../../src/utils/fn.utils.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tree_types__ = __webpack_require__("../../../../../src/tree.types.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_uuid_v4__ = __webpack_require__("../../../../uuid/v4.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_uuid_v4___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_uuid_v4__);
+
 
 
 
@@ -2071,6 +2128,7 @@ var Tree = (function () {
         if (!model.id) {
             tree.markAsNew();
         }
+        tree.id = tree.id || __WEBPACK_IMPORTED_MODULE_3_uuid_v4__();
         if (this.childrenShouldBeLoaded() && !(this.childrenAreBeingLoaded() || this.childrenWereLoaded())) {
             return null;
         }
@@ -2127,7 +2185,12 @@ var Tree = (function () {
      * @returns {Tree} A newly inserted child.
      */
     Tree.prototype.addChild = function (child, position) {
-        return this._addChild(Tree.cloneTreeShallow(child), position);
+        var newborn = this._addChild(Tree.cloneTreeShallow(child), position);
+        this._setFoldingType();
+        if (this.isNodeCollapsed()) {
+            this.switchFoldingType();
+        }
+        return newborn;
     };
     Tree.prototype._addChild = function (child, position) {
         if (position === void 0) { position = Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["j" /* size */])(this._children) || 0; }
@@ -2137,10 +2200,6 @@ var Tree = (function () {
         }
         else {
             this._children = [child];
-        }
-        this._setFoldingType();
-        if (this.isNodeCollapsed()) {
-            this.switchFoldingType();
         }
         return child;
     };
@@ -2198,6 +2257,24 @@ var Tree = (function () {
      */
     Tree.prototype.isLeaf = function () {
         return !this.isBranch();
+    };
+    Object.defineProperty(Tree.prototype, "menuItems", {
+        /**
+         * Get menu items of the current tree.
+         * @returns {NodeMenuItem[]} The menu items of the current tree.
+         */
+        get: function () {
+            return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(this.node.settings, 'menuItems');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Check whether or not this tree has a custom menu.
+     * @returns {boolean} A flag indicating whether or not this tree has a custom menu.
+     */
+    Tree.prototype.hasCustomMenu = function () {
+        return !this.isStatic() && !!Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(this.node.settings, 'menuItems', false);
     };
     /**
      * Check whether this tree is "Branch" or not. "Branch" is a node that has children.
@@ -2269,6 +2346,7 @@ var Tree = (function () {
         if (this.isLeaf() || !this.hasChildren()) {
             return;
         }
+        this.disableCollapseOnInit();
         this.node._foldingType = this.isNodeExpanded() ? __WEBPACK_IMPORTED_MODULE_2__tree_types__["a" /* FoldingType */].Collapsed : __WEBPACK_IMPORTED_MODULE_2__tree_types__["a" /* FoldingType */].Expanded;
     };
     /**
@@ -2293,7 +2371,7 @@ var Tree = (function () {
             this.node._foldingType = __WEBPACK_IMPORTED_MODULE_2__tree_types__["a" /* FoldingType */].Collapsed;
         }
         else if (this._children && !Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["e" /* isEmpty */])(this._children)) {
-            this.node._foldingType = __WEBPACK_IMPORTED_MODULE_2__tree_types__["a" /* FoldingType */].Expanded;
+            this.node._foldingType = this.isCollapsedOnInit() ? __WEBPACK_IMPORTED_MODULE_2__tree_types__["a" /* FoldingType */].Collapsed : __WEBPACK_IMPORTED_MODULE_2__tree_types__["a" /* FoldingType */].Expanded;
         }
         else if (Array.isArray(this._children)) {
             this.node._foldingType = __WEBPACK_IMPORTED_MODULE_2__tree_types__["a" /* FoldingType */].Empty;
@@ -2375,6 +2453,14 @@ var Tree = (function () {
         enumerable: true,
         configurable: true
     });
+    Tree.prototype.disableCollapseOnInit = function () {
+        if (this.node.settings) {
+            this.node.settings.isCollapsedOnInit = false;
+        }
+    };
+    Tree.prototype.isCollapsedOnInit = function () {
+        return !!Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(this.node.settings, 'isCollapsedOnInit');
+    };
     /**
      * Check that current tree is newly created (added by user via menu for example). Tree that was built from the TreeModel is not marked as new.
      * @returns {boolean} A flag whether the tree is new.
@@ -2424,6 +2510,19 @@ var Tree = (function () {
     Tree.prototype.markAsModified = function () {
         this.node._status = __WEBPACK_IMPORTED_MODULE_2__tree_types__["c" /* TreeStatus */].Modified;
     };
+    /**
+     * Makes a clone of an underlying TreeModel instance
+     * @returns {TreeModel} a clone of an underlying TreeModel instance
+     */
+    Tree.prototype.toTreeModel = function () {
+        var model = Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["a" /* defaultsDeep */])(this.isLeaf() ? {} : { children: [] }, this.node);
+        if (this.children) {
+            this.children.forEach(function (child) {
+                model.children.push(child.toTreeModel());
+            });
+        }
+        return model;
+    };
     return Tree;
 }());
 
@@ -2462,7 +2561,7 @@ var TreeModelSettings = (function () {
     function TreeModelSettings() {
     }
     TreeModelSettings.merge = function (sourceA, sourceB) {
-        return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["a" /* defaultsDeep */])({}, Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceA, 'settings'), Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceB, 'settings'), { static: false, leftMenu: false, rightMenu: true });
+        return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["a" /* defaultsDeep */])({}, Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceA, 'settings'), Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceB, 'settings'), { static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false });
     };
     return TreeModelSettings;
 }());

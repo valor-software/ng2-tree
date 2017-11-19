@@ -27615,6 +27615,113 @@ function __makeTemplateObject(cooked, raw) {
 
 /***/ }),
 
+/***/ "../../../../uuid/lib/bytesToUuid.js":
+/***/ (function(module, exports) {
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+var byteToHex = [];
+for (var i = 0; i < 256; ++i) {
+  byteToHex[i] = (i + 0x100).toString(16).substr(1);
+}
+
+function bytesToUuid(buf, offset) {
+  var i = offset || 0;
+  var bth = byteToHex;
+  return bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]];
+}
+
+module.exports = bytesToUuid;
+
+
+/***/ }),
+
+/***/ "../../../../uuid/lib/rng-browser.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {// Unique ID creation requires a high quality random # generator.  In the
+// browser this is a little complicated due to unknown quality of Math.random()
+// and inconsistent support for the `crypto` API.  We do the best we can via
+// feature-detection
+var rng;
+
+var crypto = global.crypto || global.msCrypto; // for IE 11
+if (crypto && crypto.getRandomValues) {
+  // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
+  var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
+  rng = function whatwgRNG() {
+    crypto.getRandomValues(rnds8);
+    return rnds8;
+  };
+}
+
+if (!rng) {
+  // Math.random()-based (RNG)
+  //
+  // If all else fails, use Math.random().  It's fast, but is of unspecified
+  // quality.
+  var rnds = new Array(16);
+  rng = function() {
+    for (var i = 0, r; i < 16; i++) {
+      if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
+      rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
+    }
+
+    return rnds;
+  };
+}
+
+module.exports = rng;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("../../../../webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "../../../../uuid/v4.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+var rng = __webpack_require__("../../../../uuid/lib/rng-browser.js");
+var bytesToUuid = __webpack_require__("../../../../uuid/lib/bytesToUuid.js");
+
+function v4(options, buf, offset) {
+  var i = buf && offset || 0;
+
+  if (typeof(options) == 'string') {
+    buf = options == 'binary' ? new Array(16) : null;
+    options = null;
+  }
+  options = options || {};
+
+  var rnds = options.random || (options.rng || rng)();
+
+  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+  rnds[6] = (rnds[6] & 0x0f) | 0x40;
+  rnds[8] = (rnds[8] & 0x3f) | 0x80;
+
+  // Copy bytes to buffer, if provided
+  if (buf) {
+    for (var ii = 0; ii < 16; ++ii) {
+      buf[i + ii] = rnds[ii];
+    }
+  }
+
+  return buf || bytesToUuid(rnds);
+}
+
+module.exports = v4;
+
+
+/***/ }),
+
 /***/ "../../../../webpack/buildin/global.js":
 /***/ (function(module, exports) {
 
@@ -27733,7 +27840,7 @@ module.exports = g;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_tslib__ = __webpack_require__("../../../../tslib/tslib.es6.js");
 /**
- * @license Angular v5.0.0
+ * @license Angular v5.0.2
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -32020,7 +32127,7 @@ var ISO8601_DATE_REGEX = /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\
  *  |                    | ww          | Numeric: 2 digits + zero padded                               | 01... 53                                                   |
  *  | Week of month      | W           | Numeric: 1 digit                                              | 1... 5                                                     |
  *  | Day of month       | d           | Numeric: minimum digits                                       | 1                                                          |
- *  |                    | dd          | Numeric: 2 digits + zero padded                               | 1                                                          |
+ *  |                    | dd          | Numeric: 2 digits + zero padded                               | 01                                                          |
  *  | Week day           | E, EE & EEE | Abbreviated                                                   | Tue                                                        |
  *  |                    | EEEE        | Wide                                                          | Tuesday                                                    |
  *  |                    | EEEEE       | Narrow                                                        | T                                                          |
@@ -33831,11 +33938,11 @@ var PercentPipe = (function () {
  * - `currencyCode` is the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code, such
  *    as `USD` for the US dollar and `EUR` for the euro.
  * - `display` indicates whether to show the currency symbol or the code.
- *   - `code`(default): use code (e.g. `USD`).
- *   - `symbol`: use symbol (e.g. `$`).
+ *   - `code`: use code (e.g. `USD`).
+ *   - `symbol`(default): use symbol (e.g. `$`).
  *   - `symbol-narrow`: some countries have two symbols for their currency, one regular and one
- *   - boolean (deprecated from v5): `true` for symbol and false for `code`
  *   narrow (e.g. the canadian dollar CAD has the symbol `CA$` and the symbol-narrow `$`).
+ *   - boolean (deprecated from v5): `true` for symbol and false for `code`
  *   If there is no narrow symbol for the chosen currency, the regular symbol will be used.
  * - `digitInfo` See {\@link DecimalPipe} for detailed description.
  *  - `locale` is a `string` defining the locale to use (uses the current {\@link LOCALE_ID} by
@@ -34179,7 +34286,7 @@ function isPlatformWorkerUi(platformId) {
 /**
  * \@stable
  */
-var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* Version */]('5.0.0');
+var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* Version */]('5.0.2');
 
 /**
  * @fileoverview added by tsickle
@@ -34454,7 +34561,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* Version */
 /* unused harmony export removeSummaryDuplicates */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__("../../../../tslib/tslib.es6.js");
 /**
- * @license Angular v5.0.0
+ * @license Angular v5.0.2
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -35074,7 +35181,7 @@ var Version = (function () {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0');
+var VERSION = new Version('5.0.2');
 
 /**
  * @fileoverview added by tsickle
@@ -35769,11 +35876,11 @@ function templateVisitAll(visitor, asts, context) {
  */
 var CompilerConfig = (function () {
     function CompilerConfig(_a) {
-        var _b = _a === void 0 ? {} : _a, _c = _b.defaultEncapsulation, defaultEncapsulation = _c === void 0 ? ViewEncapsulation.Emulated : _c, _d = _b.useJit, useJit = _d === void 0 ? true : _d, _e = _b.jitDevMode, jitDevMode = _e === void 0 ? false : _e, missingTranslation = _b.missingTranslation, enableLegacyTemplate = _b.enableLegacyTemplate, preserveWhitespaces = _b.preserveWhitespaces, strictInjectionParameters = _b.strictInjectionParameters;
+        var _b = _a === void 0 ? {} : _a, _c = _b.defaultEncapsulation, defaultEncapsulation = _c === void 0 ? ViewEncapsulation.Emulated : _c, _d = _b.useJit, useJit = _d === void 0 ? true : _d, _e = _b.jitDevMode, jitDevMode = _e === void 0 ? false : _e, _f = _b.missingTranslation, missingTranslation = _f === void 0 ? null : _f, enableLegacyTemplate = _b.enableLegacyTemplate, preserveWhitespaces = _b.preserveWhitespaces, strictInjectionParameters = _b.strictInjectionParameters;
         this.defaultEncapsulation = defaultEncapsulation;
         this.useJit = !!useJit;
         this.jitDevMode = !!jitDevMode;
-        this.missingTranslation = missingTranslation || null;
+        this.missingTranslation = missingTranslation;
         this.enableLegacyTemplate = enableLegacyTemplate === true;
         this.preserveWhitespaces = preserveWhitespacesDefault(noUndefined(preserveWhitespaces));
         this.strictInjectionParameters = strictInjectionParameters === true;
@@ -41901,7 +42008,8 @@ var ParseError = (function () {
      */
     function () {
         var /** @type {?} */ ctx = this.span.start.getContext(100, 3);
-        return ctx ? " (\"" + ctx.before + "[" + ParseErrorLevel[this.level] + " ->]" + ctx.after + "\")" : '';
+        return ctx ? this.msg + " (\"" + ctx.before + "[" + ParseErrorLevel[this.level] + " ->]" + ctx.after + "\")" :
+            this.msg;
     };
     /**
      * @return {?}
@@ -41911,7 +42019,7 @@ var ParseError = (function () {
      */
     function () {
         var /** @type {?} */ details = this.span.details ? ", " + this.span.details : '';
-        return "" + this.msg + this.contextualMessage() + ": " + this.span.start + details;
+        return this.contextualMessage() + ": " + this.span.start + details;
     };
     return ParseError;
 }());
@@ -49678,14 +49786,16 @@ var CompileMetadataResolver = (function () {
      * @return {?}
      */
     function (type) {
-        if (this.isDirective(type)) {
-            return 'directive';
-        }
-        if (this.isPipe(type)) {
-            return 'pipe';
-        }
-        if (this.isNgModule(type)) {
-            return 'module';
+        if (isValidType(type)) {
+            if (this.isDirective(type)) {
+                return 'directive';
+            }
+            if (this.isPipe(type)) {
+                return 'pipe';
+            }
+            if (this.isNgModule(type)) {
+                return 'module';
+            }
         }
         if ((/** @type {?} */ (type)).provide) {
             return 'provider';
@@ -57330,17 +57440,31 @@ var ShadowCss = (function () {
         var /** @type {?} */ startIndex = 0;
         var /** @type {?} */ res;
         var /** @type {?} */ sep = /( |>|\+|~(?!=))\s*/g;
-        var /** @type {?} */ scopeAfter = selector.indexOf(_polyfillHostNoCombinator);
+        // If a selector appears before :host it should not be shimmed as it
+        // matches on ancestor elements and not on elements in the host's shadow
+        // `:host-context(div)` is transformed to
+        // `-shadowcsshost-no-combinatordiv, div -shadowcsshost-no-combinator`
+        // the `div` is not part of the component in the 2nd selectors and should not be scoped.
+        // Historically `component-tag:host` was matching the component so we also want to preserve
+        // this behavior to avoid breaking legacy apps (it should not match).
+        // The behavior should be:
+        // - `tag:host` -> `tag[h]` (this is to avoid breaking legacy apps, should not match anything)
+        // - `tag :host` -> `tag [h]` (`tag` is not scoped because it's considered part of a
+        //   `:host-context(tag)`)
+        var /** @type {?} */ hasHost = selector.indexOf(_polyfillHostNoCombinator) > -1;
+        // Only scope parts after the first `-shadowcsshost-no-combinator` when it is present
+        var /** @type {?} */ shouldScope = !hasHost;
         while ((res = sep.exec(selector)) !== null) {
             var /** @type {?} */ separator = res[1];
-            var /** @type {?} */ part = selector.slice(startIndex, res.index).trim();
-            // if a selector appears before :host-context it should not be shimmed as it
-            // matches on ancestor elements and not on elements in the host's shadow
-            var /** @type {?} */ scopedPart = startIndex >= scopeAfter ? _scopeSelectorPart(part) : part;
+            var /** @type {?} */ part_1 = selector.slice(startIndex, res.index).trim();
+            shouldScope = shouldScope || part_1.indexOf(_polyfillHostNoCombinator) > -1;
+            var /** @type {?} */ scopedPart = shouldScope ? _scopeSelectorPart(part_1) : part_1;
             scopedSelector += scopedPart + " " + separator + " ";
             startIndex = sep.lastIndex;
         }
-        scopedSelector += _scopeSelectorPart(selector.substring(startIndex));
+        var /** @type {?} */ part = selector.substring(startIndex);
+        shouldScope = shouldScope || part.indexOf(_polyfillHostNoCombinator) > -1;
+        scopedSelector += shouldScope ? _scopeSelectorPart(part) : part;
         // replace the placeholders with their original values
         return safeContent.restore(scopedSelector);
     };
@@ -64494,16 +64618,16 @@ function analyzeFile(host, staticSymbolResolver, metadataResolver, fileName) {
                     isNgSymbol = true;
                     pipes.push(symbol);
                 }
-                else if (metadataResolver.isInjectable(symbol)) {
-                    isNgSymbol = true;
-                    injectables.push(symbol);
-                }
-                else {
+                else if (metadataResolver.isNgModule(symbol)) {
                     var /** @type {?} */ ngModule = metadataResolver.getNgModuleMetadata(symbol, false);
                     if (ngModule) {
                         isNgSymbol = true;
                         ngModules.push(ngModule);
                     }
+                }
+                else if (metadataResolver.isInjectable(symbol)) {
+                    isNgSymbol = true;
+                    injectables.push(symbol);
                 }
             }
             if (!isNgSymbol) {
@@ -69012,7 +69136,7 @@ var Extractor = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_share__ = __webpack_require__("../../../../rxjs/_esm5/operator/share.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
 /**
- * @license Angular v5.0.0
+ * @license Angular v5.0.2
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -69631,9 +69755,9 @@ var NgModule = makeDecorator('NgModule', function (ngModule) { return ngModule; 
 var ViewEncapsulation = {
     /**
        * Emulate `Native` scoping of styles by adding an attribute containing surrogate id to the Host
-       * Element and pre-processing the style rules provided via
-       * {@link Component#styles} or {@link Component#styleUrls}, and adding the new Host Element
-       * attribute to all selectors.
+       * Element and pre-processing the style rules provided via {@link Component#styles styles} or
+       * {@link Component#styleUrls styleUrls}, and adding the new Host Element attribute to all
+       * selectors.
        *
        * This is the default option.
        */
@@ -69680,7 +69804,7 @@ var Version = (function () {
 /**
  * \@stable
  */
-var VERSION = new Version('5.0.0');
+var VERSION = new Version('5.0.2');
 
 /**
  * @fileoverview added by tsickle
@@ -71787,7 +71911,7 @@ var ReflectiveInjector = (function () {
      * });
      * ```
      *
-     * See {@link ReflectiveInjector#fromResolvedProviders} for more info.
+     * See {@link ReflectiveInjector#fromResolvedProviders fromResolvedProviders} for more info.
      */
     /**
      * Turns an array of provider definitions into an array of resolved providers.
@@ -71820,7 +71944,7 @@ var ReflectiveInjector = (function () {
      * });
      * ```
      *
-     * See {\@link ReflectiveInjector#fromResolvedProviders} for more info.
+     * See {\@link ReflectiveInjector#fromResolvedProviders fromResolvedProviders} for more info.
      * @param {?} providers
      * @return {?}
      */
@@ -71855,7 +71979,7 @@ var ReflectiveInjector = (function () {
      * });
      * ```
      *
-     * See {\@link ReflectiveInjector#fromResolvedProviders} for more info.
+     * See {\@link ReflectiveInjector#fromResolvedProviders fromResolvedProviders} for more info.
      * @param {?} providers
      * @return {?}
      */
@@ -71886,7 +72010,8 @@ var ReflectiveInjector = (function () {
      *
      * This function is slower than the corresponding `fromResolvedProviders`
      * because it needs to resolve the passed-in providers first.
-     * See {@link ReflectiveInjector#resolve} and {@link ReflectiveInjector#fromResolvedProviders}.
+     * See {@link ReflectiveInjector#resolve resolve} and
+     * {@link ReflectiveInjector#fromResolvedProviders fromResolvedProviders}.
      */
     /**
      * Resolves an array of providers and creates an injector from those providers.
@@ -71912,7 +72037,8 @@ var ReflectiveInjector = (function () {
      *
      * This function is slower than the corresponding `fromResolvedProviders`
      * because it needs to resolve the passed-in providers first.
-     * See {\@link ReflectiveInjector#resolve} and {\@link ReflectiveInjector#fromResolvedProviders}.
+     * See {\@link ReflectiveInjector#resolve resolve} and
+     * {\@link ReflectiveInjector#fromResolvedProviders fromResolvedProviders}.
      * @param {?} providers
      * @param {?=} parent
      * @return {?}
@@ -71941,7 +72067,8 @@ var ReflectiveInjector = (function () {
      *
      * This function is slower than the corresponding `fromResolvedProviders`
      * because it needs to resolve the passed-in providers first.
-     * See {\@link ReflectiveInjector#resolve} and {\@link ReflectiveInjector#fromResolvedProviders}.
+     * See {\@link ReflectiveInjector#resolve resolve} and
+     * {\@link ReflectiveInjector#fromResolvedProviders fromResolvedProviders}.
      * @param {?} providers
      * @param {?=} parent
      * @return {?}
@@ -72494,7 +72621,7 @@ var ApplicationInitStatus = (function () {
 /**
  * A DI Token representing a unique string id assigned to the application by Angular and used
  * primarily for prefixing application attributes and CSS styles when
- * {\@link ViewEncapsulation#Emulated} is being used.
+ * {\@link ViewEncapsulation#Emulated ViewEncapsulation.Emulated} is being used.
  *
  * If you need to avoid randomly generated value to be used as an application id, you can provide
  * a custom value via a DI provider <!-- TODO: provider --> configuring the root {\@link Injector}
@@ -73363,7 +73490,7 @@ var NgZone = (function () {
          */
         this.onError = new EventEmitter(false);
         if (typeof Zone == 'undefined') {
-            throw new Error('Angular requires Zone.js prolyfill.');
+            throw new Error("In this configuration Angular requires Zone.js");
         }
         Zone.assertZonePatched();
         var /** @type {?} */ self = /** @type {?} */ ((this));
@@ -75000,9 +75127,8 @@ var Renderer2Interceptor = new InjectionToken('Renderer2Interceptor');
  *
  * Use this service to bypass Angular's templating and make custom UI changes that can't be
  * expressed declaratively. For example if you need to set a property or an attribute whose name is
- * not statically known, use {\@link Renderer#setElementProperty} or {\@link
- * Renderer#setElementAttribute}
- * respectively.
+ * not statically known, use {\@link Renderer#setElementProperty setElementProperty} or
+ * {\@link Renderer#setElementAttribute setElementAttribute} respectively.
  *
  * If you are implementing a custom renderer, you must implement this interface.
  *
@@ -75505,9 +75631,8 @@ function checkNotEmpty(value, modulePath, exportName) {
  * the constructor of the directive using the `TemplateRef` Token. Alternatively you can query for
  * the `TemplateRef` from a Component or a Directive via {\@link Query}.
  *
- * To instantiate Embedded Views based on a Template, use
- * {\@link ViewContainerRef#createEmbeddedView}, which will create the View and attach it to the
- * View Container.
+ * To instantiate Embedded Views based on a Template, use {\@link ViewContainerRef#
+ * createEmbeddedView}, which will create the View and attach it to the View Container.
  * \@stable
  * @abstract
  */
@@ -85528,7 +85653,7 @@ function transition$$1(stateChangeExpr, steps) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__ = __webpack_require__("../../../platform-browser/esm5/platform-browser.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_tslib__ = __webpack_require__("../../../../tslib/tslib.es6.js");
 /**
- * @license Angular v5.0.0
+ * @license Angular v5.0.2
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -86179,7 +86304,7 @@ var CachedResourceLoader = (function (_super) {
 /**
  * \@stable
  */
-var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["_3" /* Version */]('5.0.0');
+var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["_3" /* Version */]('5.0.2');
 
 /**
  * @fileoverview added by tsickle
@@ -86290,7 +86415,7 @@ var platformBrowserDynamic = Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__[
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_tslib__ = __webpack_require__("../../../../tslib/tslib.es6.js");
 /**
- * @license Angular v5.0.0
+ * @license Angular v5.0.2
  * (c) 2010-2017 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -89419,7 +89544,7 @@ var ShadowDomRenderer = (function (_super) {
  * found in the LICENSE file at https://angular.io/license
  */
 var ɵ0 = function (v) {
-    return v;
+    return '__zone_symbol__' + v;
 };
 /**
  * Detect if Zone is present. If it is then use simple zone aware 'addEventListener'
@@ -91413,7 +91538,7 @@ var By = (function () {
 /**
  * \@stable
  */
-var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["_3" /* Version */]('5.0.0');
+var VERSION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["_3" /* Version */]('5.0.2');
 
 /**
  * @fileoverview added by tsickle
