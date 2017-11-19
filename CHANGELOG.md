@@ -1,3 +1,20 @@
+<a name="2.0.0-rc.2"></a>
+# [2.0.0-rc.2](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.1...v2.0.0-rc.2) (2017-11-19)
+
+
+### Bug Fixes
+
+* **TreeController:** populate new nodes with ids unless they have them. Closes [#145](https://github.com/valor-software/ng2-tree/issues/145) ([3d0826a](https://github.com/valor-software/ng2-tree/commit/3d0826a))
+
+
+### Features
+
+* **node-menu:** bring custom menu items to the node menu. Closes [#48](https://github.com/valor-software/ng2-tree/issues/48), closes [#53](https://github.com/valor-software/ng2-tree/issues/53), closes [#25](https://github.com/valor-software/ng2-tree/issues/25), closes [#161](https://github.com/valor-software/ng2-tree/issues/161) ([#170](https://github.com/valor-software/ng2-tree/issues/170)) ([d776886](https://github.com/valor-software/ng2-tree/commit/d776886))
+* **tree:** make it possible to collapse a tree on a first load. Closes [#102](https://github.com/valor-software/ng2-tree/issues/102) ([be42398](https://github.com/valor-software/ng2-tree/commit/be42398))
+* **Tree:** adds ability to acquire tree underlying model ([#168](https://github.com/valor-software/ng2-tree/issues/168)). Closes [#147](https://github.com/valor-software/ng2-tree/issues/147) ([68c4dcf](https://github.com/valor-software/ng2-tree/commit/68c4dcf))
+
+
+
 <a name="2.0.0-rc.1"></a>
 # [2.0.0-rc.1](https://github.com/valor-software/ng2-tree/compare/v2.0.0-alpha.10...v2.0.0-rc.1) (2017-11-05)
 
