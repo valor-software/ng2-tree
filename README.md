@@ -32,6 +32,7 @@
     - [isCollapsed - check whether a node is collapsed](#iscollapsed---check-whether-a-node-is-collapsed)
     - [expand - expands a node](#expand---expands-a-node)
     - [isExpanded - checks whether a node is expanded](#isexpanded---checks-whether-a-node-is-expanded)
+    - [toTreeModel - converts a tree to a TreeModel instance](#totreemodel---converts-a-tree-to-a-treemodel-instance)
     - [rename - renames a node (changes its value underneath)](#rename---renames-a-node-changes-its-value-underneath)
     - [startRenaming - changes the node template so that text input appears and lets a user type a new name](#startrenaming---changes-the-node-template-so-that-text-input-appears-and-lets-a-user-type-a-new-name)
     - [remove - removes a node from the tree](#remove---removes-a-node-from-the-tree)
@@ -657,6 +658,14 @@ This method expands the node in case it can be expanded. On successful expanding
 
 ```typescript
 oopNodeController.isExpanded();
+```
+
+#### toTreeModel - converts a tree to a TreeModel instance
+
+Actually controller makes and returns a clone of tree's underlying model
+
+```typescript
+oopNodeController.toTreeModel();
 ```
 
 This method returns true if the node is expanded and false otherwise.
