@@ -10,7 +10,7 @@ import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
 import { Subscription } from 'rxjs/Subscription';
-import { get } from './utils/fn.utils';
+import { get, has } from './utils/fn.utils';
 
 @Component({
   selector: 'tree-internal',
@@ -26,7 +26,7 @@ import { get } from './utils/fn.utils';
 
         <div class="folding" (click)="onSwitchFoldingType()" [ngClass]="tree.foldingCssClass"></div>
 
-        <div class="node-checkbox" *ngIf="settings.enableCheckboxes">	
+        <div class="node-checkbox" *ngIf="settings.showCheckboxes">	
         <input checkbox  type="checkbox" [disabled]="isReadOnly" [checked]="isChecked" (change)="NodeCheckSatusChanged()" #checkbox />			
          </div>
 
@@ -75,6 +75,7 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
   public isRightMenuVisible = false;
   public isLeftMenuVisible = false;
   public isChecked = false;
+  public isReadOnly = false;
   public controller: TreeController;
 
 
@@ -94,9 +95,11 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
       this.treeService.setController(this.tree.node.id, this.controller);
     }
 
-    this.settings = this.settings || { rootIsVisible: true, enableCheckboxes: false };
+    this.settings = this.settings || { rootIsVisible: true, showCheckboxes: false, enableCheckboxes: true };
 
     this.isChecked = this.tree.isChecked;
+
+    this.isReadOnly = has(this.settings, 'enableCheckboxes') ? !this.settings.enableCheckboxes : false;
 
     this.subscriptions.push(this.nodeMenuService.hideMenuStream(this.element)
       .subscribe(() => {

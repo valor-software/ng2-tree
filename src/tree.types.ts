@@ -97,6 +97,7 @@ export interface Ng2TreeSettings {
    * @type boolean
    */
   rootIsVisible?: boolean;
+  showCheckboxes?: boolean;
   enableCheckboxes?: boolean;
 }
 
