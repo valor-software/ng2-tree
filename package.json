@@ -85,6 +85,7 @@
     "protractor": "5.2.0",
     "rimraf": "2.6.2",
     "rxjs": "5.5.2",
+    "rxjs-tslint-rules": "3.1.2",
     "shelljs": "0.7.8",
     "systemjs-builder": "0.16.12",
     "ts-node": "3.3.0",

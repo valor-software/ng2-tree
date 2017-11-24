@@ -1,5 +1,5 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { Subject } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 import { CapturedNode } from './captured-node';
 import { NodeDraggableEvent } from './draggable.events';
 
