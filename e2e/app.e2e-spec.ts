@@ -37,6 +37,6 @@ describe('Tree App', () => {
         return antiquaNode.getAttribute(key).then((value: string) => expect(value).toEqual(attrs[key]));
     });
 
-    return Promise.all(expectations);
+    return Promise.all(expectations as any);
   });
 });

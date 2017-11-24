@@ -12,7 +12,8 @@ import {
   defaultsDeep
 } from './utils/fn.utils';
 
-import { Observable, Observer } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings, ChildrenLoadingFunction } from './tree.types';
 import { NodeMenuItem } from './menu/node-menu.component';
 
