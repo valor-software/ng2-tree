@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { NodeMenuService } from '../../src/menu/node-menu.service';
-import { Subject } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 import { ElementRef } from '@angular/core';
 import { NodeMenuEvent, NodeMenuAction } from '../../src/menu/menu.events';
 
