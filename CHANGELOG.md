@@ -1,3 +1,13 @@
+<a name="2.0.0-rc.3"></a>
+# [2.0.0-rc.3](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.2...v2.0.0-rc.3) (2017-11-24)
+
+
+### Bug Fixes
+
+* import rxjs in a proper way. Closes [#172](https://github.com/valor-software/ng2-tree/issues/172) ([#173](https://github.com/valor-software/ng2-tree/issues/173)) ([5360828](https://github.com/valor-software/ng2-tree/commit/5360828))
+
+
+
 <a name="2.0.0-rc.2"></a>
 # [2.0.0-rc.2](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.1...v2.0.0-rc.2) (2017-11-19)
 
