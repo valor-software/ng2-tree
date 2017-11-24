@@ -852,7 +852,7 @@ var NodeDraggableDirective = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NodeDraggableService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__draggable_events__ = __webpack_require__("../../../../../src/draggable/draggable.events.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -865,7 +865,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 var NodeDraggableService = (function () {
     function NodeDraggableService() {
-        this.draggableNodeEvents$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
+        this.draggableNodeEvents$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
     }
     NodeDraggableService.prototype.fireNodeDragged = function (captured, target) {
         if (!captured.tree || captured.tree.isStatic()) {
@@ -1131,7 +1131,7 @@ var NodeMenuComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NodeMenuService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__menu_events__ = __webpack_require__("../../../../../src/menu/menu.events.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1144,7 +1144,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 var NodeMenuService = (function () {
     function NodeMenuService() {
-        this.nodeMenuEvents$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
+        this.nodeMenuEvents$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
     }
     NodeMenuService.prototype.fireMenuEvent = function (sender, action) {
         var nodeMenuEvent = { sender: sender, action: action };
@@ -1166,6 +1166,18 @@ var NodeMenuService = (function () {
     ], NodeMenuService);
     return NodeMenuService;
 }());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/rxjs-imports.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_filter__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/filter.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_observable_of__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/of.js");
+
 
 
 
@@ -1756,17 +1768,18 @@ var LoadNextLevelEvent = (function (_super) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tree_component__ = __webpack_require__("../../../../../src/tree.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tree_internal_component__ = __webpack_require__("../../../../../src/tree-internal.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__draggable_node_draggable_directive__ = __webpack_require__("../../../../../src/draggable/node-draggable.directive.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__draggable_node_draggable_service__ = __webpack_require__("../../../../../src/draggable/node-draggable.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__editable_node_editable_directive__ = __webpack_require__("../../../../../src/editable/node-editable.directive.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__menu_node_menu_component__ = __webpack_require__("../../../../../src/menu/node-menu.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__menu_node_menu_service__ = __webpack_require__("../../../../../src/menu/node-menu.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__tree_service__ = __webpack_require__("../../../../../src/tree.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__utils_safe_html_pipe__ = __webpack_require__("../../../../../src/utils/safe-html.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__rxjs_imports__ = __webpack_require__("../../../../../src/rxjs-imports.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tree_component__ = __webpack_require__("../../../../../src/tree.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__tree_internal_component__ = __webpack_require__("../../../../../src/tree-internal.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__draggable_node_draggable_directive__ = __webpack_require__("../../../../../src/draggable/node-draggable.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__draggable_node_draggable_service__ = __webpack_require__("../../../../../src/draggable/node-draggable.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__editable_node_editable_directive__ = __webpack_require__("../../../../../src/editable/node-editable.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__menu_node_menu_component__ = __webpack_require__("../../../../../src/menu/node-menu.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__menu_node_menu_service__ = __webpack_require__("../../../../../src/menu/node-menu.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__tree_service__ = __webpack_require__("../../../../../src/tree.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__utils_safe_html_pipe__ = __webpack_require__("../../../../../src/utils/safe-html.pipe.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1784,22 +1797,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var TreeModule = (function () {
     function TreeModule() {
     }
     TreeModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["G" /* NgModule */])({
-            imports: [__WEBPACK_IMPORTED_MODULE_3__angular_common__["a" /* CommonModule */]],
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["G" /* NgModule */])({
+            imports: [__WEBPACK_IMPORTED_MODULE_4__angular_common__["a" /* CommonModule */]],
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_4__draggable_node_draggable_directive__["a" /* NodeDraggableDirective */],
-                __WEBPACK_IMPORTED_MODULE_1__tree_component__["a" /* TreeComponent */],
-                __WEBPACK_IMPORTED_MODULE_6__editable_node_editable_directive__["a" /* NodeEditableDirective */],
-                __WEBPACK_IMPORTED_MODULE_7__menu_node_menu_component__["a" /* NodeMenuComponent */],
-                __WEBPACK_IMPORTED_MODULE_2__tree_internal_component__["a" /* TreeInternalComponent */],
-                __WEBPACK_IMPORTED_MODULE_10__utils_safe_html_pipe__["a" /* SafeHtmlPipe */]
+                __WEBPACK_IMPORTED_MODULE_5__draggable_node_draggable_directive__["a" /* NodeDraggableDirective */],
+                __WEBPACK_IMPORTED_MODULE_2__tree_component__["a" /* TreeComponent */],
+                __WEBPACK_IMPORTED_MODULE_7__editable_node_editable_directive__["a" /* NodeEditableDirective */],
+                __WEBPACK_IMPORTED_MODULE_8__menu_node_menu_component__["a" /* NodeMenuComponent */],
+                __WEBPACK_IMPORTED_MODULE_3__tree_internal_component__["a" /* TreeInternalComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__utils_safe_html_pipe__["a" /* SafeHtmlPipe */]
             ],
-            exports: [__WEBPACK_IMPORTED_MODULE_1__tree_component__["a" /* TreeComponent */]],
-            providers: [__WEBPACK_IMPORTED_MODULE_5__draggable_node_draggable_service__["a" /* NodeDraggableService */], __WEBPACK_IMPORTED_MODULE_8__menu_node_menu_service__["a" /* NodeMenuService */], __WEBPACK_IMPORTED_MODULE_9__tree_service__["a" /* TreeService */]]
+            exports: [__WEBPACK_IMPORTED_MODULE_2__tree_component__["a" /* TreeComponent */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_6__draggable_node_draggable_service__["a" /* NodeDraggableService */], __WEBPACK_IMPORTED_MODULE_9__menu_node_menu_service__["a" /* NodeMenuService */], __WEBPACK_IMPORTED_MODULE_10__tree_service__["a" /* TreeService */]]
         })
     ], TreeModule);
     return TreeModule;
@@ -1815,7 +1829,7 @@ var TreeModule = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tree_events__ = __webpack_require__("../../../../../src/tree.events.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__draggable_node_draggable_service__ = __webpack_require__("../../../../../src/draggable/node-draggable.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_fn_utils__ = __webpack_require__("../../../../../src/utils/fn.utils.ts");
@@ -1839,15 +1853,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var TreeService = (function () {
     function TreeService(nodeDraggableService) {
         this.nodeDraggableService = nodeDraggableService;
-        this.nodeMoved$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
-        this.nodeRemoved$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
-        this.nodeRenamed$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
-        this.nodeCreated$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
-        this.nodeSelected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
-        this.nodeExpanded$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
-        this.nodeCollapsed$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
-        this.menuItemSelected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
-        this.loadNextLevel$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
+        this.nodeMoved$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeRemoved$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeRenamed$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeCreated$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeSelected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeExpanded$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeCollapsed$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.menuItemSelected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.loadNextLevel$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
         this.controllers = new Map();
         this.nodeRemoved$.subscribe(function (e) { return e.node.removeItselfFromParent(); });
     }
@@ -1942,7 +1956,7 @@ var TreeService = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Tree; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__ = __webpack_require__("../../../../../src/utils/fn.utils.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tree_types__ = __webpack_require__("../../../../../src/tree.types.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_uuid_v4__ = __webpack_require__("../../../../uuid/v4.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_uuid_v4___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_uuid_v4__);
@@ -1969,7 +1983,7 @@ var Tree = (function () {
         var _this = this;
         this._childrenLoadingState = ChildrenLoadingState.NotStarted;
         this._childrenAsyncOnce = Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["i" /* once */])(function () {
-            return new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["a" /* Observable */](function (observer) {
+            return new __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */](function (observer) {
                 setTimeout(function () {
                     _this._childrenLoadingState = ChildrenLoadingState.Loading;
                     _this._loadChildren(function (children) {
@@ -2088,7 +2102,7 @@ var Tree = (function () {
             if (this.canLoadChildren()) {
                 return this._childrenAsyncOnce();
             }
-            return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["a" /* Observable */].of(this.children);
+            return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */].of(this.children);
         },
         enumerable: true,
         configurable: true
