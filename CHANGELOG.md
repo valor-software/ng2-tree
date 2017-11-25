@@ -1,3 +1,13 @@
+<a name="2.0.0-rc.4"></a>
+# [2.0.0-rc.4](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.3...v2.0.0-rc.4) (2017-11-25)
+
+
+### Bug Fixes
+
+* export noop function from rxjs-imports in order to force ngc to generate a proper metadata.json file. Closes [#175](https://github.com/valor-software/ng2-tree/issues/175) ([#177](https://github.com/valor-software/ng2-tree/issues/177)) ([c0aab34](https://github.com/valor-software/ng2-tree/commit/c0aab34))
+
+
+
 <a name="2.0.0-rc.3"></a>
 # [2.0.0-rc.3](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.2...v2.0.0-rc.3) (2017-11-24)
 
