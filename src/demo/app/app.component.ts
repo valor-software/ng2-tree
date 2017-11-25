@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from '../../../index';
+import { Ng2TreeSettings, NodeEvent, RenamableNode, TreeModel } from '../../../index';
+import { NodeMenuItemAction } from '../../menu/menu.events';
+import { MenuItemSelectedEvent } from '../../tree.events';
 
 declare const alertify: any;
 
@@ -12,6 +14,7 @@ declare const alertify: any;
         <div class="tree-content">
           <tree #treeFonts
                 [tree]="fonts"
+                (menuItemSelected)="onMenuItemSelected($event)"
                 (nodeRemoved)="onNodeRemoved($event)"
                 (nodeRenamed)="onNodeRenamed($event)"
                 (nodeSelected)="onNodeSelected($event)"
@@ -214,8 +217,15 @@ export class AppComponent implements OnInit {
         ]
       },
       {
-        value: 'Sans-serif',
+        value: 'Sans-serif (Right click me - I have a custom menu)',
         id: 11,
+        settings: {
+        menuItems: [
+            { action: NodeMenuItemAction.Custom, name: 'Foo', cssClass: 'fa fa-arrow-right' },
+            { action: NodeMenuItemAction.Custom, name: 'Bar', cssClass: 'fa fa-arrow-right' },
+            { action: NodeMenuItemAction.Custom, name: 'Baz', cssClass: 'fa fa-arrow-right'}
+          ]
+        },
         children: [
           { value: 'Arial', id: 12 },
           { value: 'Century Gothic', id: 13 },
@@ -272,17 +282,21 @@ export class AppComponent implements OnInit {
         value: 'bin',
         id: 2,
         children: [
-          { value: 'bash', id: 3 },
-          { value: 'umount', id: 4 },
-          { value: 'cp', id: 5 },
-          { value: 'less', id: 6 },
-          { value: 'rmdir', id: 7 },
-          { value: 'touch', id: 8 },
-          { value: 'chgrp', id: 9 },
-          { value: 'chmod', id: 10 },
-          { value: 'chown', id: 11 },
-          { value: 'nano', id: 12 }
-        ]
+
+          {value: 'bash', id: 3},
+          {value: 'umount', id: 4},
+          {value: 'cp', id: 5},
+          {value: 'less', id: 6},
+          {value: 'rmdir', id: 7},
+          {value: 'touch', id: 8},
+          {value: 'chgrp', id: 9},
+          {value: 'chmod', id: 10},
+          {value: 'chown', id: 11},
+          {value: 'nano', id: 12}
+        ],
+        settings: {
+          isCollapsedOnInit: true
+        }
       },
       {
         value: 'boot',
@@ -575,6 +589,10 @@ export class AppComponent implements OnInit {
 
   public onNodeSelected(e: NodeEvent): void {
     AppComponent.logEvent(e, 'Selected');
+  }
+
+  public onMenuItemSelected(e: MenuItemSelectedEvent) {
+    AppComponent.logEvent(e, `You selected ${e.selectedItem} menu item`);
   }
 
   public onNodeExpanded(e: NodeEvent): void {

@@ -32,6 +32,7 @@
     - [isCollapsed - check whether a node is collapsed](#iscollapsed---check-whether-a-node-is-collapsed)
     - [expand - expands a node](#expand---expands-a-node)
     - [isExpanded - checks whether a node is expanded](#isexpanded---checks-whether-a-node-is-expanded)
+    - [toTreeModel - converts a tree to a TreeModel instance](#totreemodel---converts-a-tree-to-a-treemodel-instance)
     - [rename - renames a node (changes its value underneath)](#rename---renames-a-node-changes-its-value-underneath)
     - [startRenaming - changes the node template so that text input appears and lets a user type a new name](#startrenaming---changes-the-node-template-so-that-text-input-appears-and-lets-a-user-type-a-new-name)
     - [remove - removes a node from the tree](#remove---removes-a-node-from-the-tree)
@@ -334,6 +335,12 @@ Here is an example of its usage:
       'node': '<i class="fa fa-folder-o fa-lg"></i>',
       'leaf': '<i class="fa fa-file-o fa-lg"></i>',
       'leftMenu': '<i class="fa fa-navicon fa-lg"></i>'
+    },
+    'menuItems': [
+        { action: NodeMenuItemAction.Custom, name: 'Foo', cssClass: 'fa fa-arrow-right' },
+        { action: NodeMenuItemAction.Custom, name: 'Bar', cssClass: 'fa fa-arrow-right' },
+        { action: NodeMenuItemAction.Custom, name: 'Baz', cssClass: 'fa fa-arrow-right'}
+      ]
     }
   },
   children: [
@@ -345,6 +352,7 @@ Here is an example of its usage:
 ```
 
 * `static` - Boolean - This option makes it impossible to drag a tree or modify it in a some way, though you still can select nodes in the static tree and appropriate events will be generated.
+* `isCollapsedOnInit` - Boolean - This option makes a tree to be collapsed on first load (this option cascades to its children).
 * `rightMenu` - Boolean - This option allows you to activate (true, by default) or deactivate (false) right menu when clicking with right button of a mouse.
 * `leftMenu` - Boolean - This option allows you to activate (true) or deactivate (false, by default) left menu.
 * `cssClasses` - Object:
@@ -356,6 +364,7 @@ Here is an example of its usage:
   * `node` - String - It specifies a html template which will be included to the left of the node's value.
   * `leaf` - String - It specifies a html template which will be included to the left of the leaf's value.
   * `leftMenu` - String - It specifies a html template to the right of the node's value. This template becomes clickable and shows a menu on node's click.
+* `menuItems` - here you can specify your custom menu items. You should feed an array of NodeMenuItem instances to this setting. Once done - setup a subscription to `MenuItemSelectedEvent`s by listening to `(menuItemSelected)="onMenuItemSelected($event)"` on the tree.
 
 All options that are defined on a `parent` are automatically applied to children. If you want you can override them by `settings` of the child node.
 
@@ -449,7 +458,7 @@ You can subscribe to `NodeCreatedEvent` by attaching listener to `(nodeCreated)`
 `NodeCreatedEvent` has a `node` property of type `Tree`, which contains a created node and a `controller` property, which will give you access to node's controller.
 
 ```typescript
-{node: <Tree>{...}, controller: <TreeController>{...}}
+{node: <Tree>{...}}
 ```
 
 #### NodeRenamedEvent
@@ -530,7 +539,11 @@ Relevant for loading children via ngrx (or any redux-inspired library).
 ```
 
 ## :gun: Controller
-First of all you should know how to get a controller of a particular node. You can get a controller of a node only if you set an id property of a node. For example, your tree structure should look like:
+First of all you should know how to get a controller of a particular node. You can get a controller of a node only if you set an id property of a node.
+
+> TIP: Ids for nodes created via the context menu or using a TreeController instance get populated automatically unless nodes had ids before there were added to the tree
+
+For example, your tree structure should look like:
 
 ```typescript
 public tree: TreeModel = {
@@ -652,6 +665,14 @@ This method expands the node in case it can be expanded. On successful expanding
 
 ```typescript
 oopNodeController.isExpanded();
+```
+
+#### toTreeModel - converts a tree to a TreeModel instance
+
+Actually controller makes and returns a clone of tree's underlying model
+
+```typescript
+oopNodeController.toTreeModel();
 ```
 
 This method returns true if the node is expanded and false otherwise.

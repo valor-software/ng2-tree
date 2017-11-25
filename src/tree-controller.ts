@@ -44,6 +44,10 @@ export class TreeController {
     return this.tree.isNodeCollapsed();
   }
 
+  public toTreeModel(): TreeModel {
+    return this.tree.toTreeModel();
+  }
+
   public rename(newValue: string): void {
     this.tree.markAsBeingRenamed();
     this.component.applyNewValue({ type: 'keyup', value: newValue });

@@ -4,7 +4,11 @@ import {
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import * as TreeTypes from './tree.types';
-import { NodeEvent, NodeCheckedEvent, NodeUncheckedEvent } from './tree.events';
+
+import { NodeEvent, NodeCheckedEvent, NodeUncheckedEvent,MenuItemSelectedEvent } from './tree.events';
+
+import { NodeEvent, MenuItemSelectedEvent } from './tree.events';
+
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
 import { Subscription } from 'rxjs/Subscription';
@@ -47,6 +51,7 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
   public nodeCollapsed: EventEmitter<any> = new EventEmitter();
 
   @Output()
+
   public loadNextLevel: EventEmitter<any> = new EventEmitter();
 
   @Output()
@@ -54,6 +59,8 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output()
   public nodeUnchecked: EventEmitter<NodeUncheckedEvent> = new EventEmitter();
+
+  public menuItemSelected: EventEmitter<any> = new EventEmitter();
 
   public tree: Tree;
   @ViewChild('rootComponent') public rootComponent;
@@ -100,6 +107,10 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
 
     this.subscriptions.push(this.treeService.nodeCollapsed$.subscribe((e: NodeEvent) => {
       this.nodeCollapsed.emit(e);
+    }));
+
+    this.subscriptions.push(this.treeService.menuItemSelected$.subscribe((e: MenuItemSelectedEvent) => {
+      this.menuItemSelected.emit(e);
     }));
 
     this.subscriptions.push(this.treeService.loadNextLevel$.subscribe((e: NodeEvent) => {

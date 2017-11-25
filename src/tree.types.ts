@@ -1,4 +1,5 @@
 import { get, defaultsDeep } from './utils/fn.utils';
+import { NodeMenuItem } from './menu/node-menu.component';
 
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
@@ -78,6 +79,13 @@ export class TreeModelSettings {
   public rightMenu?: boolean;
 
   /**
+   * "menu" property when set will be available as custom context menu.
+   * @name TreeModelSettings#MenuItems
+   * @type NodeMenuItem
+   */
+  public menuItems?: NodeMenuItem[];
+
+  /**
    * "static" property when set to true makes it impossible to drag'n'drop tree or call a menu on it.
    * @name TreeModelSettings#static
    * @type boolean
@@ -85,8 +93,15 @@ export class TreeModelSettings {
    */
   public static?: boolean;
 
+  public isCollapsedOnInit?: boolean;
+
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
-    return defaultsDeep({}, get(sourceA, 'settings'), get(sourceB, 'settings'), { static: false, leftMenu: false, rightMenu: true });
+    return defaultsDeep(
+      {},
+      get(sourceA, 'settings'),
+      get(sourceB, 'settings'),
+      {static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false}
+    );
   }
 }
 

@@ -17,6 +17,8 @@
     "./index.ts"
   ],
   "angularCompilerOptions": {
-    "genDir": "factories"
+    "strictMetadataEmit" : true,
+    "skipMetadataEmit" : false,
+    "preserveWhitespaces": false
   }
 }

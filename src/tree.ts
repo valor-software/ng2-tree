@@ -8,11 +8,16 @@ import {
   size,
   once,
   includes,
-  isNil
+  isNil,
+  defaultsDeep
 } from './utils/fn.utils';
 
-import { Observable, Observer } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings, ChildrenLoadingFunction } from './tree.types';
+import { NodeMenuItem } from './menu/node-menu.component';
+
+import * as uuidv4 from 'uuid/v4';
 
 enum ChildrenLoadingState {
   NotStarted,
@@ -202,6 +207,8 @@ export class Tree {
       tree.markAsNew();
     }
 
+    tree.id = tree.id || uuidv4();
+
     if (this.childrenShouldBeLoaded() && !(this.childrenAreBeingLoaded() || this.childrenWereLoaded())) {
       return null;
     }
@@ -257,7 +264,14 @@ export class Tree {
    * @returns {Tree} A newly inserted child.
    */
   public addChild(child: Tree, position?: number): Tree {
-    return this._addChild(Tree.cloneTreeShallow(child), position);
+    const newborn = this._addChild(Tree.cloneTreeShallow(child), position);
+
+    this._setFoldingType();
+    if (this.isNodeCollapsed()) {
+      this.switchFoldingType();
+    }
+
+    return newborn;
   }
 
   private _addChild(child: Tree, position: number = size(this._children) || 0): Tree {
@@ -269,10 +283,6 @@ export class Tree {
       this._children = [child];
     }
 
-    this._setFoldingType();
-    if (this.isNodeCollapsed()) {
-      this.switchFoldingType();
-    }
     return child;
   }
 
@@ -336,6 +346,21 @@ export class Tree {
     return !this.isBranch();
   }
 
+  /**
+   * Get menu items of the current tree.
+   * @returns {NodeMenuItem[]} The menu items of the current tree.
+   */
+  public get menuItems(): NodeMenuItem[] {
+    return get(this.node.settings, 'menuItems');
+  }
+
+  /**
+   * Check whether or not this tree has a custom menu.
+   * @returns {boolean} A flag indicating whether or not this tree has a custom menu.
+   */
+  public hasCustomMenu(): boolean {
+    return !this.isStatic() && !!get(this.node.settings, 'menuItems', false);
+  }
   /**
    * Check whether this tree is "Branch" or not. "Branch" is a node that has children.
    * @returns {boolean} A flag indicating whether or not this tree is a "Branch".
@@ -415,6 +440,9 @@ export class Tree {
     if (this.isLeaf() || !this.hasChildren()) {
       return;
     }
+
+    this.disableCollapseOnInit();
+
     this.node._foldingType = this.isNodeExpanded() ? FoldingType.Collapsed : FoldingType.Expanded;
   }
 
@@ -441,7 +469,7 @@ export class Tree {
     if (this.childrenShouldBeLoaded()) {
       this.node._foldingType = FoldingType.Collapsed;
     } else if (this._children && !isEmpty(this._children)) {
-      this.node._foldingType = FoldingType.Expanded;
+      this.node._foldingType = this.isCollapsedOnInit() ? FoldingType.Collapsed : FoldingType.Expanded;
     } else if (Array.isArray(this._children)) {
       this.node._foldingType = FoldingType.Empty;
     } else {
@@ -511,6 +539,16 @@ export class Tree {
     return '';
   }
 
+  private disableCollapseOnInit() {
+    if (this.node.settings) {
+      this.node.settings.isCollapsedOnInit = false;
+    }
+  }
+
+  public isCollapsedOnInit() {
+    return !!get(this.node.settings, 'isCollapsedOnInit');
+  }
+
   /**
    * Check that current tree is newly created (added by user via menu for example). Tree that was built from the TreeModel is not marked as new.
    * @returns {boolean} A flag whether the tree is new.
@@ -562,5 +600,21 @@ export class Tree {
    */
   public markAsModified(): void {
     this.node._status = TreeStatus.Modified;
+  }
+
+  /**
+   * Makes a clone of an underlying TreeModel instance
+   * @returns {TreeModel} a clone of an underlying TreeModel instance
+   */
+  public toTreeModel(): TreeModel {
+    const model = defaultsDeep(this.isLeaf() ? {} : {children: []}, this.node);
+
+    if (this.children) {
+      this.children.forEach(child => {
+        model.children.push(child.toTreeModel());
+      });
+    }
+
+    return model;
   }
 }

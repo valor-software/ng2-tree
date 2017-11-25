@@ -1,4 +1,16 @@
-import { Component, ElementRef, TemplateRef, Inject, Input, OnDestroy, OnInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  TemplateRef,
+    ViewChild
+} from '@angular/core';
+
 import * as TreeTypes from './tree.types';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
@@ -47,13 +59,19 @@ import { get, has } from './utils/fn.utils';
 
         <div class="node-left-menu" *ngIf="tree.hasLeftMenu()" (click)="showLeftMenu($event)" [innerHTML]="tree.leftMenuTemplate">
         </div>
-        <node-menu *ngIf="tree.hasLeftMenu() && isLeftMenuVisible"
+        <node-menu *ngIf="tree.hasLeftMenu() && isLeftMenuVisible && !hasCustomMenu()"
           (menuItemSelected)="onMenuItemSelected($event)">
         </node-menu>
       </div>
 
-      <node-menu *ngIf="isRightMenuVisible" (menuItemSelected)="onMenuItemSelected($event)"></node-menu>
+      <node-menu *ngIf="isRightMenuVisible && !hasCustomMenu()"
+           (menuItemSelected)="onMenuItemSelected($event)">
+      </node-menu>
 
+      <node-menu *ngIf="hasCustomMenu() && (isRightMenuVisible || isLeftMenuVisible)"
+           [menuItems]="tree.menuItems"
+           (menuItemSelected)="onMenuItemSelected($event)">
+      </node-menu>
       <ng-template [ngIf]="tree.isNodeExpanded()">
         <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child" [template]="template" [settings]="settings"></tree-internal>
       </ng-template>
@@ -84,9 +102,10 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  public constructor( @Inject(NodeMenuService) private nodeMenuService: NodeMenuService,
-    @Inject(TreeService) public treeService: TreeService,
-    @Inject(ElementRef) public element: ElementRef) {
+
+  public constructor(private nodeMenuService: NodeMenuService,
+                     public treeService: TreeService,
+                     public element: ElementRef) {
   }
 
   public ngOnInit(): void {
@@ -94,6 +113,7 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
     if (get(this.tree, 'node.id', '')) {
       this.treeService.setController(this.tree.node.id, this.controller);
     }
+
 
     this.settings = this.settings || { rootIsVisible: true, showCheckboxes: false, enableCheckboxes: true };
 
@@ -198,6 +218,9 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
       case NodeMenuItemAction.Remove:
         this.onRemoveSelected();
         break;
+      case NodeMenuItemAction.Custom:
+        this.treeService.fireMenuItemSelected(this.tree, e.nodeMenuItemSelected);
+        break;
       default:
         throw new Error(`Chosen menu item doesn't exist`);
     }
@@ -289,5 +312,9 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
     }
+
+  public hasCustomMenu(): boolean {
+    return this.tree.hasCustomMenu();
+
   }
 }

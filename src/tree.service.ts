@@ -8,16 +8,17 @@ import {
   NodeSelectedEvent,
   LoadNextLevelEvent,
   NodeCheckedEvent,
-  NodeUncheckedEvent
-} from './tree.events';
+  NodeUncheckedEvent,
+  MenuItemSelectedEvent} from './tree.events';
 import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import { NodeDraggableService } from './draggable/node-draggable.service';
 import { NodeDraggableEvent } from './draggable/draggable.events';
-import {isEmpty} from './utils/fn.utils';
+import { isEmpty } from './utils/fn.utils';
 
 @Injectable()
 export class TreeService {
@@ -28,6 +29,7 @@ export class TreeService {
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
   public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
   public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
+  public menuItemSelected$: Subject<MenuItemSelectedEvent> = new Subject<MenuItemSelectedEvent>();
   public loadNextLevel$: Subject<LoadNextLevelEvent> = new Subject<LoadNextLevelEvent>();
   public nodeChecked$ : Subject<NodeCheckedEvent> = new Subject<NodeCheckedEvent>();
   public nodeUnchecked$ : Subject<NodeUncheckedEvent> = new Subject<NodeUncheckedEvent>();
@@ -60,6 +62,10 @@ export class TreeService {
 
   public fireNodeMoved(tree: Tree, parent: Tree): void {
     this.nodeMoved$.next(new NodeMovedEvent(tree, parent));
+  }
+
+  public fireMenuItemSelected(tree: Tree, selectedItem: string): void {
+    this.menuItemSelected$.next(new MenuItemSelectedEvent(tree, selectedItem));
   }
 
   public fireNodeSwitchFoldingType(tree: Tree): void {
