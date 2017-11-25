@@ -1175,10 +1175,14 @@ var NodeMenuService = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export noop */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_filter__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/filter.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_observable_of__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/of.js");
 
 
+// This forces angular compiler to generate a "rxjs-imports.metadata.json"
+// with a valid metadata instead of "[null]"
+var noop = function () { };
 
 
 /***/ }),
