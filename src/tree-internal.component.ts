@@ -312,6 +312,7 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
     }
+  }
 
   public hasCustomMenu(): boolean {
     return this.tree.hasCustomMenu();

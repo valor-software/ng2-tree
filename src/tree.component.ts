@@ -7,8 +7,6 @@ import * as TreeTypes from './tree.types';
 
 import { NodeEvent, NodeCheckedEvent, NodeUncheckedEvent,MenuItemSelectedEvent } from './tree.events';
 
-import { NodeEvent, MenuItemSelectedEvent } from './tree.events';
-
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
 import { Subscription } from 'rxjs/Subscription';
