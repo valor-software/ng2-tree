@@ -342,7 +342,7 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
 
   public updateIndeterminateState(): void {
 
-    setTimeout(() => { //calling setTimeout so the value of isChecked will be updated and after that I'll check the children status.
+    setTimeout(() => { // Calling setTimeout so the value of isChecked will be updated and after that I'll check the children status.
       this.updateIndeterminateStateInternal();
     }, 1)
   };
