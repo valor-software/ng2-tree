@@ -9,7 +9,8 @@ import {
   LoadNextLevelEvent,
   NodeCheckedEvent,
   NodeUncheckedEvent,
-  MenuItemSelectedEvent} from './tree.events';
+  MenuItemSelectedEvent,
+NodeIndeterminateEvent} from './tree.events';
 import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
@@ -33,6 +34,7 @@ export class TreeService {
   public loadNextLevel$: Subject<LoadNextLevelEvent> = new Subject<LoadNextLevelEvent>();
   public nodeChecked$ : Subject<NodeCheckedEvent> = new Subject<NodeCheckedEvent>();
   public nodeUnchecked$ : Subject<NodeUncheckedEvent> = new Subject<NodeUncheckedEvent>();
+  public nodeIndeterminate$ : Subject<NodeIndeterminateEvent> = new Subject<NodeIndeterminateEvent>();
 
   private controllers: Map<string | number, TreeController> = new Map();
 
@@ -139,5 +141,9 @@ export class TreeService {
       }
 
       return shouldLoadNextLevel;
+  }
+
+  public fireNodeIndeterminate(tree: Tree) : void {
+    this.nodeIndeterminate$.next(new NodeIndeterminateEvent(tree));
   }
 }

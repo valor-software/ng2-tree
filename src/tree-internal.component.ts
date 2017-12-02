@@ -8,7 +8,7 @@ import {
   OnInit,
   SimpleChanges,
   TemplateRef,
-    ViewChild
+  ViewChild
 } from '@angular/core';
 
 import * as TreeTypes from './tree.types';
@@ -17,7 +17,7 @@ import { TreeController } from './tree-controller';
 import { NodeMenuService } from './menu/node-menu.service';
 import { NodeMenuItemAction, NodeMenuItemSelectedEvent } from './menu/menu.events';
 import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.events';
-import { NodeRemovedEvent, NodeCheckedEvent } from './tree.events'
+import { NodeEvent, NodeRemovedEvent, NodeCheckedEvent, NodeIndeterminateEvent } from './tree.events'
 import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
@@ -104,8 +104,8 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
 
 
   public constructor(private nodeMenuService: NodeMenuService,
-                     public treeService: TreeService,
-                     public element: ElementRef) {
+    public treeService: TreeService,
+    public element: ElementRef) {
   }
 
   public ngOnInit(): void {
@@ -139,6 +139,28 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
         } else {
           this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, this.tree);
         }
+      }));
+
+    this.subscriptions.push(this.treeService.nodeChecked$
+      .filter((e: NodeCheckedEvent) => this.eventContainsId(e) && this.tree.children
+        && this.tree.children.some((child: Tree) => child.id === e.node.id))
+      .subscribe((e: NodeCheckedEvent) => {
+        this.updateIndeterminateState();
+      }));
+
+
+    this.subscriptions.push(this.treeService.nodeUnchecked$
+      .filter((e: NodeCheckedEvent) => this.eventContainsId(e) && this.tree.children
+        && this.tree.children.some((child: Tree) => child.id === e.node.id))
+      .subscribe((e: NodeCheckedEvent) => {
+        this.updateIndeterminateState();
+      }));
+
+
+    this.subscriptions.push(this.treeService.nodeIndeterminate$
+      .filter((e: NodeIndeterminateEvent) => this.eventContainsId(e) &&
+        this.tree.children && this.tree.children.some((child: Tree) => child.id === e.node.id))
+      .subscribe((e: NodeIndeterminateEvent) => {
       }));
   }
 
@@ -275,6 +297,10 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
     return this.tree.isRoot() && !this.settings.rootIsVisible;
   }
 
+  public hasCustomMenu(): boolean {
+    return this.tree.hasCustomMenu();
+  }
+
   public NodeCheckSatusChanged() {
     if (!this.isChecked) {
       this.onNodeChecked();
@@ -314,8 +340,44 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public hasCustomMenu(): boolean {
-    return this.tree.hasCustomMenu();
+  public updateIndeterminateState(): void {
 
+    setTimeout(() => { //calling setTimeout so the value of isChecked will be updated and after that I'll check the children status.
+      this.updateIndeterminateStateInternal();
+    }, 1)
+  };
+
+
+  private updateIndeterminateStateInternal(): void {
+    const checkedChildren = this.tree.children.filter(child => child.isChecked).length;
+
+    if (checkedChildren === 0) {
+      this._checkboxElement.nativeElement.indeterminate = false;
+      this.isChecked = false;
+      this.tree.isChecked = false;
+      this.treeService.fireNodeUnchecked(this.tree)
+    }
+    else if (checkedChildren === this.tree.children.length) {
+      this._checkboxElement.nativeElement.indeterminate = false;
+      this.isChecked = true;
+      this.tree.isChecked = true;
+      this.treeService.fireNodeChecked(this.tree)
+    }
+    else {
+      this.setNodeInderminated();
+    }
+  }
+
+  private setNodeInderminated(): void {
+    this._checkboxElement.nativeElement.indeterminate = true;
+    this.treeService.fireNodeIndeterminate(this.tree);
+  }
+
+  private eventContainsId(event: NodeEvent): boolean {
+    if (!event.node.id) {
+      console.log('Checking feature requires a well known id for every node, lease prvide a unique id.')
+      return false;
+    }
+    return true;
   }
 }
