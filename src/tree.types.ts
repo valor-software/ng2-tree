@@ -27,6 +27,7 @@ export interface TreeModel {
   _status?: TreeStatus;
   _foldingType?: FoldingType;
   [additionalData: string]: any;
+  checked?: boolean;
 }
 
 export interface CssClasses {
@@ -111,6 +112,8 @@ export interface Ng2TreeSettings {
    * @type boolean
    */
   rootIsVisible?: boolean;
+  showCheckboxes?: boolean;
+  enableCheckboxes?: boolean;
 }
 
 export enum TreeStatus {
