@@ -27,7 +27,6 @@ export interface TreeModel {
   _status?: TreeStatus;
   _foldingType?: FoldingType;
   [additionalData: string]: any;
-  checked?: boolean;
 }
 
 export interface CssClasses {
@@ -95,25 +94,27 @@ export class TreeModelSettings {
 
   public isCollapsedOnInit?: boolean;
 
+  public checked?: boolean;
+
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
     return defaultsDeep(
       {},
       get(sourceA, 'settings'),
       get(sourceB, 'settings'),
-      {static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false}
+      {static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false, checked: false}
     );
   }
 }
 
-export interface Ng2TreeSettings {
+export class Ng2TreeSettings {
   /**
    * Indicates root visibility in the tree. When true - root is invisible.
    * @name Ng2TreeSettings#rootIsVisible
    * @type boolean
    */
-  rootIsVisible?: boolean;
-  showCheckboxes?: boolean;
-  enableCheckboxes?: boolean;
+  rootIsVisible? = true;
+  showCheckboxes? = false;
+  enableCheckboxes? = true;
 }
 
 export enum TreeStatus {

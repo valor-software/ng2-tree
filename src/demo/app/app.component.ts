@@ -80,7 +80,7 @@ declare const alertify: any;
           <button button (click)="addChildFFS(78, { value: 'Voodo People'})">Add a child with name 'Voodo People' to
             '2Cellos'
           </button>
-          <button button (click)="checkFolder(52)">Check Music folder	
+          <button button (click)="checkFolder(52)">Check Music folder
           </button>
           <button button (click)="uncheckFolder(52)">Uncheck Music folder</button>
         </div>
@@ -318,7 +318,10 @@ export class AppComponent implements OnInit {
           {
             value: 'lost+found',
             id: 22,
-            children: []
+            children: [],
+            settings: {
+              checked: true
+            }
           },
           { value: 'abi-4.4.0-57-generic', id: 23 },
           { value: 'config-4.4.0-57-generic', id: 24 },

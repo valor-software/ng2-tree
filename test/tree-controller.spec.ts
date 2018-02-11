@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Component, DebugElement, ElementRef, ViewChild } from '@angular/core';
 import { TreeInternalComponent } from '../src/tree-internal.component';
@@ -14,6 +14,8 @@ import { NodeEditableDirective } from '../src/editable/node-editable.directive';
 import { TreeStatus } from '../src/tree.types';
 import * as EventUtils from '../src/utils/event.utils';
 import { SafeHtmlPipe } from '../src/utils/safe-html.pipe';
+import { Ng2TreeSettings, Tree } from '../index';
+import { isEmpty } from '../src/utils/fn.utils';
 
 let fixture: ComponentFixture<TestComponent>;
 let lordTreeInstance: TreeComponent;
@@ -52,15 +54,19 @@ const treeLord: TreeModel = {
 
 @Component({
   template: `
-  <div><tree id="lord" #lordTreeComponent [tree]="treeLord"></tree></div>
+  <div><tree id="lord" #lordTreeComponent [tree]="treeLord" [settings]="settings"></tree></div>
 `
 })
 class TestComponent {
+  public settings = new Ng2TreeSettings();
   public treeLord: TreeModel = treeLord;
 
   @ViewChild('lordTreeInstance') public lordTreeComponent;
 
-  public constructor(public treeHolder: ElementRef) { }
+  public constructor(public treeHolder: ElementRef) {
+    this.settings.enableCheckboxes = true;
+    this.settings.showCheckboxes = true;
+  }
 }
 
 describe('TreeController', () => {
@@ -88,6 +94,72 @@ describe('TreeController', () => {
   it('should have properly set tree controller property', () => {
     expect(treeService.getController(lordInternalTreeInstance.tree.id)).toBeDefined();
   });
+
+  it('can check a node', () => {
+    const controller = treeService.getController(lordInternalTreeInstance.tree.id);
+    expect(controller.isChecked()).toBe(false);
+
+    controller.check();
+
+    fixture.detectChanges();
+
+    expect(controller.isChecked()).toBe(true);
+  });
+
+  it('can uncheck a node', () => {
+    const controller = treeService.getController(lordInternalTreeInstance.tree.id);
+    expect(controller.isChecked()).toBe(false);
+
+    controller.check();
+    fixture.detectChanges();
+
+    controller.uncheck();
+    fixture.detectChanges();
+
+    expect(controller.isChecked()).toBe(false);
+  });
+
+  it('checks all the children down the branch', () => {
+    const tree = lordInternalTreeInstance.tree;
+    const controller = treeService.getController(tree.id);
+
+    controller.check();
+    fixture.detectChanges();
+
+    const checkChildChecked = (children: Tree[], checked: boolean) =>
+      isEmpty(children) ? checked : children.every(child => child.checked && checkChildChecked(child.children, child.checked));
+
+    expect(checkChildChecked(tree.children, tree.checked)).toBe(true, 'All the children should be checked');
+  });
+
+  it('unchecks all the children down the branch', () => {
+    const tree = lordInternalTreeInstance.tree;
+    const controller = treeService.getController(tree.id);
+
+    controller.check();
+    fixture.detectChanges();
+
+    controller.uncheck();
+    fixture.detectChanges();
+
+    const checkChildChecked = (children: Tree[], checked: boolean) =>
+      isEmpty(children) ? checked : children.every(child => child.checked && checkChildChecked(child.children, child.checked));
+
+    expect(checkChildChecked(tree.children, tree.checked)).toBe(false, 'All the children should be unchecked');
+  });
+
+  it('detects indetermined node', fakeAsync(() => {
+    const tree = lordInternalTreeInstance.tree;
+    const controller = treeService.getController(tree.id);
+    const childController = treeService.getController(tree.children[0].id);
+
+    childController.check();
+    fixture.detectChanges();
+    tick();
+
+    expect(childController.isChecked()).toBe(true, 'Node should be checked');
+    expect(controller.isIndetermined()).toBe(true, 'Node should be in indetermined state');
+  }));
 
   it('knows when node is selected', () => {
     const event = jasmine.createSpyObj('e', ['preventDefault']);

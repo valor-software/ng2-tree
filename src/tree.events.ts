@@ -79,7 +79,7 @@ export class NodeUncheckedEvent extends NodeEvent {
   }
 }
 
-export class NodeIndeterminateEvent extends NodeEvent {
+export class NodeIndeterminedEvent extends NodeEvent {
   public constructor(node: Tree) {
     super(node);
   }

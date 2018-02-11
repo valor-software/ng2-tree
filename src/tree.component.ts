@@ -5,7 +5,7 @@ import {
 import { TreeService } from './tree.service';
 import * as TreeTypes from './tree.types';
 
-import { NodeEvent, NodeCheckedEvent, NodeUncheckedEvent,MenuItemSelectedEvent } from './tree.events';
+import { NodeEvent, NodeCheckedEvent, NodeUncheckedEvent, MenuItemSelectedEvent } from './tree.events';
 
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
@@ -115,10 +115,13 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
       this.loadNextLevel.emit(e);
     }));
 
-    this.subscriptions.push(this.treeService.nodeChecked$.subscribe((e: NodeCheckedEvent) => this.nodeChecked.emit(e)));
+    this.subscriptions.push(this.treeService.nodeChecked$.subscribe((e: NodeCheckedEvent) => {
+      this.nodeChecked.emit(e);
+    }));
 
-    this.subscriptions.push(this.treeService.nodeUnchecked$.subscribe((e: NodeUncheckedEvent) => this.nodeChecked.emit(e)));
-
+    this.subscriptions.push(this.treeService.nodeUnchecked$.subscribe((e: NodeUncheckedEvent) => {
+      this.nodeUnchecked.emit(e);
+    }));
   }
 
   public getController(): TreeController {

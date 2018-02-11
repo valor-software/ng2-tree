@@ -49,7 +49,7 @@
     "webdriver-update": "node ./node_modules/protractor/bin/webdriver-manager update"
   },
   "devDependencies": {
-    "@angular/cli": "1.5.4",
+    "@angular/cli": "1.6.8",
     "@angular/common": "5.0.2",
     "@angular/compiler": "5.0.2",
     "@angular/compiler-cli": "5.0.2",
