@@ -1,10 +1,10 @@
-import { TreeService } from './tree.service';
-import { Tree } from './tree';
-import { TreeModel } from './tree.types';
-import { NodeMenuItemAction } from './menu/menu.events';
-import { TreeInternalComponent } from './tree-internal.component';
-import { MouseButtons } from './utils/event.utils';
-import { get } from './utils/fn.utils';
+import {TreeService} from './tree.service';
+import {Tree} from './tree';
+import {TreeModel} from './tree.types';
+import {NodeMenuItemAction} from './menu/menu.events';
+import {TreeInternalComponent} from './tree-internal.component';
+import {MouseButtons} from './utils/event.utils';
+import {get} from './utils/fn.utils';
 
 export class TreeController {
   private tree: Tree;

@@ -1,5 +1,5 @@
-import { Tree } from '../tree';
-import { ElementRef } from '@angular/core';
+import {Tree} from '../tree';
+import {ElementRef} from '@angular/core';
 
 export class CapturedNode {
   public constructor(private anElement: ElementRef,
