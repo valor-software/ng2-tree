@@ -4,7 +4,9 @@ import {
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import * as TreeTypes from './tree.types';
-import { NodeEvent, MenuItemSelectedEvent } from './tree.events';
+
+import { NodeEvent, NodeCheckedEvent, NodeUncheckedEvent, MenuItemSelectedEvent } from './tree.events';
+
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
 import { Subscription } from 'rxjs/Subscription';
@@ -15,7 +17,7 @@ import { Subscription } from 'rxjs/Subscription';
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit, OnChanges, OnDestroy {
-  private static EMPTY_TREE: Tree = new Tree({value: ''});
+  private static EMPTY_TREE: Tree = new Tree({ value: '' });
 
   /* tslint:disable:no-input-rename */
   @Input('tree')
@@ -47,10 +49,16 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
   public nodeCollapsed: EventEmitter<any> = new EventEmitter();
 
   @Output()
-  public menuItemSelected: EventEmitter<any> = new EventEmitter();
+
+  public loadNextLevel: EventEmitter<any> = new EventEmitter();
 
   @Output()
-  public loadNextLevel: EventEmitter<any> = new EventEmitter();
+  public nodeChecked: EventEmitter<NodeCheckedEvent> = new EventEmitter();
+
+  @Output()
+  public nodeUnchecked: EventEmitter<NodeUncheckedEvent> = new EventEmitter();
+
+  public menuItemSelected: EventEmitter<any> = new EventEmitter();
 
   public tree: Tree;
   @ViewChild('rootComponent') public rootComponent;
@@ -59,7 +67,7 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  public constructor(@Inject(TreeService) private treeService: TreeService) {
+  public constructor( @Inject(TreeService) private treeService: TreeService) {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -105,6 +113,14 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
 
     this.subscriptions.push(this.treeService.loadNextLevel$.subscribe((e: NodeEvent) => {
       this.loadNextLevel.emit(e);
+    }));
+
+    this.subscriptions.push(this.treeService.nodeChecked$.subscribe((e: NodeCheckedEvent) => {
+      this.nodeChecked.emit(e);
+    }));
+
+    this.subscriptions.push(this.treeService.nodeUnchecked$.subscribe((e: NodeUncheckedEvent) => {
+      this.nodeUnchecked.emit(e);
     }));
   }
 

@@ -93,9 +93,11 @@ export class Tree {
 
   private buildTreeFromModel(model: TreeModel, parent: Tree, isBranch: boolean): void {
     this.parent = parent;
-    this.node = Object.assign(omit(model, 'children') as TreeModel, {
-      settings: TreeModelSettings.merge(model, get(parent, 'node') as TreeModel)
-    }, { emitLoadNextLevel: model.emitLoadNextLevel === true }) as TreeModel;
+    this.node = Object.assign(
+      omit(model, 'children') as TreeModel,
+      { settings: TreeModelSettings.merge(model, get(parent, 'node')) },
+      { emitLoadNextLevel: model.emitLoadNextLevel === true }
+    ) as TreeModel;
 
     if (isFunction(this.node.loadChildren)) {
       this._loadChildren = this.node.loadChildren;
@@ -224,6 +226,30 @@ export class Tree {
    */
   public get value(): any {
     return this.node.value;
+  }
+
+  public set checked(checked: boolean) {
+    this.node.settings = Object.assign({}, this.node.settings, { checked });
+  }
+
+  public get checked(): boolean {
+    return !!get(this.node.settings, 'checked');
+  }
+
+  public get checkedChildren(): Tree[] {
+    return this.hasLoadedChildern() ? this.children.filter(child => child.checked) : [];
+  }
+
+  hasLoadedChildern() {
+    return !isEmpty(this.children);
+  }
+
+  loadedChildrenAmount() {
+    return size(this.children);
+  }
+
+  checkedChildrenAmount() {
+    return size(this.checkedChildren);
   }
 
   /**

@@ -66,3 +66,21 @@ export class LoadNextLevelEvent extends NodeEvent {
     super(node);
   }
 }
+
+export class NodeCheckedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
+export class NodeUncheckedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
+export class NodeIndeterminedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}

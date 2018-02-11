@@ -179,7 +179,7 @@ describe('LeftMenu-TreeInternalComponent', () => {
     expect(masterComponentInstance.isLeftMenuVisible).toEqual(true);
     expect(event.preventDefault).toHaveBeenCalled();
     expect(nodeMenuService.hideMenuForAllNodesExcept).toHaveBeenCalledTimes(1);
-    expect(nodeMenuService.hideMenuForAllNodesExcept).toHaveBeenCalledWith(masterComponentInstance.element);
+    expect(nodeMenuService.hideMenuForAllNodesExcept).toHaveBeenCalledWith(masterComponentInstance.nodeElementRef);
   });
 
   it('shouldn`t have a left menu on node and it`s child by default', () => {
@@ -580,8 +580,8 @@ describe('LeftMenu-TreeInternalComponent', () => {
       expect(staticInternalTreeEl.componentInstance.tree.children[0].value).toEqual('Eyes');
       expect(staticInternalTreeEl.componentInstance.tree.children[2].value).toEqual('Lips');
 
-      const capturedNode = new CapturedNode(eyesEl.componentInstance.element, eyesEl.componentInstance.tree);
-      nodeDraggableService.fireNodeDragged(capturedNode, lipsEl.componentInstance.element);
+      const capturedNode = new CapturedNode(eyesEl.componentInstance.nodeElementRef, eyesEl.componentInstance.tree);
+      nodeDraggableService.fireNodeDragged(capturedNode, lipsEl.componentInstance.nodeElementRef);
 
       fixture.detectChanges();
 
@@ -615,8 +615,8 @@ describe('LeftMenu-TreeInternalComponent', () => {
       expect(staticInternalTreeEl.componentInstance.tree.children[1].children[0].value).toEqual('Eyelash');
       expect(staticInternalTreeEl.componentInstance.tree.children[1].children[1].value).toEqual('Eyebow');
 
-      const capturedNode = new CapturedNode(eyelashEl.componentInstance.element, eyelashEl.componentInstance.tree);
-      nodeDraggableService.fireNodeDragged(capturedNode, eyebowEl.componentInstance.element);
+      const capturedNode = new CapturedNode(eyelashEl.componentInstance.nodeElementRef, eyelashEl.componentInstance.tree);
+      nodeDraggableService.fireNodeDragged(capturedNode, eyebowEl.componentInstance.nodeElementRef);
 
       fixture.detectChanges();
 

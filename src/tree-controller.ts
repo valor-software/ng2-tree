@@ -4,6 +4,7 @@ import { TreeModel } from './tree.types';
 import { NodeMenuItemAction } from './menu/menu.events';
 import { TreeInternalComponent } from './tree-internal.component';
 import { MouseButtons } from './utils/event.utils';
+import { get } from './utils/fn.utils';
 
 export class TreeController {
   private tree: Tree;
@@ -92,6 +93,21 @@ export class TreeController {
 
   public startRenaming(): void {
     this.tree.markAsBeingRenamed();
+  }
 
+  public check(): void {
+    this.component.onNodeChecked();
+  }
+
+  public uncheck(): void {
+    this.component.onNodeUnchecked();
+  }
+
+  public isChecked(): boolean {
+    return this.tree.checked;
+  }
+
+  public isIndetermined(): boolean {
+    return get(this.component, 'checkboxElementRef.nativeElement.indeterminate');
   }
 }
