@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Ng2TreeSettings, NodeEvent, RenamableNode, TreeModel } from '../../../index';
-import { NodeMenuItemAction } from '../../menu/menu.events';
-import { MenuItemSelectedEvent } from '../../tree.events';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Ng2TreeSettings, NodeEvent, RenamableNode, TreeModel} from '../../../index';
+import {NodeMenuItemAction} from '../../menu/menu.events';
+import {MenuItemSelectedEvent} from '../../tree.events';
 
 declare const alertify: any;
 
@@ -14,6 +14,7 @@ declare const alertify: any;
         <div class="tree-content">
           <tree #treeFonts
                 [tree]="fonts"
+                [settings]="{rootIsVisible: false}"
                 (menuItemSelected)="onMenuItemSelected($event)"
                 (nodeRemoved)="onNodeRemoved($event)"
                 (nodeRenamed)="onNodeRenamed($event)"
@@ -31,7 +32,7 @@ declare const alertify: any;
         <div class="tree-content">
           <tree
             [tree]="pls"
-            [settings]="settings"
+            [settings]="disabledCheckboxesSettings"
             (nodeRemoved)="onNodeRemoved($event)"
             (nodeRenamed)="onNodeRenamed($event)"
             (nodeSelected)="onNodeSelected($event)"
@@ -54,7 +55,8 @@ declare const alertify: any;
                 (nodeMoved)="onNodeMoved($event)"
                 (nodeCreated)="onNodeFFSCreated($event)"
                 (nodeExpanded)="onNodeExpanded($event)"
-                (nodeCollapsed)="onNodeCollapsed($event)">
+                (nodeCollapsed)="onNodeCollapsed($event)"
+                [settings]="settings">
           </tree>
         </div>
 
@@ -67,18 +69,13 @@ declare const alertify: any;
           <button button (click)="handleActionOnFFS(12, 'remove')">Remove 'nano'</button>
           <button button (click)="handleActionOnFFS(52, 'reloadChildren')">Reload Music's children</button>
           <button button (click)="setChildrenFFS(36)">Set 'etc' children</button>
-          <button button (click)="addChildFFS(2, { value: 'ping'})">Add a child with name 'ping' to 'bin'</button>
-          <button button (click)="addChildFFS(22, { value: 'lost'})">Add a child with name 'lost' to 'lost+found'
-          </button>
-          <button button (click)="addChildFFS(22, { value: 'found', children: []})">Add a child with name 'found' to
-            'lost+found'
-          </button>
-          <button button (click)="addChildFFS(36, { value: 'found', children: []})">Add a child with name 'found' to
-            'etc'
-          </button>
-          <button button (click)="addChildFFS(78, { value: 'Voodo People'})">Add a child with name 'Voodo People' to
-            '2Cellos'
-          </button>
+          <button button (click)="addChildFFS(2, {value: 'ping'})">Add a child with name 'ping' to 'bin'</button>
+          <button button (click)="addChildFFS(22, {value: 'lost'})">Add a child with name 'lost' to 'lost+found'</button>
+          <button button (click)="addChildFFS(22, {value: 'found', children: []})">Add a child with name 'found' to 'lost+found'</button>
+          <button button (click)="addChildFFS(36, {value: 'found', children: []})">Add a child with name 'found' to 'etc'</button>
+          <button button (click)="addChildFFS(78, {value: 'Voodo People'})">Add a child with name 'Voodo People' to '2Cellos'</button>
+          <button button (click)="checkFolder(52)">Check Music folder</button>
+          <button button (click)="uncheckFolder(52)">Uncheck Music folder</button>
         </div>
       </div>
       <div class="tree-container">
@@ -175,11 +172,22 @@ declare const alertify: any;
 })
 export class AppComponent implements OnInit {
   public settings: Ng2TreeSettings = {
-    rootIsVisible: false
+    rootIsVisible: false,
+    showCheckboxes: true,
   };
+
+  public disabledCheckboxesSettings: Ng2TreeSettings = {
+    rootIsVisible: false,
+    showCheckboxes: true,
+    enableCheckboxes: false
+  };
+
 
   public fonts: TreeModel = {
     value: 'Fonts',
+    settings: {
+      isCollapsedOnInit: true
+    },
     children: [
       {
         value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
@@ -208,10 +216,10 @@ export class AppComponent implements OnInit {
         value: 'Sans-serif (Right click me - I have a custom menu)',
         id: 11,
         settings: {
-        menuItems: [
-            { action: NodeMenuItemAction.Custom, name: 'Foo', cssClass: 'fa fa-arrow-right' },
-            { action: NodeMenuItemAction.Custom, name: 'Bar', cssClass: 'fa fa-arrow-right' },
-            { action: NodeMenuItemAction.Custom, name: 'Baz', cssClass: 'fa fa-arrow-right'}
+          menuItems: [
+            {action: NodeMenuItemAction.Custom, name: 'Foo', cssClass: 'fa fa-arrow-right'},
+            {action: NodeMenuItemAction.Custom, name: 'Bar', cssClass: 'fa fa-arrow-right'},
+            {action: NodeMenuItemAction.Custom, name: 'Baz', cssClass: 'fa fa-arrow-right'}
           ]
         },
         children: [
@@ -253,6 +261,7 @@ export class AppComponent implements OnInit {
     value: '/',
     id: 1,
     settings: {
+
       cssClasses: {
         expanded: 'fa fa-caret-down',
         collapsed: 'fa fa-caret-right',
@@ -269,6 +278,7 @@ export class AppComponent implements OnInit {
         value: 'bin',
         id: 2,
         children: [
+
           {value: 'bash', id: 3},
           {value: 'umount', id: 4},
           {value: 'cp', id: 5},
@@ -304,7 +314,10 @@ export class AppComponent implements OnInit {
           {
             value: 'lost+found',
             id: 22,
-            children: []
+            children: [],
+            settings: {
+              checked: true
+            }
           },
           {value: 'abi-4.4.0-57-generic', id: 23},
           {value: 'config-4.4.0-57-generic', id: 24},
@@ -475,31 +488,31 @@ export class AppComponent implements OnInit {
       {
         value: 'Web Application Icons',
         children: [
-          {value: 'calendar', icon: 'fa-calendar' },
-          {value: 'download', icon: 'fa-download' },
-          {value: 'group', icon: 'fa-group' },
-          {value: 'print', icon: 'fa-print' }
+          {value: 'calendar', icon: 'fa-calendar'},
+          {value: 'download', icon: 'fa-download'},
+          {value: 'group', icon: 'fa-group'},
+          {value: 'print', icon: 'fa-print'}
         ]
       },
       {
         value: 'Hand Icons',
         children: [
-          {value: 'pointer', icon: 'fa-hand-pointer-o' },
-          {value: 'grab', icon: 'fa-hand-rock-o' },
-          {value: 'thumbs up', icon: 'fa-thumbs-o-up ' },
-          {value: 'thumbs down', icon: 'fa-thumbs-o-down' }
+          {value: 'pointer', icon: 'fa-hand-pointer-o'},
+          {value: 'grab', icon: 'fa-hand-rock-o'},
+          {value: 'thumbs up', icon: 'fa-thumbs-o-up '},
+          {value: 'thumbs down', icon: 'fa-thumbs-o-down'}
         ]
       },
       {
         value: 'File Type Icons',
         children: [
-          {value: 'file', icon: 'fa-file-o' },
-          {value: 'audio', icon: 'fa-file-audio-o' },
-          {value: 'movie', icon: 'fa-file-movie-o ' },
-          {value: 'archive', icon: 'fa-file-zip-o' }
+          {value: 'file', icon: 'fa-file-o'},
+          {value: 'audio', icon: 'fa-file-audio-o'},
+          {value: 'movie', icon: 'fa-file-movie-o '},
+          {value: 'archive', icon: 'fa-file-zip-o'}
         ]
       },
-   ]
+    ]
   };
 
   private static logEvent(e: NodeEvent, message: string): void {
@@ -630,5 +643,25 @@ export class AppComponent implements OnInit {
     } else {
       console.log(`Controller is absent for a node with id: ${id}`);
     }
+  }
+
+  public checkFolder(id: number): void {
+    const treeController = this.treeFFS.getControllerByNodeId(id);
+    if (treeController) {
+      treeController.check();
+    } else {
+      console.log(`Controller is absent for a node with id: ${id}`);
+    }
+
+  }
+
+  public uncheckFolder(id: number): void {
+    const treeController = this.treeFFS.getControllerByNodeId(id);
+    if (treeController) {
+      treeController.uncheck();
+    } else {
+      console.log(`Controller is absent for a node with id: ${id}`);
+    }
+
   }
 }

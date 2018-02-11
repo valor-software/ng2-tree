@@ -1140,13 +1140,14 @@ describe('Tree', () => {
         isCollapsedOnInit: true,
         static: false,
         leftMenu: false,
-        rightMenu: true
+        rightMenu: true,
+        checked: true
       },
       children: [
         {
           value: 'child#1',
           emitLoadNextLevel: false,
-          settings: { isCollapsedOnInit: true, static: false, leftMenu: false, rightMenu: true } }
+          settings: { isCollapsedOnInit: true, static: false, leftMenu: false, rightMenu: true, checked: true } }
       ]
     };
 

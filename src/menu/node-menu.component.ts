@@ -1,9 +1,7 @@
-import {
-  Component, EventEmitter, Output, Input, Inject, OnDestroy, OnInit, ViewChild, Renderer2
-} from '@angular/core';
-import { NodeMenuService } from './node-menu.service';
-import { NodeMenuItemSelectedEvent, NodeMenuItemAction, NodeMenuAction } from './menu.events';
-import { isLeftButtonClicked, isEscapePressed } from '../utils/event.utils';
+import {Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
+import {NodeMenuService} from './node-menu.service';
+import {NodeMenuAction, NodeMenuItemAction, NodeMenuItemSelectedEvent} from './menu.events';
+import {isEscapePressed, isLeftButtonClicked} from '../utils/event.utils';
 
 @Component({
   selector: 'node-menu',

@@ -1,15 +1,15 @@
 import {
   Directive,
   ElementRef,
-  Input,
-  OnInit,
-  Output,
   EventEmitter,
   HostListener,
   Inject,
+  Input,
+  OnInit,
+  Output,
   Renderer2
 } from '@angular/core';
-import { NodeEditableEvent, NodeEditableEventAction } from './editable.events';
+import {NodeEditableEvent, NodeEditableEventAction} from './editable.events';
 
 @Directive({
   selector: '[nodeEditable]'

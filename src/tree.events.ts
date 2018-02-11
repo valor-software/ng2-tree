@@ -1,6 +1,5 @@
-import { Tree } from './tree';
-import { TreeController } from './tree-controller';
-import { RenamableNode } from './tree.types';
+import {Tree} from './tree';
+import {RenamableNode} from './tree.types';
 
 export class NodeEvent {
   public constructor(public node: Tree) {
@@ -62,6 +61,24 @@ export class MenuItemSelectedEvent extends NodeEvent {
 }
 
 export class LoadNextLevelEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
+export class NodeCheckedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
+export class NodeUncheckedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
+export class NodeIndeterminedEvent extends NodeEvent {
   public constructor(node: Tree) {
     super(node);
   }

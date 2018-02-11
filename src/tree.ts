@@ -1,21 +1,16 @@
-import {
-  isEmpty,
-  trim,
-  has,
-  isFunction,
-  get,
-  omit,
-  size,
-  once,
-  includes,
-  isNil,
-  defaultsDeep
-} from './utils/fn.utils';
+import {defaultsDeep, get, has, includes, isEmpty, isFunction, isNil, omit, once, size, trim} from './utils/fn.utils';
 
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings, ChildrenLoadingFunction } from './tree.types';
-import { NodeMenuItem } from './menu/node-menu.component';
+import {Observable} from 'rxjs/Observable';
+import {Observer} from 'rxjs/Observer';
+import {
+  ChildrenLoadingFunction,
+  FoldingType,
+  RenamableNode,
+  TreeModel,
+  TreeModelSettings,
+  TreeStatus
+} from './tree.types';
+import {NodeMenuItem} from './menu/node-menu.component';
 
 import * as uuidv4 from 'uuid/v4';
 
@@ -93,9 +88,11 @@ export class Tree {
 
   private buildTreeFromModel(model: TreeModel, parent: Tree, isBranch: boolean): void {
     this.parent = parent;
-    this.node = Object.assign(omit(model, 'children') as TreeModel, {
-      settings: TreeModelSettings.merge(model, get(parent, 'node') as TreeModel)
-    }, { emitLoadNextLevel: model.emitLoadNextLevel === true }) as TreeModel;
+    this.node = Object.assign(
+      omit(model, 'children') as TreeModel,
+      { settings: TreeModelSettings.merge(model, get(parent, 'node')) },
+      { emitLoadNextLevel: model.emitLoadNextLevel === true }
+    ) as TreeModel;
 
     if (isFunction(this.node.loadChildren)) {
       this._loadChildren = this.node.loadChildren;
@@ -224,6 +221,30 @@ export class Tree {
    */
   public get value(): any {
     return this.node.value;
+  }
+
+  public set checked(checked: boolean) {
+    this.node.settings = Object.assign({}, this.node.settings, { checked });
+  }
+
+  public get checked(): boolean {
+    return !!get(this.node.settings, 'checked');
+  }
+
+  public get checkedChildren(): Tree[] {
+    return this.hasLoadedChildern() ? this.children.filter(child => child.checked) : [];
+  }
+
+  hasLoadedChildern() {
+    return !isEmpty(this.children);
+  }
+
+  loadedChildrenAmount() {
+    return size(this.children);
+  }
+
+  checkedChildrenAmount() {
+    return size(this.checkedChildren);
   }
 
   /**
@@ -538,7 +559,7 @@ export class Tree {
     return '';
   }
 
-  private disableCollapseOnInit() {
+  public disableCollapseOnInit() {
     if (this.node.settings) {
       this.node.settings.isCollapsedOnInit = false;
     }

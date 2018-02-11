@@ -181,8 +181,8 @@ describe('TreeInternalComponent', () => {
     expect(masterInternalTreeEl.componentInstance.tree.children[0].value).toEqual('Servant#1');
     expect(masterInternalTreeEl.componentInstance.tree.children[1].value).toEqual('Servant#2');
 
-    const capturedNode = new CapturedNode(servant1InternalTreeEl.componentInstance.element, servant1InternalTreeEl.componentInstance.tree);
-    nodeDraggableService.fireNodeDragged(capturedNode, servant2InternalTreeEl.componentInstance.element);
+    const capturedNode = new CapturedNode(servant1InternalTreeEl.componentInstance.nodeElementRef, servant1InternalTreeEl.componentInstance.tree);
+    nodeDraggableService.fireNodeDragged(capturedNode, servant2InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
 
@@ -211,8 +211,8 @@ describe('TreeInternalComponent', () => {
     expect(lordInternalTreeEl.componentInstance.tree.children[0].value).toEqual('Disciple#1');
     expect(lordInternalTreeEl.componentInstance.tree.children[1].value).toEqual('Disciple#2');
 
-    const capturedNode = new CapturedNode(disciple1InternalTreeEl.componentInstance.element, disciple1InternalTreeEl.componentInstance.tree);
-    nodeDraggableService.fireNodeDragged(capturedNode, disciple2InternalTreeEl.componentInstance.element);
+    const capturedNode = new CapturedNode(disciple1InternalTreeEl.componentInstance.nodeElementRef, disciple1InternalTreeEl.componentInstance.tree);
+    nodeDraggableService.fireNodeDragged(capturedNode, disciple2InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
 
@@ -239,8 +239,8 @@ describe('TreeInternalComponent', () => {
     const internalTreeChildren = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     const servant2InternalTreeEl = internalTreeChildren[1];
 
-    const capturedNode = new CapturedNode(masterComponentInstance.element, masterComponentInstance.tree);
-    nodeDraggableService.fireNodeDragged(capturedNode, servant2InternalTreeEl.componentInstance.element);
+    const capturedNode = new CapturedNode(masterComponentInstance.nodeElementRef, masterComponentInstance.tree);
+    nodeDraggableService.fireNodeDragged(capturedNode, servant2InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
 
@@ -267,8 +267,8 @@ describe('TreeInternalComponent', () => {
     expect(subDisciple2InternalTreeEl.componentInstance.tree.value).toEqual('SubDisciple#2');
     expect(disciple2InternalTreeEl.componentInstance.tree.value).toEqual('Disciple#2');
 
-    const capturedNode = new CapturedNode(subDisciple1InternalTreeEl.componentInstance.element, subDisciple1InternalTreeEl.componentInstance.tree);
-    nodeDraggableService.fireNodeDragged(capturedNode, disciple2InternalTreeEl.componentInstance.element);
+    const capturedNode = new CapturedNode(subDisciple1InternalTreeEl.componentInstance.nodeElementRef, subDisciple1InternalTreeEl.componentInstance.tree);
+    nodeDraggableService.fireNodeDragged(capturedNode, disciple2InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
 
@@ -298,8 +298,8 @@ describe('TreeInternalComponent', () => {
     const masterInternalTreeChildren = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     const servant1InternalTreeEl = masterInternalTreeChildren[0];
 
-    const capturedNode = new CapturedNode(servant1InternalTreeEl.componentInstance.element, servant1InternalTreeEl.componentInstance.tree);
-    nodeDraggableService.fireNodeDragged(capturedNode, subDisciple1InternalTreeEl.componentInstance.element);
+    const capturedNode = new CapturedNode(servant1InternalTreeEl.componentInstance.nodeElementRef, servant1InternalTreeEl.componentInstance.tree);
+    nodeDraggableService.fireNodeDragged(capturedNode, subDisciple1InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
 
@@ -335,8 +335,8 @@ describe('TreeInternalComponent', () => {
     const masterInternalTreeChildren = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     const servant1InternalTreeEl = masterInternalTreeChildren[0];
 
-    const capturedNode = new CapturedNode(servant1InternalTreeEl.componentInstance.element, servant1InternalTreeEl.componentInstance.tree);
-    nodeDraggableService.fireNodeDragged(capturedNode, disciple1InternalTreeEl.componentInstance.element);
+    const capturedNode = new CapturedNode(servant1InternalTreeEl.componentInstance.nodeElementRef, servant1InternalTreeEl.componentInstance.tree);
+    nodeDraggableService.fireNodeDragged(capturedNode, disciple1InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
 
@@ -473,8 +473,8 @@ describe('TreeInternalComponent', () => {
       expect(lipsEl.componentInstance.tree.value).toEqual('Lips');
       expect(lipsEl.componentInstance.tree.positionInParent).toEqual(1);
 
-      const capturedNode = new CapturedNode(eyesEl.componentInstance.element, eyesEl.componentInstance.tree);
-      nodeDraggableService.fireNodeDragged(capturedNode, lipsEl.componentInstance.element);
+      const capturedNode = new CapturedNode(eyesEl.componentInstance.nodeElementRef, eyesEl.componentInstance.tree);
+      nodeDraggableService.fireNodeDragged(capturedNode, lipsEl.componentInstance.nodeElementRef);
 
       fixture.detectChanges();
 

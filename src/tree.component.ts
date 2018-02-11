@@ -1,13 +1,25 @@
 import {
-  Input, Component, OnInit, EventEmitter, Output, Inject, OnChanges, SimpleChanges, ViewChild,
-  OnDestroy, TemplateRef, ContentChild
+  Component,
+  ContentChild,
+  EventEmitter,
+  Inject,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
-import { TreeService } from './tree.service';
+import {TreeService} from './tree.service';
 import * as TreeTypes from './tree.types';
-import { NodeEvent, MenuItemSelectedEvent } from './tree.events';
-import { Tree } from './tree';
-import { TreeController } from './tree-controller';
-import { Subscription } from 'rxjs/Subscription';
+
+import {MenuItemSelectedEvent, NodeCheckedEvent, NodeEvent, NodeUncheckedEvent} from './tree.events';
+
+import {Tree} from './tree';
+import {TreeController} from './tree-controller';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'tree',
@@ -15,7 +27,7 @@ import { Subscription } from 'rxjs/Subscription';
   providers: [TreeService]
 })
 export class TreeComponent implements OnInit, OnChanges, OnDestroy {
-  private static EMPTY_TREE: Tree = new Tree({value: ''});
+  private static EMPTY_TREE: Tree = new Tree({ value: '' });
 
   /* tslint:disable:no-input-rename */
   @Input('tree')
@@ -47,15 +59,24 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
   public nodeCollapsed: EventEmitter<any> = new EventEmitter();
 
   @Output()
-  public menuItemSelected: EventEmitter<any> = new EventEmitter();
-
-  @Output()
   public loadNextLevel: EventEmitter<any> = new EventEmitter();
 
-  public tree: Tree;
-  @ViewChild('rootComponent') public rootComponent;
+  @Output()
+  public nodeChecked: EventEmitter<NodeCheckedEvent> = new EventEmitter();
 
-  @ContentChild(TemplateRef) public template;
+  @Output()
+  public nodeUnchecked: EventEmitter<NodeUncheckedEvent> = new EventEmitter();
+
+  @Output()
+  public menuItemSelected: EventEmitter<any> = new EventEmitter();
+
+  public tree: Tree;
+
+  @ViewChild('rootComponent')
+  public rootComponent;
+
+  @ContentChild(TemplateRef)
+  public template;
 
   private subscriptions: Subscription[] = [];
 
@@ -105,6 +126,14 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
 
     this.subscriptions.push(this.treeService.loadNextLevel$.subscribe((e: NodeEvent) => {
       this.loadNextLevel.emit(e);
+    }));
+
+    this.subscriptions.push(this.treeService.nodeChecked$.subscribe((e: NodeCheckedEvent) => {
+      this.nodeChecked.emit(e);
+    }));
+
+    this.subscriptions.push(this.treeService.nodeUnchecked$.subscribe((e: NodeUncheckedEvent) => {
+      this.nodeUnchecked.emit(e);
     }));
   }
 

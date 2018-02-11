@@ -1,7 +1,7 @@
-import { Directive, ElementRef, Input, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { NodeDraggableService } from './node-draggable.service';
-import { CapturedNode } from './captured-node';
-import { Tree } from '../tree';
+import {Directive, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {NodeDraggableService} from './node-draggable.service';
+import {CapturedNode} from './captured-node';
+import {Tree} from '../tree';
 
 @Directive({
   selector: '[nodeDraggable]'
@@ -43,7 +43,9 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   }
 
   private handleDragStart(e: DragEvent): any {
-    e.stopPropagation();
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
 
     this.nodeDraggableService.captureNode(new CapturedNode(this.nodeDraggable, this.tree));
 
@@ -71,7 +73,9 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
 
   private handleDrop(e: DragEvent): any {
     e.preventDefault();
-    e.stopPropagation();
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
 
     this.removeClass('over-drop-target');
 
