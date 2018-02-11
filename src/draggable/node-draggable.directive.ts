@@ -43,7 +43,9 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   }
 
   private handleDragStart(e: DragEvent): any {
-    e.stopPropagation();
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
 
     this.nodeDraggableService.captureNode(new CapturedNode(this.nodeDraggable, this.tree));
 
@@ -71,7 +73,9 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
 
   private handleDrop(e: DragEvent): any {
     e.preventDefault();
-    e.stopPropagation();
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
 
     this.removeClass('over-drop-target');
 
