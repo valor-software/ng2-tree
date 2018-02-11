@@ -1,21 +1,16 @@
-import {
-  isEmpty,
-  trim,
-  has,
-  isFunction,
-  get,
-  omit,
-  size,
-  once,
-  includes,
-  isNil,
-  defaultsDeep
-} from './utils/fn.utils';
+import {defaultsDeep, get, has, includes, isEmpty, isFunction, isNil, omit, once, size, trim} from './utils/fn.utils';
 
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import { TreeModel, RenamableNode, FoldingType, TreeStatus, TreeModelSettings, ChildrenLoadingFunction } from './tree.types';
-import { NodeMenuItem } from './menu/node-menu.component';
+import {Observable} from 'rxjs/Observable';
+import {Observer} from 'rxjs/Observer';
+import {
+  ChildrenLoadingFunction,
+  FoldingType,
+  RenamableNode,
+  TreeModel,
+  TreeModelSettings,
+  TreeStatus
+} from './tree.types';
+import {NodeMenuItem} from './menu/node-menu.component';
 
 import * as uuidv4 from 'uuid/v4';
 
@@ -564,7 +559,7 @@ export class Tree {
     return '';
   }
 
-  private disableCollapseOnInit() {
+  public disableCollapseOnInit() {
     if (this.node.settings) {
       this.node.settings.isCollapsedOnInit = false;
     }

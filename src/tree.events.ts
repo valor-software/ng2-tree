@@ -1,6 +1,5 @@
-import { Tree } from './tree';
-import { TreeController } from './tree-controller';
-import { RenamableNode } from './tree.types';
+import {Tree} from './tree';
+import {RenamableNode} from './tree.types';
 
 export class NodeEvent {
   public constructor(public node: Tree) {

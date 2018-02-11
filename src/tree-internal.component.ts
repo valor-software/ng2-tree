@@ -1,4 +1,5 @@
 import {
+  AfterContentChecked,
   Component,
   ElementRef,
   Input,
@@ -7,24 +8,22 @@ import {
   OnInit,
   SimpleChanges,
   TemplateRef,
-  ViewChild,
-  AfterViewInit,
-  AfterContentChecked
+  ViewChild
 } from '@angular/core';
 
 import * as TreeTypes from './tree.types';
-import { Tree } from './tree';
-import { TreeController } from './tree-controller';
-import { NodeMenuService } from './menu/node-menu.service';
-import { NodeMenuItemAction, NodeMenuItemSelectedEvent } from './menu/menu.events';
-import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.events';
-import { NodeEvent, NodeRemovedEvent, NodeCheckedEvent, NodeIndeterminedEvent } from './tree.events';
-import { TreeService } from './tree.service';
+import {Ng2TreeSettings} from './tree.types';
+import {Tree} from './tree';
+import {TreeController} from './tree-controller';
+import {NodeMenuService} from './menu/node-menu.service';
+import {NodeMenuItemAction, NodeMenuItemSelectedEvent} from './menu/menu.events';
+import {NodeEditableEvent, NodeEditableEventAction} from './editable/editable.events';
+import {NodeCheckedEvent, NodeEvent} from './tree.events';
+import {TreeService} from './tree.service';
 import * as EventUtils from './utils/event.utils';
-import { NodeDraggableEvent } from './draggable/draggable.events';
-import { Subscription } from 'rxjs/Subscription';
-import { get, has, size, isNil } from './utils/fn.utils';
-import { Ng2TreeSettings } from './tree.types';
+import {NodeDraggableEvent} from './draggable/draggable.events';
+import {Subscription} from 'rxjs/Subscription';
+import {get, isNil} from './utils/fn.utils';
 
 @Component({
   selector: 'tree-internal',
@@ -125,6 +124,10 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
 
     this.settings = this.settings || new Ng2TreeSettings();
     this.isReadOnly = !get(this.settings, 'enableCheckboxes', true);
+
+    if (this.tree.isRoot() && this.settings.rootIsVisible === false) {
+      this.tree.disableCollapseOnInit();
+    }
 
     this.subscriptions.push(this.nodeMenuService.hideMenuStream(this.nodeElementRef)
       .subscribe(() => {

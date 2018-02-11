@@ -1,26 +1,26 @@
 import {
+  LoadNextLevelEvent,
+  MenuItemSelectedEvent,
+  NodeCheckedEvent,
   NodeCollapsedEvent,
   NodeCreatedEvent,
   NodeExpandedEvent,
+  NodeIndeterminedEvent,
   NodeMovedEvent,
   NodeRemovedEvent,
   NodeRenamedEvent,
   NodeSelectedEvent,
-  LoadNextLevelEvent,
-  NodeCheckedEvent,
-  NodeUncheckedEvent,
-  MenuItemSelectedEvent,
-  NodeIndeterminedEvent
+  NodeUncheckedEvent
 } from './tree.events';
-import { RenamableNode } from './tree.types';
-import { Tree } from './tree';
-import { TreeController } from './tree-controller';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { ElementRef, Inject, Injectable } from '@angular/core';
-import { NodeDraggableService } from './draggable/node-draggable.service';
-import { NodeDraggableEvent } from './draggable/draggable.events';
-import { isEmpty } from './utils/fn.utils';
+import {RenamableNode} from './tree.types';
+import {Tree} from './tree';
+import {TreeController} from './tree-controller';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+import {ElementRef, Inject, Injectable} from '@angular/core';
+import {NodeDraggableService} from './draggable/node-draggable.service';
+import {NodeDraggableEvent} from './draggable/draggable.events';
+import {isEmpty} from './utils/fn.utils';
 
 @Injectable()
 export class TreeService {

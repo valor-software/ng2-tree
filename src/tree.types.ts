@@ -1,5 +1,5 @@
-import { get, defaultsDeep } from './utils/fn.utils';
-import { NodeMenuItem } from './menu/node-menu.component';
+import {defaultsDeep, get} from './utils/fn.utils';
+import {NodeMenuItem} from './menu/node-menu.component';
 
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
