@@ -67,6 +67,22 @@ export class TreeController {
     this.treeService.fireNodeCreated(newTree);
   }
 
+  public addChildAsync(newNode: TreeModel): Promise<Tree> {
+    if (this.tree.hasDeferredChildren() && !this.tree.childrenWereLoaded()) {
+      return Promise.reject(new Error('This node loads its children asynchronously, hence child cannot be added this way'));
+    }
+
+    const newTree = this.tree.createNode(Array.isArray(newNode.children), newNode);
+    this.treeService.fireNodeCreated(newTree);
+
+    // This will give TreeInternalComponent to set up a controller for the node
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(newTree);
+      })
+    })
+  }
+
   public changeNodeId(id: string | number) {
     if (!id) {
       throw Error('You should supply an id!');
