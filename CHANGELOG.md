@@ -1,3 +1,20 @@
+<a name="2.0.0-rc.5"></a>
+# [2.0.0-rc.5](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.4...v2.0.0-rc.5) (2018-02-11)
+
+
+### Bug Fixes
+
+* **dragndrop:** check whether stopPropagation is available on event (closes [#115](https://github.com/valor-software/ng2-tree/issues/115)) ([93b5f9c](https://github.com/valor-software/ng2-tree/commit/93b5f9c))
+* **tree:** add method for creating children asynchronously (closes [#204](https://github.com/valor-software/ng2-tree/issues/204)) ([72cfcb6](https://github.com/valor-software/ng2-tree/commit/72cfcb6))
+* **tree:** does not collapse root node when it is hidden (closes [#209](https://github.com/valor-software/ng2-tree/issues/209)) ([9aaa065](https://github.com/valor-software/ng2-tree/commit/9aaa065))
+
+
+### Features
+
+* **tree:** add checkboxes support (closes [#181](https://github.com/valor-software/ng2-tree/issues/181), closes [#79](https://github.com/valor-software/ng2-tree/issues/79)) ([5069953](https://github.com/valor-software/ng2-tree/commit/5069953))
+
+
+
 <a name="2.0.0-rc.4"></a>
 # [2.0.0-rc.4](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.3...v2.0.0-rc.4) (2017-11-25)
 
