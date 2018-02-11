@@ -1,4 +1,3 @@
-
 /**
  * alertifyjs 1.10.0 http://alertifyjs.com
  * AlertifyJS is a javascript framework for developing pretty browser dialogs and notifications.
@@ -3586,3 +3585,6 @@
     }
 
 } ( typeof window !== 'undefined' ? window : this ) );
+
+;
+//# sourceMappingURL=scripts.bundle.js.map

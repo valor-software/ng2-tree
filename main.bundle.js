@@ -12,6 +12,7 @@ webpackJsonp(["main"],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_tree_module__ = __webpack_require__("../../../../../src/tree.module.ts");
 /* unused harmony reexport Tree */
 /* unused harmony reexport TreeModelSettings */
+/* unused harmony reexport Ng2TreeSettings */
 /* unused harmony reexport FoldingType */
 /* unused harmony reexport NodeEvent */
 /* unused harmony reexport NodeCreatedEvent */
@@ -75,10 +76,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var AppComponent = (function () {
     function AppComponent() {
         this.settings = {
-            rootIsVisible: false
+            rootIsVisible: false,
+            showCheckboxes: true,
+        };
+        this.disabledCheckboxesSettings = {
+            rootIsVisible: false,
+            showCheckboxes: true,
+            enableCheckboxes: false
         };
         this.fonts = {
             value: 'Fonts',
+            settings: {
+                isCollapsedOnInit: true
+            },
             children: [
                 {
                     value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
@@ -198,7 +208,10 @@ var AppComponent = (function () {
                         {
                             value: 'lost+found',
                             id: 22,
-                            children: []
+                            children: [],
+                            settings: {
+                                checked: true
+                            }
                         },
                         { value: 'abi-4.4.0-57-generic', id: 23 },
                         { value: 'config-4.4.0-57-generic', id: 24 },
@@ -514,6 +527,24 @@ var AppComponent = (function () {
             console.log("Controller is absent for a node with id: " + id);
         }
     };
+    AppComponent.prototype.checkFolder = function (id) {
+        var treeController = this.treeFFS.getControllerByNodeId(id);
+        if (treeController) {
+            treeController.check();
+        }
+        else {
+            console.log("Controller is absent for a node with id: " + id);
+        }
+    };
+    AppComponent.prototype.uncheckFolder = function (id) {
+        var treeController = this.treeFFS.getControllerByNodeId(id);
+        if (treeController) {
+            treeController.uncheck();
+        }
+        else {
+            console.log("Controller is absent for a node with id: " + id);
+        }
+    };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* ViewChild */])('treeFonts'),
         __metadata("design:type", Object)
@@ -525,7 +556,7 @@ var AppComponent = (function () {
     AppComponent = AppComponent_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app',
-            template: "\n    <div class=\"tree-demo-app\">\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Fonts tree</p></div>\n        <div class=\"tree-content\">\n          <tree #treeFonts\n                [tree]=\"fonts\"\n                (menuItemSelected)=\"onMenuItemSelected($event)\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is loaded asynchronously</p></div>\n        <div class=\"tree-content\">\n          <tree\n            [tree]=\"pls\"\n            [settings]=\"settings\"\n            (nodeRemoved)=\"onNodeRemoved($event)\"\n            (nodeRenamed)=\"onNodeRenamed($event)\"\n            (nodeSelected)=\"onNodeSelected($event)\"\n            (nodeMoved)=\"onNodeMoved($event)\"\n            (nodeCreated)=\"onNodeCreated($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container tree-container--with-controls\">\n        <div class=\"tree-info\">\n          <p class=\"tree-title\">Directory/File structure</p>\n          <p class=\"notice\">this tree has advanced configurations</p>\n        </div>\n        <div class=\"tree-content\">\n          <tree #treeFFS\n                [tree]=\"ffs\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeFFSCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\">\n          </tree>\n        </div>\n\n        <div class=\"tree-controlls\">\n          <p class=\"notice\">Tree API exposed via TreeController</p>\n          <button button (click)=\"handleActionOnFFS(13, 'select')\">Select 'boot' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'collapse')\">Collapse 'bin' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'expand')\">Expand 'bin' node</button>\n          <button button (click)=\"renameFFS(21)\">Rename 'unicode.pf2' to 'unicode.pf'</button>\n          <button button (click)=\"handleActionOnFFS(12, 'remove')\">Remove 'nano'</button>\n          <button button (click)=\"handleActionOnFFS(52, 'reloadChildren')\">Reload Music's children</button>\n          <button button (click)=\"setChildrenFFS(36)\">Set 'etc' children</button>\n          <button button (click)=\"addChildFFS(2, { value: 'ping'})\">Add a child with name 'ping' to 'bin'</button>\n          <button button (click)=\"addChildFFS(22, { value: 'lost'})\">Add a child with name 'lost' to 'lost+found'\n          </button>\n          <button button (click)=\"addChildFFS(22, { value: 'found', children: []})\">Add a child with name 'found' to\n            'lost+found'\n          </button>\n          <button button (click)=\"addChildFFS(36, { value: 'found', children: []})\">Add a child with name 'found' to\n            'etc'\n          </button>\n          <button button (click)=\"addChildFFS(78, { value: 'Voodo People'})\">Add a child with name 'Voodo People' to\n            '2Cellos'\n          </button>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is using a custom template</p></div>\n        <div class=\"tree-content\">\n          <tree [tree]=\"icons\"\n                [settings]=\"settings\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\">\n            <ng-template let-node>\n              <i class=\"fa {{node.icon}}\"></i> <span class=\"node-name\" [innerHTML]=\"node.value\"></span>\n            </ng-template>\n          </tree>\n        </div>\n      </div>\n    </div>\n  ",
+            template: "\n    <div class=\"tree-demo-app\">\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Fonts tree</p></div>\n        <div class=\"tree-content\">\n          <tree #treeFonts\n                [tree]=\"fonts\"\n                [settings]=\"{rootIsVisible: false}\"\n                (menuItemSelected)=\"onMenuItemSelected($event)\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is loaded asynchronously</p></div>\n        <div class=\"tree-content\">\n          <tree\n            [tree]=\"pls\"\n            [settings]=\"disabledCheckboxesSettings\"\n            (nodeRemoved)=\"onNodeRemoved($event)\"\n            (nodeRenamed)=\"onNodeRenamed($event)\"\n            (nodeSelected)=\"onNodeSelected($event)\"\n            (nodeMoved)=\"onNodeMoved($event)\"\n            (nodeCreated)=\"onNodeCreated($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container tree-container--with-controls\">\n        <div class=\"tree-info\">\n          <p class=\"tree-title\">Directory/File structure</p>\n          <p class=\"notice\">this tree has advanced configurations</p>\n        </div>\n        <div class=\"tree-content\">\n          <tree #treeFFS\n                [tree]=\"ffs\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeFFSCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\"\n                [settings]=\"settings\">\n          </tree>\n        </div>\n\n        <div class=\"tree-controlls\">\n          <p class=\"notice\">Tree API exposed via TreeController</p>\n          <button button (click)=\"handleActionOnFFS(13, 'select')\">Select 'boot' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'collapse')\">Collapse 'bin' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'expand')\">Expand 'bin' node</button>\n          <button button (click)=\"renameFFS(21)\">Rename 'unicode.pf2' to 'unicode.pf'</button>\n          <button button (click)=\"handleActionOnFFS(12, 'remove')\">Remove 'nano'</button>\n          <button button (click)=\"handleActionOnFFS(52, 'reloadChildren')\">Reload Music's children</button>\n          <button button (click)=\"setChildrenFFS(36)\">Set 'etc' children</button>\n          <button button (click)=\"addChildFFS(2, {value: 'ping'})\">Add a child with name 'ping' to 'bin'</button>\n          <button button (click)=\"addChildFFS(22, {value: 'lost'})\">Add a child with name 'lost' to 'lost+found'</button>\n          <button button (click)=\"addChildFFS(22, {value: 'found', children: []})\">Add a child with name 'found' to 'lost+found'</button>\n          <button button (click)=\"addChildFFS(36, {value: 'found', children: []})\">Add a child with name 'found' to 'etc'</button>\n          <button button (click)=\"addChildFFS(78, {value: 'Voodo People'})\">Add a child with name 'Voodo People' to '2Cellos'</button>\n          <button button (click)=\"checkFolder(52)\">Check Music folder</button>\n          <button button (click)=\"uncheckFolder(52)\">Uncheck Music folder</button>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is using a custom template</p></div>\n        <div class=\"tree-content\">\n          <tree [tree]=\"icons\"\n                [settings]=\"settings\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\">\n            <ng-template let-node>\n              <i class=\"fa {{node.icon}}\"></i> <span class=\"node-name\" [innerHTML]=\"node.value\"></span>\n            </ng-template>\n          </tree>\n        </div>\n      </div>\n    </div>\n  ",
             styles: ["\n    .tree-info {\n      flex: 1 0 100%;\n      display: flex;\n      flex-direction: column;\n      align-items: flex-start;\n    }\n\n    .tree-controlls {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .tree-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .tree-container {\n      margin-bottom: 20px;\n\n    }\n\n    .tree-container--with-controls {\n      display: flex;\n      flex-wrap: wrap;\n    }\n\n    .tree-demo-app {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .tree-title {\n      margin: 0;\n      color: #40a070;\n      font-size: 2em;\n    }\n\n    .notice {\n      color: #e91e63;\n      font-size: 1.2em;\n      font-style: italic;\n    }\n\n    :host /deep/ .fa {\n      cursor: pointer;\n    }\n\n    :host /deep/ .fa.disabled {\n      cursor: inherit;\n      color: #757575;\n    }\n\n    .button {\n      border-radius: 4px;\n      box-shadow: 0 2px 4px 0 #888;\n      background-color: #fff;\n      -webkit-appearance: none;\n      border: 1px solid #000;\n      height: 35px;\n      outline: none;\n    }\n\n    .button-pressed {\n      box-shadow: 0 0 1px 0 #888;\n    }\n\n    .tree-controlls button {\n      margin: 5px;\n    }\n  "]
         })
     ], AppComponent);
@@ -762,7 +793,9 @@ var NodeDraggableDirective = (function () {
         /* tslint:enable:typedef */
     };
     NodeDraggableDirective.prototype.handleDragStart = function (e) {
-        e.stopPropagation();
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
         this.nodeDraggableService.captureNode(new __WEBPACK_IMPORTED_MODULE_2__captured_node__["a" /* CapturedNode */](this.nodeDraggable, this.tree));
         e.dataTransfer.setData('text', NodeDraggableDirective_1.DATA_TRANSFER_STUB_DATA);
         e.dataTransfer.effectAllowed = 'move';
@@ -784,7 +817,9 @@ var NodeDraggableDirective = (function () {
     };
     NodeDraggableDirective.prototype.handleDrop = function (e) {
         e.preventDefault();
-        e.stopPropagation();
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
         this.removeClass('over-drop-target');
         if (!this.isDropPossible(e)) {
             return false;
@@ -1178,6 +1213,8 @@ var NodeMenuService = (function () {
 /* unused harmony export noop */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_filter__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/filter.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_observable_of__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/of.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_merge__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/merge.js");
+
 
 
 // This forces angular compiler to generate a "rxjs-imports.metadata.json"
@@ -1194,6 +1231,8 @@ var noop = function () { };
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TreeController; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__menu_menu_events__ = __webpack_require__("../../../../../src/menu/menu.events.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_event_utils__ = __webpack_require__("../../../../../src/utils/event.utils.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_fn_utils__ = __webpack_require__("../../../../../src/utils/fn.utils.ts");
+
 
 
 var TreeController = (function () {
@@ -1243,6 +1282,19 @@ var TreeController = (function () {
         var newTree = this.tree.createNode(Array.isArray(newNode.children), newNode);
         this.treeService.fireNodeCreated(newTree);
     };
+    TreeController.prototype.addChildAsync = function (newNode) {
+        if (this.tree.hasDeferredChildren() && !this.tree.childrenWereLoaded()) {
+            return Promise.reject(new Error('This node loads its children asynchronously, hence child cannot be added this way'));
+        }
+        var newTree = this.tree.createNode(Array.isArray(newNode.children), newNode);
+        this.treeService.fireNodeCreated(newTree);
+        // This will give TreeInternalComponent to set up a controller for the node
+        return new Promise(function (resolve) {
+            setTimeout(function () {
+                resolve(newTree);
+            });
+        });
+    };
     TreeController.prototype.changeNodeId = function (id) {
         if (!id) {
             throw Error('You should supply an id!');
@@ -1264,6 +1316,18 @@ var TreeController = (function () {
     };
     TreeController.prototype.startRenaming = function () {
         this.tree.markAsBeingRenamed();
+    };
+    TreeController.prototype.check = function () {
+        this.component.onNodeChecked();
+    };
+    TreeController.prototype.uncheck = function () {
+        this.component.onNodeUnchecked();
+    };
+    TreeController.prototype.isChecked = function () {
+        return this.tree.checked;
+    };
+    TreeController.prototype.isIndetermined = function () {
+        return Object(__WEBPACK_IMPORTED_MODULE_2__utils_fn_utils__["b" /* get */])(this.component, 'checkboxElementRef.nativeElement.indeterminate');
     };
     return TreeController;
 }());
@@ -1306,31 +1370,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var TreeInternalComponent = (function () {
-    function TreeInternalComponent(nodeMenuService, treeService, element) {
+    function TreeInternalComponent(nodeMenuService, treeService, nodeElementRef) {
         this.nodeMenuService = nodeMenuService;
         this.treeService = treeService;
-        this.element = element;
+        this.nodeElementRef = nodeElementRef;
         this.isSelected = false;
         this.isRightMenuVisible = false;
         this.isLeftMenuVisible = false;
+        this.isReadOnly = false;
         this.subscriptions = [];
     }
+    TreeInternalComponent.prototype.ngAfterContentChecked = function () {
+        // if a node was checked in settings
+        // we should notify parent nodes about this
+        // (they need to switch to appropriate state as well)
+        if (this.tree.checked) {
+            this.treeService.fireNodeChecked(this.tree);
+        }
+    };
     TreeInternalComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.controller = new __WEBPACK_IMPORTED_MODULE_3__tree_controller__["a" /* TreeController */](this);
-        if (Object(__WEBPACK_IMPORTED_MODULE_9__utils_fn_utils__["b" /* get */])(this.tree, 'node.id', '')) {
-            this.treeService.setController(this.tree.node.id, this.controller);
+        var nodeId = Object(__WEBPACK_IMPORTED_MODULE_9__utils_fn_utils__["b" /* get */])(this.tree, 'node.id', '');
+        if (nodeId) {
+            this.controller = new __WEBPACK_IMPORTED_MODULE_3__tree_controller__["a" /* TreeController */](this);
+            this.treeService.setController(nodeId, this.controller);
         }
-        this.settings = this.settings || { rootIsVisible: true };
-        this.subscriptions.push(this.nodeMenuService.hideMenuStream(this.element)
+        this.settings = this.settings || new __WEBPACK_IMPORTED_MODULE_1__tree_types__["b" /* Ng2TreeSettings */]();
+        this.isReadOnly = !Object(__WEBPACK_IMPORTED_MODULE_9__utils_fn_utils__["b" /* get */])(this.settings, 'enableCheckboxes', true);
+        if (this.tree.isRoot() && this.settings.rootIsVisible === false) {
+            this.tree.disableCollapseOnInit();
+        }
+        this.subscriptions.push(this.nodeMenuService.hideMenuStream(this.nodeElementRef)
             .subscribe(function () {
             _this.isRightMenuVisible = false;
             _this.isLeftMenuVisible = false;
         }));
         this.subscriptions.push(this.treeService.unselectStream(this.tree)
             .subscribe(function () { return _this.isSelected = false; }));
-        this.subscriptions.push(this.treeService.draggedStream(this.tree, this.element)
+        this.subscriptions.push(this.treeService.draggedStream(this.tree, this.nodeElementRef)
             .subscribe(function (e) {
             if (_this.tree.hasSibling(e.captured.tree)) {
                 _this.swapWithSibling(e.captured.tree, _this.tree);
@@ -1341,6 +1420,11 @@ var TreeInternalComponent = (function () {
             else {
                 _this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, _this.tree);
             }
+        }));
+        this.subscriptions.push(this.treeService.nodeChecked$.merge(this.treeService.nodeUnchecked$)
+            .filter(function (e) { return _this.eventContainsId(e) && _this.tree.hasChild(e.node); })
+            .subscribe(function (e) {
+            _this.updateCheckboxState();
         }));
     };
     TreeInternalComponent.prototype.ngOnChanges = function (changes) {
@@ -1378,7 +1462,7 @@ var TreeInternalComponent = (function () {
         }
         if (__WEBPACK_IMPORTED_MODULE_8__utils_event_utils__["d" /* isRightButtonClicked */](e)) {
             this.isRightMenuVisible = !this.isRightMenuVisible;
-            this.nodeMenuService.hideMenuForAllNodesExcept(this.element);
+            this.nodeMenuService.hideMenuForAllNodesExcept(this.nodeElementRef);
         }
         e.preventDefault();
     };
@@ -1388,7 +1472,7 @@ var TreeInternalComponent = (function () {
         }
         if (__WEBPACK_IMPORTED_MODULE_8__utils_event_utils__["c" /* isLeftButtonClicked */](e)) {
             this.isLeftMenuVisible = !this.isLeftMenuVisible;
-            this.nodeMenuService.hideMenuForAllNodesExcept(this.element);
+            this.nodeMenuService.hideMenuForAllNodesExcept(this.nodeElementRef);
             if (this.isLeftMenuVisible) {
                 e.preventDefault();
             }
@@ -1457,22 +1541,94 @@ var TreeInternalComponent = (function () {
     TreeInternalComponent.prototype.hasCustomMenu = function () {
         return this.tree.hasCustomMenu();
     };
+    TreeInternalComponent.prototype.switchNodeCheckStatus = function () {
+        if (!this.tree.checked) {
+            this.onNodeChecked();
+        }
+        else {
+            this.onNodeUnchecked();
+        }
+    };
+    TreeInternalComponent.prototype.onNodeChecked = function () {
+        if (!this.checkboxElementRef) {
+            return;
+        }
+        this.checkboxElementRef.nativeElement.indeterminate = false;
+        this.treeService.fireNodeChecked(this.tree);
+        this.executeOnChildController(function (controller) { return controller.check(); });
+        this.tree.checked = true;
+    };
+    TreeInternalComponent.prototype.onNodeUnchecked = function () {
+        if (!this.checkboxElementRef) {
+            return;
+        }
+        this.checkboxElementRef.nativeElement.indeterminate = false;
+        this.treeService.fireNodeUnchecked(this.tree);
+        this.executeOnChildController(function (controller) { return controller.uncheck(); });
+        this.tree.checked = false;
+    };
+    TreeInternalComponent.prototype.executeOnChildController = function (executor) {
+        var _this = this;
+        if (this.tree.hasLoadedChildern()) {
+            this.tree.children.forEach(function (child) {
+                var controller = _this.treeService.getController(child.id);
+                if (!Object(__WEBPACK_IMPORTED_MODULE_9__utils_fn_utils__["g" /* isNil */])(controller)) {
+                    executor(controller);
+                }
+            });
+        }
+    };
+    TreeInternalComponent.prototype.updateCheckboxState = function () {
+        var _this = this;
+        if (!this.checkboxElementRef) {
+            return;
+        }
+        // Calling setTimeout so the value of isChecked will be updated and after that I'll check the children status.
+        setTimeout(function () {
+            var checkedChildrenAmount = _this.tree.checkedChildrenAmount();
+            if (checkedChildrenAmount === 0) {
+                _this.checkboxElementRef.nativeElement.indeterminate = false;
+                _this.tree.checked = false;
+                _this.treeService.fireNodeUnchecked(_this.tree);
+            }
+            else if (checkedChildrenAmount === _this.tree.loadedChildrenAmount()) {
+                _this.checkboxElementRef.nativeElement.indeterminate = false;
+                _this.tree.checked = true;
+                _this.treeService.fireNodeChecked(_this.tree);
+            }
+            else {
+                _this.checkboxElementRef.nativeElement.indeterminate = true;
+                _this.treeService.fireNodeIndetermined(_this.tree);
+            }
+        });
+    };
+    TreeInternalComponent.prototype.eventContainsId = function (event) {
+        if (!event.node.id) {
+            console.warn('"Node with checkbox" feature requires a unique id assigned to every node, please consider to add it.');
+            return false;
+        }
+        return true;
+    };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__tree__["a" /* Tree */])
     ], TreeInternalComponent.prototype, "tree", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
-        __metadata("design:type", Object)
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__tree_types__["b" /* Ng2TreeSettings */])
     ], TreeInternalComponent.prototype, "settings", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["_1" /* TemplateRef */])
     ], TreeInternalComponent.prototype, "template", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* ViewChild */])('checkbox'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* ElementRef */])
+    ], TreeInternalComponent.prototype, "checkboxElementRef", void 0);
     TreeInternalComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'tree-internal',
-            template: "\n  <ul class=\"tree\" *ngIf=\"tree\" [ngClass]=\"{rootless: isRootHidden()}\">\n    <li>\n      <div class=\"value-container\"\n        [ngClass]=\"{rootless: isRootHidden()}\"\n        [class.selected]=\"isSelected\"\n        (contextmenu)=\"showRightMenu($event)\"\n        [nodeDraggable]=\"element\"\n        [tree]=\"tree\">\n\n        <div class=\"folding\" (click)=\"onSwitchFoldingType()\" [ngClass]=\"tree.foldingCssClass\"></div>\n        <div class=\"node-value\"\n          *ngIf=\"!shouldShowInputForTreeValue()\"\n          [class.node-selected]=\"isSelected\"\n          (click)=\"onNodeSelected($event)\">\n            <div *ngIf=\"tree.nodeTemplate\" class=\"node-template\" [innerHTML]=\"tree.nodeTemplate | safeHtml\"></div>\n            <span *ngIf=\"!template\" class=\"node-name\" [innerHTML]=\"tree.value | safeHtml\"></span>\n            <span class=\"loading-children\" *ngIf=\"tree.childrenAreBeingLoaded()\"></span>\n            <ng-template [ngTemplateOutlet]=\"template\" [ngTemplateOutletContext]=\"{ $implicit: tree.node }\"></ng-template>\n        </div>\n\n        <input type=\"text\" class=\"node-value\"\n           *ngIf=\"shouldShowInputForTreeValue()\"\n           [nodeEditable]=\"tree.value\"\n           (valueChanged)=\"applyNewValue($event)\"/>\n\n        <div class=\"node-left-menu\" *ngIf=\"tree.hasLeftMenu()\" (click)=\"showLeftMenu($event)\" [innerHTML]=\"tree.leftMenuTemplate\">\n        </div>\n        <node-menu *ngIf=\"tree.hasLeftMenu() && isLeftMenuVisible && !hasCustomMenu()\"\n          (menuItemSelected)=\"onMenuItemSelected($event)\">\n        </node-menu>\n      </div>\n\n      <node-menu *ngIf=\"isRightMenuVisible && !hasCustomMenu()\"\n           (menuItemSelected)=\"onMenuItemSelected($event)\">\n      </node-menu>\n\n      <node-menu *ngIf=\"hasCustomMenu() && (isRightMenuVisible || isLeftMenuVisible)\"\n           [menuItems]=\"tree.menuItems\"\n           (menuItemSelected)=\"onMenuItemSelected($event)\">\n      </node-menu>\n      <ng-template [ngIf]=\"tree.isNodeExpanded()\">\n        <tree-internal *ngFor=\"let child of tree.childrenAsync | async\" [tree]=\"child\" [template]=\"template\"></tree-internal>\n      </ng-template>\n    </li>\n  </ul>\n  "
+            template: "\n  <ul class=\"tree\" *ngIf=\"tree\" [ngClass]=\"{rootless: isRootHidden()}\">\n    <li>\n      <div class=\"value-container\"\n        [ngClass]=\"{rootless: isRootHidden()}\"\n        [class.selected]=\"isSelected\"\n        (contextmenu)=\"showRightMenu($event)\"\n        [nodeDraggable]=\"nodeElementRef\"\n        [tree]=\"tree\">\n\n        <div class=\"folding\" (click)=\"onSwitchFoldingType()\" [ngClass]=\"tree.foldingCssClass\"></div>\n\n        <div class=\"node-checkbox\" *ngIf=\"settings.showCheckboxes\">\n        <input checkbox  type=\"checkbox\" [disabled]=\"isReadOnly\" [checked]=\"this.tree.checked\" (change)=\"switchNodeCheckStatus()\" #checkbox />\n         </div>\n\n        <div class=\"node-value\"\n          *ngIf=\"!shouldShowInputForTreeValue()\"\n          [class.node-selected]=\"isSelected\"\n          (click)=\"onNodeSelected($event)\">\n            <div *ngIf=\"tree.nodeTemplate\" class=\"node-template\" [innerHTML]=\"tree.nodeTemplate | safeHtml\"></div>\n            <span *ngIf=\"!template\" class=\"node-name\" [innerHTML]=\"tree.value | safeHtml\"></span>\n            <span class=\"loading-children\" *ngIf=\"tree.childrenAreBeingLoaded()\"></span>\n            <ng-template [ngTemplateOutlet]=\"template\" [ngTemplateOutletContext]=\"{ $implicit: tree.node }\"></ng-template>\n        </div>\n\n        <input type=\"text\" class=\"node-value\"\n           *ngIf=\"shouldShowInputForTreeValue()\"\n           [nodeEditable]=\"tree.value\"\n           (valueChanged)=\"applyNewValue($event)\"/>\n\n        <div class=\"node-left-menu\" *ngIf=\"tree.hasLeftMenu()\" (click)=\"showLeftMenu($event)\" [innerHTML]=\"tree.leftMenuTemplate\">\n        </div>\n        <node-menu *ngIf=\"tree.hasLeftMenu() && isLeftMenuVisible && !hasCustomMenu()\"\n          (menuItemSelected)=\"onMenuItemSelected($event)\">\n        </node-menu>\n      </div>\n\n      <node-menu *ngIf=\"isRightMenuVisible && !hasCustomMenu()\"\n           (menuItemSelected)=\"onMenuItemSelected($event)\">\n      </node-menu>\n\n      <node-menu *ngIf=\"hasCustomMenu() && (isRightMenuVisible || isLeftMenuVisible)\"\n           [menuItems]=\"tree.menuItems\"\n           (menuItemSelected)=\"onMenuItemSelected($event)\">\n      </node-menu>\n      <ng-template [ngIf]=\"tree.isNodeExpanded()\">\n        <tree-internal *ngFor=\"let child of tree.childrenAsync | async\" [tree]=\"child\" [template]=\"template\" [settings]=\"settings\"></tree-internal>\n      </ng-template>\n    </li>\n  </ul>\n  "
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__menu_node_menu_service__["a" /* NodeMenuService */],
             __WEBPACK_IMPORTED_MODULE_7__tree_service__["a" /* TreeService */],
@@ -1520,8 +1676,10 @@ var TreeComponent = (function () {
         this.nodeMoved = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.nodeExpanded = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.nodeCollapsed = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
-        this.menuItemSelected = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.loadNextLevel = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
+        this.nodeChecked = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
+        this.nodeUnchecked = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
+        this.menuItemSelected = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.subscriptions = [];
     }
     TreeComponent_1 = TreeComponent;
@@ -1562,6 +1720,12 @@ var TreeComponent = (function () {
         this.subscriptions.push(this.treeService.loadNextLevel$.subscribe(function (e) {
             _this.loadNextLevel.emit(e);
         }));
+        this.subscriptions.push(this.treeService.nodeChecked$.subscribe(function (e) {
+            _this.nodeChecked.emit(e);
+        }));
+        this.subscriptions.push(this.treeService.nodeUnchecked$.subscribe(function (e) {
+            _this.nodeUnchecked.emit(e);
+        }));
     };
     TreeComponent.prototype.getController = function () {
         return this.rootComponent.controller;
@@ -1579,7 +1743,7 @@ var TreeComponent = (function () {
     ], TreeComponent.prototype, "treeModel", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
-        __metadata("design:type", Object)
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__tree_types__["b" /* Ng2TreeSettings */])
     ], TreeComponent.prototype, "settings", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
@@ -1612,11 +1776,19 @@ var TreeComponent = (function () {
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */])
-    ], TreeComponent.prototype, "menuItemSelected", void 0);
+    ], TreeComponent.prototype, "loadNextLevel", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */])
-    ], TreeComponent.prototype, "loadNextLevel", void 0);
+    ], TreeComponent.prototype, "nodeChecked", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */])
+    ], TreeComponent.prototype, "nodeUnchecked", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */])
+    ], TreeComponent.prototype, "menuItemSelected", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_4" /* ViewChild */])('rootComponent'),
         __metadata("design:type", Object)
@@ -1647,16 +1819,19 @@ var TreeComponent = (function () {
 
 "use strict";
 /* unused harmony export NodeEvent */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return NodeSelectedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return NodeSelectedEvent; });
 /* unused harmony export NodeDestructiveEvent */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return NodeMovedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return NodeRemovedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return NodeCreatedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return NodeRenamedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return NodeExpandedEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return NodeCollapsedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return NodeMovedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return NodeRemovedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return NodeCreatedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return NodeRenamedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return NodeExpandedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return NodeCollapsedEvent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MenuItemSelectedEvent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoadNextLevelEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return NodeCheckedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return NodeUncheckedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return NodeIndeterminedEvent; });
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1763,6 +1938,30 @@ var LoadNextLevelEvent = (function (_super) {
     return LoadNextLevelEvent;
 }(NodeEvent));
 
+var NodeCheckedEvent = (function (_super) {
+    __extends(NodeCheckedEvent, _super);
+    function NodeCheckedEvent(node) {
+        return _super.call(this, node) || this;
+    }
+    return NodeCheckedEvent;
+}(NodeEvent));
+
+var NodeUncheckedEvent = (function (_super) {
+    __extends(NodeUncheckedEvent, _super);
+    function NodeUncheckedEvent(node) {
+        return _super.call(this, node) || this;
+    }
+    return NodeUncheckedEvent;
+}(NodeEvent));
+
+var NodeIndeterminedEvent = (function (_super) {
+    __extends(NodeIndeterminedEvent, _super);
+    function NodeIndeterminedEvent(node) {
+        return _super.call(this, node) || this;
+    }
+    return NodeIndeterminedEvent;
+}(NodeEvent));
+
 
 
 /***/ }),
@@ -1866,6 +2065,9 @@ var TreeService = (function () {
         this.nodeCollapsed$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
         this.menuItemSelected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
         this.loadNextLevel$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeChecked$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeUnchecked$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeIndetermined$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
         this.controllers = new Map();
         this.nodeRemoved$.subscribe(function (e) { return e.node.removeItselfFromParent(); });
     }
@@ -1873,19 +2075,19 @@ var TreeService = (function () {
         return this.nodeSelected$.filter(function (e) { return tree !== e.node; });
     };
     TreeService.prototype.fireNodeRemoved = function (tree) {
-        this.nodeRemoved$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["g" /* NodeRemovedEvent */](tree, tree.positionInParent));
+        this.nodeRemoved$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["i" /* NodeRemovedEvent */](tree, tree.positionInParent));
     };
     TreeService.prototype.fireNodeCreated = function (tree) {
-        this.nodeCreated$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["d" /* NodeCreatedEvent */](tree));
+        this.nodeCreated$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["e" /* NodeCreatedEvent */](tree));
     };
     TreeService.prototype.fireNodeSelected = function (tree) {
-        this.nodeSelected$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["i" /* NodeSelectedEvent */](tree));
+        this.nodeSelected$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["k" /* NodeSelectedEvent */](tree));
     };
     TreeService.prototype.fireNodeRenamed = function (oldValue, tree) {
-        this.nodeRenamed$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["h" /* NodeRenamedEvent */](tree, oldValue, tree.value));
+        this.nodeRenamed$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["j" /* NodeRenamedEvent */](tree, oldValue, tree.value));
     };
     TreeService.prototype.fireNodeMoved = function (tree, parent) {
-        this.nodeMoved$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["f" /* NodeMovedEvent */](tree, parent));
+        this.nodeMoved$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["h" /* NodeMovedEvent */](tree, parent));
     };
     TreeService.prototype.fireMenuItemSelected = function (tree, selectedItem) {
         this.menuItemSelected$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["b" /* MenuItemSelectedEvent */](tree, selectedItem));
@@ -1902,13 +2104,19 @@ var TreeService = (function () {
         }
     };
     TreeService.prototype.fireNodeExpanded = function (tree) {
-        this.nodeExpanded$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["e" /* NodeExpandedEvent */](tree));
+        this.nodeExpanded$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["f" /* NodeExpandedEvent */](tree));
     };
     TreeService.prototype.fireNodeCollapsed = function (tree) {
-        this.nodeCollapsed$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["c" /* NodeCollapsedEvent */](tree));
+        this.nodeCollapsed$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["d" /* NodeCollapsedEvent */](tree));
     };
     TreeService.prototype.fireLoadNextLevel = function (tree) {
         this.loadNextLevel$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["a" /* LoadNextLevelEvent */](tree));
+    };
+    TreeService.prototype.fireNodeChecked = function (tree) {
+        this.nodeChecked$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["c" /* NodeCheckedEvent */](tree));
+    };
+    TreeService.prototype.fireNodeUnchecked = function (tree) {
+        this.nodeUnchecked$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["l" /* NodeUncheckedEvent */](tree));
     };
     TreeService.prototype.draggedStream = function (tree, element) {
         return this.nodeDraggableService.draggableNodeEvents$
@@ -1933,14 +2141,17 @@ var TreeService = (function () {
         return this.controllers.has(id);
     };
     TreeService.prototype.shouldFireLoadNextLevel = function (tree) {
-        var shouldLoadNextLevel = tree.node.emitLoadNextLevel &&
-            !tree.node.loadChildren &&
-            !tree.childrenAreBeingLoaded() &&
-            (!tree.children || Object(__WEBPACK_IMPORTED_MODULE_4__utils_fn_utils__["e" /* isEmpty */])(tree.children));
+        var shouldLoadNextLevel = tree.node.emitLoadNextLevel
+            && !tree.node.loadChildren
+            && !tree.childrenAreBeingLoaded()
+            && Object(__WEBPACK_IMPORTED_MODULE_4__utils_fn_utils__["e" /* isEmpty */])(tree.children);
         if (shouldLoadNextLevel) {
             tree.loadingChildrenRequested();
         }
         return shouldLoadNextLevel;
+    };
+    TreeService.prototype.fireNodeIndetermined = function (tree) {
+        this.nodeIndetermined$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["g" /* NodeIndeterminedEvent */](tree));
     };
     TreeService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["y" /* Injectable */])(),
@@ -2034,9 +2245,7 @@ var Tree = (function () {
     Tree.prototype.buildTreeFromModel = function (model, parent, isBranch) {
         var _this = this;
         this.parent = parent;
-        this.node = Object.assign(Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["h" /* omit */])(model, 'children'), {
-            settings: __WEBPACK_IMPORTED_MODULE_2__tree_types__["b" /* TreeModelSettings */].merge(model, Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(parent, 'node'))
-        }, { emitLoadNextLevel: model.emitLoadNextLevel === true });
+        this.node = Object.assign(Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["h" /* omit */])(model, 'children'), { settings: __WEBPACK_IMPORTED_MODULE_2__tree_types__["c" /* TreeModelSettings */].merge(model, Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(parent, 'node')) }, { emitLoadNextLevel: model.emitLoadNextLevel === true });
         if (Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["f" /* isFunction */])(this.node.loadChildren)) {
             this._loadChildren = this.node.loadChildren;
         }
@@ -2184,6 +2393,32 @@ var Tree = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Tree.prototype, "checked", {
+        get: function () {
+            return !!Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(this.node.settings, 'checked');
+        },
+        set: function (checked) {
+            this.node.settings = Object.assign({}, this.node.settings, { checked: checked });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tree.prototype, "checkedChildren", {
+        get: function () {
+            return this.hasLoadedChildern() ? this.children.filter(function (child) { return child.checked; }) : [];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Tree.prototype.hasLoadedChildern = function () {
+        return !Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["e" /* isEmpty */])(this.children);
+    };
+    Tree.prototype.loadedChildrenAmount = function () {
+        return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["j" /* size */])(this.children);
+    };
+    Tree.prototype.checkedChildrenAmount = function () {
+        return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["j" /* size */])(this.checkedChildren);
+    };
     /**
      * Add a sibling node for the current node. This won't work if the current node is a root.
      * @param {Tree} sibling - A node that should become a sibling.
@@ -2484,7 +2719,7 @@ var Tree = (function () {
      * @returns {boolean} A flag whether the tree is new.
      */
     Tree.prototype.isNew = function () {
-        return this.node._status === __WEBPACK_IMPORTED_MODULE_2__tree_types__["c" /* TreeStatus */].New;
+        return this.node._status === __WEBPACK_IMPORTED_MODULE_2__tree_types__["d" /* TreeStatus */].New;
     };
     Object.defineProperty(Tree.prototype, "id", {
         get: function () {
@@ -2500,33 +2735,33 @@ var Tree = (function () {
      * Mark current tree as new (@see {@link isNew}).
      */
     Tree.prototype.markAsNew = function () {
-        this.node._status = __WEBPACK_IMPORTED_MODULE_2__tree_types__["c" /* TreeStatus */].New;
+        this.node._status = __WEBPACK_IMPORTED_MODULE_2__tree_types__["d" /* TreeStatus */].New;
     };
     /**
      * Check that current tree is being renamed (it is in the process of its value renaming initiated by a user).
      * @returns {boolean} A flag whether the tree is being renamed.
      */
     Tree.prototype.isBeingRenamed = function () {
-        return this.node._status === __WEBPACK_IMPORTED_MODULE_2__tree_types__["c" /* TreeStatus */].IsBeingRenamed;
+        return this.node._status === __WEBPACK_IMPORTED_MODULE_2__tree_types__["d" /* TreeStatus */].IsBeingRenamed;
     };
     /**
      * Mark current tree as being renamed (@see {@link isBeingRenamed}).
      */
     Tree.prototype.markAsBeingRenamed = function () {
-        this.node._status = __WEBPACK_IMPORTED_MODULE_2__tree_types__["c" /* TreeStatus */].IsBeingRenamed;
+        this.node._status = __WEBPACK_IMPORTED_MODULE_2__tree_types__["d" /* TreeStatus */].IsBeingRenamed;
     };
     /**
      * Check that current tree is modified (for example it was renamed).
      * @returns {boolean} A flag whether the tree is modified.
      */
     Tree.prototype.isModified = function () {
-        return this.node._status === __WEBPACK_IMPORTED_MODULE_2__tree_types__["c" /* TreeStatus */].Modified;
+        return this.node._status === __WEBPACK_IMPORTED_MODULE_2__tree_types__["d" /* TreeStatus */].Modified;
     };
     /**
      * Mark current tree as modified (@see {@link isModified}).
      */
     Tree.prototype.markAsModified = function () {
-        this.node._status = __WEBPACK_IMPORTED_MODULE_2__tree_types__["c" /* TreeStatus */].Modified;
+        this.node._status = __WEBPACK_IMPORTED_MODULE_2__tree_types__["d" /* TreeStatus */].Modified;
     };
     /**
      * Makes a clone of an underlying TreeModel instance
@@ -2553,8 +2788,9 @@ var Tree = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FoldingType; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return TreeModelSettings; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return TreeStatus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return TreeModelSettings; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Ng2TreeSettings; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return TreeStatus; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__ = __webpack_require__("../../../../../src/utils/fn.utils.ts");
 
 var FoldingType = (function () {
@@ -2579,9 +2815,23 @@ var TreeModelSettings = (function () {
     function TreeModelSettings() {
     }
     TreeModelSettings.merge = function (sourceA, sourceB) {
-        return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["a" /* defaultsDeep */])({}, Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceA, 'settings'), Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceB, 'settings'), { static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false });
+        return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["a" /* defaultsDeep */])({}, Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceA, 'settings'), Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceB, 'settings'), { static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false, checked: false });
     };
     return TreeModelSettings;
+}());
+
+var Ng2TreeSettings = (function () {
+    function Ng2TreeSettings() {
+        /**
+         * Indicates root visibility in the tree. When true - root is invisible.
+         * @name Ng2TreeSettings#rootIsVisible
+         * @type boolean
+         */
+        this.rootIsVisible = true;
+        this.showCheckboxes = false;
+        this.enableCheckboxes = true;
+    }
+    return Ng2TreeSettings;
 }());
 
 var TreeStatus;
