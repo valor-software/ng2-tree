@@ -1382,11 +1382,9 @@ var TreeInternalComponent = (function () {
         this.isReadOnly = false;
         this.subscriptions = [];
     }
-    TreeInternalComponent.prototype.ngAfterContentChecked = function () {
-        // if a node was checked in settings
-        // we should notify parent nodes about this
-        // (they need to switch to appropriate state as well)
-        if (this.tree.checked) {
+    TreeInternalComponent.prototype.ngAfterViewInit = function () {
+        if (this.tree.checked && !this.tree.firstCheckedFired) {
+            this.tree.firstCheckedFired = true;
             this.treeService.fireNodeChecked(this.tree);
         }
     };
@@ -1423,9 +1421,7 @@ var TreeInternalComponent = (function () {
         }));
         this.subscriptions.push(this.treeService.nodeChecked$.merge(this.treeService.nodeUnchecked$)
             .filter(function (e) { return _this.eventContainsId(e) && _this.tree.hasChild(e.node); })
-            .subscribe(function (e) {
-            _this.updateCheckboxState();
-        }));
+            .subscribe(function (e) { return _this.updateCheckboxState(); }));
     };
     TreeInternalComponent.prototype.ngOnChanges = function (changes) {
         this.controller = new __WEBPACK_IMPORTED_MODULE_3__tree_controller__["a" /* TreeController */](this);
@@ -1580,9 +1576,6 @@ var TreeInternalComponent = (function () {
     };
     TreeInternalComponent.prototype.updateCheckboxState = function () {
         var _this = this;
-        if (!this.checkboxElementRef) {
-            return;
-        }
         // Calling setTimeout so the value of isChecked will be updated and after that I'll check the children status.
         setTimeout(function () {
             var checkedChildrenAmount = _this.tree.checkedChildrenAmount();
@@ -1597,6 +1590,7 @@ var TreeInternalComponent = (function () {
                 _this.treeService.fireNodeChecked(_this.tree);
             }
             else {
+                _this.tree.checked = false;
                 _this.checkboxElementRef.nativeElement.indeterminate = true;
                 _this.treeService.fireNodeIndetermined(_this.tree);
             }
