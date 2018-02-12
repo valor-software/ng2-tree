@@ -1,5 +1,5 @@
 import {
-  AfterContentChecked,
+  AfterViewInit,
   Component,
   ElementRef,
   Input,
@@ -12,18 +12,18 @@ import {
 } from '@angular/core';
 
 import * as TreeTypes from './tree.types';
-import {Ng2TreeSettings} from './tree.types';
-import {Tree} from './tree';
-import {TreeController} from './tree-controller';
-import {NodeMenuService} from './menu/node-menu.service';
-import {NodeMenuItemAction, NodeMenuItemSelectedEvent} from './menu/menu.events';
-import {NodeEditableEvent, NodeEditableEventAction} from './editable/editable.events';
-import {NodeCheckedEvent, NodeEvent} from './tree.events';
-import {TreeService} from './tree.service';
+import { Ng2TreeSettings } from './tree.types';
+import { Tree } from './tree';
+import { TreeController } from './tree-controller';
+import { NodeMenuService } from './menu/node-menu.service';
+import { NodeMenuItemAction, NodeMenuItemSelectedEvent } from './menu/menu.events';
+import { NodeEditableEvent, NodeEditableEventAction } from './editable/editable.events';
+import { NodeCheckedEvent, NodeEvent } from './tree.events';
+import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
-import {NodeDraggableEvent} from './draggable/draggable.events';
-import {Subscription} from 'rxjs/Subscription';
-import {get, isNil} from './utils/fn.utils';
+import { NodeDraggableEvent } from './draggable/draggable.events';
+import { Subscription } from 'rxjs/Subscription';
+import { get, isNil } from './utils/fn.utils';
 
 @Component({
   selector: 'tree-internal',
@@ -80,7 +80,7 @@ import {get, isNil} from './utils/fn.utils';
   </ul>
   `
 })
-export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
+export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input()
   public tree: Tree;
 
@@ -106,11 +106,9 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
                      public nodeElementRef: ElementRef) {
   }
 
-  public ngAfterContentChecked(): void {
-    // if a node was checked in settings
-    // we should notify parent nodes about this
-    // (they need to switch to appropriate state as well)
-    if (this.tree.checked) {
+  public ngAfterViewInit(): void {
+    if (this.tree.checked && !(this.tree as any).firstCheckedFired) {
+      (this.tree as any).firstCheckedFired = true;
       this.treeService.fireNodeChecked(this.tree);
     }
   }
@@ -151,9 +149,7 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
 
     this.subscriptions.push(this.treeService.nodeChecked$.merge(this.treeService.nodeUnchecked$)
       .filter((e: NodeCheckedEvent) => this.eventContainsId(e) && this.tree.hasChild(e.node))
-      .subscribe((e: NodeCheckedEvent) => {
-        this.updateCheckboxState();
-      }));
+      .subscribe((e: NodeCheckedEvent) => this.updateCheckboxState()));
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -335,10 +331,6 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
   }
 
   updateCheckboxState(): void {
-    if (!this.checkboxElementRef) {
-      return;
-    }
-
     // Calling setTimeout so the value of isChecked will be updated and after that I'll check the children status.
     setTimeout(() => {
       const checkedChildrenAmount = this.tree.checkedChildrenAmount();
@@ -351,6 +343,7 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
         this.tree.checked = true;
         this.treeService.fireNodeChecked(this.tree);
       } else {
+        this.tree.checked = false;
         this.checkboxElementRef.nativeElement.indeterminate = true;
         this.treeService.fireNodeIndetermined(this.tree);
       }
