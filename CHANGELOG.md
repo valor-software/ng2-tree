@@ -1,3 +1,13 @@
+<a name="2.0.0-rc.6"></a>
+# [2.0.0-rc.6](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.5...v2.0.0-rc.6) (2018-02-12)
+
+
+### Bug Fixes
+
+* **checkboxes:** get rid of performance issue with cyclic event firing; fix indetermined state ([55b975e](https://github.com/valor-software/ng2-tree/commit/55b975e))
+
+
+
 <a name="2.0.0-rc.5"></a>
 # [2.0.0-rc.5](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.4...v2.0.0-rc.5) (2018-02-11)
 
