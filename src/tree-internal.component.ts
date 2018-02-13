@@ -229,6 +229,7 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
         this.onRemoveSelected();
         break;
       case NodeMenuItemAction.Custom:
+        this.onCustomSelected();
         this.treeService.fireMenuItemSelected(this.tree, e.nodeMenuItemSelected);
         break;
       default:
@@ -251,6 +252,11 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
   private onRemoveSelected(): void {
     this.treeService.deleteController(get(this.tree, 'node.id', ''));
     this.treeService.fireNodeRemoved(this.tree);
+  }
+
+  private onCustomSelected(): void {
+    this.isRightMenuVisible = false;
+    this.isLeftMenuVisible = false;
   }
 
   public onSwitchFoldingType(): void {
