@@ -36,9 +36,15 @@ export function get(value: any, path: string, defaultValue?: any) {
   return isNil(result) || result === value ? defaultValue : result;
 }
 
-export function omit(value: any, propToSkip: string): any {
+export function omit(value: any, propsToSkip: string | string[]): any {
+  if (!value) {
+    return value;
+  }
+
+  const normalizedPropsToSkip = typeof propsToSkip === 'string' ? [propsToSkip] : propsToSkip;
+
   return Object.keys(value).reduce((result, prop) => {
-    if (prop === propToSkip) {
+    if (includes(normalizedPropsToSkip, prop)) {
       return result;
     }
     return Object.assign(result, { [prop]: value[prop] });

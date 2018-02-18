@@ -121,6 +121,32 @@ describe('TreeController', () => {
     expect(controller.isChecked()).toBe(false);
   });
 
+  it('forbids selection', () => {
+    const controller = treeService.getController(lordInternalTreeInstance.tree.id);
+    expect(controller.isSelectionAllowed()).toBe(true);
+
+    controller.forbidSelection();
+
+    fixture.detectChanges();
+
+    expect(controller.isSelectionAllowed()).toBe(false);
+  });
+
+  it('allows selection', () => {
+    const controller = treeService.getController(lordInternalTreeInstance.tree.id);
+    expect(controller.isSelectionAllowed()).toBe(true);
+
+    controller.forbidSelection();
+    fixture.detectChanges();
+
+    expect(controller.isSelectionAllowed()).toBe(false);
+
+    controller.allowSelection();
+    fixture.detectChanges();
+
+    expect(controller.isSelectionAllowed()).toBe(true);
+  });
+
   it('checks all the children down the branch', () => {
     const tree = lordInternalTreeInstance.tree;
     const controller = treeService.getController(tree.id);
