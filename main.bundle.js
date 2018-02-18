@@ -77,7 +77,7 @@ var AppComponent = (function () {
     function AppComponent() {
         this.settings = {
             rootIsVisible: false,
-            showCheckboxes: true,
+            showCheckboxes: true
         };
         this.disabledCheckboxesSettings = {
             rootIsVisible: false,
@@ -94,7 +94,7 @@ var AppComponent = (function () {
                     value: 'Serif  -  All my children and I are STATIC ¯\\_(ツ)_/¯',
                     id: 1,
                     settings: {
-                        'static': true
+                        static: true
                     },
                     children: [
                         { value: '<a href="#" id="antiqua" class="test">Antiqua</a> with HTML tags.', id: 2 },
@@ -105,11 +105,7 @@ var AppComponent = (function () {
                         {
                             value: 'Slab serif',
                             id: 7,
-                            children: [
-                                { value: 'Candida', id: 8 },
-                                { value: 'Swift', id: 9 },
-                                { value: 'Guardian Egyptian', id: 10 }
-                            ]
+                            children: [{ value: 'Candida', id: 8 }, { value: 'Swift', id: 9 }, { value: 'Guardian Egyptian', id: 10 }]
                         }
                     ]
                 },
@@ -191,6 +187,9 @@ var AppComponent = (function () {
                 {
                     value: 'boot',
                     id: 13,
+                    settings: {
+                        selectionAllowed: false
+                    },
                     children: [
                         {
                             value: 'grub',
@@ -311,7 +310,7 @@ var AppComponent = (function () {
                                 {
                                     value: 'Music',
                                     id: 52,
-                                    children: [{ value: 'won\'t be displayed' }],
+                                    children: [{ value: "won't be displayed" }],
                                     loadChildren: function (callback) {
                                         setTimeout(function () {
                                             callback([
@@ -402,8 +401,21 @@ var AppComponent = (function () {
                         { value: 'movie', icon: 'fa-file-movie-o ' },
                         { value: 'archive', icon: 'fa-file-zip-o' }
                     ]
-                },
+                }
             ]
+        };
+        this.custom = {
+            settings: {
+                menuItems: [
+                    { action: __WEBPACK_IMPORTED_MODULE_1__menu_menu_events__["b" /* NodeMenuItemAction */].NewFolder, name: 'Add parent node', cssClass: '' },
+                    { action: __WEBPACK_IMPORTED_MODULE_1__menu_menu_events__["b" /* NodeMenuItemAction */].NewTag, name: 'Add child node', cssClass: '' },
+                    { action: __WEBPACK_IMPORTED_MODULE_1__menu_menu_events__["b" /* NodeMenuItemAction */].Remove, name: 'Remove node', cssClass: '' },
+                    { action: __WEBPACK_IMPORTED_MODULE_1__menu_menu_events__["b" /* NodeMenuItemAction */].Rename, name: 'Rename node', cssClass: '' },
+                    { action: __WEBPACK_IMPORTED_MODULE_1__menu_menu_events__["b" /* NodeMenuItemAction */].Custom, name: 'Custom Action', cssClass: '' }
+                ]
+            },
+            value: 'TestParent',
+            children: [{ value: 'TestChild', icon: '' }]
         };
     }
     AppComponent_1 = AppComponent;
@@ -419,10 +431,7 @@ var AppComponent = (function () {
                 children: [
                     {
                         value: 'Aspect-oriented programming',
-                        children: [
-                            { value: 'AspectJ' },
-                            { value: 'AspectC++' }
-                        ]
+                        children: [{ value: 'AspectJ' }, { value: 'AspectC++' }]
                     },
                     {
                         value: 'Object-oriented programming',
@@ -444,11 +453,7 @@ var AppComponent = (function () {
                     },
                     {
                         value: 'Prototype-based programming',
-                        children: [
-                            { value: 'JavaScript' },
-                            { value: 'CoffeeScript' },
-                            { value: 'TypeScript' }
-                        ]
+                        children: [{ value: 'JavaScript' }, { value: 'CoffeeScript' }, { value: 'TypeScript' }]
                     }
                 ]
             };
@@ -556,8 +561,10 @@ var AppComponent = (function () {
     AppComponent = AppComponent_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app',
-            template: "\n    <div class=\"tree-demo-app\">\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Fonts tree</p></div>\n        <div class=\"tree-content\">\n          <tree #treeFonts\n                [tree]=\"fonts\"\n                [settings]=\"{rootIsVisible: false}\"\n                (menuItemSelected)=\"onMenuItemSelected($event)\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is loaded asynchronously</p></div>\n        <div class=\"tree-content\">\n          <tree\n            [tree]=\"pls\"\n            [settings]=\"disabledCheckboxesSettings\"\n            (nodeRemoved)=\"onNodeRemoved($event)\"\n            (nodeRenamed)=\"onNodeRenamed($event)\"\n            (nodeSelected)=\"onNodeSelected($event)\"\n            (nodeMoved)=\"onNodeMoved($event)\"\n            (nodeCreated)=\"onNodeCreated($event)\">\n          </tree>\n        </div>\n      </div>\n      <div class=\"tree-container tree-container--with-controls\">\n        <div class=\"tree-info\">\n          <p class=\"tree-title\">Directory/File structure</p>\n          <p class=\"notice\">this tree has advanced configurations</p>\n        </div>\n        <div class=\"tree-content\">\n          <tree #treeFFS\n                [tree]=\"ffs\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeFFSCreated($event)\"\n                (nodeExpanded)=\"onNodeExpanded($event)\"\n                (nodeCollapsed)=\"onNodeCollapsed($event)\"\n                [settings]=\"settings\">\n          </tree>\n        </div>\n\n        <div class=\"tree-controlls\">\n          <p class=\"notice\">Tree API exposed via TreeController</p>\n          <button button (click)=\"handleActionOnFFS(13, 'select')\">Select 'boot' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'collapse')\">Collapse 'bin' node</button>\n          <button button (click)=\"handleActionOnFFS(2, 'expand')\">Expand 'bin' node</button>\n          <button button (click)=\"renameFFS(21)\">Rename 'unicode.pf2' to 'unicode.pf'</button>\n          <button button (click)=\"handleActionOnFFS(12, 'remove')\">Remove 'nano'</button>\n          <button button (click)=\"handleActionOnFFS(52, 'reloadChildren')\">Reload Music's children</button>\n          <button button (click)=\"setChildrenFFS(36)\">Set 'etc' children</button>\n          <button button (click)=\"addChildFFS(2, {value: 'ping'})\">Add a child with name 'ping' to 'bin'</button>\n          <button button (click)=\"addChildFFS(22, {value: 'lost'})\">Add a child with name 'lost' to 'lost+found'</button>\n          <button button (click)=\"addChildFFS(22, {value: 'found', children: []})\">Add a child with name 'found' to 'lost+found'</button>\n          <button button (click)=\"addChildFFS(36, {value: 'found', children: []})\">Add a child with name 'found' to 'etc'</button>\n          <button button (click)=\"addChildFFS(78, {value: 'Voodo People'})\">Add a child with name 'Voodo People' to '2Cellos'</button>\n          <button button (click)=\"checkFolder(52)\">Check Music folder</button>\n          <button button (click)=\"uncheckFolder(52)\">Uncheck Music folder</button>\n        </div>\n      </div>\n      <div class=\"tree-container\">\n        <div class=\"tree-info\"><p class=\"tree-title\">Programming languages tree</p>\n          <p class=\"notice\">this tree is using a custom template</p></div>\n        <div class=\"tree-content\">\n          <tree [tree]=\"icons\"\n                [settings]=\"settings\"\n                (nodeRemoved)=\"onNodeRemoved($event)\"\n                (nodeRenamed)=\"onNodeRenamed($event)\"\n                (nodeSelected)=\"onNodeSelected($event)\"\n                (nodeMoved)=\"onNodeMoved($event)\"\n                (nodeCreated)=\"onNodeCreated($event)\">\n            <ng-template let-node>\n              <i class=\"fa {{node.icon}}\"></i> <span class=\"node-name\" [innerHTML]=\"node.value\"></span>\n            </ng-template>\n          </tree>\n        </div>\n      </div>\n    </div>\n  ",
-            styles: ["\n    .tree-info {\n      flex: 1 0 100%;\n      display: flex;\n      flex-direction: column;\n      align-items: flex-start;\n    }\n\n    .tree-controlls {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .tree-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .tree-container {\n      margin-bottom: 20px;\n\n    }\n\n    .tree-container--with-controls {\n      display: flex;\n      flex-wrap: wrap;\n    }\n\n    .tree-demo-app {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .tree-title {\n      margin: 0;\n      color: #40a070;\n      font-size: 2em;\n    }\n\n    .notice {\n      color: #e91e63;\n      font-size: 1.2em;\n      font-style: italic;\n    }\n\n    :host /deep/ .fa {\n      cursor: pointer;\n    }\n\n    :host /deep/ .fa.disabled {\n      cursor: inherit;\n      color: #757575;\n    }\n\n    .button {\n      border-radius: 4px;\n      box-shadow: 0 2px 4px 0 #888;\n      background-color: #fff;\n      -webkit-appearance: none;\n      border: 1px solid #000;\n      height: 35px;\n      outline: none;\n    }\n\n    .button-pressed {\n      box-shadow: 0 0 1px 0 #888;\n    }\n\n    .tree-controlls button {\n      margin: 5px;\n    }\n  "]
+            template: "\n    <div class=\"tree-demo-app\">\n        <div class=\"tree-container\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Fonts tree</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree #treeFonts\n                      [tree]=\"fonts\"\n                      [settings]=\"{rootIsVisible: false}\"\n                      (menuItemSelected)=\"onMenuItemSelected($event)\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeCreated($event)\"\n                      (nodeExpanded)=\"onNodeExpanded($event)\"\n                      (nodeCollapsed)=\"onNodeCollapsed($event)\">\n                </tree>\n            </div>\n        </div>\n        <div class=\"tree-container\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Programming languages tree</p>\n                <p class=\"notice\">this tree is loaded asynchronously</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree [tree]=\"pls\"\n                      [settings]=\"disabledCheckboxesSettings\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeCreated($event)\">\n                </tree>\n            </div>\n        </div>\n        <div class=\"tree-container tree-container--with-controls\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Directory/File structure</p>\n                <p class=\"notice\">this tree has advanced configurations</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree #treeFFS\n                      [tree]=\"ffs\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeFFSCreated($event)\"\n                      (nodeExpanded)=\"onNodeExpanded($event)\"\n                      (nodeCollapsed)=\"onNodeCollapsed($event)\"\n                      [settings]=\"settings\">\n                </tree>\n            </div>\n\n            <div class=\"tree-controlls\">\n                <p class=\"notice\">Tree API exposed via TreeController</p>\n                <button button (click)=\"handleActionOnFFS(13, 'select')\">Select 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(13, 'allowSelection')\">Allow selection of the 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(13, 'forbidSelection')\">Forbid selection of the 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(2, 'collapse')\">Collapse 'bin' node</button>\n                <button button (click)=\"handleActionOnFFS(2, 'expand')\">Expand 'bin' node</button>\n                <button button (click)=\"renameFFS(21)\">Rename 'unicode.pf2' to 'unicode.pf'</button>\n                <button button (click)=\"handleActionOnFFS(12, 'remove')\">Remove 'nano'</button>\n                <button button (click)=\"handleActionOnFFS(52, 'reloadChildren')\">Reload Music's children</button>\n                <button button (click)=\"setChildrenFFS(36)\">Set 'etc' children</button>\n                <button button (click)=\"addChildFFS(2, {value: 'ping'})\">Add a child with name 'ping' to 'bin'</button>\n                <button button (click)=\"addChildFFS(22, {value: 'lost'})\">Add a child with name 'lost' to 'lost+found'</button>\n                <button button (click)=\"addChildFFS(22, {value: 'found', children: []})\">Add a child with name 'found' to 'lost+found'</button>\n                <button button (click)=\"addChildFFS(36, {value: 'found', children: []})\">Add a child with name 'found' to 'etc'</button>\n                <button button (click)=\"addChildFFS(78, {value: 'Voodo People'})\">Add a child with name 'Voodo People' to '2Cellos'</button>\n                <button button (click)=\"checkFolder(52)\">Check Music folder</button>\n                <button button (click)=\"uncheckFolder(52)\">Uncheck Music folder</button>\n            </div>\n        </div>\n        <div class=\"tree-container\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Programming languages tree</p>\n                <p class=\"notice\">this tree is using a custom template</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree [tree]=\"icons\"\n                      [settings]=\"settings\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeCreated($event)\">\n                    <ng-template let-node>\n                        <i class=\"fa {{node.icon}}\"></i>\n                        <span class=\"node-name\" [innerHTML]=\"node.value\"></span>\n                    </ng-template>\n                </tree>\n            </div>\n        </div>\n        <div>\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Custom right click GUI tree</p>\n                <p class=\"notice\">this tree is using a custom right click menu</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree [tree]=\"custom\"\n                      (nodeSelected)=\"onNodeSelected($event)\">\n                </tree>\n            </div>\n        </div>\n    </div>\n  ",
+            styles: [
+                "\n    .tree-info {\n        flex: 1 0 100%;\n        display: flex;\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .tree-controlls {\n        display: flex;\n        flex-direction: column;\n      }\n\n      .tree-content {\n        display: flex;\n        flex-direction: column;\n      }\n\n      .tree-container {\n        margin-bottom: 20px;\n\n      }\n\n      .tree-container--with-controls {\n        display: flex;\n        flex-wrap: wrap;\n      }\n\n      .tree-demo-app {\n        display: flex;\n        flex-direction: column;\n        margin-bottom:50px;\n      }\n\n      .tree-title {\n        margin: 0;\n        color: #40a070;\n        font-size: 2em;\n      }\n\n      .notice {\n        color: #e91e63;\n        font-size: 1.2em;\n        font-style: italic;\n      }\n\n      :host /deep/ .fa {\n        cursor: pointer;\n      }\n\n      :host /deep/ .fa.disabled {\n        cursor: inherit;\n        color: #757575;\n      }\n\n      .button {\n        border-radius: 4px;\n        box-shadow: 0 2px 4px 0 #888;\n        background-color: #fff;\n        -webkit-appearance: none;\n        border: 1px solid #000;\n        height: 35px;\n        outline: none;\n      }\n\n      .button-pressed {\n        box-shadow: 0 0 1px 0 #888;\n      }\n\n      .tree-controlls button {\n        margin: 5px;\n      }\n  "
+            ]
         })
     ], AppComponent);
     return AppComponent;
@@ -830,9 +837,7 @@ var NodeDraggableDirective = (function () {
     };
     NodeDraggableDirective.prototype.isDropPossible = function (e) {
         var capturedNode = this.nodeDraggableService.getCapturedNode();
-        return capturedNode
-            && capturedNode.canBeDroppedAt(this.nodeDraggable)
-            && this.containsElementAt(e);
+        return capturedNode && capturedNode.canBeDroppedAt(this.nodeDraggable) && this.containsElementAt(e);
     };
     NodeDraggableDirective.prototype.handleDragEnd = function (e) {
         this.removeClass('over-drop-target');
@@ -1126,8 +1131,8 @@ var NodeMenuComponent = (function () {
     NodeMenuComponent.prototype.closeMenu = function (e) {
         var mouseClicked = e instanceof MouseEvent;
         // Check if the click is fired on an element inside a menu
-        var containingTarget = (this.menuContainer.nativeElement !== e.target && this.menuContainer.nativeElement.contains(e.target));
-        if (mouseClicked && !containingTarget || Object(__WEBPACK_IMPORTED_MODULE_3__utils_event_utils__["b" /* isEscapePressed */])(e)) {
+        var containingTarget = this.menuContainer.nativeElement !== e.target && this.menuContainer.nativeElement.contains(e.target);
+        if ((mouseClicked && !containingTarget) || Object(__WEBPACK_IMPORTED_MODULE_3__utils_event_utils__["b" /* isEscapePressed */])(e)) {
             this.nodeMenuService.fireMenuEvent(e.target, __WEBPACK_IMPORTED_MODULE_2__menu_events__["a" /* NodeMenuAction */].Close);
         }
     };
@@ -1329,6 +1334,15 @@ var TreeController = (function () {
     TreeController.prototype.isIndetermined = function () {
         return Object(__WEBPACK_IMPORTED_MODULE_2__utils_fn_utils__["b" /* get */])(this.component, 'checkboxElementRef.nativeElement.indeterminate');
     };
+    TreeController.prototype.allowSelection = function () {
+        this.tree.selectionAllowed = true;
+    };
+    TreeController.prototype.forbidSelection = function () {
+        this.tree.selectionAllowed = false;
+    };
+    TreeController.prototype.isSelectionAllowed = function () {
+        return this.tree.selectionAllowed;
+    };
     return TreeController;
 }());
 
@@ -1400,15 +1414,12 @@ var TreeInternalComponent = (function () {
         if (this.tree.isRoot() && this.settings.rootIsVisible === false) {
             this.tree.disableCollapseOnInit();
         }
-        this.subscriptions.push(this.nodeMenuService.hideMenuStream(this.nodeElementRef)
-            .subscribe(function () {
+        this.subscriptions.push(this.nodeMenuService.hideMenuStream(this.nodeElementRef).subscribe(function () {
             _this.isRightMenuVisible = false;
             _this.isLeftMenuVisible = false;
         }));
-        this.subscriptions.push(this.treeService.unselectStream(this.tree)
-            .subscribe(function () { return _this.isSelected = false; }));
-        this.subscriptions.push(this.treeService.draggedStream(this.tree, this.nodeElementRef)
-            .subscribe(function (e) {
+        this.subscriptions.push(this.treeService.unselectStream(this.tree).subscribe(function () { return (_this.isSelected = false); }));
+        this.subscriptions.push(this.treeService.draggedStream(this.tree, this.nodeElementRef).subscribe(function (e) {
             if (_this.tree.hasSibling(e.captured.tree)) {
                 _this.swapWithSibling(e.captured.tree, _this.tree);
             }
@@ -1419,7 +1430,8 @@ var TreeInternalComponent = (function () {
                 _this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, _this.tree);
             }
         }));
-        this.subscriptions.push(this.treeService.nodeChecked$.merge(this.treeService.nodeUnchecked$)
+        this.subscriptions.push(this.treeService.nodeChecked$
+            .merge(this.treeService.nodeUnchecked$)
             .filter(function (e) { return _this.eventContainsId(e) && _this.tree.hasChild(e.node); })
             .subscribe(function (e) { return _this.updateCheckboxState(); }));
     };
@@ -1447,6 +1459,9 @@ var TreeInternalComponent = (function () {
         this.treeService.fireNodeMoved(addedSibling, e.captured.tree.parent);
     };
     TreeInternalComponent.prototype.onNodeSelected = function (e) {
+        if (!this.tree.selectionAllowed) {
+            return;
+        }
         if (__WEBPACK_IMPORTED_MODULE_8__utils_event_utils__["c" /* isLeftButtonClicked */](e)) {
             this.isSelected = true;
             this.treeService.fireNodeSelected(this.tree);
@@ -1489,6 +1504,7 @@ var TreeInternalComponent = (function () {
                 this.onRemoveSelected();
                 break;
             case __WEBPACK_IMPORTED_MODULE_5__menu_menu_events__["b" /* NodeMenuItemAction */].Custom:
+                this.onCustomSelected();
                 this.treeService.fireMenuItemSelected(this.tree, e.nodeMenuItemSelected);
                 break;
             default:
@@ -1508,6 +1524,10 @@ var TreeInternalComponent = (function () {
     TreeInternalComponent.prototype.onRemoveSelected = function () {
         this.treeService.deleteController(Object(__WEBPACK_IMPORTED_MODULE_9__utils_fn_utils__["b" /* get */])(this.tree, 'node.id', ''));
         this.treeService.fireNodeRemoved(this.tree);
+    };
+    TreeInternalComponent.prototype.onCustomSelected = function () {
+        this.isRightMenuVisible = false;
+        this.isLeftMenuVisible = false;
     };
     TreeInternalComponent.prototype.onSwitchFoldingType = function () {
         this.tree.switchFoldingType();
@@ -2135,10 +2155,10 @@ var TreeService = (function () {
         return this.controllers.has(id);
     };
     TreeService.prototype.shouldFireLoadNextLevel = function (tree) {
-        var shouldLoadNextLevel = tree.node.emitLoadNextLevel
-            && !tree.node.loadChildren
-            && !tree.childrenAreBeingLoaded()
-            && Object(__WEBPACK_IMPORTED_MODULE_4__utils_fn_utils__["e" /* isEmpty */])(tree.children);
+        var shouldLoadNextLevel = tree.node.emitLoadNextLevel &&
+            !tree.node.loadChildren &&
+            !tree.childrenAreBeingLoaded() &&
+            Object(__WEBPACK_IMPORTED_MODULE_4__utils_fn_utils__["e" /* isEmpty */])(tree.children);
         if (shouldLoadNextLevel) {
             tree.loadingChildrenRequested();
         }
@@ -2223,8 +2243,9 @@ var Tree = (function () {
      * @static
      */
     Tree.isRenamable = function (value) {
-        return (Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["c" /* has */])(value, 'setName') && Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["f" /* isFunction */])(value.setName))
-            && (Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["c" /* has */])(value, 'toString') && Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["f" /* isFunction */])(value.toString) && value.toString !== Object.toString);
+        return (Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["c" /* has */])(value, 'setName') &&
+            Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["f" /* isFunction */])(value.setName) &&
+            (Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["c" /* has */])(value, 'toString') && Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["f" /* isFunction */])(value.toString) && value.toString !== Object.toString));
     };
     Tree.cloneTreeShallow = function (origin) {
         var tree = new Tree(Object.assign({}, origin.node));
@@ -2265,7 +2286,7 @@ var Tree = (function () {
      * @returns {boolean} A flag indicating that children are being loaded.
      */
     Tree.prototype.childrenAreBeingLoaded = function () {
-        return (this._childrenLoadingState === ChildrenLoadingState.Loading);
+        return this._childrenLoadingState === ChildrenLoadingState.Loading;
     };
     /**
      * Check whether children of the node were loaded.
@@ -2273,12 +2294,12 @@ var Tree = (function () {
      * @returns {boolean} A flag indicating that children were loaded.
      */
     Tree.prototype.childrenWereLoaded = function () {
-        return (this._childrenLoadingState === ChildrenLoadingState.Completed);
+        return this._childrenLoadingState === ChildrenLoadingState.Completed;
     };
     Tree.prototype.canLoadChildren = function () {
-        return (this._childrenLoadingState === ChildrenLoadingState.NotStarted)
-            && (this.foldingType === __WEBPACK_IMPORTED_MODULE_2__tree_types__["a" /* FoldingType */].Expanded)
-            && (!!this._loadChildren);
+        return (this._childrenLoadingState === ChildrenLoadingState.NotStarted &&
+            this.foldingType === __WEBPACK_IMPORTED_MODULE_2__tree_types__["a" /* FoldingType */].Expanded &&
+            !!this._loadChildren);
     };
     /**
      * Check whether children of the node should be loaded and not loaded yet.
@@ -2400,6 +2421,17 @@ var Tree = (function () {
     Object.defineProperty(Tree.prototype, "checkedChildren", {
         get: function () {
             return this.hasLoadedChildern() ? this.children.filter(function (child) { return child.checked; }) : [];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tree.prototype, "selectionAllowed", {
+        get: function () {
+            var value = Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(this.node.settings, 'selectionAllowed');
+            return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["g" /* isNil */])(value) ? true : !!value;
+        },
+        set: function (selectionAllowed) {
+            this.node.settings = Object.assign({}, this.node.settings, { selectionAllowed: selectionAllowed });
         },
         enumerable: true,
         configurable: true
@@ -2808,9 +2840,18 @@ var FoldingType = (function () {
 var TreeModelSettings = (function () {
     function TreeModelSettings() {
     }
-    TreeModelSettings.merge = function (sourceA, sourceB) {
-        return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["a" /* defaultsDeep */])({}, Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceA, 'settings'), Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(sourceB, 'settings'), { static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false, checked: false });
+    TreeModelSettings.merge = function (child, parent) {
+        var parentCascadingSettings = Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["h" /* omit */])(Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(parent, 'settings'), TreeModelSettings.NOT_CASCADING_SETTINGS);
+        return Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["a" /* defaultsDeep */])({}, Object(__WEBPACK_IMPORTED_MODULE_0__utils_fn_utils__["b" /* get */])(child, 'settings'), parentCascadingSettings, {
+            static: false,
+            leftMenu: false,
+            rightMenu: true,
+            isCollapsedOnInit: false,
+            checked: false,
+            selectionAllowed: true
+        });
     };
+    TreeModelSettings.NOT_CASCADING_SETTINGS = ['selectionAllowed'];
     return TreeModelSettings;
 }());
 
@@ -2913,11 +2954,13 @@ function get(value, path, defaultValue) {
     }
     return isNil(result) || result === value ? defaultValue : result;
 }
-function omit(value, propToSkip) {
-    return Object
-        .keys(value)
-        .reduce(function (result, prop) {
-        if (prop === propToSkip) {
+function omit(value, propsToSkip) {
+    if (!value) {
+        return value;
+    }
+    var normalizedPropsToSkip = typeof propsToSkip === 'string' ? [propsToSkip] : propsToSkip;
+    return Object.keys(value).reduce(function (result, prop) {
+        if (includes(normalizedPropsToSkip, prop)) {
             return result;
         }
         return Object.assign(result, (_a = {}, _a[prop] = value[prop], _a));
