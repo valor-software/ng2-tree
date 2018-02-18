@@ -2,7 +2,7 @@
 .vscode
 .publish
 dist
-demo-dist
+dist-demo
 build
 coverage
 bundles

@@ -1,10 +1,8 @@
-import {Tree} from '../tree';
-import {ElementRef} from '@angular/core';
+import { Tree } from '../tree';
+import { ElementRef } from '@angular/core';
 
 export class CapturedNode {
-  public constructor(private anElement: ElementRef,
-                     private aTree: Tree) {
-  }
+  public constructor(private anElement: ElementRef, private aTree: Tree) {}
 
   public canBeDroppedAt(element: ElementRef): boolean {
     return !this.sameAs(element) && !this.contains(element);

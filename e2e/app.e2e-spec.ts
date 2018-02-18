@@ -31,10 +31,10 @@ describe('Tree App', () => {
     expect(browser.isElementPresent(antiquaNode)).toBeTruthy();
     expect(await antiquaNode.getText()).toEqual('Antiqua');
 
-    const attrs = {id: 'antiqua', class: 'test'};
+    const attrs = { id: 'antiqua', class: 'test' };
 
     const expectations = Object.keys(attrs).map((key: string) => {
-        return antiquaNode.getAttribute(key).then((value: string) => expect(value).toEqual(attrs[key]));
+      return antiquaNode.getAttribute(key).then((value: string) => expect(value).toEqual(attrs[key]));
     });
 
     return Promise.all(expectations as any);

@@ -63,7 +63,7 @@ describe('NodeEditableDirective', () => {
     spyOn(directiveInstance.valueChanged, 'emit');
     directiveEl.triggerEventHandler('keyup.enter', event);
 
-    expect(directiveInstance.valueChanged.emit).toHaveBeenCalledWith({type: 'keyup', value: expectedNewValue});
+    expect(directiveInstance.valueChanged.emit).toHaveBeenCalledWith({ type: 'keyup', value: expectedNewValue });
     expect(directiveInstance.valueChanged.emit).toHaveBeenCalledTimes(1);
   });
 
@@ -76,7 +76,7 @@ describe('NodeEditableDirective', () => {
     spyOn(directiveInstance.valueChanged, 'emit');
     directiveEl.triggerEventHandler('blur', event);
 
-    expect(directiveInstance.valueChanged.emit).toHaveBeenCalledWith({type: 'blur', value: expectedNewValue});
+    expect(directiveInstance.valueChanged.emit).toHaveBeenCalledWith({ type: 'blur', value: expectedNewValue });
     expect(directiveInstance.valueChanged.emit).toHaveBeenCalledTimes(1);
   });
 
@@ -86,7 +86,11 @@ describe('NodeEditableDirective', () => {
     spyOn(directiveInstance.valueChanged, 'emit');
     directiveEl.triggerEventHandler('keyup.esc');
 
-    const event: NodeEditableEvent = {type: 'keyup', value: directiveInstance.nodeValue, action: NodeEditableEventAction.Cancel};
+    const event: NodeEditableEvent = {
+      type: 'keyup',
+      value: directiveInstance.nodeValue,
+      action: NodeEditableEventAction.Cancel
+    };
     expect(directiveInstance.valueChanged.emit).toHaveBeenCalledWith(event);
     expect(directiveInstance.valueChanged.emit).toHaveBeenCalledTimes(1);
   });

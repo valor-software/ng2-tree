@@ -20,8 +20,7 @@ class TestComponent {
     value: '42'
   });
 
-  public constructor(public draggableTarget: ElementRef) {
-  }
+  public constructor(public draggableTarget: ElementRef) {}
 }
 
 describe('NodeDraggableDirective', () => {
@@ -137,7 +136,10 @@ describe('NodeDraggableDirective', () => {
     expect(capturedNode.element).toBe(directiveInstance.nodeDraggable);
     expect(capturedNode.tree).toBe(directiveInstance.tree);
 
-    expect(dragenterEvent.dataTransfer.setData).toHaveBeenCalledWith('text', NodeDraggableDirective.DATA_TRANSFER_STUB_DATA);
+    expect(dragenterEvent.dataTransfer.setData).toHaveBeenCalledWith(
+      'text',
+      NodeDraggableDirective.DATA_TRANSFER_STUB_DATA
+    );
     expect(dragenterEvent.dataTransfer.effectAllowed).toBe('move');
   });
 
@@ -230,7 +232,7 @@ describe('NodeDraggableDirective', () => {
     expect(nodeDraggableService.fireNodeDragged).not.toHaveBeenCalled();
   });
 
-  it('should handle drop event: do not notify that node was dropped if it is not a target\'s child element or target itself', () => {
+  it(`should handle drop event: do not notify that node was dropped if it is not a target's child element or target itself`, () => {
     fixture.detectChanges();
 
     const dragenterEvent = jasmine.createSpyObj('e', ['stopPropagation', 'preventDefault']);

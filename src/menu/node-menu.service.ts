@@ -1,7 +1,7 @@
-import {ElementRef, Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
-import {NodeMenuAction, NodeMenuEvent} from './menu.events';
+import { ElementRef, Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+import { NodeMenuAction, NodeMenuEvent } from './menu.events';
 
 @Injectable()
 export class NodeMenuService {

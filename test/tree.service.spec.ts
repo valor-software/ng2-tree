@@ -134,11 +134,10 @@ describe('TreeService', () => {
     const selectedTree = new Tree({ value: 'Master' });
 
     const tree = new Tree({ value: 'Master' });
-    treeService.unselectStream(tree)
-      .subscribe((e: NodeSelectedEvent) => {
-        expect(e.node).toBe(selectedTree);
-        done();
-      });
+    treeService.unselectStream(tree).subscribe((e: NodeSelectedEvent) => {
+      expect(e.node).toBe(selectedTree);
+      done();
+    });
 
     treeService.fireNodeSelected(selectedTree);
   });
@@ -146,10 +145,7 @@ describe('TreeService', () => {
   it('removes node from parent when when appropriate event fires', done => {
     const masterTree = new Tree({
       value: 'Master',
-      children: [
-        { value: 'Servant#1' },
-        { value: 'Servant#2' }
-      ]
+      children: [{ value: 'Servant#1' }, { value: 'Servant#2' }]
     });
 
     const servantNumber1Tree = masterTree.children[0];
@@ -168,22 +164,18 @@ describe('TreeService', () => {
   it('should produce drag event for the same element and not on captured node children', done => {
     const masterTree = new Tree({
       value: 'Master',
-      children: [
-        { value: 'Servant#1' },
-        { value: 'Servant#2' }
-      ]
+      children: [{ value: 'Servant#1' }, { value: 'Servant#2' }]
     });
 
     const tree = new Tree({ value: 'tree' });
 
     const elementRef = new ElementRef(null);
 
-    treeService.draggedStream(tree, elementRef)
-      .subscribe((e: NodeDraggableEvent) => {
-        expect(e.captured.tree).toBe(masterTree);
-        expect(e.captured.element).toBe(elementRef);
-        done();
-      });
+    treeService.draggedStream(tree, elementRef).subscribe((e: NodeDraggableEvent) => {
+      expect(e.captured.tree).toBe(masterTree);
+      expect(e.captured.element).toBe(elementRef);
+      done();
+    });
 
     draggableService.fireNodeDragged(new CapturedNode(elementRef, masterTree), elementRef);
   });
@@ -220,10 +212,7 @@ describe('TreeService', () => {
   it('fires "expanded" event for expanded tree', () => {
     const masterTree = new Tree({
       value: 'Master',
-      children: [
-        { value: 'Servant#1' },
-        { value: 'Servant#2' }
-      ]
+      children: [{ value: 'Servant#1' }, { value: 'Servant#2' }]
     });
 
     spyOn(treeService.nodeExpanded$, 'next');
@@ -238,10 +227,7 @@ describe('TreeService', () => {
   it('fires "collapsed" event for not expanded tree', () => {
     const masterTree = new Tree({
       value: 'Master',
-      children: [
-        { value: 'Servant#1' },
-        { value: 'Servant#2' }
-      ]
+      children: [{ value: 'Servant#1' }, { value: 'Servant#2' }]
     });
 
     masterTree.switchFoldingType();
@@ -307,20 +293,14 @@ describe('TreeService', () => {
     const masterTree = new Tree({
       value: 'Master',
       emitLoadNextLevel: true,
-      loadChildren: (callback) => {
+      loadChildren: callback => {
         setTimeout(() => {
-          callback([
-            { value: '1' },
-            { value: '2' },
-            { value: '3' }
-          ]);
-
+          callback([{ value: '1' }, { value: '2' }, { value: '3' }]);
         });
       }
     });
 
     masterTree.switchFoldingType();
-
 
     spyOn(treeService.loadNextLevel$, 'next');
 
@@ -333,11 +313,7 @@ describe('TreeService', () => {
     const masterTree = new Tree({
       value: 'Master',
       emitLoadNextLevel: true,
-      children: [
-        { value: '1' },
-        { value: '2' },
-        { value: '3' }
-      ]
+      children: [{ value: '1' }, { value: '2' }, { value: '3' }]
     });
 
     masterTree.switchFoldingType();
@@ -351,7 +327,7 @@ describe('TreeService', () => {
 
   it('not fires "loadNextLevel" event if "emitLoadNextLevel" does not exists', () => {
     const masterTree = new Tree({
-      value: 'Master',
+      value: 'Master'
     });
 
     masterTree.switchFoldingType();
@@ -380,14 +356,16 @@ describe('TreeService', () => {
 
   it('not fires "loadNextLevel" event if "emitLoadNextLevel" is false', () => {
     const masterTree = new Tree({
-      value: 'Master',
+      value: 'Master'
     });
 
     spyOn(treeService.menuItemSelected$, 'next');
 
     treeService.fireMenuItemSelected(masterTree, 'CustomMenu');
 
-    expect(treeService.menuItemSelected$.next).toHaveBeenCalledWith(new MenuItemSelectedEvent(masterTree, 'CustomMenu'));
+    expect(treeService.menuItemSelected$.next).toHaveBeenCalledWith(
+      new MenuItemSelectedEvent(masterTree, 'CustomMenu')
+    );
   });
 
   it('return null if there is not controller for the given id', () => {

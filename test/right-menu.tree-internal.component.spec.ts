@@ -28,33 +28,26 @@ let treeService;
 
 const tree: TreeModel = {
   value: 'Master',
-  children: [
-    {value: 'Servant#1'},
-    {value: 'Servant#2'}
-  ]
+  children: [{ value: 'Servant#1' }, { value: 'Servant#2' }]
 };
 
 const tree2: TreeModel = {
   value: 'Right Menu',
   children: [
-    {value: 'Right Menu Not Set Child'},
+    { value: 'Right Menu Not Set Child' },
     {
       value: 'Inactive',
       settings: {
         rightMenu: false
       },
-      children: [
-        {value: 'Right Menu Inactive Child'}
-      ]
+      children: [{ value: 'Right Menu Inactive Child' }]
     },
     {
       value: 'Active',
       settings: {
         rightMenu: true
       },
-      children: [
-        {value: 'Right Menu Active Child'}
-      ]
+      children: [{ value: 'Right Menu Active Child' }]
     },
     {
       value: 'Inactive With Active Children',
@@ -67,19 +60,17 @@ const tree2: TreeModel = {
           settings: {
             rightMenu: true
           },
-          children: [
-            {value: 'Reactivated Right Menu Children'}
-          ]
+          children: [{ value: 'Reactivated Right Menu Children' }]
         }
       ]
-    },
+    }
   ]
 };
 
 const tree3: TreeModel = {
   value: 'Face',
   settings: {
-    'static': true,
+    static: true,
     rightMenu: true
   },
   children: [
@@ -92,7 +83,7 @@ const tree3: TreeModel = {
     {
       value: 'Retina',
       settings: {
-        'static': false
+        static: false
       },
       children: [
         {
@@ -110,7 +101,7 @@ const tree3: TreeModel = {
         }
       ]
     },
-    {value: 'Lips'}
+    { value: 'Lips' }
   ]
 };
 
@@ -126,14 +117,21 @@ class TestComponent {
   public tree2: TreeModel = tree2;
   public tree3: TreeModel = tree3;
 
-  public constructor(public treeHolder: ElementRef) {
-  }
+  public constructor(public treeHolder: ElementRef) {}
 }
 
 describe('RightMenu-TreeInternalComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
+      declarations: [
+        TestComponent,
+        TreeInternalComponent,
+        TreeComponent,
+        NodeEditableDirective,
+        NodeMenuComponent,
+        NodeDraggableDirective,
+        SafeHtmlPipe
+      ],
       providers: [NodeMenuService, NodeDraggableService, TreeService]
     });
 
@@ -142,7 +140,9 @@ describe('RightMenu-TreeInternalComponent', () => {
     masterInternalTreeEl = fixture.debugElement.query(By.css('#master')).query(By.directive(TreeInternalComponent));
     masterComponentInstance = masterInternalTreeEl.componentInstance;
 
-    rightMenuInternalTreeEl = fixture.debugElement.query(By.css('#right-menu')).query(By.directive(TreeInternalComponent));
+    rightMenuInternalTreeEl = fixture.debugElement
+      .query(By.css('#right-menu'))
+      .query(By.directive(TreeInternalComponent));
     rightMenuComponentInstance = rightMenuInternalTreeEl.componentInstance;
 
     staticInternalTreeEl = fixture.debugElement.query(By.css('#static')).query(By.directive(TreeInternalComponent));
@@ -244,7 +244,7 @@ describe('RightMenu-TreeInternalComponent', () => {
 
     const menuItemRemove: DebugElement = menu.query(By.css('.remove')).parent;
 
-    const eventRemove = {button: EventUtils.MouseButtons.Left};
+    const eventRemove = { button: EventUtils.MouseButtons.Left };
     menuItemRemove.triggerEventHandler('click', eventRemove);
 
     fixture.detectChanges();
@@ -289,14 +289,14 @@ describe('RightMenu-TreeInternalComponent', () => {
 
     const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuItemRename.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
@@ -316,14 +316,14 @@ describe('RightMenu-TreeInternalComponent', () => {
 
     const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuItemRename.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('blur', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('blur', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
@@ -343,7 +343,7 @@ describe('RightMenu-TreeInternalComponent', () => {
 
     const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuItemRename.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
@@ -351,7 +351,7 @@ describe('RightMenu-TreeInternalComponent', () => {
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
     inputRename.nativeElement.value = '121212';
-    inputRename.triggerEventHandler('keyup.esc', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('keyup.esc', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
@@ -371,14 +371,14 @@ describe('RightMenu-TreeInternalComponent', () => {
 
     const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuItemRename.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('blur', {target: {value: ''}});
+    inputRename.triggerEventHandler('blur', { target: { value: '' } });
 
     fixture.detectChanges();
 
@@ -398,20 +398,23 @@ describe('RightMenu-TreeInternalComponent', () => {
 
     const menuNewTag: DebugElement = menu.query(By.css('.new-tag')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuNewTag.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
     expect(masterComponentInstance.tree.children.length).toEqual(3);
     expect(masterComponentInstance.tree.children[2].value).toEqual('bla');
-    expect(masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value').innerText).toEqual('bla');
+    expect(
+      masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value')
+        .innerText
+    ).toEqual('bla');
   });
 
   it('should create a sibling leaf when NewTag operation was activated on a node that is leaf', () => {
@@ -429,20 +432,23 @@ describe('RightMenu-TreeInternalComponent', () => {
 
     const menuNewTag: DebugElement = menu.query(By.css('.new-tag')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuNewTag.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeTruthy();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
     expect(masterComponentInstance.tree.children.length).toEqual(3);
     expect(masterComponentInstance.tree.children[2].value).toEqual('bla');
-    expect(masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value').innerText).toEqual('bla');
+    expect(
+      masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value')
+        .innerText
+    ).toEqual('bla');
   });
 
   it('should not create a node with empty value', () => {
@@ -458,14 +464,14 @@ describe('RightMenu-TreeInternalComponent', () => {
 
     const menuNewTag: DebugElement = menu.query(By.css('.new-tag')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuNewTag.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: '\r\n\t '}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: '\r\n\t ' } });
 
     fixture.detectChanges();
 
@@ -492,14 +498,14 @@ describe('RightMenu-TreeInternalComponent', () => {
 
     const menuNewTag: DebugElement = menu.query(By.css('.new-folder')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuNewTag.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'Branch'}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: 'Branch' } });
 
     fixture.detectChanges();
 
@@ -508,7 +514,10 @@ describe('RightMenu-TreeInternalComponent', () => {
     expect(masterComponentInstance.tree.children[2].isBranch()).toEqual(true);
     expect(masterComponentInstance.tree.children[2].children).toBeDefined();
     expect(masterComponentInstance.tree.children[2].children.length).toEqual(0);
-    expect(masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value').innerText).toEqual('Branch');
+    expect(
+      masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value')
+        .innerText
+    ).toEqual('Branch');
   });
 
   describe('Static Tree', () => {
@@ -546,7 +555,7 @@ describe('RightMenu-TreeInternalComponent', () => {
       expect(eyebowEl.query(By.css('.node-menu'))).toEqual(null);
     });
 
-    it('should allow to override static option for it\'s children', () => {
+    it("should allow to override static option for it's children", () => {
       const event = jasmine.createSpyObj('e', ['preventDefault']);
       event.button = EventUtils.MouseButtons.Right;
 
@@ -611,7 +620,10 @@ describe('RightMenu-TreeInternalComponent', () => {
       expect(staticInternalTreeEl.componentInstance.tree.children[1].children[0].value).toEqual('Eyelash');
       expect(staticInternalTreeEl.componentInstance.tree.children[1].children[1].value).toEqual('Eyebow');
 
-      const capturedNode = new CapturedNode(eyelashEl.componentInstance.nodeElementRef, eyelashEl.componentInstance.tree);
+      const capturedNode = new CapturedNode(
+        eyelashEl.componentInstance.nodeElementRef,
+        eyelashEl.componentInstance.tree
+      );
       nodeDraggableService.fireNodeDragged(capturedNode, eyebowEl.componentInstance.nodeElementRef);
 
       fixture.detectChanges();
@@ -633,5 +645,4 @@ describe('RightMenu-TreeInternalComponent', () => {
       expect(nodeValues[5].innerText).toEqual('Lips');
     });
   });
-
 });

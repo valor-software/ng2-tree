@@ -1,7 +1,7 @@
-import {Directive, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import {NodeDraggableService} from './node-draggable.service';
-import {CapturedNode} from './captured-node';
-import {Tree} from '../tree';
+import { Directive, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { NodeDraggableService } from './node-draggable.service';
+import { CapturedNode } from './captured-node';
+import { Tree } from '../tree';
 
 @Directive({
   selector: '[nodeDraggable]'
@@ -9,30 +9,42 @@ import {Tree} from '../tree';
 export class NodeDraggableDirective implements OnDestroy, OnInit {
   public static DATA_TRANSFER_STUB_DATA = 'some browsers enable drag-n-drop only when dataTransfer has data';
 
-  @Input()
-  public nodeDraggable: ElementRef;
+  @Input() public nodeDraggable: ElementRef;
 
-  @Input()
-  public tree: Tree;
+  @Input() public tree: Tree;
 
   private nodeNativeElement: HTMLElement;
   private disposersForDragListeners: Function[] = [];
 
-  public constructor(@Inject(ElementRef) public element: ElementRef,
-                     @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
-                     @Inject(Renderer2) private renderer: Renderer2) {
+  public constructor(
+    @Inject(ElementRef) public element: ElementRef,
+    @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
+    @Inject(Renderer2) private renderer: Renderer2
+  ) {
     this.nodeNativeElement = element.nativeElement;
   }
 
   public ngOnInit(): void {
     if (!this.tree.isStatic()) {
       this.renderer.setAttribute(this.nodeNativeElement, 'draggable', 'true');
-      this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragenter', this.handleDragEnter.bind(this)));
-      this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragover', this.handleDragOver.bind(this)));
-      this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragstart', this.handleDragStart.bind(this)));
-      this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragleave', this.handleDragLeave.bind(this)));
-      this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'drop', this.handleDrop.bind(this)));
-      this.disposersForDragListeners.push(this.renderer.listen(this.nodeNativeElement, 'dragend', this.handleDragEnd.bind(this)));
+      this.disposersForDragListeners.push(
+        this.renderer.listen(this.nodeNativeElement, 'dragenter', this.handleDragEnter.bind(this))
+      );
+      this.disposersForDragListeners.push(
+        this.renderer.listen(this.nodeNativeElement, 'dragover', this.handleDragOver.bind(this))
+      );
+      this.disposersForDragListeners.push(
+        this.renderer.listen(this.nodeNativeElement, 'dragstart', this.handleDragStart.bind(this))
+      );
+      this.disposersForDragListeners.push(
+        this.renderer.listen(this.nodeNativeElement, 'dragleave', this.handleDragLeave.bind(this))
+      );
+      this.disposersForDragListeners.push(
+        this.renderer.listen(this.nodeNativeElement, 'drop', this.handleDrop.bind(this))
+      );
+      this.disposersForDragListeners.push(
+        this.renderer.listen(this.nodeNativeElement, 'dragend', this.handleDragEnd.bind(this))
+      );
     }
   }
 
@@ -90,9 +102,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
 
   private isDropPossible(e: DragEvent): boolean {
     const capturedNode = this.nodeDraggableService.getCapturedNode();
-    return capturedNode
-      && capturedNode.canBeDroppedAt(this.nodeDraggable)
-      && this.containsElementAt(e);
+    return capturedNode && capturedNode.canBeDroppedAt(this.nodeDraggable) && this.containsElementAt(e);
   }
 
   private handleDragEnd(e: DragEvent): any {
@@ -101,7 +111,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   }
 
   private containsElementAt(e: DragEvent): boolean {
-    const {x = e.clientX, y = e.clientY} = e;
+    const { x = e.clientX, y = e.clientY } = e;
     return this.nodeNativeElement.contains(document.elementFromPoint(x, y));
   }
 

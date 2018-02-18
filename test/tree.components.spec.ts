@@ -28,7 +28,15 @@ class TestComponent {
 describe('TreeComponent (the one that wraps TreeInternalComponent)', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
+      declarations: [
+        TestComponent,
+        TreeInternalComponent,
+        TreeComponent,
+        NodeEditableDirective,
+        NodeMenuComponent,
+        NodeDraggableDirective,
+        SafeHtmlPipe
+      ],
       providers: [NodeMenuService, NodeDraggableService, TreeService, SafeHtmlPipe]
     });
 

@@ -106,7 +106,10 @@ describe('NodeMenuComponent', () => {
 
     menuItem.triggerEventHandler('click', event);
 
-    expect(componentInstance.menuItemSelected.emit).toHaveBeenCalledWith({nodeMenuItemAction: NodeMenuItemAction.NewTag, nodeMenuItemSelected: 'New tag'});
+    expect(componentInstance.menuItemSelected.emit).toHaveBeenCalledWith({
+      nodeMenuItemAction: NodeMenuItemAction.NewTag,
+      nodeMenuItemSelected: 'New tag'
+    });
   });
 
   it('should close menu on any click outside of it', () => {
@@ -119,7 +122,7 @@ describe('NodeMenuComponent', () => {
     document.dispatchEvent(event);
 
     const expectedNodeMenuEvent: NodeMenuEvent = {
-      sender: (event.target as HTMLElement),
+      sender: event.target as HTMLElement,
       action: NodeMenuAction.Close
     };
 
@@ -139,7 +142,7 @@ describe('NodeMenuComponent', () => {
     document.dispatchEvent(event);
 
     const expectedNodeMenuEvent: NodeMenuEvent = {
-      sender: (event.target as HTMLElement),
+      sender: event.target as HTMLElement,
       action: NodeMenuAction.Close
     };
 

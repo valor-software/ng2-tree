@@ -27,12 +27,11 @@ describe('NodeMenuService', () => {
     const initiatorElementRef = new ElementRef({});
     initiatorElementRef.nativeElement = {};
 
-    nodeMenuService.hideMenuStream(elementRef)
-      .subscribe((e: NodeMenuEvent) => {
-        expect(e.sender).toBe(initiatorElementRef.nativeElement);
-        expect(e.action).toBe(NodeMenuAction.Close);
-        done();
-      });
+    nodeMenuService.hideMenuStream(elementRef).subscribe((e: NodeMenuEvent) => {
+      expect(e.sender).toBe(initiatorElementRef.nativeElement);
+      expect(e.action).toBe(NodeMenuAction.Close);
+      done();
+    });
 
     nodeMenuService.hideMenuForAllNodesExcept(initiatorElementRef);
   });

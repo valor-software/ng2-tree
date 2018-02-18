@@ -20,11 +20,9 @@ let masterInternalTreeEl;
 let masterComponentInstance;
 
 const tree: TreeModel = {
-  value: 'Master', icon: 'icon0',
-  children: [
-    {value: 'Servant#1', icon: 'icon1'},
-    {value: 'Servant#2', icon: 'icon2'}
-  ]
+  value: 'Master',
+  icon: 'icon0',
+  children: [{ value: 'Servant#1', icon: 'icon1' }, { value: 'Servant#2', icon: 'icon2' }]
 };
 
 @Component({
@@ -38,7 +36,15 @@ class TestComponent {
 describe('template for tree', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
+      declarations: [
+        TestComponent,
+        TreeInternalComponent,
+        TreeComponent,
+        NodeEditableDirective,
+        NodeMenuComponent,
+        NodeDraggableDirective,
+        SafeHtmlPipe
+      ],
       providers: [NodeMenuService, NodeDraggableService, TreeService]
     });
 
@@ -68,5 +74,4 @@ describe('template for tree', () => {
     expect(values[1].nativeElement.innerHTML).toEqual('Servant#1');
     expect(values[2].nativeElement.innerHTML).toEqual('Servant#2');
   });
-
 });
