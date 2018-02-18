@@ -35,19 +35,13 @@ const treeLord: TreeModel = {
       value: 'Disciple#1',
       id: 2,
       loadChildren(onLoaded) {
-        onLoaded([
-          { value: 'Newborn#1' },
-          { value: 'Newborn#2' }
-        ]);
+        onLoaded([{ value: 'Newborn#1' }, { value: 'Newborn#2' }]);
       }
     },
     {
       value: 'Disciple#2',
       id: 3,
-      children: [
-        { value: 'SubDisciple#1', id: 4 },
-        { value: 'SubDisciple#2', id: 5 }
-      ]
+      children: [{ value: 'SubDisciple#1', id: 4 }, { value: 'SubDisciple#2', id: 5 }]
     }
   ]
 };
@@ -72,7 +66,15 @@ class TestComponent {
 describe('TreeController', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
+      declarations: [
+        TestComponent,
+        TreeInternalComponent,
+        TreeComponent,
+        NodeEditableDirective,
+        NodeMenuComponent,
+        NodeDraggableDirective,
+        SafeHtmlPipe
+      ],
       providers: [NodeMenuService, NodeDraggableService, TreeService, SafeHtmlPipe]
     });
 
@@ -127,7 +129,9 @@ describe('TreeController', () => {
     fixture.detectChanges();
 
     const checkChildChecked = (children: Tree[], checked: boolean) =>
-      isEmpty(children) ? checked : children.every(child => child.checked && checkChildChecked(child.children, child.checked));
+      isEmpty(children)
+        ? checked
+        : children.every(child => child.checked && checkChildChecked(child.children, child.checked));
 
     expect(checkChildChecked(tree.children, tree.checked)).toBe(true, 'All the children should be checked');
   });
@@ -143,23 +147,28 @@ describe('TreeController', () => {
     fixture.detectChanges();
 
     const checkChildChecked = (children: Tree[], checked: boolean) =>
-      isEmpty(children) ? checked : children.every(child => child.checked && checkChildChecked(child.children, child.checked));
+      isEmpty(children)
+        ? checked
+        : children.every(child => child.checked && checkChildChecked(child.children, child.checked));
 
     expect(checkChildChecked(tree.children, tree.checked)).toBe(false, 'All the children should be unchecked');
   });
 
-  it('detects indetermined node', fakeAsync(() => {
-    const tree = lordInternalTreeInstance.tree;
-    const controller = treeService.getController(tree.id);
-    const childController = treeService.getController(tree.children[0].id);
+  it(
+    'detects indetermined node',
+    fakeAsync(() => {
+      const tree = lordInternalTreeInstance.tree;
+      const controller = treeService.getController(tree.id);
+      const childController = treeService.getController(tree.children[0].id);
 
-    childController.check();
-    fixture.detectChanges();
-    tick();
+      childController.check();
+      fixture.detectChanges();
+      tick();
 
-    expect(childController.isChecked()).toBe(true, 'Node should be checked');
-    expect(controller.isIndetermined()).toBe(true, 'Node should be in indetermined state');
-  }));
+      expect(childController.isChecked()).toBe(true, 'Node should be checked');
+      expect(controller.isIndetermined()).toBe(true, 'Node should be in indetermined state');
+    })
+  );
 
   it('knows when node is selected', () => {
     const event = jasmine.createSpyObj('e', ['preventDefault']);
@@ -262,7 +271,6 @@ describe('TreeController', () => {
     lordController.expand();
     lordController.expand();
 
-
     expect(lordController.isExpanded()).toBe(true);
     expect(treeService.nodeExpanded$.next).toHaveBeenCalledTimes(1);
     expect(treeService.nodeCollapsed$.next).toHaveBeenCalledTimes(1);
@@ -301,10 +309,7 @@ describe('TreeController', () => {
 
     childController.addChild({
       value: 'N',
-      children: [
-        { value: 'N1' },
-        { value: 'N2' },
-      ]
+      children: [{ value: 'N1' }, { value: 'N2' }]
     });
 
     fixture.detectChanges();
@@ -376,10 +381,7 @@ describe('TreeController', () => {
 
     const childController = treeService.getController(lordInternalTreeInstance.tree.id);
 
-    childController.setChildren([
-      { value: 'N1' },
-      { value: 'N2' },
-    ]);
+    childController.setChildren([{ value: 'N1' }, { value: 'N2' }]);
 
     fixture.detectChanges();
 
@@ -399,10 +401,7 @@ describe('TreeController', () => {
 
     const childController = treeService.getController(child.componentInstance.tree.id);
 
-    childController.setChildren([
-      { value: 'N1' },
-      { value: 'N2' },
-    ]);
+    childController.setChildren([{ value: 'N1' }, { value: 'N2' }]);
 
     fixture.detectChanges();
 
@@ -421,14 +420,13 @@ describe('TreeController', () => {
   });
 
   it('knows how to convert a tree to tree model', () => {
-
     const model = { value: 'bla' };
 
     const tree: any = {
       toTreeModel: jasmine.createSpy('tree.toTreeModel').and.returnValue(model)
     };
 
-    const controller = new TreeController({tree, treeService: null} as any);
+    const controller = new TreeController({ tree, treeService: null } as any);
 
     const actualModel = controller.toTreeModel();
 

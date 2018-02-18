@@ -12,15 +12,15 @@ import {
   NodeSelectedEvent,
   NodeUncheckedEvent
 } from './tree.events';
-import {RenamableNode} from './tree.types';
-import {Tree} from './tree';
-import {TreeController} from './tree-controller';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
-import {ElementRef, Inject, Injectable} from '@angular/core';
-import {NodeDraggableService} from './draggable/node-draggable.service';
-import {NodeDraggableEvent} from './draggable/draggable.events';
-import {isEmpty} from './utils/fn.utils';
+import { RenamableNode } from './tree.types';
+import { Tree } from './tree';
+import { TreeController } from './tree-controller';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { ElementRef, Inject, Injectable } from '@angular/core';
+import { NodeDraggableService } from './draggable/node-draggable.service';
+import { NodeDraggableEvent } from './draggable/draggable.events';
+import { isEmpty } from './utils/fn.utils';
 
 @Injectable()
 export class TreeService {
@@ -39,7 +39,7 @@ export class TreeService {
 
   private controllers: Map<string | number, TreeController> = new Map();
 
-  public constructor( @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
+  public constructor(@Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
     this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
   }
 
@@ -132,13 +132,13 @@ export class TreeService {
 
   private shouldFireLoadNextLevel(tree: Tree): boolean {
     const shouldLoadNextLevel =
-      tree.node.emitLoadNextLevel
-      && !tree.node.loadChildren
-      && !tree.childrenAreBeingLoaded()
-      && isEmpty(tree.children);
+      tree.node.emitLoadNextLevel &&
+      !tree.node.loadChildren &&
+      !tree.childrenAreBeingLoaded() &&
+      isEmpty(tree.children);
 
     if (shouldLoadNextLevel) {
-       tree.loadingChildrenRequested();
+      tree.loadingChildrenRequested();
     }
 
     return shouldLoadNextLevel;

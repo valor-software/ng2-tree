@@ -1,7 +1,7 @@
-import {defaultsDeep, get, has, includes, isEmpty, isFunction, isNil, omit, once, size, trim} from './utils/fn.utils';
+import { defaultsDeep, get, has, includes, isEmpty, isFunction, isNil, omit, once, size, trim } from './utils/fn.utils';
 
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import {
   ChildrenLoadingFunction,
   FoldingType,
@@ -10,7 +10,7 @@ import {
   TreeModelSettings,
   TreeStatus
 } from './tree.types';
-import {NodeMenuItem} from './menu/node-menu.component';
+import { NodeMenuItem } from './menu/node-menu.component';
 
 import * as uuidv4 from 'uuid/v4';
 
@@ -60,8 +60,11 @@ export class Tree {
    * @static
    */
   public static isRenamable(value: any): value is RenamableNode {
-    return (has(value, 'setName') && isFunction(value.setName))
-      && (has(value, 'toString') && isFunction(value.toString) && value.toString !== Object.toString);
+    return (
+      has(value, 'setName') &&
+      isFunction(value.setName) &&
+      (has(value, 'toString') && isFunction(value.toString) && value.toString !== Object.toString)
+    );
   }
 
   private static cloneTreeShallow(origin: Tree): Tree {
@@ -121,7 +124,7 @@ export class Tree {
    * @returns {boolean} A flag indicating that children are being loaded.
    */
   public childrenAreBeingLoaded(): boolean {
-    return (this._childrenLoadingState === ChildrenLoadingState.Loading);
+    return this._childrenLoadingState === ChildrenLoadingState.Loading;
   }
 
   /**
@@ -130,13 +133,15 @@ export class Tree {
    * @returns {boolean} A flag indicating that children were loaded.
    */
   public childrenWereLoaded(): boolean {
-    return (this._childrenLoadingState === ChildrenLoadingState.Completed);
+    return this._childrenLoadingState === ChildrenLoadingState.Completed;
   }
 
   private canLoadChildren(): boolean {
-    return (this._childrenLoadingState === ChildrenLoadingState.NotStarted)
-      && (this.foldingType === FoldingType.Expanded)
-      && (!!this._loadChildren);
+    return (
+      this._childrenLoadingState === ChildrenLoadingState.NotStarted &&
+      this.foldingType === FoldingType.Expanded &&
+      !!this._loadChildren
+    );
   }
 
   /**
@@ -627,7 +632,7 @@ export class Tree {
    * @returns {TreeModel} a clone of an underlying TreeModel instance
    */
   public toTreeModel(): TreeModel {
-    const model = defaultsDeep(this.isLeaf() ? {} : {children: []}, this.node);
+    const model = defaultsDeep(this.isLeaf() ? {} : { children: [] }, this.node);
 
     if (this.children) {
       this.children.forEach(child => {

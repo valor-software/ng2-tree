@@ -33,10 +33,10 @@ const tree: TreeModel = {
     }
   },
   children: [
-    {value: 'Servant#1'},
+    { value: 'Servant#1' },
     {
       value: 'Servant#2',
-        settings: {
+      settings: {
         templates: {
           leaf: '<i class="bla"></i>'
         }
@@ -56,7 +56,15 @@ class TestComponent {
 describe('settings on tree model', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
+      declarations: [
+        TestComponent,
+        TreeInternalComponent,
+        TreeComponent,
+        NodeEditableDirective,
+        NodeMenuComponent,
+        NodeDraggableDirective,
+        SafeHtmlPipe
+      ],
       providers: [NodeMenuService, NodeDraggableService, TreeService]
     });
 
@@ -71,7 +79,7 @@ describe('settings on tree model', () => {
   describe('cssClasses setting in tree', () => {
     it('adds appropriate css classes for a expanded node', () => {
       const foldingEl: DebugElement = masterInternalTreeEl.query(By.css('.folding'));
-      expect(foldingEl.classes).toEqual({folding: true, fa: true, 'fa-caret-down': true});
+      expect(foldingEl.classes).toEqual({ folding: true, fa: true, 'fa-caret-down': true });
     });
 
     it('adds appropriate css classes for a collapsed node', () => {
@@ -80,17 +88,17 @@ describe('settings on tree model', () => {
       foldingEl.nativeElement.click();
       fixture.detectChanges();
 
-      expect(foldingEl.classes).toEqual({folding: true, fa: true, 'fa-caret-down': false, 'fa-caret-right': true});
+      expect(foldingEl.classes).toEqual({ folding: true, fa: true, 'fa-caret-down': false, 'fa-caret-right': true });
     });
 
     it('adds appropriate css classes for a leaf', () => {
       const foldingEl: DebugElement = masterInternalTreeEl.queryAll(By.css('.folding'))[1];
-      expect(foldingEl.classes).toEqual({folding: true, fa: true});
+      expect(foldingEl.classes).toEqual({ folding: true, fa: true });
     });
   });
 
   describe('templates setting in tree', () => {
-    it('puts node templates content to the left of the node\'s value', () => {
+    it(`puts node templates content to the left of the node's value`, () => {
       const [
         masterNodeTemplate,
         servant1NodeTemplate,

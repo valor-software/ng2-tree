@@ -32,33 +32,26 @@ const tree: TreeModel = {
     leftMenu: true,
     rightMenu: false
   },
-  children: [
-    {value: 'Servant#1'},
-    {value: 'Servant#2'}
-  ]
+  children: [{ value: 'Servant#1' }, { value: 'Servant#2' }]
 };
 
 const tree2: TreeModel = {
   value: 'Left Menu',
   children: [
-    {value: 'Left Menu Not Set Child'},
+    { value: 'Left Menu Not Set Child' },
     {
       value: 'Inactive',
       settings: {
         leftMenu: false
       },
-      children: [
-        {value: 'Left Menu Inactive Child'}
-      ]
+      children: [{ value: 'Left Menu Inactive Child' }]
     },
     {
       value: 'Active',
       settings: {
         leftMenu: true
       },
-      children: [
-        {value: 'Left Menu Active Child'}
-      ]
+      children: [{ value: 'Left Menu Active Child' }]
     },
     {
       value: 'Inactive With Active Children',
@@ -71,19 +64,17 @@ const tree2: TreeModel = {
           settings: {
             leftMenu: true
           },
-          children: [
-            {value: 'Reactivated Left Menu Children'}
-          ]
+          children: [{ value: 'Reactivated Left Menu Children' }]
         }
       ]
-    },
+    }
   ]
 };
 
 const tree3: TreeModel = {
   value: 'Face',
   settings: {
-    'static': true,
+    static: true,
     leftMenu: true
   },
   children: [
@@ -96,7 +87,7 @@ const tree3: TreeModel = {
     {
       value: 'Retina',
       settings: {
-        'static': false
+        static: false
       },
       children: [
         {
@@ -114,7 +105,7 @@ const tree3: TreeModel = {
         }
       ]
     },
-    {value: 'Lips'}
+    { value: 'Lips' }
   ]
 };
 
@@ -130,14 +121,21 @@ class TestComponent {
   public tree2: TreeModel = tree2;
   public tree3: TreeModel = tree3;
 
-  public constructor(public treeHolder: ElementRef) {
-  }
+  public constructor(public treeHolder: ElementRef) {}
 }
 
 describe('LeftMenu-TreeInternalComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
+      declarations: [
+        TestComponent,
+        TreeInternalComponent,
+        TreeComponent,
+        NodeEditableDirective,
+        NodeMenuComponent,
+        NodeDraggableDirective,
+        SafeHtmlPipe
+      ],
       providers: [NodeMenuService, NodeDraggableService, TreeService]
     });
 
@@ -146,7 +144,9 @@ describe('LeftMenu-TreeInternalComponent', () => {
     masterInternalTreeEl = fixture.debugElement.query(By.css('#master')).query(By.directive(TreeInternalComponent));
     masterComponentInstance = masterInternalTreeEl.componentInstance;
 
-    leftMenuInternalTreeEl = fixture.debugElement.query(By.css('#left-menu')).query(By.directive(TreeInternalComponent));
+    leftMenuInternalTreeEl = fixture.debugElement
+      .query(By.css('#left-menu'))
+      .query(By.directive(TreeInternalComponent));
     leftMenuComponentInstance = leftMenuInternalTreeEl.componentInstance;
 
     staticInternalTreeEl = fixture.debugElement.query(By.css('#static')).query(By.directive(TreeInternalComponent));
@@ -183,7 +183,9 @@ describe('LeftMenu-TreeInternalComponent', () => {
   });
 
   it('shouldn`t have a left menu on node and it`s child by default', () => {
-    expect(leftMenuInternalTreeEl.query(By.css('.value-container')).queryAll(By.css('.node-left-menu')).length).toEqual(0);
+    expect(leftMenuInternalTreeEl.query(By.css('.value-container')).queryAll(By.css('.node-left-menu')).length).toEqual(
+      0
+    );
 
     const defaultChildEl = leftMenuInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[0];
     expect(defaultChildEl.query(By.css('.value-container')).queryAll(By.css('.node-left-menu')).length).toEqual(0);
@@ -194,7 +196,9 @@ describe('LeftMenu-TreeInternalComponent', () => {
     expect(inactiveLeftMenuEl.query(By.css('.value-container')).queryAll(By.css('.node-left-menu')).length).toEqual(0);
 
     const inactiveLeftMenuChildEl = inactiveLeftMenuEl.queryAll(By.directive(TreeInternalComponent))[0];
-    expect(inactiveLeftMenuChildEl.query(By.css('.value-container')).queryAll(By.css('.node-left-menu')).length).toEqual(0);
+    expect(
+      inactiveLeftMenuChildEl.query(By.css('.value-container')).queryAll(By.css('.node-left-menu')).length
+    ).toEqual(0);
   });
 
   it('should show left menu on node', () => {
@@ -202,7 +206,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     event.button = EventUtils.MouseButtons.Left;
 
     const activeLeftMenuEl = leftMenuInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[3];
-    activeLeftMenuEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    activeLeftMenuEl
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -220,7 +227,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const activeLeftMenuEl = leftMenuInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[3];
     const activeLeftMenuChildEl = activeLeftMenuEl.queryAll(By.directive(TreeInternalComponent))[0];
 
-    activeLeftMenuEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    activeLeftMenuEl
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -238,7 +248,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const servantEls = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     const servant1El = servantEls[0];
 
-    servant1El.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    servant1El
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -247,7 +260,7 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const menuItemRemove: DebugElement = menu.query(By.css('.remove')).parent;
 
-    const eventRemove = {button: EventUtils.MouseButtons.Left};
+    const eventRemove = { button: EventUtils.MouseButtons.Left };
     menuItemRemove.triggerEventHandler('click', eventRemove);
 
     fixture.detectChanges();
@@ -264,7 +277,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const servantEls = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     const servant1El = servantEls[0];
 
-    servant1El.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    servant1El
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -283,7 +299,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const event = jasmine.createSpyObj('e', ['preventDefault']);
     event.button = EventUtils.MouseButtons.Left;
 
-    masterInternalTreeEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    masterInternalTreeEl
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -292,14 +311,14 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuItemRename.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
@@ -310,7 +329,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const event = jasmine.createSpyObj('e', ['preventDefault']);
     event.button = EventUtils.MouseButtons.Left;
 
-    masterInternalTreeEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    masterInternalTreeEl
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -319,14 +341,14 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuItemRename.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('blur', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('blur', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
@@ -337,7 +359,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const event = jasmine.createSpyObj('e', ['preventDefault']);
     event.button = EventUtils.MouseButtons.Left;
 
-    masterInternalTreeEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    masterInternalTreeEl
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -346,7 +371,7 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuItemRename.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
@@ -354,7 +379,7 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
     inputRename.nativeElement.value = '121212';
-    inputRename.triggerEventHandler('keyup.esc', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('keyup.esc', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
@@ -365,7 +390,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const event = jasmine.createSpyObj('e', ['preventDefault']);
     event.button = EventUtils.MouseButtons.Left;
 
-    masterInternalTreeEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    masterInternalTreeEl
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -374,14 +402,14 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const menuItemRename: DebugElement = menu.query(By.css('.rename')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuItemRename.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('blur', {target: {value: ''}});
+    inputRename.triggerEventHandler('blur', { target: { value: '' } });
 
     fixture.detectChanges();
 
@@ -392,7 +420,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const event = jasmine.createSpyObj('e', ['preventDefault']);
     event.button = EventUtils.MouseButtons.Left;
 
-    masterInternalTreeEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    masterInternalTreeEl
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -401,20 +432,23 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const menuNewTag: DebugElement = menu.query(By.css('.new-tag')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuNewTag.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
     expect(masterComponentInstance.tree.children.length).toEqual(3);
     expect(masterComponentInstance.tree.children[2].value).toEqual('bla');
-    expect(masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value').innerText).toEqual('bla');
+    expect(
+      masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value')
+        .innerText
+    ).toEqual('bla');
   });
 
   it('should create a sibling leaf when NewTag operation was activated on a node that is leaf', () => {
@@ -423,7 +457,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const servant1El = masterInternalTreeEl.query(By.directive(TreeInternalComponent));
 
-    servant1El.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    servant1El
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -432,27 +469,33 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const menuNewTag: DebugElement = menu.query(By.css('.new-tag')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuNewTag.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeTruthy();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'bla'}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: 'bla' } });
 
     fixture.detectChanges();
 
     expect(masterComponentInstance.tree.children.length).toEqual(3);
     expect(masterComponentInstance.tree.children[2].value).toEqual('bla');
-    expect(masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value').innerText).toEqual('bla');
+    expect(
+      masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value')
+        .innerText
+    ).toEqual('bla');
   });
 
   it('should not create a node with empty value', () => {
     const event = jasmine.createSpyObj('e', ['preventDefault']);
     event.button = EventUtils.MouseButtons.Left;
 
-    masterInternalTreeEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    masterInternalTreeEl
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -461,14 +504,14 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const menuNewTag: DebugElement = menu.query(By.css('.new-tag')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuNewTag.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: '\r\n\t '}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: '\r\n\t ' } });
 
     fixture.detectChanges();
 
@@ -486,7 +529,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
     const event = jasmine.createSpyObj('e', ['preventDefault']);
     event.button = EventUtils.MouseButtons.Left;
 
-    masterInternalTreeEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+    masterInternalTreeEl
+      .query(By.css('.value-container'))
+      .query(By.css('.node-left-menu'))
+      .triggerEventHandler('click', event);
 
     fixture.detectChanges();
 
@@ -495,14 +541,14 @@ describe('LeftMenu-TreeInternalComponent', () => {
 
     const menuNewTag: DebugElement = menu.query(By.css('.new-folder')).parent;
 
-    const eventRename = {button: EventUtils.MouseButtons.Left};
+    const eventRename = { button: EventUtils.MouseButtons.Left };
     menuNewTag.triggerEventHandler('click', eventRename);
 
     fixture.detectChanges();
 
     const inputRename = masterInternalTreeEl.query(By.css('input.node-value'));
     expect(inputRename).toBeDefined();
-    inputRename.triggerEventHandler('keyup.enter', {target: {value: 'Branch'}});
+    inputRename.triggerEventHandler('keyup.enter', { target: { value: 'Branch' } });
 
     fixture.detectChanges();
 
@@ -511,12 +557,17 @@ describe('LeftMenu-TreeInternalComponent', () => {
     expect(masterComponentInstance.tree.children[2].isBranch()).toEqual(true);
     expect(masterComponentInstance.tree.children[2].children).toBeDefined();
     expect(masterComponentInstance.tree.children[2].children.length).toEqual(0);
-    expect(masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value').innerText).toEqual('Branch');
+    expect(
+      masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[2].nativeElement.querySelector('.node-value')
+        .innerText
+    ).toEqual('Branch');
   });
 
   describe('Static Tree', () => {
     it('should not show left menu', () => {
-      expect(staticInternalTreeEl.query(By.css('.value-container')).queryAll(By.css('.node-left-menu')).length).toEqual(0);
+      expect(staticInternalTreeEl.query(By.css('.value-container')).queryAll(By.css('.node-left-menu')).length).toEqual(
+        0
+      );
 
       const childEl = staticInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[0];
       expect(childEl.query(By.css('.value-container')).queryAll(By.css('.node-left-menu')).length).toEqual(0);
@@ -552,12 +603,15 @@ describe('LeftMenu-TreeInternalComponent', () => {
       expect(eyebowEl.query(By.css('.node-menu'))).toEqual(null);
     });
 
-    it('should allow to override static option for it\'s children', () => {
+    it("should allow to override static option for it's children", () => {
       const event = jasmine.createSpyObj('e', ['preventDefault']);
       event.button = EventUtils.MouseButtons.Left;
 
       const childEl = staticInternalTreeEl.queryAll(By.directive(TreeInternalComponent))[1];
-      childEl.query(By.css('.value-container')).query(By.css('.node-left-menu')).triggerEventHandler('click', event);
+      childEl
+        .query(By.css('.value-container'))
+        .query(By.css('.node-left-menu'))
+        .triggerEventHandler('click', event);
 
       fixture.detectChanges();
 
@@ -615,7 +669,10 @@ describe('LeftMenu-TreeInternalComponent', () => {
       expect(staticInternalTreeEl.componentInstance.tree.children[1].children[0].value).toEqual('Eyelash');
       expect(staticInternalTreeEl.componentInstance.tree.children[1].children[1].value).toEqual('Eyebow');
 
-      const capturedNode = new CapturedNode(eyelashEl.componentInstance.nodeElementRef, eyelashEl.componentInstance.tree);
+      const capturedNode = new CapturedNode(
+        eyelashEl.componentInstance.nodeElementRef,
+        eyelashEl.componentInstance.tree
+      );
       nodeDraggableService.fireNodeDragged(capturedNode, eyebowEl.componentInstance.nodeElementRef);
 
       fixture.detectChanges();

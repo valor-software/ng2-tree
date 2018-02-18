@@ -29,10 +29,7 @@ let safeHtml;
 
 const tree: TreeModel = {
   value: 'Master',
-  children: [
-    {value: 'Servant#1'},
-    {value: 'Servant#2'}
-  ]
+  children: [{ value: 'Servant#1' }, { value: 'Servant#2' }]
 };
 
 const tree2: TreeModel = {
@@ -40,19 +37,16 @@ const tree2: TreeModel = {
   children: [
     {
       value: 'Disciple#1',
-      children: [
-        {value: 'SubDisciple#1'},
-        {value: 'SubDisciple#2'}
-      ]
+      children: [{ value: 'SubDisciple#1' }, { value: 'SubDisciple#2' }]
     },
-    {value: 'Disciple#2'}
+    { value: 'Disciple#2' }
   ]
 };
 
 const tree3: TreeModel = {
   value: 'Face',
   settings: {
-    'static': true
+    static: true
   },
   children: [
     {
@@ -61,13 +55,13 @@ const tree3: TreeModel = {
         {
           value: 'Retina',
           settings: {
-            'static': false
+            static: false
           }
         },
-        {value: 'Eyebrow'}
+        { value: 'Eyebrow' }
       ]
     },
-    {value: 'Lips'}
+    { value: 'Lips' }
   ]
 };
 
@@ -87,14 +81,21 @@ class TestComponent {
     rootIsVisible: false
   };
 
-  public constructor(public treeHolder: ElementRef) {
-  }
+  public constructor(public treeHolder: ElementRef) {}
 }
 
 describe('TreeInternalComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestComponent, TreeInternalComponent, TreeComponent, NodeEditableDirective, NodeMenuComponent, NodeDraggableDirective, SafeHtmlPipe],
+      declarations: [
+        TestComponent,
+        TreeInternalComponent,
+        TreeComponent,
+        NodeEditableDirective,
+        NodeMenuComponent,
+        NodeDraggableDirective,
+        SafeHtmlPipe
+      ],
       providers: [NodeMenuService, NodeDraggableService, TreeService, SafeHtmlPipe]
     });
 
@@ -181,7 +182,10 @@ describe('TreeInternalComponent', () => {
     expect(masterInternalTreeEl.componentInstance.tree.children[0].value).toEqual('Servant#1');
     expect(masterInternalTreeEl.componentInstance.tree.children[1].value).toEqual('Servant#2');
 
-    const capturedNode = new CapturedNode(servant1InternalTreeEl.componentInstance.nodeElementRef, servant1InternalTreeEl.componentInstance.tree);
+    const capturedNode = new CapturedNode(
+      servant1InternalTreeEl.componentInstance.nodeElementRef,
+      servant1InternalTreeEl.componentInstance.tree
+    );
     nodeDraggableService.fireNodeDragged(capturedNode, servant2InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
@@ -211,7 +215,10 @@ describe('TreeInternalComponent', () => {
     expect(lordInternalTreeEl.componentInstance.tree.children[0].value).toEqual('Disciple#1');
     expect(lordInternalTreeEl.componentInstance.tree.children[1].value).toEqual('Disciple#2');
 
-    const capturedNode = new CapturedNode(disciple1InternalTreeEl.componentInstance.nodeElementRef, disciple1InternalTreeEl.componentInstance.tree);
+    const capturedNode = new CapturedNode(
+      disciple1InternalTreeEl.componentInstance.nodeElementRef,
+      disciple1InternalTreeEl.componentInstance.tree
+    );
     nodeDraggableService.fireNodeDragged(capturedNode, disciple2InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
@@ -267,7 +274,10 @@ describe('TreeInternalComponent', () => {
     expect(subDisciple2InternalTreeEl.componentInstance.tree.value).toEqual('SubDisciple#2');
     expect(disciple2InternalTreeEl.componentInstance.tree.value).toEqual('Disciple#2');
 
-    const capturedNode = new CapturedNode(subDisciple1InternalTreeEl.componentInstance.nodeElementRef, subDisciple1InternalTreeEl.componentInstance.tree);
+    const capturedNode = new CapturedNode(
+      subDisciple1InternalTreeEl.componentInstance.nodeElementRef,
+      subDisciple1InternalTreeEl.componentInstance.tree
+    );
     nodeDraggableService.fireNodeDragged(capturedNode, disciple2InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
@@ -298,7 +308,10 @@ describe('TreeInternalComponent', () => {
     const masterInternalTreeChildren = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     const servant1InternalTreeEl = masterInternalTreeChildren[0];
 
-    const capturedNode = new CapturedNode(servant1InternalTreeEl.componentInstance.nodeElementRef, servant1InternalTreeEl.componentInstance.tree);
+    const capturedNode = new CapturedNode(
+      servant1InternalTreeEl.componentInstance.nodeElementRef,
+      servant1InternalTreeEl.componentInstance.tree
+    );
     nodeDraggableService.fireNodeDragged(capturedNode, subDisciple1InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
@@ -335,7 +348,10 @@ describe('TreeInternalComponent', () => {
     const masterInternalTreeChildren = masterInternalTreeEl.queryAll(By.directive(TreeInternalComponent));
     const servant1InternalTreeEl = masterInternalTreeChildren[0];
 
-    const capturedNode = new CapturedNode(servant1InternalTreeEl.componentInstance.nodeElementRef, servant1InternalTreeEl.componentInstance.tree);
+    const capturedNode = new CapturedNode(
+      servant1InternalTreeEl.componentInstance.nodeElementRef,
+      servant1InternalTreeEl.componentInstance.tree
+    );
     nodeDraggableService.fireNodeDragged(capturedNode, disciple1InternalTreeEl.componentInstance.nodeElementRef);
 
     fixture.detectChanges();
@@ -413,21 +429,33 @@ describe('TreeInternalComponent', () => {
     expect(children.length).toEqual(2);
   });
 
-  it('shouldn\'t show root of the tree', () => {
-    expect(faceComponentInstance.tree.isRoot()).toEqual(true, 'Element that has rootless class should be a root of the tree');
+  it("shouldn't show root of the tree", () => {
+    expect(faceComponentInstance.tree.isRoot()).toEqual(
+      true,
+      'Element that has rootless class should be a root of the tree'
+    );
 
     const treeUl = faceInternalTreeEl.query(By.css('.tree'));
     expect(treeUl.classes['rootless']).toEqual(true, 'Tree with hidden root should have "rootless" css class');
 
     const valueContainer = faceInternalTreeEl.query(By.css('.value-container'));
-    expect(valueContainer.classes['rootless']).toEqual(true, 'Element which contains tree value should also have "rootless" css class');
+    expect(valueContainer.classes['rootless']).toEqual(
+      true,
+      'Element which contains tree value should also have "rootless" css class'
+    );
   });
 
   it('should not propagate root visibility to its children - in other words only root should be modified in the tree and hidden', () => {
     const childEl = faceInternalTreeEl.query(By.directive(TreeInternalComponent));
     expect(childEl.componentInstance.tree.isRoot()).toEqual(false);
-    expect(childEl.query(By.css('.tree')).classes['rootless']).toEqual(false, 'Only element with root tree node can have rootless class');
-    expect(childEl.query(By.css('.value-container')).classes['rootless']).toEqual(false, 'Only element with root tree node can have rootless class');
+    expect(childEl.query(By.css('.tree')).classes['rootless']).toEqual(
+      false,
+      'Only element with root tree node can have rootless class'
+    );
+    expect(childEl.query(By.css('.value-container')).classes['rootless']).toEqual(
+      false,
+      'Only element with root tree node can have rootless class'
+    );
   });
 
   describe('Static Tree', () => {
@@ -447,7 +475,7 @@ describe('TreeInternalComponent', () => {
       expect(childEl.query(By.css('.node-menu'))).toEqual(null);
     });
 
-    it('should allow to override static option for it\'s children', () => {
+    it("should allow to override static option for it's children", () => {
       const event = jasmine.createSpyObj('e', ['preventDefault']);
       event.button = EventUtils.MouseButtons.Right;
 

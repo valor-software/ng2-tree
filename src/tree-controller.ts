@@ -1,10 +1,10 @@
-import {TreeService} from './tree.service';
-import {Tree} from './tree';
-import {TreeModel} from './tree.types';
-import {NodeMenuItemAction} from './menu/menu.events';
-import {TreeInternalComponent} from './tree-internal.component';
-import {MouseButtons} from './utils/event.utils';
-import {get} from './utils/fn.utils';
+import { TreeService } from './tree.service';
+import { Tree } from './tree';
+import { TreeModel } from './tree.types';
+import { NodeMenuItemAction } from './menu/menu.events';
+import { TreeInternalComponent } from './tree-internal.component';
+import { MouseButtons } from './utils/event.utils';
+import { get } from './utils/fn.utils';
 
 export class TreeController {
   private tree: Tree;
@@ -69,7 +69,9 @@ export class TreeController {
 
   public addChildAsync(newNode: TreeModel): Promise<Tree> {
     if (this.tree.hasDeferredChildren() && !this.tree.childrenWereLoaded()) {
-      return Promise.reject(new Error('This node loads its children asynchronously, hence child cannot be added this way'));
+      return Promise.reject(
+        new Error('This node loads its children asynchronously, hence child cannot be added this way')
+      );
     }
 
     const newTree = this.tree.createNode(Array.isArray(newNode.children), newNode);
@@ -79,8 +81,8 @@ export class TreeController {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(newTree);
-      })
-    })
+      });
+    });
   }
 
   public changeNodeId(id: string | number) {

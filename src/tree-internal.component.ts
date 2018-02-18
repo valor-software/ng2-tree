@@ -81,14 +81,11 @@ import { get, isNil } from './utils/fn.utils';
   `
 })
 export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
-  @Input()
-  public tree: Tree;
+  @Input() public tree: Tree;
 
-  @Input()
-  public settings: TreeTypes.Ng2TreeSettings;
+  @Input() public settings: TreeTypes.Ng2TreeSettings;
 
-  @Input()
-  public template: TemplateRef<any>;
+  @Input() public template: TemplateRef<any>;
 
   public isSelected = false;
   public isRightMenuVisible = false;
@@ -96,15 +93,15 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
   public isReadOnly = false;
   public controller: TreeController;
 
-  @ViewChild('checkbox')
-  public checkboxElementRef: ElementRef;
+  @ViewChild('checkbox') public checkboxElementRef: ElementRef;
 
   private subscriptions: Subscription[] = [];
 
-  public constructor(private nodeMenuService: NodeMenuService,
-                     public treeService: TreeService,
-                     public nodeElementRef: ElementRef) {
-  }
+  public constructor(
+    private nodeMenuService: NodeMenuService,
+    public treeService: TreeService,
+    public nodeElementRef: ElementRef
+  ) {}
 
   public ngAfterViewInit(): void {
     if (this.tree.checked && !(this.tree as any).firstCheckedFired) {
@@ -127,17 +124,17 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
       this.tree.disableCollapseOnInit();
     }
 
-    this.subscriptions.push(this.nodeMenuService.hideMenuStream(this.nodeElementRef)
-      .subscribe(() => {
+    this.subscriptions.push(
+      this.nodeMenuService.hideMenuStream(this.nodeElementRef).subscribe(() => {
         this.isRightMenuVisible = false;
         this.isLeftMenuVisible = false;
-      }));
+      })
+    );
 
-    this.subscriptions.push(this.treeService.unselectStream(this.tree)
-      .subscribe(() => this.isSelected = false));
+    this.subscriptions.push(this.treeService.unselectStream(this.tree).subscribe(() => (this.isSelected = false)));
 
-    this.subscriptions.push(this.treeService.draggedStream(this.tree, this.nodeElementRef)
-      .subscribe((e: NodeDraggableEvent) => {
+    this.subscriptions.push(
+      this.treeService.draggedStream(this.tree, this.nodeElementRef).subscribe((e: NodeDraggableEvent) => {
         if (this.tree.hasSibling(e.captured.tree)) {
           this.swapWithSibling(e.captured.tree, this.tree);
         } else if (this.tree.isBranch()) {
@@ -145,11 +142,15 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
         } else {
           this.moveNodeToParentTreeAndRemoveFromPreviousOne(e, this.tree);
         }
-      }));
+      })
+    );
 
-    this.subscriptions.push(this.treeService.nodeChecked$.merge(this.treeService.nodeUnchecked$)
-      .filter((e: NodeCheckedEvent) => this.eventContainsId(e) && this.tree.hasChild(e.node))
-      .subscribe((e: NodeCheckedEvent) => this.updateCheckboxState()));
+    this.subscriptions.push(
+      this.treeService.nodeChecked$
+        .merge(this.treeService.nodeUnchecked$)
+        .filter((e: NodeCheckedEvent) => this.eventContainsId(e) && this.tree.hasChild(e.node))
+        .subscribe((e: NodeCheckedEvent) => this.updateCheckboxState())
+    );
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -358,7 +359,9 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
 
   private eventContainsId(event: NodeEvent): boolean {
     if (!event.node.id) {
-      console.warn('"Node with checkbox" feature requires a unique id assigned to every node, please consider to add it.');
+      console.warn(
+        '"Node with checkbox" feature requires a unique id assigned to every node, please consider to add it.'
+      );
       return false;
     }
     return true;

@@ -1,5 +1,5 @@
-import {defaultsDeep, get} from './utils/fn.utils';
-import {NodeMenuItem} from './menu/node-menu.component';
+import { defaultsDeep, get } from './utils/fn.utils';
+import { NodeMenuItem } from './menu/node-menu.component';
 
 export class FoldingType {
   public static Expanded: FoldingType = new FoldingType('node-expanded');
@@ -7,8 +7,7 @@ export class FoldingType {
   public static Empty: FoldingType = new FoldingType('node-empty');
   public static Leaf: FoldingType = new FoldingType('node-leaf');
 
-  public constructor(private _cssClass: string) {
-  }
+  public constructor(private _cssClass: string) {}
 
   public get cssClass(): string {
     return this._cssClass;
@@ -97,12 +96,13 @@ export class TreeModelSettings {
   public checked?: boolean;
 
   public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
-    return defaultsDeep(
-      {},
-      get(sourceA, 'settings'),
-      get(sourceB, 'settings'),
-      {static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false, checked: false}
-    );
+    return defaultsDeep({}, get(sourceA, 'settings'), get(sourceB, 'settings'), {
+      static: false,
+      leftMenu: false,
+      rightMenu: true,
+      isCollapsedOnInit: false,
+      checked: false
+    });
   }
 }
 
