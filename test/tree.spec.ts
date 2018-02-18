@@ -1047,13 +1047,21 @@ describe('Tree', () => {
         static: false,
         leftMenu: false,
         rightMenu: true,
-        checked: true
+        checked: true,
+        selectionAllowed: true
       },
       children: [
         {
           value: 'child#1',
           emitLoadNextLevel: false,
-          settings: { isCollapsedOnInit: true, static: false, leftMenu: false, rightMenu: true, checked: true }
+          settings: {
+            isCollapsedOnInit: true,
+            static: false,
+            leftMenu: false,
+            rightMenu: true,
+            checked: true,
+            selectionAllowed: true
+          }
         }
       ]
     };
@@ -1061,6 +1069,62 @@ describe('Tree', () => {
     const tree: Tree = new Tree(model);
 
     expect(tree.toTreeModel()).toEqual(model);
+  });
+
+  it('has selection allowed by default', () => {
+    const model: TreeModel = {
+      id: 6,
+      value: 'root'
+    };
+
+    const tree: Tree = new Tree(model);
+
+    expect(tree.selectionAllowed).toBe(true);
+  });
+
+  it('can forbid selection', () => {
+    const model: TreeModel = {
+      id: 6,
+      value: 'root'
+    };
+
+    const tree: Tree = new Tree(model);
+    tree.selectionAllowed = false;
+
+    expect(tree.selectionAllowed).toBe(false);
+  });
+
+  it('can allow selection', () => {
+    const model: TreeModel = {
+      id: 6,
+      value: 'root',
+      settings: {
+        selectionAllowed: false
+      }
+    };
+
+    const tree: Tree = new Tree(model);
+
+    expect(tree.selectionAllowed).toBe(false);
+
+    tree.selectionAllowed = true;
+    expect(tree.selectionAllowed).toBe(true);
+  });
+
+  it('does not cascade selectionAllowed setting', () => {
+    const model: TreeModel = {
+      id: 6,
+      value: 'root',
+      settings: {
+        selectionAllowed: false
+      },
+      children: [{ value: 'foo' }]
+    };
+
+    const tree: Tree = new Tree(model);
+
+    expect(tree.selectionAllowed).toBe(false);
+    expect(tree.children[0].selectionAllowed).toBe(true);
   });
 
   it('has an access to menu items', () => {

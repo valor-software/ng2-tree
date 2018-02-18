@@ -3,26 +3,68 @@ export class TreeDataProvider {
     'default values': {
       treeModelA: { value: '42' },
       treeModelB: { value: '12' },
-      result: { static: false, leftMenu: false, rightMenu: true, isCollapsedOnInit: false, checked: false }
+      result: {
+        static: false,
+        leftMenu: false,
+        rightMenu: true,
+        isCollapsedOnInit: false,
+        checked: false,
+        selectionAllowed: true
+      }
     },
     'first settings source has higher priority': {
       treeModelA: {
         value: '42',
-        settings: { static: true, leftMenu: true, rightMenu: true, isCollapsedOnInit: true, checked: true }
+        settings: {
+          static: true,
+          leftMenu: true,
+          rightMenu: true,
+          isCollapsedOnInit: true,
+          checked: true,
+          selectionAllowed: false
+        }
       },
       treeModelB: {
         value: '12',
-        settings: { static: false, leftMenu: false, rightMenu: false, isCollapsedOnInit: false, checked: false }
+        settings: {
+          static: false,
+          leftMenu: false,
+          rightMenu: false,
+          isCollapsedOnInit: false,
+          checked: false,
+          selectionAllowed: true
+        }
       },
-      result: { static: true, leftMenu: true, rightMenu: true, isCollapsedOnInit: true, checked: true }
+      result: {
+        static: true,
+        leftMenu: true,
+        rightMenu: true,
+        isCollapsedOnInit: true,
+        checked: true,
+        selectionAllowed: false
+      }
     },
     'second settings source has priority if first settings source does not have the option': {
       treeModelA: { value: '42' },
       treeModelB: {
         value: '12',
-        settings: { static: true, leftMenu: true, rightMenu: false, isCollapsedOnInit: true, checked: true }
+        settings: {
+          static: true,
+          leftMenu: true,
+          rightMenu: false,
+          isCollapsedOnInit: true,
+          checked: true,
+          selectionAllowed: false
+        }
       },
-      result: { static: true, leftMenu: true, rightMenu: false, isCollapsedOnInit: true, checked: true }
+      result: {
+        static: true,
+        leftMenu: true,
+        rightMenu: false,
+        isCollapsedOnInit: true,
+        checked: true,
+        selectionAllowed: true
+      }
     },
     'first expanded property of cssClasses has higher priority': {
       treeModelA: { value: '12', settings: { cssClasses: { expanded: 'arrow-down-o' } } },
@@ -36,6 +78,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down-o', collapsed: 'arrow-right', empty: 'arrow-gray', leaf: 'dot' }
       }
     },
@@ -51,6 +94,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down', collapsed: 'arrow-right-o', empty: 'arrow-gray', leaf: 'dot' }
       }
     },
@@ -66,6 +110,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down', collapsed: 'arrow-right', empty: 'arrow-gray-o', leaf: 'dot' }
       }
     },
@@ -81,6 +126,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down', collapsed: 'arrow-right', empty: 'arrow-gray', leaf: 'dot-o' }
       }
     },
@@ -101,6 +147,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down-o', collapsed: 'arrow-right-o', empty: 'arrow-gray-o', leaf: 'dot-o' }
       }
     },
@@ -118,6 +165,7 @@ export class TreeDataProvider {
         leftMenu: true,
         rightMenu: false,
         checked: false,
+        selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down-o', collapsed: 'arrow-right-o', empty: 'arrow-gray-o', leaf: 'dot-o' }
       }
     },
@@ -139,6 +187,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        selectionAllowed: true,
         templates: {
           node: '<i class="folder-o"></i>',
           leaf: '<i class="file"></i>',
@@ -164,6 +213,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        selectionAllowed: true,
         templates: {
           node: '<i class="folder"></i>',
           leaf: '<i class="file-o"></i>',
@@ -189,6 +239,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        selectionAllowed: true,
         templates: {
           node: '<i class="folder"></i>',
           leaf: '<i class="file"></i>',
@@ -223,6 +274,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        selectionAllowed: true,
         templates: {
           node: '<i class="folder-o"></i>',
           leaf: '<i class="file-o"></i>',
@@ -248,6 +300,7 @@ export class TreeDataProvider {
         leftMenu: true,
         rightMenu: false,
         checked: false,
+        selectionAllowed: true,
         templates: {
           node: '<i class="folder-o"></i>',
           leaf: '<i class="file-o"></i>',

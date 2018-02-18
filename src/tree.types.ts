@@ -1,4 +1,4 @@
-import { defaultsDeep, get } from './utils/fn.utils';
+import { defaultsDeep, get, omit } from './utils/fn.utils';
 import { NodeMenuItem } from './menu/node-menu.component';
 
 export class FoldingType {
@@ -95,13 +95,19 @@ export class TreeModelSettings {
 
   public checked?: boolean;
 
-  public static merge(sourceA: TreeModel, sourceB: TreeModel): TreeModelSettings {
-    return defaultsDeep({}, get(sourceA, 'settings'), get(sourceB, 'settings'), {
+  public selectionAllowed?: boolean;
+
+  public static readonly NOT_CASCADING_SETTINGS = ['selectionAllowed'];
+
+  public static merge(child: TreeModel, parent: TreeModel): TreeModelSettings {
+    const parentCascadingSettings = omit(get(parent, 'settings'), TreeModelSettings.NOT_CASCADING_SETTINGS);
+    return defaultsDeep({}, get(child, 'settings'), parentCascadingSettings, {
       static: false,
       leftMenu: false,
       rightMenu: true,
       isCollapsedOnInit: false,
-      checked: false
+      checked: false,
+      selectionAllowed: true
     });
   }
 }

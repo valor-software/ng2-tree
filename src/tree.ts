@@ -240,6 +240,15 @@ export class Tree {
     return this.hasLoadedChildern() ? this.children.filter(child => child.checked) : [];
   }
 
+  public set selectionAllowed(selectionAllowed: boolean) {
+    this.node.settings = Object.assign({}, this.node.settings, { selectionAllowed });
+  }
+
+  public get selectionAllowed(): boolean {
+    const value = get(this.node.settings, 'selectionAllowed');
+    return isNil(value) ? true : !!value;
+  }
+
   hasLoadedChildern() {
     return !isEmpty(this.children);
   }

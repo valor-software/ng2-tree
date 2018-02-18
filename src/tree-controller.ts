@@ -128,4 +128,16 @@ export class TreeController {
   public isIndetermined(): boolean {
     return get(this.component, 'checkboxElementRef.nativeElement.indeterminate');
   }
+
+  public allowSelection() {
+    this.tree.selectionAllowed = true;
+  }
+
+  public forbidSelection() {
+    this.tree.selectionAllowed = false;
+  }
+
+  public isSelectionAllowed(): boolean {
+    return this.tree.selectionAllowed;
+  }
 }
