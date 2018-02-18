@@ -37,14 +37,12 @@ export function get(value: any, path: string, defaultValue?: any) {
 }
 
 export function omit(value: any, propToSkip: string): any {
-  return Object
-    .keys(value)
-    .reduce((result, prop) => {
-      if (prop === propToSkip) {
-        return result;
-      }
-      return Object.assign(result, { [prop]: value[prop] });
-    }, {});
+  return Object.keys(value).reduce((result, prop) => {
+    if (prop === propToSkip) {
+      return result;
+    }
+    return Object.assign(result, { [prop]: value[prop] });
+  }, {});
 }
 
 export function size(value: any[]): number {
@@ -54,7 +52,7 @@ export function size(value: any[]): number {
 export function once(fn: Once): Once {
   let result;
 
-  return (... args: any[]) => {
+  return (...args: any[]) => {
     if (fn) {
       result = fn.apply(null, args);
       fn = null;
@@ -63,13 +61,13 @@ export function once(fn: Once): Once {
   };
 }
 
-export function defaultsDeep(target: any, ... sources: any[]): any {
+export function defaultsDeep(target: any, ...sources: any[]): any {
   return [target].concat(sources).reduce((result: any, source: any) => {
     if (!source) {
       return result;
     }
 
-    Object.keys(source).forEach((prop) => {
+    Object.keys(source).forEach(prop => {
       if (isNil(result[prop])) {
         result[prop] = source[prop];
         return;
@@ -98,4 +96,4 @@ export function isNil(value: any): boolean {
   return value === undefined || value === null;
 }
 
-export type Once = (... args: any[]) => any;
+export type Once = (...args: any[]) => any;
