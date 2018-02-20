@@ -55,6 +55,7 @@ declare const alertify: any;
                       (nodeRemoved)="onNodeRemoved($event)"
                       (nodeRenamed)="onNodeRenamed($event)"
                       (nodeSelected)="onNodeSelected($event)"
+                      (nodeUnselected)="onNodeUnselected($event)"
                       (nodeMoved)="onNodeMoved($event)"
                       (nodeCreated)="onNodeFFSCreated($event)"
                       (nodeExpanded)="onNodeExpanded($event)"
@@ -66,6 +67,7 @@ declare const alertify: any;
             <div class="tree-controlls">
                 <p class="notice">Tree API exposed via TreeController</p>
                 <button button (click)="handleActionOnFFS(13, 'select')">Select 'boot' node</button>
+                <button button (click)="handleActionOnFFS(13, 'unselect')">Unselect 'boot' node</button>
                 <button button (click)="handleActionOnFFS(13, 'allowSelection')">Allow selection of the 'boot' node</button>
                 <button button (click)="handleActionOnFFS(13, 'forbidSelection')">Forbid selection of the 'boot' node</button>
                 <button button (click)="handleActionOnFFS(2, 'collapse')">Collapse 'bin' node</button>
@@ -312,9 +314,6 @@ export class AppComponent implements OnInit {
       {
         value: 'boot',
         id: 13,
-        settings: {
-          selectionAllowed: false
-        },
         children: [
           {
             value: 'grub',
@@ -613,6 +612,10 @@ export class AppComponent implements OnInit {
 
   public onNodeSelected(e: NodeEvent): void {
     AppComponent.logEvent(e, 'Selected');
+  }
+
+  public onNodeUnselected(e: NodeEvent): void {
+    AppComponent.logEvent(e, 'Unselected');
   }
 
   public onMenuItemSelected(e: MenuItemSelectedEvent) {

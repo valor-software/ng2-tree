@@ -21,6 +21,12 @@ export class TreeController {
     }
   }
 
+  public unselect(): void {
+    if (this.isSelected()) {
+      this.component.onNodeUnselected({ button: MouseButtons.Left });
+    }
+  }
+
   public isSelected(): boolean {
     return this.component.isSelected;
   }
