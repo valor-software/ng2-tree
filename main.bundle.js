@@ -187,9 +187,6 @@ var AppComponent = (function () {
                 {
                     value: 'boot',
                     id: 13,
-                    settings: {
-                        selectionAllowed: false
-                    },
                     children: [
                         {
                             value: 'grub',
@@ -480,6 +477,9 @@ var AppComponent = (function () {
     AppComponent.prototype.onNodeSelected = function (e) {
         AppComponent_1.logEvent(e, 'Selected');
     };
+    AppComponent.prototype.onNodeUnselected = function (e) {
+        AppComponent_1.logEvent(e, 'Unselected');
+    };
     AppComponent.prototype.onMenuItemSelected = function (e) {
         AppComponent_1.logEvent(e, "You selected " + e.selectedItem + " menu item");
     };
@@ -561,7 +561,7 @@ var AppComponent = (function () {
     AppComponent = AppComponent_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app',
-            template: "\n    <div class=\"tree-demo-app\">\n        <div class=\"tree-container\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Fonts tree</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree #treeFonts\n                      [tree]=\"fonts\"\n                      [settings]=\"{rootIsVisible: false}\"\n                      (menuItemSelected)=\"onMenuItemSelected($event)\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeCreated($event)\"\n                      (nodeExpanded)=\"onNodeExpanded($event)\"\n                      (nodeCollapsed)=\"onNodeCollapsed($event)\">\n                </tree>\n            </div>\n        </div>\n        <div class=\"tree-container\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Programming languages tree</p>\n                <p class=\"notice\">this tree is loaded asynchronously</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree [tree]=\"pls\"\n                      [settings]=\"disabledCheckboxesSettings\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeCreated($event)\">\n                </tree>\n            </div>\n        </div>\n        <div class=\"tree-container tree-container--with-controls\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Directory/File structure</p>\n                <p class=\"notice\">this tree has advanced configurations</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree #treeFFS\n                      [tree]=\"ffs\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeFFSCreated($event)\"\n                      (nodeExpanded)=\"onNodeExpanded($event)\"\n                      (nodeCollapsed)=\"onNodeCollapsed($event)\"\n                      [settings]=\"settings\">\n                </tree>\n            </div>\n\n            <div class=\"tree-controlls\">\n                <p class=\"notice\">Tree API exposed via TreeController</p>\n                <button button (click)=\"handleActionOnFFS(13, 'select')\">Select 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(13, 'allowSelection')\">Allow selection of the 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(13, 'forbidSelection')\">Forbid selection of the 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(2, 'collapse')\">Collapse 'bin' node</button>\n                <button button (click)=\"handleActionOnFFS(2, 'expand')\">Expand 'bin' node</button>\n                <button button (click)=\"renameFFS(21)\">Rename 'unicode.pf2' to 'unicode.pf'</button>\n                <button button (click)=\"handleActionOnFFS(12, 'remove')\">Remove 'nano'</button>\n                <button button (click)=\"handleActionOnFFS(52, 'reloadChildren')\">Reload Music's children</button>\n                <button button (click)=\"setChildrenFFS(36)\">Set 'etc' children</button>\n                <button button (click)=\"addChildFFS(2, {value: 'ping'})\">Add a child with name 'ping' to 'bin'</button>\n                <button button (click)=\"addChildFFS(22, {value: 'lost'})\">Add a child with name 'lost' to 'lost+found'</button>\n                <button button (click)=\"addChildFFS(22, {value: 'found', children: []})\">Add a child with name 'found' to 'lost+found'</button>\n                <button button (click)=\"addChildFFS(36, {value: 'found', children: []})\">Add a child with name 'found' to 'etc'</button>\n                <button button (click)=\"addChildFFS(78, {value: 'Voodo People'})\">Add a child with name 'Voodo People' to '2Cellos'</button>\n                <button button (click)=\"checkFolder(52)\">Check Music folder</button>\n                <button button (click)=\"uncheckFolder(52)\">Uncheck Music folder</button>\n            </div>\n        </div>\n        <div class=\"tree-container\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Programming languages tree</p>\n                <p class=\"notice\">this tree is using a custom template</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree [tree]=\"icons\"\n                      [settings]=\"settings\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeCreated($event)\">\n                    <ng-template let-node>\n                        <i class=\"fa {{node.icon}}\"></i>\n                        <span class=\"node-name\" [innerHTML]=\"node.value\"></span>\n                    </ng-template>\n                </tree>\n            </div>\n        </div>\n        <div>\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Custom right click GUI tree</p>\n                <p class=\"notice\">this tree is using a custom right click menu</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree [tree]=\"custom\"\n                      (nodeSelected)=\"onNodeSelected($event)\">\n                </tree>\n            </div>\n        </div>\n    </div>\n  ",
+            template: "\n    <div class=\"tree-demo-app\">\n        <div class=\"tree-container\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Fonts tree</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree #treeFonts\n                      [tree]=\"fonts\"\n                      [settings]=\"{rootIsVisible: false}\"\n                      (menuItemSelected)=\"onMenuItemSelected($event)\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeCreated($event)\"\n                      (nodeExpanded)=\"onNodeExpanded($event)\"\n                      (nodeCollapsed)=\"onNodeCollapsed($event)\">\n                </tree>\n            </div>\n        </div>\n        <div class=\"tree-container\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Programming languages tree</p>\n                <p class=\"notice\">this tree is loaded asynchronously</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree [tree]=\"pls\"\n                      [settings]=\"disabledCheckboxesSettings\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeCreated($event)\">\n                </tree>\n            </div>\n        </div>\n        <div class=\"tree-container tree-container--with-controls\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Directory/File structure</p>\n                <p class=\"notice\">this tree has advanced configurations</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree #treeFFS\n                      [tree]=\"ffs\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeUnselected)=\"onNodeUnselected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeFFSCreated($event)\"\n                      (nodeExpanded)=\"onNodeExpanded($event)\"\n                      (nodeCollapsed)=\"onNodeCollapsed($event)\"\n                      [settings]=\"settings\">\n                </tree>\n            </div>\n\n            <div class=\"tree-controlls\">\n                <p class=\"notice\">Tree API exposed via TreeController</p>\n                <button button (click)=\"handleActionOnFFS(13, 'select')\">Select 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(13, 'unselect')\">Unselect 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(13, 'allowSelection')\">Allow selection of the 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(13, 'forbidSelection')\">Forbid selection of the 'boot' node</button>\n                <button button (click)=\"handleActionOnFFS(2, 'collapse')\">Collapse 'bin' node</button>\n                <button button (click)=\"handleActionOnFFS(2, 'expand')\">Expand 'bin' node</button>\n                <button button (click)=\"renameFFS(21)\">Rename 'unicode.pf2' to 'unicode.pf'</button>\n                <button button (click)=\"handleActionOnFFS(12, 'remove')\">Remove 'nano'</button>\n                <button button (click)=\"handleActionOnFFS(52, 'reloadChildren')\">Reload Music's children</button>\n                <button button (click)=\"setChildrenFFS(36)\">Set 'etc' children</button>\n                <button button (click)=\"addChildFFS(2, {value: 'ping'})\">Add a child with name 'ping' to 'bin'</button>\n                <button button (click)=\"addChildFFS(22, {value: 'lost'})\">Add a child with name 'lost' to 'lost+found'</button>\n                <button button (click)=\"addChildFFS(22, {value: 'found', children: []})\">Add a child with name 'found' to 'lost+found'</button>\n                <button button (click)=\"addChildFFS(36, {value: 'found', children: []})\">Add a child with name 'found' to 'etc'</button>\n                <button button (click)=\"addChildFFS(78, {value: 'Voodo People'})\">Add a child with name 'Voodo People' to '2Cellos'</button>\n                <button button (click)=\"checkFolder(52)\">Check Music folder</button>\n                <button button (click)=\"uncheckFolder(52)\">Uncheck Music folder</button>\n            </div>\n        </div>\n        <div class=\"tree-container\">\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Programming languages tree</p>\n                <p class=\"notice\">this tree is using a custom template</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree [tree]=\"icons\"\n                      [settings]=\"settings\"\n                      (nodeRemoved)=\"onNodeRemoved($event)\"\n                      (nodeRenamed)=\"onNodeRenamed($event)\"\n                      (nodeSelected)=\"onNodeSelected($event)\"\n                      (nodeMoved)=\"onNodeMoved($event)\"\n                      (nodeCreated)=\"onNodeCreated($event)\">\n                    <ng-template let-node>\n                        <i class=\"fa {{node.icon}}\"></i>\n                        <span class=\"node-name\" [innerHTML]=\"node.value\"></span>\n                    </ng-template>\n                </tree>\n            </div>\n        </div>\n        <div>\n            <div class=\"tree-info\">\n                <p class=\"tree-title\">Custom right click GUI tree</p>\n                <p class=\"notice\">this tree is using a custom right click menu</p>\n            </div>\n            <div class=\"tree-content\">\n                <tree [tree]=\"custom\"\n                      (nodeSelected)=\"onNodeSelected($event)\">\n                </tree>\n            </div>\n        </div>\n    </div>\n  ",
             styles: [
                 "\n    .tree-info {\n        flex: 1 0 100%;\n        display: flex;\n        flex-direction: column;\n        align-items: flex-start;\n      }\n\n      .tree-controlls {\n        display: flex;\n        flex-direction: column;\n      }\n\n      .tree-content {\n        display: flex;\n        flex-direction: column;\n      }\n\n      .tree-container {\n        margin-bottom: 20px;\n\n      }\n\n      .tree-container--with-controls {\n        display: flex;\n        flex-wrap: wrap;\n      }\n\n      .tree-demo-app {\n        display: flex;\n        flex-direction: column;\n        margin-bottom:50px;\n      }\n\n      .tree-title {\n        margin: 0;\n        color: #40a070;\n        font-size: 2em;\n      }\n\n      .notice {\n        color: #e91e63;\n        font-size: 1.2em;\n        font-style: italic;\n      }\n\n      :host /deep/ .fa {\n        cursor: pointer;\n      }\n\n      :host /deep/ .fa.disabled {\n        cursor: inherit;\n        color: #757575;\n      }\n\n      .button {\n        border-radius: 4px;\n        box-shadow: 0 2px 4px 0 #888;\n        background-color: #fff;\n        -webkit-appearance: none;\n        border: 1px solid #000;\n        height: 35px;\n        outline: none;\n      }\n\n      .button-pressed {\n        box-shadow: 0 0 1px 0 #888;\n      }\n\n      .tree-controlls button {\n        margin: 5px;\n      }\n  "
             ]
@@ -1251,6 +1251,11 @@ var TreeController = (function () {
             this.component.onNodeSelected({ button: __WEBPACK_IMPORTED_MODULE_1__utils_event_utils__["a" /* MouseButtons */].Left });
         }
     };
+    TreeController.prototype.unselect = function () {
+        if (this.isSelected()) {
+            this.component.onNodeUnselected({ button: __WEBPACK_IMPORTED_MODULE_1__utils_event_utils__["a" /* MouseButtons */].Left });
+        }
+    };
     TreeController.prototype.isSelected = function () {
         return this.component.isSelected;
     };
@@ -1465,6 +1470,15 @@ var TreeInternalComponent = (function () {
         if (__WEBPACK_IMPORTED_MODULE_8__utils_event_utils__["c" /* isLeftButtonClicked */](e)) {
             this.isSelected = true;
             this.treeService.fireNodeSelected(this.tree);
+        }
+    };
+    TreeInternalComponent.prototype.onNodeUnselected = function (e) {
+        if (!this.tree.selectionAllowed) {
+            return;
+        }
+        if (__WEBPACK_IMPORTED_MODULE_8__utils_event_utils__["c" /* isLeftButtonClicked */](e)) {
+            this.isSelected = false;
+            this.treeService.fireNodeUnselected(this.tree);
         }
     };
     TreeInternalComponent.prototype.showRightMenu = function (e) {
@@ -1687,6 +1701,7 @@ var TreeComponent = (function () {
         this.nodeRemoved = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.nodeRenamed = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.nodeSelected = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
+        this.nodeUnselected = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.nodeMoved = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.nodeExpanded = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
         this.nodeCollapsed = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */]();
@@ -1718,6 +1733,9 @@ var TreeComponent = (function () {
         }));
         this.subscriptions.push(this.treeService.nodeSelected$.subscribe(function (e) {
             _this.nodeSelected.emit(e);
+        }));
+        this.subscriptions.push(this.treeService.nodeUnselected$.subscribe(function (e) {
+            _this.nodeUnselected.emit(e);
         }));
         this.subscriptions.push(this.treeService.nodeMoved$.subscribe(function (e) {
             _this.nodeMoved.emit(e);
@@ -1778,6 +1796,10 @@ var TreeComponent = (function () {
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */])
+    ], TreeComponent.prototype, "nodeUnselected", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* EventEmitter */])
     ], TreeComponent.prototype, "nodeMoved", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Output */])(),
@@ -1834,6 +1856,7 @@ var TreeComponent = (function () {
 "use strict";
 /* unused harmony export NodeEvent */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return NodeSelectedEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return NodeUnselectedEvent; });
 /* unused harmony export NodeDestructiveEvent */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return NodeMovedEvent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return NodeRemovedEvent; });
@@ -1869,6 +1892,14 @@ var NodeSelectedEvent = (function (_super) {
         return _super.call(this, node) || this;
     }
     return NodeSelectedEvent;
+}(NodeEvent));
+
+var NodeUnselectedEvent = (function (_super) {
+    __extends(NodeUnselectedEvent, _super);
+    function NodeUnselectedEvent(node) {
+        return _super.call(this, node) || this;
+    }
+    return NodeUnselectedEvent;
 }(NodeEvent));
 
 var NodeDestructiveEvent = (function (_super) {
@@ -2075,6 +2106,7 @@ var TreeService = (function () {
         this.nodeRenamed$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
         this.nodeCreated$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
         this.nodeSelected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.nodeUnselected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
         this.nodeExpanded$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
         this.nodeCollapsed$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
         this.menuItemSelected$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
@@ -2096,6 +2128,9 @@ var TreeService = (function () {
     };
     TreeService.prototype.fireNodeSelected = function (tree) {
         this.nodeSelected$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["k" /* NodeSelectedEvent */](tree));
+    };
+    TreeService.prototype.fireNodeUnselected = function (tree) {
+        this.nodeUnselected$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["m" /* NodeUnselectedEvent */](tree));
     };
     TreeService.prototype.fireNodeRenamed = function (oldValue, tree) {
         this.nodeRenamed$.next(new __WEBPACK_IMPORTED_MODULE_0__tree_events__["j" /* NodeRenamedEvent */](tree, oldValue, tree.value));
