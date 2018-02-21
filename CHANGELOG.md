@@ -1,3 +1,11 @@
+<a name="2.0.0-rc.8"></a>
+
+# [2.0.0-rc.8](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.7...v2.0.0-rc.8) (2018-02-20)
+
+### Features
+
+* **tree:** unselect tree via controller ([6c43391](https://github.com/valor-software/ng2-tree/commit/6c43391))
+
 <a name="2.0.0-rc.7"></a>
 
 # [2.0.0-rc.7](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.5...v2.0.0-rc.7) (2018-02-18)

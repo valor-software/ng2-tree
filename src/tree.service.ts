@@ -10,7 +10,8 @@ import {
   NodeRemovedEvent,
   NodeRenamedEvent,
   NodeSelectedEvent,
-  NodeUncheckedEvent
+  NodeUncheckedEvent,
+  NodeUnselectedEvent
 } from './tree.events';
 import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
@@ -29,6 +30,7 @@ export class TreeService {
   public nodeRenamed$: Subject<NodeRenamedEvent> = new Subject<NodeRenamedEvent>();
   public nodeCreated$: Subject<NodeCreatedEvent> = new Subject<NodeCreatedEvent>();
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
+  public nodeUnselected$: Subject<NodeUnselectedEvent> = new Subject<NodeUnselectedEvent>();
   public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
   public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
   public menuItemSelected$: Subject<MenuItemSelectedEvent> = new Subject<MenuItemSelectedEvent>();
@@ -57,6 +59,10 @@ export class TreeService {
 
   public fireNodeSelected(tree: Tree): void {
     this.nodeSelected$.next(new NodeSelectedEvent(tree));
+  }
+
+  public fireNodeUnselected(tree: Tree): void {
+    this.nodeUnselected$.next(new NodeUnselectedEvent(tree));
   }
 
   public fireNodeRenamed(oldValue: RenamableNode | string, tree: Tree): void {

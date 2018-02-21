@@ -11,6 +11,12 @@ export class NodeSelectedEvent extends NodeEvent {
   }
 }
 
+export class NodeUnselectedEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+
 export class NodeDestructiveEvent extends NodeEvent {
   public constructor(node: Tree) {
     super(node);
