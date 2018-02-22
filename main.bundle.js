@@ -9,7 +9,8 @@ webpackJsonp(["main"],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_menu_menu_events__ = __webpack_require__("../../../../../src/menu/menu.events.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_tree_events__ = __webpack_require__("../../../../../src/tree.events.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_tree_component__ = __webpack_require__("../../../../../src/tree.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_tree_module__ = __webpack_require__("../../../../../src/tree.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_tree_controller__ = __webpack_require__("../../../../../src/tree-controller.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__src_tree_module__ = __webpack_require__("../../../../../src/tree.module.ts");
 /* unused harmony reexport Tree */
 /* unused harmony reexport TreeModelSettings */
 /* unused harmony reexport Ng2TreeSettings */
@@ -23,10 +24,16 @@ webpackJsonp(["main"],{
 /* unused harmony reexport NodeExpandedEvent */
 /* unused harmony reexport NodeCollapsedEvent */
 /* unused harmony reexport NodeDestructiveEvent */
+/* unused harmony reexport NodeUncheckedEvent */
+/* unused harmony reexport NodeCheckedEvent */
+/* unused harmony reexport NodeIndeterminedEvent */
+/* unused harmony reexport NodeUnselectedEvent */
 /* unused harmony reexport TreeComponent */
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_5__src_tree_module__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_6__src_tree_module__["a"]; });
 /* unused harmony reexport NodeMenuItemAction */
 /* unused harmony reexport MenuItemSelectedEvent */
+/* unused harmony reexport TreeController */
+
 
 
 
