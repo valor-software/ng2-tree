@@ -9,7 +9,7 @@ import {
 
 import { Tree } from './src/tree';
 
-import { NodeMenuItemAction } from './src/menu/menu.events';
+import { NodeMenuItemAction, NodeMenuEvent } from './src/menu/menu.events';
 import { NodeMenuItem } from './src/menu/node-menu.component';
 
 import {
@@ -22,10 +22,15 @@ import {
   NodeExpandedEvent,
   NodeCollapsedEvent,
   MenuItemSelectedEvent,
-  NodeDestructiveEvent
+  NodeDestructiveEvent,
+  NodeUncheckedEvent,
+  NodeCheckedEvent,
+  NodeIndeterminedEvent,
+  NodeUnselectedEvent
 } from './src/tree.events';
 
 import { TreeComponent } from './src/tree.component';
+import { TreeController } from './src/tree-controller';
 import { TreeModule } from './src/tree.module';
 
 export {
@@ -44,10 +49,16 @@ export {
   NodeExpandedEvent,
   NodeCollapsedEvent,
   NodeDestructiveEvent,
+  NodeMenuEvent,
+  NodeUncheckedEvent,
+  NodeCheckedEvent,
+  NodeIndeterminedEvent,
+  NodeUnselectedEvent,
   TreeComponent,
   TreeModule,
   NodeMenuItemAction,
   NodeMenuItem,
   ChildrenLoadingFunction,
-  MenuItemSelectedEvent
+  MenuItemSelectedEvent,
+  TreeController
 };
