@@ -9,7 +9,8 @@ export class TreeDataProvider {
         rightMenu: true,
         isCollapsedOnInit: false,
         checked: false,
-        selectionAllowed: true
+        selectionAllowed: true,
+        keepNodesInDOM: false
       }
     },
     'first settings source has higher priority': {
@@ -21,7 +22,8 @@ export class TreeDataProvider {
           rightMenu: true,
           isCollapsedOnInit: true,
           checked: true,
-          selectionAllowed: false
+          selectionAllowed: false,
+          keepNodesInDOM: true
         }
       },
       treeModelB: {
@@ -32,7 +34,8 @@ export class TreeDataProvider {
           rightMenu: false,
           isCollapsedOnInit: false,
           checked: false,
-          selectionAllowed: true
+          selectionAllowed: true,
+          keepNodesInDOM: false
         }
       },
       result: {
@@ -41,7 +44,8 @@ export class TreeDataProvider {
         rightMenu: true,
         isCollapsedOnInit: true,
         checked: true,
-        selectionAllowed: false
+        selectionAllowed: false,
+        keepNodesInDOM: true
       }
     },
     'second settings source has priority if first settings source does not have the option': {
@@ -54,7 +58,8 @@ export class TreeDataProvider {
           rightMenu: false,
           isCollapsedOnInit: true,
           checked: true,
-          selectionAllowed: false
+          selectionAllowed: false,
+          keepNodesInDOM: true
         }
       },
       result: {
@@ -63,7 +68,8 @@ export class TreeDataProvider {
         rightMenu: false,
         isCollapsedOnInit: true,
         checked: true,
-        selectionAllowed: true
+        selectionAllowed: true,
+        keepNodesInDOM: true
       }
     },
     'first expanded property of cssClasses has higher priority': {
@@ -78,6 +84,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        keepNodesInDOM: false,
         selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down-o', collapsed: 'arrow-right', empty: 'arrow-gray', leaf: 'dot' }
       }
@@ -93,6 +100,7 @@ export class TreeDataProvider {
         static: false,
         leftMenu: false,
         rightMenu: true,
+        keepNodesInDOM: false,
         checked: false,
         selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down', collapsed: 'arrow-right-o', empty: 'arrow-gray', leaf: 'dot' }
@@ -109,6 +117,7 @@ export class TreeDataProvider {
         static: false,
         leftMenu: false,
         rightMenu: true,
+        keepNodesInDOM: false,
         checked: false,
         selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down', collapsed: 'arrow-right', empty: 'arrow-gray-o', leaf: 'dot' }
@@ -125,6 +134,7 @@ export class TreeDataProvider {
         static: false,
         leftMenu: false,
         rightMenu: true,
+        keepNodesInDOM: false,
         checked: false,
         selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down', collapsed: 'arrow-right', empty: 'arrow-gray', leaf: 'dot-o' }
@@ -146,6 +156,7 @@ export class TreeDataProvider {
         static: false,
         leftMenu: false,
         rightMenu: true,
+        keepNodesInDOM: false,
         checked: false,
         selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down-o', collapsed: 'arrow-right-o', empty: 'arrow-gray-o', leaf: 'dot-o' }
@@ -164,6 +175,7 @@ export class TreeDataProvider {
         static: true,
         leftMenu: true,
         rightMenu: false,
+        keepNodesInDOM: false,
         checked: false,
         selectionAllowed: true,
         cssClasses: { expanded: 'arrow-down-o', collapsed: 'arrow-right-o', empty: 'arrow-gray-o', leaf: 'dot-o' }
@@ -187,6 +199,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        keepNodesInDOM: false,
         selectionAllowed: true,
         templates: {
           node: '<i class="folder-o"></i>',
@@ -212,6 +225,7 @@ export class TreeDataProvider {
         static: false,
         leftMenu: false,
         rightMenu: true,
+        keepNodesInDOM: false,
         checked: false,
         selectionAllowed: true,
         templates: {
@@ -238,6 +252,7 @@ export class TreeDataProvider {
         static: false,
         leftMenu: false,
         rightMenu: true,
+        keepNodesInDOM: false,
         checked: false,
         selectionAllowed: true,
         templates: {
@@ -274,6 +289,7 @@ export class TreeDataProvider {
         leftMenu: false,
         rightMenu: true,
         checked: false,
+        keepNodesInDOM: false,
         selectionAllowed: true,
         templates: {
           node: '<i class="folder-o"></i>',
@@ -300,6 +316,7 @@ export class TreeDataProvider {
         leftMenu: true,
         rightMenu: false,
         checked: false,
+        keepNodesInDOM: false,
         selectionAllowed: true,
         templates: {
           node: '<i class="folder-o"></i>',

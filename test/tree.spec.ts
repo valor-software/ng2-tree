@@ -1048,7 +1048,8 @@ describe('Tree', () => {
         leftMenu: false,
         rightMenu: true,
         checked: true,
-        selectionAllowed: true
+        selectionAllowed: true,
+        keepNodesInDOM: true
       },
       children: [
         {
@@ -1060,7 +1061,8 @@ describe('Tree', () => {
             leftMenu: false,
             rightMenu: true,
             checked: true,
-            selectionAllowed: true
+            selectionAllowed: true,
+            keepNodesInDOM: true
           }
         }
       ]
