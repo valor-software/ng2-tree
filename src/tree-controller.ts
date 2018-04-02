@@ -37,6 +37,16 @@ export class TreeController {
     }
   }
 
+  public expandToParent(tree: any = this.tree): void {
+    if (tree) {
+      const controller = this.treeService.getController(tree.id);
+      if (controller) {
+        controller.expand();
+        this.expandToParent(tree.parent);
+      }
+    }
+  }
+
   public isExpanded(): boolean {
     return this.tree.isNodeExpanded();
   }
