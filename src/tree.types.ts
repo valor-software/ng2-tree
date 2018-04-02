@@ -97,6 +97,8 @@ export class TreeModelSettings {
 
   public selectionAllowed?: boolean;
 
+  public keepNodesInDOM?: boolean;
+
   public static readonly NOT_CASCADING_SETTINGS = ['selectionAllowed'];
 
   public static merge(child: TreeModel, parent: TreeModel): TreeModelSettings {
@@ -107,6 +109,7 @@ export class TreeModelSettings {
       rightMenu: true,
       isCollapsedOnInit: false,
       checked: false,
+      keepNodesInDOM: false,
       selectionAllowed: true
     });
   }

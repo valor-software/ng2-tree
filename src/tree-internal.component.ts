@@ -73,7 +73,11 @@ import { get, isNil } from './utils/fn.utils';
            [menuItems]="tree.menuItems"
            (menuItemSelected)="onMenuItemSelected($event)">
       </node-menu>
-      <ng-template [ngIf]="tree.isNodeExpanded()">
+
+      <div *ngIf="tree.keepNodesInDOM()" [ngStyle]="{'display': tree.isNodeExpanded() ? 'block' : 'none'}">
+        <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child" [template]="template" [settings]="settings"></tree-internal>
+      </div>
+      <ng-template [ngIf]="tree.isNodeExpanded() && !tree.keepNodesInDOM()">
         <tree-internal *ngFor="let child of tree.childrenAsync | async" [tree]="child" [template]="template" [settings]="settings"></tree-internal>
       </ng-template>
     </li>

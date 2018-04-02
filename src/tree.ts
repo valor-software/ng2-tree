@@ -583,6 +583,10 @@ export class Tree {
     return !!get(this.node.settings, 'isCollapsedOnInit');
   }
 
+  public keepNodesInDOM() {
+    return get(this.node.settings, 'keepNodesInDOM');
+  }
+
   /**
    * Check that current tree is newly created (added by user via menu for example). Tree that was built from the TreeModel is not marked as new.
    * @returns {boolean} A flag whether the tree is new.

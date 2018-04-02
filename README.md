@@ -6,47 +6,48 @@
 
 <!-- TOC -->
 
-- [:clapper: Usage](#clapper-usage)
-- [:eyes: Demo](#eyes-demo)
-- [:wrench: API](#wrench-api)
-  - [tree](#tree)
-  - [[tree]](#tree)
-    - [Load children asynchronously](#load-children-asynchronously)
-    - [Load children using ngrx (or any redux-like library)](#load-children-using-ngrx-or-any-redux-like-library)
-    - [Configure node via TreeModelSettings](#configure-node-via-treemodelsettings)
-  - [[settings]](#settings)
-  - [`Tree` class](#tree-class)
-  - [events (nodeMoved, nodeSelected, nodeRenamed, nodeRemoved, nodeCreated, nodeExpanded, nodeCollapsed)](#events-nodemoved-nodeselected-noderenamed-noderemoved-nodecreated-nodeexpanded-nodecollapsed)
-    - [NodeSelectedEvent](#nodeselectedevent)
-    - [NodeMovedEvent](#nodemovedevent)
-    - [NodeRemovedEvent](#noderemovedevent)
-    - [NodeCreatedEvent](#nodecreatedevent)
-    - [NodeRenamedEvent](#noderenamedevent)
-    - [NodeExpandedEvent](#nodeexpandedevent)
-    - [NodeCollapsedEvent](#nodecollapsedevent)
-    - [LoadNextLevelEvent](#loadnextlevelevent)
-- [:gun: Controller](#gun-controller)
-    - [select - selects a node](#select---selects-a-node)
-    - [isSelected - checks whether a node is selected](#isselected---checks-whether-a-node-is-selected)
-    - [collapse - collapses a node](#collapse---collapses-a-node)
-    - [isCollapsed - check whether a node is collapsed](#iscollapsed---check-whether-a-node-is-collapsed)
-    - [expand - expands a node](#expand---expands-a-node)
-    - [isExpanded - checks whether a node is expanded](#isexpanded---checks-whether-a-node-is-expanded)
-    - [toTreeModel - converts a tree to a TreeModel instance](#totreemodel---converts-a-tree-to-a-treemodel-instance)
-    - [rename - renames a node (changes its value underneath)](#rename---renames-a-node-changes-its-value-underneath)
-    - [startRenaming - changes the node template so that text input appears and lets a user type a new name](#startrenaming---changes-the-node-template-so-that-text-input-appears-and-lets-a-user-type-a-new-name)
-    - [remove - removes a node from the tree](#remove---removes-a-node-from-the-tree)
-    - [addChild - creates a new child node](#addchild---creates-a-new-child-node)
-  - [changeNodeId - changes node's id](#changenodeid---changes-nodes-id)
-  - [reloadChildren - loads async children once more](#reloadchildren---loads-async-children-once-more)
-  - [setChildren - changes children of a node;](#setchildren---changes-children-of-a-node)
-- [SystemJS](#systemjs)
-- [Changes that should be taken into account in order to migrate from __ng2-tree V1__ to __ng2-tree V2__](#changes-that-should-be-taken-into-account-in-order-to-migrate-from-__ng2-tree-v1__-to-__ng2-tree-v2__)
-- [:bulb: Want to help?](#bulb-want-to-help)
+* [:clapper: Usage](#clapper-usage)
+* [:eyes: Demo](#eyes-demo)
+* [:wrench: API](#wrench-api)
+  * [tree](#tree)
+  * [[tree]](#tree)
+    * [Load children asynchronously](#load-children-asynchronously)
+    * [Load children using ngrx (or any redux-like library)](#load-children-using-ngrx-or-any-redux-like-library)
+    * [Configure node via TreeModelSettings](#configure-node-via-treemodelsettings)
+  * [[settings]](#settings)
+  * [`Tree` class](#tree-class)
+  * [events (nodeMoved, nodeSelected, nodeRenamed, nodeRemoved, nodeCreated, nodeExpanded, nodeCollapsed)](#events-nodemoved-nodeselected-noderenamed-noderemoved-nodecreated-nodeexpanded-nodecollapsed)
+    * [NodeSelectedEvent](#nodeselectedevent)
+    * [NodeMovedEvent](#nodemovedevent)
+    * [NodeRemovedEvent](#noderemovedevent)
+    * [NodeCreatedEvent](#nodecreatedevent)
+    * [NodeRenamedEvent](#noderenamedevent)
+    * [NodeExpandedEvent](#nodeexpandedevent)
+    * [NodeCollapsedEvent](#nodecollapsedevent)
+    * [LoadNextLevelEvent](#loadnextlevelevent)
+* [:gun: Controller](#gun-controller)
+  * [select - selects a node](#select---selects-a-node)
+  * [isSelected - checks whether a node is selected](#isselected---checks-whether-a-node-is-selected)
+  * [collapse - collapses a node](#collapse---collapses-a-node)
+  * [isCollapsed - check whether a node is collapsed](#iscollapsed---check-whether-a-node-is-collapsed)
+  * [expand - expands a node](#expand---expands-a-node)
+  * [isExpanded - checks whether a node is expanded](#isexpanded---checks-whether-a-node-is-expanded)
+  * [toTreeModel - converts a tree to a TreeModel instance](#totreemodel---converts-a-tree-to-a-treemodel-instance)
+  * [rename - renames a node (changes its value underneath)](#rename---renames-a-node-changes-its-value-underneath)
+  * [startRenaming - changes the node template so that text input appears and lets a user type a new name](#startrenaming---changes-the-node-template-so-that-text-input-appears-and-lets-a-user-type-a-new-name)
+  * [remove - removes a node from the tree](#remove---removes-a-node-from-the-tree)
+  * [addChild - creates a new child node](#addchild---creates-a-new-child-node)
+  * [changeNodeId - changes node's id](#changenodeid---changes-nodes-id)
+  * [reloadChildren - loads async children once more](#reloadchildren---loads-async-children-once-more)
+  * [setChildren - changes children of a node;](#setchildren---changes-children-of-a-node)
+* [SystemJS](#systemjs)
+* [Changes that should be taken into account in order to migrate from **ng2-tree V1** to **ng2-tree V2**](#changes-that-should-be-taken-into-account-in-order-to-migrate-from-__ng2-tree-v1__-to-__ng2-tree-v2__)
+* [:bulb: Want to help?](#bulb-want-to-help)
 
 <!-- /TOC -->
 
 ## :clapper: Usage
+
 Ok, let's start with an installation - all you need to do is:
 
 `npm install --save ng2-tree`
@@ -63,11 +64,10 @@ import { TreeModule } from 'ng2-tree';
 
 @NgModule({
   declarations: [MyComponent],
-  imports:      [BrowserModule, TreeModule],
-  bootstrap:    [MyComponent]
+  imports: [BrowserModule, TreeModule],
+  bootstrap: [MyComponent]
 })
-export class MyModule {
-}
+export class MyModule {}
 ```
 
 2. As soon as the previous step is done we need to give ng2-tree a model to render - this can be accomplished by populating its `[tree]` attribute with an object that conforms to the `TreeModel` interface (see [API](#wrench-api)):
@@ -88,19 +88,11 @@ class MyComponent {
     children: [
       {
         value: 'Object-oriented programming',
-        children: [
-          {value: 'Java'},
-          {value: 'C++'},
-          {value: 'C#'}
-        ]
+        children: [{ value: 'Java' }, { value: 'C++' }, { value: 'C#' }]
       },
       {
         value: 'Prototype-based programming',
-        children: [
-          {value: 'JavaScript'},
-          {value: 'CoffeeScript'},
-          {value: 'Lua'}
-        ]
+        children: [{ value: 'JavaScript' }, { value: 'CoffeeScript' }, { value: 'Lua' }]
       }
     ]
   };
@@ -112,12 +104,12 @@ class MyComponent {
 In Angular 2/4 cli projects, modify **.angular-cli.json** as below:
 
 ```typescript
-
       "styles": [
         "styles.css",
         "../node_modules/ng2-tree/styles.css"
       ],
 ```
+
 4. And finally, I suppose, you'd want to listen to events generated by ng2-tree (for a full list of supported events look at the [API](#wrench-api)). No problem, this is also easy to do - for example let's add a listener for `node was selected` kind of events:
 
 ```typescript
@@ -138,15 +130,17 @@ class MyComponent {
   }
 }
 ```
+
 Voila! That's pretty much it - enjoy :blush:
 
 ## :eyes: Demo
+
 Feel free to examine the [demo](https://valor-software.github.io/ng2-tree/index.html) and its [sources](src/demo) to find out how things are wired.
 Also, there is [another demo built with Angular CLI](https://github.com/rychkog/ng2-tree-demo).
 
 ## :wrench: API
 
-Here is the fully stuffed *tree* tag that you can use in your templates:
+Here is the fully stuffed _tree_ tag that you can use in your templates:
 
 ```html
     <tree
@@ -271,7 +265,7 @@ Here is an example of such a node in the `TreeModel` object:
 
 #### Load children asynchronously
 
-Another worth noting thing is `loadChildren`. This function on `TreeModel` allows you to load its __children asynchronously__.
+Another worth noting thing is `loadChildren`. This function on `TreeModel` allows you to load its **children asynchronously**.
 
 ```typescript
 {
@@ -296,21 +290,21 @@ If `loadChildren` function is given to the node - `children` property is ignored
 You can also load children by changing the tree state using ngrx.
 The tree can emit an appropriate event notifying you to dispatch a new action in order to load the branch's children.
 
-To enable this feature you should set the ```TreeModel.emitLoadNextLevel``` property to true:
+To enable this feature you should set the `TreeModel.emitLoadNextLevel` property to true:
 
- ```typscript
- const model: TreeModel = {
- emitLoadNextLevel : true
- }
- ```
+```typscript
+const model: TreeModel = {
+emitLoadNextLevel : true
+}
+```
 
-Now on the first time the node is expanded a __LoadNextLevelEvent__ will be fired (via the __loadNextLevel__ EventEmitter in the tree) containing the node that requested a next level (its children) loading.
+Now on the first time the node is expanded a **LoadNextLevelEvent** will be fired (via the **loadNextLevel** EventEmitter in the tree) containing the node that requested a next level (its children) loading.
 
 In your code make sure you change the tree state and add the children to the model.
 
-In addition the regular __NodeExpanded__ event will be fired.
+In addition the regular **NodeExpanded** event will be fired.
 
-__NOTICE__: if both ```emitLoadNextLevel``` and ```loadChildren``` are provided, the tree will ignore the ```emitLoadNextLevel``` and the ```LoadNextLevelEvent``` won't be fired.
+**NOTICE**: if both `emitLoadNextLevel` and `loadChildren` are provided, the tree will ignore the `emitLoadNextLevel` and the `LoadNextLevelEvent` won't be fired.
 
 #### Configure node via TreeModelSettings
 
@@ -370,12 +364,12 @@ All options that are defined on a `parent` are automatically applied to children
 
 ### [settings]
 
-Object that should be passed to `[settings]` must be of type [`Ng2TreeSettings`](src/tree.types.ts). This attribute is __optional__. Right now only one setting is available in there - `rootIsVisible`. This setting allows you to make a root node of the tree _invisible_:
+Object that should be passed to `[settings]` must be of type [`Ng2TreeSettings`](src/tree.types.ts). This attribute is **optional**. Right now only one setting is available in there - `rootIsVisible`. This setting allows you to make a root node of the tree _invisible_:
 
 ```typescript
 const treeSettings: Ng2TreeSettings = {
   rootIsVisible: false
-}
+};
 ```
 
 By default `rootIsVisible` equals to `true`
@@ -420,8 +414,8 @@ You can subscribe to `NodeMovedEvent` by attaching listener to `(nodeMoved)` att
 
 `NodeMovedEvent` has two properties `node` and `previousParent` both of which contain `Tree` objects:
 
-- `node` contains a moved node;
-- `previousParent` contains a previous parent of the moved node;
+* `node` contains a moved node;
+* `previousParent` contains a previous parent of the moved node;
 
 ```typescript
 {node: <Tree>{...}, previousParent: <Tree>{...}}
@@ -474,9 +468,9 @@ You can subscribe to `NodeRenamedEvent` by attaching listener to `(nodeRenamed)`
 
 `NodeRenamedEvent` has three properties:
 
-- `node` contains a node that was renamed ( an instance of `Tree`).
-- `oldValue` contains a value, that node used to have (it might be `string` or `RenamableNode`)
-- `newValue` contains a new value of the node (it might be `string` or `RenamableNode`)
+* `node` contains a node that was renamed ( an instance of `Tree`).
+* `oldValue` contains a value, that node used to have (it might be `string` or `RenamableNode`)
+* `newValue` contains a new value of the node (it might be `string` or `RenamableNode`)
 
 ```typescript
 {
@@ -539,6 +533,7 @@ Relevant for loading children via ngrx (or any redux-inspired library).
 ```
 
 ## :gun: Controller
+
 First of all you should know how to get a controller of a particular node. You can get a controller of a node only if you set an id property of a node.
 
 > TIP: Ids for nodes created via the context menu or using a TreeController instance get populated automatically unless nodes had ids before there were added to the tree
@@ -661,6 +656,16 @@ oopNodeController.expand();
 
 This method expands the node in case it can be expanded. On successful expanding the expand event is fired.
 
+#### expandToParent - expands a node and its parents up to the root
+
+```typescript
+oopNodeController.expandToParent();
+```
+
+This method expands the node even if it is a leaf. Expand event is fired for every expanded parent up to the root.
+
+**Important:** For this to work - `keepNodesInDOM: true` should be set on the appropriate tree.
+
 #### isExpanded - checks whether a node is expanded
 
 ```typescript
@@ -731,9 +736,9 @@ oopNodeController.reloadChildren();
 
 ```typescript
 let newChildren: Array<TreeModel> = [
-  {value: 'new children 1'},
-  {value: 'new children 2'},
-  {value: 'new children 3'}
+  { value: 'new children 1' },
+  { value: 'new children 2' },
+  { value: 'new children 3' }
 ];
 oopNodeController.setChildren(newChildren);
 ```
@@ -741,6 +746,7 @@ oopNodeController.setChildren(newChildren);
 This method replaces all existing children of the node with new ones.
 
 ## SystemJS
+
 If you are using SystemJS, then you need
 
 ```javascript
@@ -755,12 +761,13 @@ System.config({
 }
 ```
 
-## Changes that should be taken into account in order to migrate from __ng2-tree V1__ to __ng2-tree V2__
-- Events were reworked:
-  - In V1 all events that were inherited from NodeDestructiveEvent used to have property `parent`. It's not the case anymore. If you need a parent you should get it from `node` in event object like `node.parent`;
-  - All events used to have `node` property of type `TreeModel`. Now `node` is of type [Tree](#tree-class) (as well as `node.parent`);
-  - `NodeMovedEvent` now has property `previousParent`, which contains tree in which moved node used to be.
-- CSS styles in __ng2-tree V2__ are distributed as separate file which you can find in `node_modules/ng2-tree/styles.css`. That allows you to override ng2-tree styles more easily.
+## Changes that should be taken into account in order to migrate from **ng2-tree V1** to **ng2-tree V2**
+
+* Events were reworked:
+  * In V1 all events that were inherited from NodeDestructiveEvent used to have property `parent`. It's not the case anymore. If you need a parent you should get it from `node` in event object like `node.parent`;
+  * All events used to have `node` property of type `TreeModel`. Now `node` is of type [Tree](#tree-class) (as well as `node.parent`);
+  * `NodeMovedEvent` now has property `previousParent`, which contains tree in which moved node used to be.
+* CSS styles in **ng2-tree V2** are distributed as separate file which you can find in `node_modules/ng2-tree/styles.css`. That allows you to override ng2-tree styles more easily.
 
 ## :bulb: Want to help?
 

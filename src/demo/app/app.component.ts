@@ -66,6 +66,7 @@ declare const alertify: any;
 
             <div class="tree-controlls">
                 <p class="notice">Tree API exposed via TreeController</p>
+                <button button (click)="handleActionOnFFS(21, 'expandToParent')">Select 'unicode.pf2' up to root</button>
                 <button button (click)="handleActionOnFFS(13, 'select')">Select 'boot' node</button>
                 <button button (click)="handleActionOnFFS(13, 'unselect')">Unselect 'boot' node</button>
                 <button button (click)="handleActionOnFFS(13, 'allowSelection')">Allow selection of the 'boot' node</button>
@@ -314,6 +315,10 @@ export class AppComponent implements OnInit {
       {
         value: 'boot',
         id: 13,
+        settings: {
+          isCollapsedOnInit: true,
+          keepNodesInDOM: true
+        },
         children: [
           {
             value: 'grub',
