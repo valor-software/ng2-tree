@@ -1,6 +1,6 @@
 {
   "name": "ng2-tree",
-  "version": "2.0.0-rc.9",
+  "version": "2.0.0-rc.10",
   "description": "angular2 component for visualizing data that can be naturally represented as a tree",
   "main": "index.js",
   "license": "MIT",
@@ -33,7 +33,8 @@
   "scripts": {
     "compile": "ngc -p tsconfig-aot.json && node umd-bundler.js",
     "clean": "rimraf coverage build dist dist-demo bundles factories .publish",
-    "pre:publish": "npm run clean && npm run test && npm run lint && npm run compile && mkdir -p dist && cp -R src/styles.css README.md media dist",
+    "pre:publish":
+      "npm run clean && npm run test && npm run lint && npm run compile && mkdir -p dist && cp -R src/styles.css README.md media dist",
     "post:publish": "npm run build:demo && gh-pages -d dist-demo",
     "start": "ng serve",
     "build:demo": "ng build",
