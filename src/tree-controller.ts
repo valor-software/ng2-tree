@@ -41,8 +41,10 @@ export class TreeController {
     if (tree) {
       const controller = this.treeService.getController(tree.id);
       if (controller) {
-        controller.expand();
-        this.expandToParent(tree.parent);
+        requestAnimationFrame(() => {
+          controller.expand();
+          this.expandToParent(tree.parent);
+        });
       }
     }
   }
