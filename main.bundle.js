@@ -1276,12 +1276,15 @@ var TreeController = (function () {
         }
     };
     TreeController.prototype.expandToParent = function (tree) {
+        var _this = this;
         if (tree === void 0) { tree = this.tree; }
         if (tree) {
-            var controller = this.treeService.getController(tree.id);
-            if (controller) {
-                controller.expand();
-                this.expandToParent(tree.parent);
+            var controller_1 = this.treeService.getController(tree.id);
+            if (controller_1) {
+                requestAnimationFrame(function () {
+                    controller_1.expand();
+                    _this.expandToParent(tree.parent);
+                });
             }
         }
     };
