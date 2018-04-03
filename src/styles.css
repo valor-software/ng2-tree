@@ -81,7 +81,7 @@ tree-internal .tree li {
 }
 
 tree-internal .tree li div {
-  display: inline-block;
+  display: -webkit-inline-flex;
   box-sizing: border-box;
 }
 
@@ -120,7 +120,6 @@ tree-internal .tree .node-selected:after {
 }
 
 tree-internal .tree .folding {
-  width: 25px;
   display: inline-block;
   line-height: 1px;
   padding: 0 5px;
