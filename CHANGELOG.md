@@ -1,19 +1,24 @@
-<a name="2.0.0-rc.9"></a>
-# [2.0.0-rc.9](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.6...v2.0.0-rc.9) (2018-02-22)
+<a name="2.0.0-rc.10"></a>
 
+# [2.0.0-rc.10](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.9...v2.0.0-rc.10) (2018-04-02)
+
+### Features
+
+* **tree:** expand node up to parent ([#245](https://github.com/valor-software/ng2-tree/issues/245)) ([3493ff1](https://github.com/valor-software/ng2-tree/commit/3493ff1))
+
+<a name="2.0.0-rc.9"></a>
+
+# [2.0.0-rc.9](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.6...v2.0.0-rc.9) (2018-02-22)
 
 ### Bug Fixes
 
 * **custom-menu:** close menu when custom menu item gets clicked ([#218](https://github.com/valor-software/ng2-tree/issues/218)) ([ae75381](https://github.com/valor-software/ng2-tree/commit/ae75381))
 * **types:** export missed type definitions ([8335cf9](https://github.com/valor-software/ng2-tree/commit/8335cf9))
 
-
 ### Features
 
 * **selection:** add ability to allow and forbid a node selection (closes [#220](https://github.com/valor-software/ng2-tree/issues/220)) ([#221](https://github.com/valor-software/ng2-tree/issues/221)) ([12852c9](https://github.com/valor-software/ng2-tree/commit/12852c9))
 * **tree:** unselect tree via controller ([6c43391](https://github.com/valor-software/ng2-tree/commit/6c43391))
-
-
 
 <a name="2.0.0-rc.8"></a>
 
