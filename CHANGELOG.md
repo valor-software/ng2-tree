@@ -1,3 +1,11 @@
+<a name="2.0.0-rc.11"></a>
+
+# [2.0.0-rc.11](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.10...v2.0.0-rc.11) (2018-04-03)
+
+### Bug Fixes
+
+* **tree-controller:** handle change dection in expandToParent properly ([#248](https://github.com/valor-software/ng2-tree/issues/248)) ([d6414d5](https://github.com/valor-software/ng2-tree/commit/d6414d5))
+
 <a name="2.0.0-rc.10"></a>
 
 # [2.0.0-rc.10](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.9...v2.0.0-rc.10) (2018-04-02)
