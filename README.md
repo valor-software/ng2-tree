@@ -14,6 +14,7 @@
     * [Load children asynchronously](#load-children-asynchronously)
     * [Load children using ngrx (or any redux-like library)](#load-children-using-ngrx-or-any-redux-like-library)
     * [Configure node via TreeModelSettings](#configure-node-via-treemodelsettings)
+    * [Customize node templates](#customize-node-templates)
   * [[settings]](#settings)
   * [`Tree` class](#tree-class)
   * [events (nodeMoved, nodeSelected, nodeRenamed, nodeRemoved, nodeCreated, nodeExpanded, nodeCollapsed)](#events-nodemoved-nodeselected-noderenamed-noderemoved-nodecreated-nodeexpanded-nodecollapsed)
@@ -361,6 +362,18 @@ Here is an example of its usage:
 * `menuItems` - here you can specify your custom menu items. You should feed an array of NodeMenuItem instances to this setting. Once done - setup a subscription to `MenuItemSelectedEvent`s by listening to `(menuItemSelected)="onMenuItemSelected($event)"` on the tree.
 
 All options that are defined on a `parent` are automatically applied to children. If you want you can override them by `settings` of the child node.
+
+#### Customize node templates
+
+You can customize how the nodes render via content transclusion:
+
+```html
+<tree [tree]="tree">
+  <ng-template let-node>
+    <b class="custom-node">{{node.value}}</b>
+  </ng-template>
+</tree>
+```
 
 ### [settings]
 
