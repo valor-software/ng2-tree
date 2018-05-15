@@ -103,7 +103,7 @@
     "tslint": "5.8.0",
     "tslint-config-valorsoft": "2.1.1",
     "typescript": "2.4.2",
-    "uuid": "3.1.0",
+    "uuid": "3.2.1",
     "webpack": "3.8.1",
     "zone.js": "0.8.18"
   }
