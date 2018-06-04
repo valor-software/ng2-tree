@@ -9,5 +9,13 @@
       "jasmine",
       "node"
     ]
-  }
+  },
+  "files": [
+    "test.ts",
+    "../src/demo/polyfills.ts"
+  ],
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ]
 }

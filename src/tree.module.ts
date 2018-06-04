@@ -1,5 +1,3 @@
-import './rxjs-imports';
-
 import { NgModule } from '@angular/core';
 import { TreeComponent } from './tree.component';
 import { TreeInternalComponent } from './tree-internal.component';
