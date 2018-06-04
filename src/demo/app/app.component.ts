@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Ng2TreeSettings, NodeEvent, RenamableNode, TreeModel } from '../../../index';
 import { NodeMenuItemAction } from '../../menu/menu.events';
+import { TreeController } from '../../tree-controller';
 import { MenuItemSelectedEvent } from '../../tree.events';
 
 declare const alertify: any;
@@ -608,7 +609,7 @@ export class AppComponent implements OnInit {
     AppComponent.logEvent(e, 'Created');
   }
 
-  public onNodeFFSCreated(e: NodeEvent, controller): void {
+  public onNodeFFSCreated(e: NodeEvent, controller?: TreeController): void {
     AppComponent.logEvent(e, 'Created');
     if (controller) {
       controller.changeNodeId(++this.lastFFSNodeId);

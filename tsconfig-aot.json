@@ -19,6 +19,6 @@
   "angularCompilerOptions": {
     "strictMetadataEmit" : true,
     "skipMetadataEmit" : false,
-    "preserveWhitespaces": false
+    "preserveWhitespaces": true
   }
 }

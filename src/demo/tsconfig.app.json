@@ -5,5 +5,8 @@
     "module": "es2015",
     "baseUrl": "",
     "types": []
+  },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true
   }
 }
