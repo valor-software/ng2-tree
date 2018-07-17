@@ -453,7 +453,7 @@ describe('TreeInternalComponent', () => {
       'Only element with root tree node can have rootless class'
     );
     expect(childEl.query(By.css('.value-container')).classes['rootless']).toEqual(
-      false,
+      undefined,
       'Only element with root tree node can have rootless class'
     );
   });
