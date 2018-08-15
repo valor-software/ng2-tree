@@ -12,7 +12,7 @@
   box-shadow: 0 0 5px #bdbdbd;
   background-color: #eee;
   color: #212121;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   z-index: 999;
 }
 
@@ -72,7 +72,7 @@ tree-internal .over-drop-target {
 
 tree-internal .tree {
   box-sizing: border-box;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 tree-internal .tree li {
@@ -171,6 +171,10 @@ tree-internal ul.rootless {
   padding: 0;
 }
 
+tree-internal ul.hidden {
+  display: none;
+}
+
 tree-internal div.rootless {
   display: none !important;
 }
@@ -187,16 +191,31 @@ tree-internal .loading-children:after {
 }
 
 @keyframes loading-children {
-  0%    { color: #f3e5f5; }
-  12.5% { color: #e1bee7; }
-  25%   { color: #ce93d8; }
-  37.5% { color: #ba68c8; }
-  50%   { color: #ab47bc; }
-  62.5% { color: #9c27b0; }
-  75%   { color: #8e24aa; }
-  87.5% { color: #7b1fa2; }
-  100%  { color: #6a1b9a; }
+  0% {
+    color: #f3e5f5;
+  }
+  12.5% {
+    color: #e1bee7;
+  }
+  25% {
+    color: #ce93d8;
+  }
+  37.5% {
+    color: #ba68c8;
+  }
+  50% {
+    color: #ab47bc;
+  }
+  62.5% {
+    color: #9c27b0;
+  }
+  75% {
+    color: #8e24aa;
+  }
+  87.5% {
+    color: #7b1fa2;
+  }
+  100% {
+    color: #6a1b9a;
+  }
 }
-
-
-

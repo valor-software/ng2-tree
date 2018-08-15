@@ -28,7 +28,7 @@ import { get, isNil } from './utils/fn.utils';
 @Component({
   selector: 'tree-internal',
   template: `
-  <ul class="tree" *ngIf="tree" [ngClass]="{rootless: isRootHidden()}">
+  <ul class="tree" *ngIf="tree" [ngClass]="{rootless: isRootHidden(), hidden: tree.hidden}">
     <li>
       <div class="value-container"
         [ngClass]="{rootless: isRootHidden()}"
