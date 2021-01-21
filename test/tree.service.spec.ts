@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { TreeService } from '../src/tree.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { NodeDraggableService } from '../src/draggable/node-draggable.service';
 import { Tree } from '../src/tree';
 import {
