@@ -19,7 +19,7 @@ import { MenuItemSelectedEvent, NodeCheckedEvent, NodeEvent, NodeUncheckedEvent 
 
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tree',

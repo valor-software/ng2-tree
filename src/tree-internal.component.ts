@@ -22,7 +22,7 @@ import { NodeCheckedEvent, NodeEvent } from './tree.events';
 import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { get, isNil } from './utils/fn.utils';
 
 @Component({
