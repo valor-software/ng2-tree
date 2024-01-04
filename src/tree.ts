@@ -1,7 +1,5 @@
 import { defaultsDeep, get, has, includes, isEmpty, isFunction, isNil, omit, once, size, trim } from './utils/fn.utils';
 
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
 import {
   ChildrenLoadingFunction,
   FoldingType,
@@ -13,6 +11,7 @@ import {
 import { NodeMenuItem } from './menu/node-menu.component';
 
 import * as uuidv4 from 'uuid/v4';
+import { Observable, Observer, of } from 'rxjs';
 
 enum ChildrenLoadingState {
   NotStarted,
@@ -170,7 +169,7 @@ export class Tree {
     if (this.canLoadChildren()) {
       return this._childrenAsyncOnce();
     }
-    return Observable.of(this.children);
+    return of(this.children);
   }
 
   /**
