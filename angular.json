@@ -92,13 +92,6 @@
             ],
             "assets": ["src/demo/assets", "src/demo/favicon.ico"]
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["src/demo/tsconfig.app.json", "test/tsconfig.spec.json"],
-            "exclude": []
-          }
         }
       }
     },
@@ -114,13 +107,6 @@
             "devServerTarget": "ng2-tree:serve"
           },
           "configurations": {}
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["e2e/tsconfig.e2e.json"],
-            "exclude": []
-          }
         }
       }
     }
