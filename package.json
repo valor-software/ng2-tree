@@ -69,6 +69,7 @@
     "@angular/platform-browser-dynamic": "9.1.13",
     "@angular/router": "9.1.13",
     "@types/jasmine": "2.8.2",
+    "@types/jest": "^29.5.11",
     "@types/node": "^12.11.1",
     "alertifyjs": "1.10.0",
     "codelyzer": "^5.2.2",
