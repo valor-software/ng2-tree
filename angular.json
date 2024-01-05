@@ -52,20 +52,23 @@
                   "with": "src/demo/environments/environment.prod.ts"
                 }
               ]
-            }
+            },
+            "development": {}
           },
-          "defaultConfiguration": ""
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "ng2-tree:build"
-          },
+          "options": {},
           "configurations": {
             "production": {
               "browserTarget": "ng2-tree:build:production"
+            },
+            "development": {
+              "browserTarget": "ng2-tree:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -109,7 +112,8 @@
           "options": {
             "protractorConfig": "./protractor.conf.js",
             "devServerTarget": "ng2-tree:serve"
-          }
+          },
+          "configurations": {}
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
