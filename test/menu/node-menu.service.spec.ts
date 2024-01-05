@@ -12,7 +12,7 @@ describe('NodeMenuService', () => {
       providers: [NodeMenuService]
     });
 
-    nodeMenuService = TestBed.get(NodeMenuService);
+    nodeMenuService = TestBed.inject(NodeMenuService);
   });
 
   it('should be created by angular', () => {

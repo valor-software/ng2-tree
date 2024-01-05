@@ -88,8 +88,8 @@ describe('TreeController', () => {
 
     treeService = lordInternalTreeInstance.treeService;
 
-    nodeMenuService = TestBed.get(NodeMenuService);
-    nodeDraggableService = TestBed.get(NodeDraggableService);
+    nodeMenuService = TestBed.inject(NodeMenuService);
+    nodeDraggableService = TestBed.inject(NodeDraggableService);
 
     fixture.detectChanges();
   });

@@ -152,9 +152,9 @@ describe('LeftMenu-TreeInternalComponent', () => {
     staticInternalTreeEl = fixture.debugElement.query(By.css('#static')).query(By.directive(TreeInternalComponent));
     staticComponentInstance = leftMenuInternalTreeEl.componentInstance;
 
-    nodeMenuService = TestBed.get(NodeMenuService);
-    nodeDraggableService = TestBed.get(NodeDraggableService);
-    treeService = TestBed.get(TreeService);
+    nodeMenuService = TestBed.inject(NodeMenuService);
+    nodeDraggableService = TestBed.inject(NodeDraggableService);
+    treeService = TestBed.inject(TreeService);
 
     fixture.detectChanges();
   });

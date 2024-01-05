@@ -26,8 +26,8 @@ describe('TreeService', () => {
       providers: [TreeService, NodeDraggableService]
     });
 
-    treeService = TestBed.get(TreeService);
-    draggableService = TestBed.get(NodeDraggableService);
+    treeService = TestBed.inject(TreeService);
+    draggableService = TestBed.inject(NodeDraggableService);
   });
 
   it('should be created by angular', () => {

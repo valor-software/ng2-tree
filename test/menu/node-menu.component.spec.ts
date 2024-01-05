@@ -19,7 +19,7 @@ describe('NodeMenuComponent', () => {
 
     fixture = TestBed.createComponent(NodeMenuComponent);
     componentInstance = fixture.debugElement.componentInstance;
-    nodeMenuService = TestBed.get(NodeMenuService);
+    nodeMenuService = TestBed.inject(NodeMenuService);
   });
 
   it('should be created by angular', () => {
