@@ -55,7 +55,8 @@ class TestComponent {
   public settings = new Ng2TreeSettings();
   public treeLord: TreeModel = treeLord;
 
-  @ViewChild('lordTreeInstance') public lordTreeComponent;
+  @ViewChild('lordTreeInstance', { static: true })
+  public lordTreeComponent;
 
   public constructor(public treeHolder: ElementRef) {
     this.settings.enableCheckboxes = true;
