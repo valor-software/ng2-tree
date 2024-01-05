@@ -21,11 +21,8 @@ describe('NodeMenuService', () => {
   });
 
   it('should fire close menu events', done => {
-    const elementRef = new ElementRef({});
-    elementRef.nativeElement = {};
-
-    const initiatorElementRef = new ElementRef({});
-    initiatorElementRef.nativeElement = {};
+    const elementRef = new ElementRef<HTMLElement>(document.createElement('div'));
+    const initiatorElementRef = new ElementRef<HTMLElement>(document.createElement('div'));
 
     nodeMenuService.hideMenuStream(elementRef).subscribe((e: NodeMenuEvent) => {
       expect(e.sender).toBe(initiatorElementRef.nativeElement);
