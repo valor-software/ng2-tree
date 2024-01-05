@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { Component, ElementRef, DebugElement } from '@angular/core';
 import { TreeInternalComponent } from '../src/tree-internal.component';
 import { TreeComponent } from '../src/tree.component';
@@ -14,6 +13,7 @@ import { NodeMenuAction } from '../src/menu/menu.events';
 import * as EventUtils from '../src/utils/event.utils';
 import { CapturedNode } from '../src/draggable/captured-node';
 import { SafeHtmlPipe } from '../src/utils/safe-html.pipe';
+import { By } from 'protractor';
 
 let fixture;
 let masterInternalTreeEl;
