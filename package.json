@@ -101,7 +101,7 @@
     "systemjs-builder": "0.16.12",
     "ts-node": "3.3.0",
     "tslint": "~6.1.0",
-    "typescript": "^4.8.4",
+    "typescript": "^4.9.5",
     "uuid": "3.1.0",
     "webpack": "3.8.1",
     "zone.js": "^0.11.8"
