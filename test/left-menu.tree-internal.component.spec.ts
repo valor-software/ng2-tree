@@ -13,7 +13,7 @@ import { NodeMenuAction } from '../src/menu/menu.events';
 import * as EventUtils from '../src/utils/event.utils';
 import { CapturedNode } from '../src/draggable/captured-node';
 import { SafeHtmlPipe } from '../src/utils/safe-html.pipe';
-import { By } from 'protractor';
+import { By } from '@angular/platform-browser';
 
 let fixture;
 let masterInternalTreeEl;
