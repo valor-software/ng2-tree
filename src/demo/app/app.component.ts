@@ -274,7 +274,7 @@ export class AppComponent implements OnInit {
     ]
   };
 
-  @ViewChild('treeFonts', { static: true })
+  @ViewChild('treeFonts', { static: false })
   public treeFonts;
 
   public pls: TreeModel;
@@ -504,7 +504,7 @@ export class AppComponent implements OnInit {
   };
   private lastFFSNodeId = 86;
 
-  @ViewChild('treeFFS', { static: true })
+  @ViewChild('treeFFS', { static: false })
   public treeFFS;
 
   public icons: TreeModel = {
@@ -611,7 +611,7 @@ export class AppComponent implements OnInit {
     AppComponent.logEvent(e, 'Created');
   }
 
-  public onNodeFFSCreated(e: NodeEvent, controller): void {
+  public onNodeFFSCreated(e: NodeEvent, controller?): void {
     AppComponent.logEvent(e, 'Created');
     if (controller) {
       controller.changeNodeId(++this.lastFFSNodeId);

@@ -23,7 +23,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
 
   @Input() public menuItems: NodeMenuItem[];
 
-  @ViewChild('menuContainer', { static: true })
+  @ViewChild('menuContainer', { static: false })
   public menuContainer: any;
 
   public availableMenuItems: NodeMenuItem[] = [

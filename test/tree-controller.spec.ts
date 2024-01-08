@@ -55,7 +55,7 @@ class TestComponent {
   public settings = new Ng2TreeSettings();
   public treeLord: TreeModel = treeLord;
 
-  @ViewChild('lordTreeInstance', { static: true })
+  @ViewChild('lordTreeInstance', { static: false })
   public lordTreeComponent;
 
   public constructor(public treeHolder: ElementRef) {
