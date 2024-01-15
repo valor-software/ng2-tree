@@ -166,14 +166,15 @@ declare const alertify: any;
         font-style: italic;
       }
 
-      :host /deep/ .fa {
+      :host ::ng-deep .fa {
         cursor: pointer;
       }
-
-      :host /deep/ .fa.disabled {
+      
+      :host ::ng-deep .fa.disabled {
         cursor: inherit;
         color: #757575;
       }
+      
 
       .button {
         border-radius: 4px;
@@ -273,7 +274,8 @@ export class AppComponent implements OnInit {
     ]
   };
 
-  @ViewChild('treeFonts') public treeFonts;
+  @ViewChild('treeFonts', { static: false })
+  public treeFonts;
 
   public pls: TreeModel;
 
@@ -502,7 +504,8 @@ export class AppComponent implements OnInit {
   };
   private lastFFSNodeId = 86;
 
-  @ViewChild('treeFFS') public treeFFS;
+  @ViewChild('treeFFS', { static: false })
+  public treeFFS;
 
   public icons: TreeModel = {
     value: 'Icons',
@@ -608,7 +611,7 @@ export class AppComponent implements OnInit {
     AppComponent.logEvent(e, 'Created');
   }
 
-  public onNodeFFSCreated(e: NodeEvent, controller): void {
+  public onNodeFFSCreated(e: NodeEvent, controller?): void {
     AppComponent.logEvent(e, 'Created');
     if (controller) {
       controller.changeNodeId(++this.lastFFSNodeId);

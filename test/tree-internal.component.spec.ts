@@ -110,10 +110,10 @@ describe('TreeInternalComponent', () => {
     faceInternalTreeEl = fixture.debugElement.query(By.css('#face')).query(By.directive(TreeInternalComponent));
     faceComponentInstance = faceInternalTreeEl.componentInstance;
 
-    nodeMenuService = TestBed.get(NodeMenuService);
-    nodeDraggableService = TestBed.get(NodeDraggableService);
-    treeService = TestBed.get(TreeService);
-    safeHtml = TestBed.get(SafeHtmlPipe);
+    nodeMenuService = TestBed.inject(NodeMenuService);
+    nodeDraggableService = TestBed.inject(NodeDraggableService);
+    treeService = TestBed.inject(TreeService);
+    safeHtml = TestBed.inject(SafeHtmlPipe);
 
     fixture.detectChanges();
   });

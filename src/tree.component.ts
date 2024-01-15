@@ -19,7 +19,7 @@ import { MenuItemSelectedEvent, NodeCheckedEvent, NodeEvent, NodeUncheckedEvent 
 
 import { Tree } from './tree';
 import { TreeController } from './tree-controller';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tree',
@@ -61,9 +61,11 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
 
   public tree: Tree;
 
-  @ViewChild('rootComponent') public rootComponent;
+  @ViewChild('rootComponent', { static: false })
+  public rootComponent;
 
-  @ContentChild(TemplateRef) public template;
+  @ContentChild(TemplateRef, { static: false })
+  public template;
 
   private subscriptions: Subscription[] = [];
 

@@ -55,7 +55,8 @@ class TestComponent {
   public settings = new Ng2TreeSettings();
   public treeLord: TreeModel = treeLord;
 
-  @ViewChild('lordTreeInstance') public lordTreeComponent;
+  @ViewChild('lordTreeInstance', { static: false })
+  public lordTreeComponent;
 
   public constructor(public treeHolder: ElementRef) {
     this.settings.enableCheckboxes = true;
@@ -87,8 +88,8 @@ describe('TreeController', () => {
 
     treeService = lordInternalTreeInstance.treeService;
 
-    nodeMenuService = TestBed.get(NodeMenuService);
-    nodeDraggableService = TestBed.get(NodeDraggableService);
+    nodeMenuService = TestBed.inject(NodeMenuService);
+    nodeDraggableService = TestBed.inject(NodeDraggableService);
 
     fixture.detectChanges();
   });

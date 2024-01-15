@@ -22,8 +22,10 @@ import { NodeCheckedEvent, NodeEvent } from './tree.events';
 import { TreeService } from './tree.service';
 import * as EventUtils from './utils/event.utils';
 import { NodeDraggableEvent } from './draggable/draggable.events';
-import { Subscription } from 'rxjs/Subscription';
 import { get, isNil } from './utils/fn.utils';
+import { Subscription } from 'rxjs';
+import { merge, of } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'tree-internal',
@@ -97,7 +99,8 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
   public isReadOnly = false;
   public controller: TreeController;
 
-  @ViewChild('checkbox') public checkboxElementRef: ElementRef;
+  @ViewChild('checkbox', { static: false })
+  public checkboxElementRef: ElementRef;
 
   private subscriptions: Subscription[] = [];
 
@@ -150,9 +153,8 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
     );
 
     this.subscriptions.push(
-      this.treeService.nodeChecked$
-        .merge(this.treeService.nodeUnchecked$)
-        .filter((e: NodeCheckedEvent) => this.eventContainsId(e) && this.tree.hasChild(e.node))
+      merge(this.treeService.nodeChecked$, this.treeService.nodeUnchecked$)
+        .pipe(filter((e: NodeCheckedEvent) => this.eventContainsId(e) && this.tree.hasChild(e.node)))
         .subscribe((e: NodeCheckedEvent) => this.updateCheckboxState())
     );
   }

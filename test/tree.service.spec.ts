@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { TreeService } from '../src/tree.service';
-import { Subject } from 'rxjs/Subject';
 import { NodeDraggableService } from '../src/draggable/node-draggable.service';
 import { Tree } from '../src/tree';
 import {
@@ -16,6 +15,7 @@ import {
 import { ElementRef } from '@angular/core';
 import { NodeDraggableEvent } from '../src/draggable/draggable.events';
 import { CapturedNode } from '../src/draggable/captured-node';
+import { Subject } from 'rxjs';
 
 let treeService;
 let draggableService;
@@ -26,8 +26,8 @@ describe('TreeService', () => {
       providers: [TreeService, NodeDraggableService]
     });
 
-    treeService = TestBed.get(TreeService);
-    draggableService = TestBed.get(NodeDraggableService);
+    treeService = TestBed.inject(TreeService);
+    draggableService = TestBed.inject(NodeDraggableService);
   });
 
   it('should be created by angular', () => {

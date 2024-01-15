@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { NodeMenuService } from '../../src/menu/node-menu.service';
-import { Subject } from 'rxjs/Subject';
 import { ElementRef } from '@angular/core';
 import { NodeMenuEvent, NodeMenuAction } from '../../src/menu/menu.events';
+import { Subject } from 'rxjs';
 
 let nodeMenuService;
 
@@ -12,7 +12,7 @@ describe('NodeMenuService', () => {
       providers: [NodeMenuService]
     });
 
-    nodeMenuService = TestBed.get(NodeMenuService);
+    nodeMenuService = TestBed.inject(NodeMenuService);
   });
 
   it('should be created by angular', () => {
@@ -21,11 +21,8 @@ describe('NodeMenuService', () => {
   });
 
   it('should fire close menu events', done => {
-    const elementRef = new ElementRef({});
-    elementRef.nativeElement = {};
-
-    const initiatorElementRef = new ElementRef({});
-    initiatorElementRef.nativeElement = {};
+    const elementRef = new ElementRef<HTMLElement>(document.createElement('div'));
+    const initiatorElementRef = new ElementRef<HTMLElement>(document.createElement('div'));
 
     nodeMenuService.hideMenuStream(elementRef).subscribe((e: NodeMenuEvent) => {
       expect(e.sender).toBe(initiatorElementRef.nativeElement);

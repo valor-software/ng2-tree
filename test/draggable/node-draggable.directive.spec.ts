@@ -33,7 +33,7 @@ describe('NodeDraggableDirective', () => {
     fixture = TestBed.createComponent(TestComponent);
     directiveEl = fixture.debugElement.query(By.directive(NodeDraggableDirective));
     directiveInstance = directiveEl.injector.get(NodeDraggableDirective);
-    nodeDraggableService = TestBed.get(NodeDraggableService);
+    nodeDraggableService = TestBed.inject(NodeDraggableService);
   });
 
   it('should have correctly set "tree" property', () => {
