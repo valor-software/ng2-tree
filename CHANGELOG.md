@@ -1,3 +1,7 @@
+<a name="3.0.0"></a>
+
+# [3.0.0](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.11...v3.0.0) (2024-01-16)
+
 <a name="2.0.0-rc.11"></a>
 
 # [2.0.0-rc.11](https://github.com/valor-software/ng2-tree/compare/v2.0.0-rc.10...v2.0.0-rc.11) (2018-04-03)
