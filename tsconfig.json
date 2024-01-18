@@ -15,5 +15,5 @@
     "useDefineForClassFields": false
   },
   "files": ["src/demo/main.ts", "src/demo/polyfills.ts"],
-  "include": ["src/demo/**/*.d.ts", "test/**/*.spec.ts"]
+  "include": ["src/demo/**/*.d.ts"]
 }
