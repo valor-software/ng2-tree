@@ -14,7 +14,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
   @Input() public tree: Tree;
 
   private nodeNativeElement: HTMLElement;
-  private disposersForDragListeners: Function[] = [];
+  private disposersForDragListeners: (() => void)[] = [];
 
   public constructor(
     @Inject(ElementRef) public element: ElementRef,

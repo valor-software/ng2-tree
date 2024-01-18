@@ -15,7 +15,7 @@ export function trim(value: string): string {
 }
 
 export function has(value: any, prop: string): boolean {
-  return value && typeof value === 'object' && value.hasOwnProperty(prop);
+  return value && typeof value === 'object' && Object.prototype.hasOwnProperty.call(value, prop);
 }
 
 export function isFunction(value: any) {
@@ -60,7 +60,7 @@ export function once(fn: Once): Once {
 
   return (...args: any[]) => {
     if (fn) {
-      result = fn.apply(null, args);
+      result = fn(...args);
       fn = null;
     }
     return result;
