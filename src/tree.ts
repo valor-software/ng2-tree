@@ -522,8 +522,8 @@ export class Tree {
   }
 
   /**
-   * Get a css class for element which displayes folding state - expanded, collapsed or leaf
-   * @returns {string} A string icontaining css class (classes)
+   * Get a css class for element which displays folding state - expanded, collapsed or leaf
+   * @returns {string} A string containing css class (classes)
    */
   public get foldingCssClass(): string {
     return this.getCssClassesFromSettings() || this.foldingType.cssClass;
@@ -653,5 +653,14 @@ export class Tree {
     }
 
     return model;
+  }
+
+  /**
+   * Get css classes used in the value-container div
+   * @returns {string} css class that will be used in the node container
+   */
+
+  public getContainerCss(): string {
+    return get(this.node, 'cssClass', '');
   }
 }

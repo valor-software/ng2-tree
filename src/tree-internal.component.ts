@@ -33,7 +33,7 @@ import { filter } from 'rxjs/operators';
   <ul class="tree" *ngIf="tree" [ngClass]="{rootless: isRootHidden()}">
     <li>
       <div class="value-container"
-        [ngClass]="{rootless: isRootHidden()}"
+        [ngClass]="containerClass"
         [class.selected]="isSelected"
         (contextmenu)="showRightMenu($event)"
         [nodeDraggable]="nodeElementRef"
@@ -103,6 +103,10 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
   public checkboxElementRef: ElementRef;
 
   private subscriptions: Subscription[] = [];
+
+  public get containerClass(): string {
+    return this.isRootHidden() ? `rootless ${this.tree.getContainerCss()}` : this.tree.getContainerCss();
+  }
 
   public constructor(
     private nodeMenuService: NodeMenuService,
