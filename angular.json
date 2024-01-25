@@ -79,9 +79,8 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/demo/../../test/test.ts",
             "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/demo/polyfills.ts",
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "src/demo/../../test/tsconfig.spec.json",
             "scripts": ["node_modules/alertifyjs/build/alertify.js"],
             "styles": [
@@ -91,6 +90,12 @@
               "src/styles.css"
             ],
             "assets": ["src/demo/assets", "src/demo/favicon.ico"]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }

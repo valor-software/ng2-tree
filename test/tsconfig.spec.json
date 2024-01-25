@@ -4,5 +4,7 @@
     "outDir": "../out-tsc/spec",
     "baseUrl": "",
     "types": ["jasmine", "node"]
-  }
+  },
+  "files": ["../src/demo/main.ts", "../src/demo/polyfills.ts"],
+  "include": ["**/*.spec.ts"]
 }

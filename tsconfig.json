@@ -13,5 +13,7 @@
     "lib": ["es2015", "dom"],
     "module": "es2020",
     "useDefineForClassFields": false
-  }
+  },
+  "files": ["src/demo/main.ts", "src/demo/polyfills.ts"],
+  "include": ["src/demo/**/*.d.ts"]
 }

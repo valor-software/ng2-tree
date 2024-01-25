@@ -49,7 +49,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
     }
   ];
 
-  private disposersForGlobalListeners: Function[] = [];
+  private disposersForGlobalListeners: (() => void)[] = [];
 
   public constructor(
     @Inject(Renderer2) private renderer: Renderer2,
@@ -63,7 +63,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
+    this.disposersForGlobalListeners.forEach((dispose: () => void) => dispose());
   }
 
   public onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {

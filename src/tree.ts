@@ -10,7 +10,7 @@ import {
 } from './tree.types';
 import { NodeMenuItem } from './menu/node-menu.component';
 
-import * as uuidv4 from 'uuid/v4';
+import * as uuidv4 from 'uuid/dist/v4';
 import { Observable, Observer, of } from 'rxjs';
 
 enum ChildrenLoadingState {
