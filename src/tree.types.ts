@@ -110,7 +110,8 @@ export class TreeModelSettings {
       isCollapsedOnInit: false,
       checked: false,
       keepNodesInDOM: false,
-      selectionAllowed: true
+      selectionAllowed: true,
+      hidden: false
     });
   }
 }
