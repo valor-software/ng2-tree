@@ -21,6 +21,7 @@ let masterComponentInstance;
 
 const tree: TreeModel = {
   value: 'Master',
+  cssClass: 'cssClassMaster',
   settings: {
     cssClasses: {
       expanded: 'fa fa-caret-down',
@@ -77,6 +78,11 @@ describe('settings on tree model', () => {
   });
 
   describe('cssClasses setting in tree', () => {
+    it('adds appropriate css classes for a node container', () => {
+      const el: DebugElement = masterInternalTreeEl.query(By.css('.value-container'));
+      expect(el.classes).toEqual({ 'value-container': true, cssClassMaster: true, selected: false });
+    });
+
     it('adds appropriate css classes for a expanded node', () => {
       const foldingEl: DebugElement = masterInternalTreeEl.query(By.css('.folding'));
       expect(foldingEl.classes).toEqual({ folding: true, fa: true, 'fa-caret-down': true });
