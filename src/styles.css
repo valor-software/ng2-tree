@@ -38,7 +38,7 @@
   content: '\25CF';
 }
 .node-menu .node-menu-content .node-menu-item .node-menu-item-icon.new-folder:before {
-  content: '\25B6';
+  content: '\25BA';
 }
 
 .node-menu .node-menu-content .node-menu-item .node-menu-item-icon.rename:before {
@@ -132,7 +132,7 @@ tree-internal .tree .folding.node-collapsed {
 }
 
 tree-internal .tree .folding.node-collapsed:before {
-  content: '\25B6';
+  content: '\25BA';
   color: #757575;
 }
 
@@ -152,7 +152,7 @@ tree-internal .tree .folding.node-empty {
 }
 
 tree-internal .tree .folding.node-empty:before {
-  content: '\25B6';
+  content: '\25BA';
   color: #757575;
 }
 
